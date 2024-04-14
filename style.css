@@ -1,0 +1,105 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color: black;
+  color: white;
+}
+
+#teleprompter {
+  width: 100%;
+  height: 90%;
+  overflow: scroll;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 36px; /* Initial font size, adjustable via slider */
+  font-family: Helvetica;
+}
+
+#controls {
+    #controls {
+  flex-wrap: wrap;
+}
+
+#controls label,
+#controls input,
+#controls select {
+  margin: 5px;
+}
+
+  width: 100%;
+  height: 10%;
+  padding: 10px;
+  font-size: 18px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #333;
+}
+
+#speedControl {
+  margin-left: 10px;
+}
+
+button#toggleScroll {
+    margin-left: 5px;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #007BFF; /* Bootstrap blue */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button#toggleScroll:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05);
+}
+
+button#toggleScroll:focus {
+    outline: none; /* Removes the outline to keep clean aesthetics */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Soft glow effect */
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JTeleprompter</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<!-- <div id="teleprompter" onclick="toggleAutoScroll()"> -->
+<div id="teleprompter" contenteditable="false">
+    <p id="script">
+        1º Click en Menú --> Editar <br>
+        2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto <br>
+        3º Click en Menú --> Parar Editar <br>
+        Listo, click en Start para iniciar teleprompt 
+    </p>
+</div>
+
+<div id="controls">
+    <div class="menu-container">
+    <button id="menuButton">Menú</button>
+    <div id="menuItems" class="menu-items" style="display: none;">
+        <button id="editToggle">Editar</button>
+        <button id="loadText">Cargar</button>
+        <button id="saveText">Guardar</button>
+    </div>
+</div>
+
+    <!-- <button id="editToggle">Editar</button>
+    <button id="saveText">Guardar</button>
+    <button id="loadText">Cargar</button> -->
+    <input type="color" id="textColorPicker" value="#ffffff">
+    <button id="changeTextColor">Color</button>
+
+    <label for="speedControl">V:</label>
+    <input type="range" id="speedControl" min="1" max="100" value="42">
+    <span id="scrollSpeedValue" class="tooltip">42</span>
+    <label for="textSizeControl">T:</label>
+    <input type="range" id="textSizeControl" min="10" max="72" value="36">
+    <span id="textSizeValue" class="tooltip">36px</span>
+    <label for="textColorControl">C:</label>
+    <select id="textColorControl">
+      <option value="white" selected>White</option>
+      <option value="lightyellow">Yellow</option>
+      <option value="lightgreen">Green</option>
+      <option value="lightblue">Blue</option>
+      <option value="lightgray">Gris</option>
+    
+    </select>
+    <button id="toggleScroll">Start</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
