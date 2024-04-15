@@ -35,26 +35,29 @@ textColorControl.addEventListener('change', () => {
     teleprompter.style.color = newColor;
 });
 
-// Existing speedControl event listener remains the same
-
-
 function toggleAutoScroll() {
-    if (isAutoScrolling) {
-        clearInterval(scrollInterval);
-        document.getElementById('toggleScroll').textContent = 'Start';
-        document.getElementById('toggleScroll').style.backgroundColor = "#007BFF"
-    } else {
+    var button = this;
+    var icon = button.querySelector('i');
+    
+    // Comprueba la clase actual del ícono para determinar el estado del botón
+    if (icon.classList.contains("fa-play")) {
+        icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
+        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000"
+        // Iniciar el autoscroll aquí
         const speed = 100 - speedControl.value;
         scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, 1);
+                         teleprompter.scrollBy(0, 1);
             // Update lastScrollTop to new position
-            lastScrollTop = teleprompter.scrollTop;
+             lastScrollTop = teleprompter.scrollTop;
         }, speed);
-        document.getElementById('toggleScroll').textContent = 'Stop';
-        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000"
+    } else {
+        icon.className = "fas fa-play"; // Cambia el ícono a "play"
+        document.getElementById('toggleScroll').style.backgroundColor = "#007BFF"
+        // Detener el autoscroll aquí
+        clearInterval(scrollInterval);
+        
     }
-    isAutoScrolling = !isAutoScrolling;
-}
+};
 
 
 speedControl.addEventListener('input', () => {
@@ -150,3 +153,14 @@ window.onclick = function(event) {
         }
     }
 }
+
+
+
+document.getElementById('resetButton').addEventListener('click', function() {
+    if (confirm('Are you sure you want to reset the teleprompter content? This action cannot be undone.')) {
+        // Borra específicamente el contenido del párrafo con ID 'script'
+        document.getElementById('teleprompter').innerHTML = ''; // Restablece el contenido a vacío
+        alert('Teleprompter content has been reset.'); // Opcional: Muestra un mensaje de confirmación
+        localStorage.setItem('savedScript', scriptText); // guarda datos
+    }
+});
