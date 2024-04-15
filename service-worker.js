@@ -1,9 +1,9 @@
 const CACHE_NAME = 'v1';
 const urlsToCache = [
-  './',
-  './index.html',
-  './style.css',
-  './script.js'
+  '/Jteleprompter/',
+  '/Jteleprompter/index.html',
+  '/Jteleprompter/style.css',
+  'Jteleprompter/script.js'
 ];
 
 self.addEventListener('install', event => {
