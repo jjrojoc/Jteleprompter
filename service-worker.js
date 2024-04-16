@@ -1,12 +1,17 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
 var VERSION = 'version_01'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
-var URLS = [                            // Add URL you want to cache in this list.
+const URLS = [
   './',
-  './index.html',                     // If you have separate JS/CSS files,
+  './index.html',
+  './style.css',
   './script.js',
-  './style.css                        '// add path to those files here
-]
+  './manifest.json',
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png',
+  './icons/favicon.ico',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'
+];
 
 // Respond with cached resources
 self.addEventListener('fetch', function (e) {
