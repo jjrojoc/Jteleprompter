@@ -116,6 +116,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
     
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
+    icon.className = "fas fa-edit";
     teleprompter.contentEditable = !isEditable;  // Toggle the state
     this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
     if (isEditable){
@@ -124,10 +125,6 @@ document.getElementById('editToggle').addEventListener('click', function() {
         localStorage.setItem('savedScript', scriptText);
         alert('Text edited saved!');
     }
-    else {
-        icon.className = "fas fa-edit";
-    }
-    
 });
 
 document.getElementById('speedControl').addEventListener('input', function() {
