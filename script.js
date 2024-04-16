@@ -116,7 +116,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
     teleprompter.contentEditable = !isEditable;  // Toggle the state
     this.textContent = isEditable ? 'Editar' : 'Parar Editar';  // Update button text
     if (isEditable){
-    icon.className = "fas fa-ban"
+    icon.className = "fas fa-ban";
     const scriptText = document.getElementById('teleprompter').innerHTML;
     localStorage.setItem('savedScript', scriptText);
     alert('Text edited saved!');
