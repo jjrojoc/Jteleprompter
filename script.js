@@ -111,14 +111,21 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
 
 
 document.getElementById('editToggle').addEventListener('click', function() {
+    var button = this;
+    var icon = button.querySelector('i');
+    
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
     teleprompter.contentEditable = !isEditable;  // Toggle the state
     this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
     if (isEditable){
+        icon.className = "fas fa-ban";
         const scriptText = document.getElementById('teleprompter').innerHTML;
         localStorage.setItem('savedScript', scriptText);
         alert('Text edited saved!');
+    }
+    else {
+        icon.className = "fas fa-edit";
     }
     
 });
