@@ -47,7 +47,6 @@ body, html {
   background-color: #222;
   padding: 5px;
   position: absolute;
-  width: 100%;
   bottom: 50px; /* Ajuste de posición según necesidades */
   left: 10px; /* Mantiene el menú cerca del botón de menú */
 }
@@ -82,7 +81,7 @@ button:focus, input[type="range"]:focus, select:focus {
 /* Responsividad ajustada */
 @media (max-width: 768px) {
   .controls-container {
-      flex-wrap: wrap; /* Evita que los controles se apilen */
+      flex-wrap: nowrap; /* Evita que los controles se apilen */
   }
 }
 
@@ -99,37 +98,42 @@ button:focus, input[type="range"]:focus, select:focus {
 #textColorControl option[value="lightgray"] { background-color: lightgray; }
 
 
-.controls {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
-    text-align: center;
+#controls button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px; /* Ajusta según sea necesario */
+  padding: 10px;
+  cursor: pointer;
 }
 
-.menu-items {
-    display: none;
+#controls button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-.menu-items.visible {
-    display: block;
+#controls .menu-items {
+  display: none; /* asegura que el menú esté oculto inicialmente */
 }
 
-button {
-    margin: 0 10px;
-    padding: 10px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+#controls .menu-container:hover .menu-items {
+  display: block; /* muestra el menú cuando se pasa el mouse sobre el contenedor */
 }
 
-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+
+#controls button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;  /* Asegúrate de que el ícono es suficientemente grande para ser tocado fácilmente */
+  padding: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#controls button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 button#toggleScroll {

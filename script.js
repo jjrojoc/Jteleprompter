@@ -1,173 +1,142 @@
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(function(registration) {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-          console.log('ServiceWorker registration failed: ', err);
-        });
-    });
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: black;
+    color: white;
   }
   
-
-let isAutoScrolling = false;
-let scrollInterval;
-let lastScrollTop = 0;
-
-const teleprompter = document.getElementById('teleprompter');
-const speedControl = document.getElementById('speedControl');
-// Existing variables and toggleAutoScroll function remain the same
-
-const textSizeControl = document.getElementById('textSizeControl');
-const textColorControl = document.getElementById('textColorControl');
-
-document.getElementById('toggleScroll').addEventListener('click', toggleAutoScroll);
-
-
-textSizeControl.addEventListener('input', () => {
-    const newSize = textSizeControl.value + 'px';
-    teleprompter.style.fontSize = newSize;
-});
-
-textColorControl.addEventListener('change', () => {
-    // const newColor = document.getElementById('textColorPicker').value; // toma el color del colorpicker
-    const newColor = textColorControl.value;
-    teleprompter.style.color = newColor;
-});
-
-function toggleAutoScroll() {
-    var button = this;
-    var icon = button.querySelector('i');
-    
-    // Comprueba la clase actual del ícono para determinar el estado del botón
-    if (icon.classList.contains("fa-play")) {
-        icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
-        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000"
-        // Iniciar el autoscroll aquí
-        const speed = 100 - speedControl.value;
-        scrollInterval = setInterval(() => {
-                         teleprompter.scrollBy(0, 1);
-            // Update lastScrollTop to new position
-             lastScrollTop = teleprompter.scrollTop;
-        }, speed);
-    } else {
-        icon.className = "fas fa-play"; // Cambia el ícono a "play"
-        document.getElementById('toggleScroll').style.backgroundColor = "#007BFF"
-        // Detener el autoscroll aquí
-        clearInterval(scrollInterval);
-        
+  #teleprompter {
+    width: 100%;
+    height: 90%;
+    overflow: scroll;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 36px; /* Initial font size, adjustable via slider */
+    font-family: Helvetica;
+  }
+  
+  .control-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
+    color: white;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1000; /* Asegura que la barra esté siempre encima */
+  }
+  
+  .controls-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 5px; /* Espacio reducido entre los elementos */
+  }
+  
+  .menu-items {
+    display: none; /* Oculto por defecto */
+    flex-direction: column; /* Elementos en columna */
+    background-color: #222;
+    padding: 5px;
+    position: absolute;
+    bottom: 50px; /* Ajuste de posición según necesidades */
+    left: 10px; /* Mantiene el menú cerca del botón de menú */
+  }
+  
+  button, input[type="range"], select {
+    padding: 10px; /* Aumento del padding para un área de toque mayor */
+    min-width: 60px; /* Ancho mínimo para mayor accesibilidad */
+    min-height: 44px; /* Altura mínima recomendada */
+    border: none;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    margin: 5px; /* Espacio entre botones */
+    cursor: pointer;
+    font-size: 16px; /* Tamaño de fuente legible */
+  }
+  
+  input[type="color"] {
+    padding: 0;
+    border: none;
+    width: 44px; /* Ajuste para tamaño táctil */
+    height: 44px;
+    cursor: pointer;
+  }
+  
+  /* Efecto de hover cambiado por un efecto de focus más adecuado para táctil */
+  button:focus, input[type="range"]:focus, select:focus {
+    background-color: #555;
+    outline: none; /* Elimina el contorno por defecto de los navegadores */
+  }
+  
+  /* Responsividad ajustada */
+  @media (max-width: 768px) {
+    .controls-container {
+        flex-wrap: nowrap; /* Evita que los controles se apilen */
     }
-};
-
-
-speedControl.addEventListener('input', () => {
-    if (isAutoScrolling) {
-        clearInterval(scrollInterval);
-        const speed = 100 - speedControl.value;
-        scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, 1);
-        }, speed);
-    }
-    
-});
-
-document.getElementById('saveText').addEventListener('click', function() {
-    const scriptText = document.getElementById('teleprompter').innerHTML;
-    localStorage.setItem('savedScript', scriptText);
-    alert('Text saved!');
-});
-
-document.getElementById('loadText').addEventListener('click', function() {
-    const savedText = localStorage.getItem('savedScript');
-    if (savedText) {
-        document.getElementById('teleprompter').innerHTML = savedText;
-        alert('Text loaded!');
-    } else {
-        alert('No saved text found.');
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const savedText = localStorage.getItem('savedScript');
-    if (savedText) {
-        document.getElementById('teleprompter').innerHTML = savedText;
-    }
-});
-
-document.getElementById('changeTextColor').addEventListener('click', function() {
-    const color = document.getElementById('textColorPicker').value;
-    const selection = window.getSelection();
-
-    if (!selection.rangeCount) return;
-
-    const range = selection.getRangeAt(0);
-    const span = document.createElement('span');
-    span.style.color = color;
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
-    selection.removeAllRanges();
-    selection.addRange(range);
-});
-
-
-document.getElementById('editToggle').addEventListener('click', function() {
-    const teleprompter = document.getElementById('teleprompter');
-    const isEditable = teleprompter.contentEditable === "true";
-    teleprompter.contentEditable = !isEditable;  // Toggle the state
-    this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
-    if (isEditable){
-        const scriptText = document.getElementById('teleprompter').innerHTML;
-        localStorage.setItem('savedScript', scriptText);
-        alert('Text edited saved!');
-    }
-});
-
-document.getElementById('speedControl').addEventListener('input', function() {
-    const speedValueSpan = document.getElementById('scrollSpeedValue');
-    speedValueSpan.textContent = this.value;
-});
-
-document.getElementById('textSizeControl').addEventListener('input', function() {
-    const sizeValueSpan = document.getElementById('textSizeValue');
-    sizeValueSpan.textContent = this.value + 'px';
-});
-
-document.getElementById('menuButton').addEventListener('click', function() {
-    /* var menuItems = document.getElementById("menuItems");
-    if (menuItems.style.display === "none") {
-        menuItems.style.display = "block";
-    } else {
-        menuItems.style.display = "none";
-    } */
-   
-    var menu = document.getElementById('menuItems');
-    if (menu.style.display === 'block') {
-        menu.style.display = 'none';
-    } else {
-        menu.style.display = 'block';
-    }
-});
-
-// Opcional: Cerrar el menú si se hace clic fuera de él
-window.onclick = function(event) {
-    if (!event.target.matches('#menuButton')) {
-        var dropdowns = document.getElementsByClassName("menu-items");
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.style.display === "block") {
-                openDropdown.style.display = "none";
-            }
-        }
-    }
-}
-
-
-
-document.getElementById('resetButton').addEventListener('click', function() {
-    if (confirm('Are you sure you want to reset the teleprompter content? This action cannot be undone.')) {
-        // Borra específicamente el contenido del párrafo con ID 'script'
-        document.getElementById('teleprompter').innerHTML = ''; // Restablece el contenido a vacío
-        alert('Teleprompter content has been reset.'); // Opcional: Muestra un mensaje de confirmación
-        localStorage.setItem('savedScript', scriptText); // guarda datos
-    }
-});
+  }
+  
+  
+  
+  #textColorControl option {
+    color: black; /* Asegura que el texto sea visible en colores claros */
+    background-color: #FFFFFF;
+  }
+  
+  #textColorControl option[value="lightyellow"] { background-color: lightyellow; }
+  #textColorControl option[value="lightgreen"] { background-color: lightgreen; }
+  #textColorControl option[value="lightblue"] { background-color: lightblue; }
+  #textColorControl option[value="lightgray"] { background-color: lightgray; }
+  
+  
+  #controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px; /* Ajusta según sea necesario */
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  #controls button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  #controls .menu-items {
+    display: none; /* asegura que el menú esté oculto inicialmente */
+  }
+  
+  #controls .menu-container:hover .menu-items {
+    display: block; /* muestra el menú cuando se pasa el mouse sobre el contenedor */
+  }
+  
+  
+  #controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;  /* Asegúrate de que el ícono es suficientemente grande para ser tocado fácilmente */
+    padding: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #controls button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  button#toggleScroll {
+    background-color: #007BFF; /* Bootstrap blue */
+  }
+  
