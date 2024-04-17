@@ -139,7 +139,15 @@ document.getElementById('menuButton').addEventListener('click', function() {
     } else {
         menuItems.style.display = "none";
     } */
-    menuItems.classList.toggle('visible');
+   
+    var menu = document.getElementById('menuItems');
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+    }
+});
+
     });
 });
 
