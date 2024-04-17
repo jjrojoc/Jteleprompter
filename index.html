@@ -22,17 +22,18 @@
 </div>
 
 <div id="controlBar" class="control-bar">
-    <div id="controls" class="controls-container">
-        <div class="menu-container">
-            <button id="menuButton" title="Menú"><i class="fas fa-bars"></i></button>
-            <div id="menuItems" class="menu-items" style="display: none;">
-                <button id="editToggle" title="Editar"><i class="fas fa-edit"></i></button>
-                <button id="loadText" title="Cargar"><i class="fas fa-folder-open"></i></button>
-                <button id="saveText" title="Guardar"><i class="fas fa-save"></i></button>
-                <button id="resetButton" title="Resetear Teleprompter"><i class="fas fa-trash"></i></button>
-
-            </div>
+    <div id="controls">
+    <div class="menu-container">
+        <button id="menuButton" title="Menú"><i class="fas fa-bars"></i></button>
+        <div id="menuItems" class="menu-items">
+            <button id="editToggle"><i class="fas fa-edit"></i> Editar</button>
+            <button id="loadText"><i class="fas fa-folder-open"></i> Cargar</button>
+            <button id="saveText"><i class="fas fa-save"></i> Guardar</button>
+            <button id="resetButton"><i class="fas fa-trash-alt"></i> Reset</button>
         </div>
+    </div>
+</div>
+
         
         <input type="color" id="textColorPicker" value="#ffffff">
         <button id="changeTextColor" title="Cambiar color de texto">
