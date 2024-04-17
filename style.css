@@ -81,7 +81,7 @@ button:focus, input[type="range"]:focus, select:focus {
 /* Responsividad ajustada */
 @media (max-width: 768px) {
   .controls-container {
-      flex-wrap: nowrap; /* Evita que los controles se apilen */
+      flex-wrap: wrap; /* Evita que los controles se apilen */
   }
 }
 
