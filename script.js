@@ -133,12 +133,16 @@ document.getElementById('textSizeControl').addEventListener('input', function() 
 });
 
 document.getElementById('menuButton').addEventListener('click', function() {
-    var menuItems = document.getElementById("menuItems");
+    /* var menuItems = document.getElementById("menuItems");
     if (menuItems.style.display === "none") {
         menuItems.style.display = "block";
     } else {
         menuItems.style.display = "none";
-    }
+    } */
+    menuItems.classList.toggle('visible');
+    });
+});
+
 });
 
 // Opcional: Cerrar el menú si se hace clic fuera de él
