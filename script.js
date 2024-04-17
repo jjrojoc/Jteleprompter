@@ -148,11 +148,6 @@ document.getElementById('menuButton').addEventListener('click', function() {
     }
 });
 
-    });
-});
-
-});
-
 // Opcional: Cerrar el menú si se hace clic fuera de él
 window.onclick = function(event) {
     if (!event.target.matches('#menuButton')) {
