@@ -47,6 +47,7 @@ body, html {
   background-color: #222;
   padding: 5px;
   position: absolute;
+  width: 100%;
   bottom: 50px; /* Ajuste de posición según necesidades */
   left: 10px; /* Mantiene el menú cerca del botón de menú */
 }
@@ -113,6 +114,10 @@ button:focus, input[type="range"]:focus, select:focus {
 
 #controls .menu-items {
   display: none; /* asegura que el menú esté oculto inicialmente */
+}
+
+.menu-items.visible {
+    display: block; /* se muestra cuando tiene la clase 'visible' */
 }
 
 #controls .menu-container:hover .menu-items {
