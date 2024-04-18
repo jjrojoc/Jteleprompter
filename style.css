@@ -155,13 +155,15 @@ button#toggleScroll {
 
 .options {
     position: absolute;
+    bottom: 100%;  /* Posiciona el menú por encima del elemento seleccionado */
     width: 100%;
     background: #fff;
     border: 1px solid #ccc;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.2);  /* Sombra ajustada para la dirección opuesta */
     list-style: none;
     padding: 0;
     margin: 0;
+    display: none; /* Esconde inicialmente las opciones */
     z-index: 1000;
 }
 
