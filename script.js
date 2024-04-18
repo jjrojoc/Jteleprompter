@@ -29,7 +29,7 @@ textSizeControl.addEventListener('input', () => {
     teleprompter.style.fontSize = newSize;
 });
 
- textColorControl.addEventListener('change', () => {
+textColorControl.addEventListener('change', () => {
     // const newColor = document.getElementById('textColorPicker').value; // toma el color del colorpicker
     const newColor = textColorControl.value;
     teleprompter.style.color = newColor;
@@ -120,7 +120,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
     teleprompter.contentEditable = !isEditable;  // Toggle the state
     this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
     if (isEditable){
-        // icon.className = "fas fa-ban";
+        icon.className = "fas fa-ban";
         const scriptText = document.getElementById('teleprompter').innerHTML;
         localStorage.setItem('savedScript', scriptText);
         alert('Text edited saved!');
@@ -145,13 +145,6 @@ document.getElementById('menuButton').addEventListener('click', function() {
         menuItems.style.display = "none";
     }
 });
-
-
-/* document.getElementById('menuButton').addEventListener('click', function() {
-    var menu = document.getElementById('menuItems');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}); */
-
 
 // Opcional: Cerrar el menú si se hace clic fuera de él
 window.onclick = function(event) {
