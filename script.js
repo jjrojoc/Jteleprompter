@@ -169,3 +169,17 @@ document.getElementById('resetButton').addEventListener('click', function() {
         localStorage.setItem('savedScript', scriptText); // guarda datos
     }
 });
+
+document.querySelector('.selected-value').addEventListener('click', function() {
+    const options = document.querySelector('.options');
+    options.style.display = (options.style.display === 'none') ? 'block' : 'none';
+});
+
+document.querySelectorAll('.options li').forEach(option => {
+    option.addEventListener('click', function() {
+        const value = this.getAttribute('data-value');
+        document.querySelector('.selected-value').textContent = this.textContent;
+        document.querySelector('.selected-value').style.color = this.style.color;
+        document.querySelector('.options').style.display = 'none';
+    });
+});
