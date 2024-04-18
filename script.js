@@ -19,7 +19,7 @@ const speedControl = document.getElementById('speedControl');
 // Existing variables and toggleAutoScroll function remain the same
 
 const textSizeControl = document.getElementById('textSizeControl');
-// const textColorControl = document.getElementById('textColorControl');
+const textColorControl = document.getElementById('textColorControl');
 
 document.getElementById('toggleScroll').addEventListener('click', toggleAutoScroll);
 
@@ -29,12 +29,12 @@ textSizeControl.addEventListener('input', () => {
     teleprompter.style.fontSize = newSize;
 });
 
- /* textColorControl.addEventListener('change', () => {
+ textColorControl.addEventListener('change', () => {
     // const newColor = document.getElementById('textColorPicker').value; // toma el color del colorpicker
     const newColor = textColorControl.value;
     teleprompter.style.color = newColor;
 });
-*/
+
 function toggleAutoScroll() {
     var button = this;
     var icon = button.querySelector('i');
@@ -168,18 +168,4 @@ document.getElementById('resetButton').addEventListener('click', function() {
         alert('Teleprompter content has been reset.'); // Opcional: Muestra un mensaje de confirmación
         localStorage.setItem('savedScript', scriptText); // guarda datos
     }
-});
-
-document.querySelector('.selected-value').addEventListener('click', function() {
-    const options = document.querySelector('.options');
-    options.style.display = (options.style.display === 'none') ? 'block' : 'none';
-});
-
-document.querySelectorAll('.options li').forEach(option => {
-    option.addEventListener('click', function() {
-        const value = this.getAttribute('data-value');
-        document.querySelector('.selected-value').textContent = this.textContent;
-        document.querySelector('.selected-value').style.color = this.style.color;
-        document.querySelector('.options').style.display = 'none';
-    });
 });
