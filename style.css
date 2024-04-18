@@ -139,3 +139,37 @@ button:focus, input[type="range"]:focus, select:focus {
 button#toggleScroll {
   background-color: #007BFF; /* Bootstrap blue */
 }
+
+.custom-select {
+    position: relative;
+    border: 1px solid #ccc;
+    width: 200px;
+    background-color: #fff;
+}
+
+.selected-value {
+    padding: 10px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.options {
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+}
+
+.options li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.options li:hover {
+    background-color: #f0f0f0;
+}
