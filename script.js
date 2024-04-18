@@ -137,7 +137,7 @@ document.getElementById('textSizeControl').addEventListener('input', function() 
     sizeValueSpan.textContent = this.value + 'px';
 });
 
-document.getElementById('menuButton').addEventListener('click', function() {
+/* document.getElementById('menuButton').addEventListener('click', function() {
     var menuItems = document.getElementById("menuItems");
     if (menuItems.style.display === "none") {
         menuItems.style.display = "block";
@@ -145,6 +145,13 @@ document.getElementById('menuButton').addEventListener('click', function() {
         menuItems.style.display = "none";
     }
 });
+*/
+
+document.getElementById('menuButton').addEventListener('click', function() {
+    var menu = document.getElementById('menuItems');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+});
+
 
 // Opcional: Cerrar el menú si se hace clic fuera de él
 window.onclick = function(event) {
