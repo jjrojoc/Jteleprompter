@@ -82,15 +82,10 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    clients.claim() // Toma el control de las páginas abiertas inmediatamente
-  );
-});
-
-self.addEventListener('activate', event => {
   var cacheKeeplist = [CACHE_NAME];
 
   event.waitUntil(
+    clients.claim() // Toma el control de las páginas abiertas inmediatamente
     caches.keys().then(keyList => {
       return Promise.all(keyList.map(key => {
         if (cacheKeeplist.indexOf(key) === -1) {
