@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_023'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_024'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -14,7 +14,7 @@ const URLS = [
 ];
 
 // Respond with cached resources
-self.addEventListener('fetch', function (e) {
+/* self.addEventListener('fetch', function (e) {
   console.log('fetch request : ' + e.request.url)
   e.respondWith(
     caches.match(e.request).then(function (request) {
@@ -31,9 +31,25 @@ self.addEventListener('fetch', function (e) {
     })
   )
 })
+*/
+
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    fetch(event.request)
+    .then(function(response) {
+      return caches.open(CACHE_NAME).then(function(cache) {
+        cache.put(event.request, response.clone());
+        return response;
+      });
+    })
+    .catch(function(error) {
+      return caches.match(event.request);
+    })
+  );
+});
 
 // Cache resources
-self.addEventListener('install', function (e) {
+/* self.addEventListener('install', function (e) {
   e.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
       console.log('installing cache : ' + CACHE_NAME)
@@ -54,6 +70,31 @@ self.addEventListener('activate', function (e) {
         if (cacheWhitelist.indexOf(key) === -1) {
           console.log('deleting cache : ' + keyList[i]);
           return caches.delete(keyList[i]);
+        }
+      }));
+    })
+  );
+});
+*/
+
+self.addEventListener('install', event => {
+  self.skipWaiting(); // Hace que el Service Worker se active inmediatamente
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    clients.claim() // Toma el control de las páginas abiertas inmediatamente
+  );
+});
+
+self.addEventListener('activate', event => {
+  var cacheKeeplist = [CACHE_NAME];
+
+  event.waitUntil(
+    caches.keys().then(keyList => {
+      return Promise.all(keyList.map(key => {
+        if (cacheKeeplist.indexOf(key) === -1) {
+          return caches.delete(key);
         }
       }));
     })
