@@ -67,8 +67,6 @@ speedControl.addEventListener('input', () => {
         scrollInterval = setInterval(() => {
             teleprompter.scrollBy(0, 1);
         }, speed);
-        const speedValueSpan = document.getElementById('scrollSpeedValue');
-        speedValueSpan.textContent = this.value;
     }
     
 });
@@ -129,10 +127,10 @@ document.getElementById('editToggle').addEventListener('click', function() {
     }
 });
 
-// document.getElementById('speedControl').addEventListener('input', function() {
-//     const speedValueSpan = document.getElementById('scrollSpeedValue');
-//     speedValueSpan.textContent = this.value;
-// });
+document.getElementById('speedControl').addEventListener('input', function() {
+     const speedValueSpan = document.getElementById('scrollSpeedValue');
+     speedValueSpan.textContent = this.value;
+ });
 
 document.getElementById('textSizeControl').addEventListener('input', function() {
     const sizeValueSpan = document.getElementById('textSizeValue');
