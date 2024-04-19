@@ -14,7 +14,7 @@ const URLS = [
 ];
 
 // Respond with cached resources
-/* self.addEventListener('fetch', function (e) {
+self.addEventListener('fetch', function (e) {
   console.log('fetch request : ' + e.request.url)
   e.respondWith(
     caches.match(e.request).then(function (request) {
@@ -30,22 +30,6 @@ const URLS = [
       // return request || fetch(e.request)
     })
   )
-})
-*/
-
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    fetch(event.request)
-    .then(function(response) {
-      return caches.open(CACHE_NAME).then(function(cache) {
-        cache.put(event.request, response.clone());
-        return response;
-      });
-    })
-    .catch(function(error) {
-      return caches.match(event.request);
-    })
-  );
 });
 
 // Cache resources
