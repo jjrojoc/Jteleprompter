@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_032'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_033'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -58,7 +58,7 @@ self.addEventListener('install', function (e) {
   )
 });
 
-self.addEventListener('activate', function (e) {
+/* self.addEventListener('activate', function (e) {
   e.waitUntil(
     caches.keys().then(function (keyList) {
       var cacheWhitelist = keyList.filter(function (key) {
@@ -74,4 +74,22 @@ self.addEventListener('activate', function (e) {
       }));
     })
   );
+}); */
+
+self.addEventListener('activate', function (e) {
+  e.waitUntil(
+    caches.keys().then(function (keyList) {
+      return Promise.all(keyList.map(function (key, i) {
+        if (key !== CACHE_NAME) {
+          console.log('Service Worker: removing old cache', key);
+          return caches.delete(key);
+        }
+      }));
+    })
+  );
 });
+
+self.addEventListener('controllerchange', () => {
+  window.location.reload();
+});
+
