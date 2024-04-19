@@ -19,21 +19,28 @@ body, html {
 }
 
 .control-bar {
-  position: fixed; /* Posición fija en la parte inferior */
-  bottom: 0; /* Alineado al fondo de la pantalla */
+  position: fixed;
+  bottom: 0;
   left: 0;
-  width: 100%; /* Ancho completo */
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px 5px; /* Padding ajustado para mejor visualización */
+  padding: 10px 5px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  z-index: 1000; /* Alto z-index para mantenerlo por encima de otros elementos */
+  justify-content: space-between; /* Asegúrate de que los elementos se distribuyan a lo largo de la barra */
+  z-index: 1000;
 }
 
-button, input[type="range"], select, input[type="color"] {
+.controls-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around; /* Espacio uniforme alrededor de cada control */
+  width: 100%;
+  gap: 10px; /* Espacio entre controles */
+}
+
+button, input[type="range"], select {
   padding: 10px;
   min-width: 60px;
   min-height: 44px;
@@ -41,15 +48,17 @@ button, input[type="range"], select, input[type="color"] {
   background-color: #333;
   color: white;
   border-radius: 5px;
-  margin: 5px;
+  margin: 0 5px; /* Asegura un pequeño espacio entre los botones */
   cursor: pointer;
   font-size: 16px;
 }
 
 input[type="color"] {
   padding: 0;
+  border: none;
   width: 44px;
   height: 44px;
+  cursor: pointer;
 }
 
 button:focus, input[type="range"]:focus, select:focus {
