@@ -38,26 +38,24 @@ textColorControl.addEventListener('change', () => {
 function toggleAutoScroll() {
     var button = this;
     var icon = button.querySelector('i');
-    
-    // Comprueba la clase actual del ícono para determinar el estado del botón
-    if (icon.classList.contains("fa-play")) {
+
+    if (!isAutoScrolling) {
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
-        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000"
+        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
+        isAutoScrolling = true; // Actualiza el estado
         // Iniciar el autoscroll aquí
         const speed = 100 - speedControl.value;
         scrollInterval = setInterval(() => {
-                         teleprompter.scrollBy(0, 1);
-            // Update lastScrollTop to new position
-             lastScrollTop = teleprompter.scrollTop;
+            teleprompter.scrollBy(0, 1);
         }, speed);
     } else {
         icon.className = "fas fa-play"; // Cambia el ícono a "play"
-        document.getElementById('toggleScroll').style.backgroundColor = "#007BFF"
+        document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
+        isAutoScrolling = false; // Actualiza el estado
         // Detener el autoscroll aquí
         clearInterval(scrollInterval);
-        
     }
-};
+}
 
 
 speedControl.addEventListener('input', () => {
