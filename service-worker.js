@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_029'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_030'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -49,7 +49,7 @@ self.addEventListener('fetch', function(event) {
 });
 
 // Cache resources
-/* self.addEventListener('install', function (e) {
+self.addEventListener('install', function (e) {
   e.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
       console.log('installing cache : ' + CACHE_NAME)
@@ -74,23 +74,4 @@ self.addEventListener('activate', function (e) {
       }));
     })
   );
-});
-*/
-
-self.addEventListener('install', event => {
-  self.skipWaiting(); // Hace que el Service Worker se active inmediatamente
-});
-
-self.addEventListener('activate', event => {
-  var cacheKeeplist = [CACHE_NAME];
-
-  event.waitUntil(
-    clients.claim();
-    caches.keys().then(keyList => {
-      return Promise.all(keyList.map(key => {
-        if (cacheKeeplist.indexOf(key) === -1) {
-          return caches.delete(key);
-        }
-      }));
-    })
 });
