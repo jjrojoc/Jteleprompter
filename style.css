@@ -1,39 +1,51 @@
 body, html {
   height: 100%;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* Asegúrate de que el box-sizing esté configurado como border-box */
+  background-color: black;
+  color: white;
 }
 
 #teleprompter {
-  margin-bottom: 50px; /* Espacio para la barra de control */
   width: 100%;
-  height: calc(100% - 50px); /* Ajusta el alto considerando la barra de control */
-  overflow: auto;
+  height: 90%;
+  overflow: scroll;
+  cursor: pointer;
   background-color: black;
   color: white;
   padding: 20px;
   box-sizing: border-box;
-  font-size: 36px;
+  font-size: 36px; /* Initial font size, adjustable via slider */
   font-family: Helvetica;
 }
 
 .control-bar {
-  position: fixed; /* Posición fija en la parte inferior */
-  bottom: 0; /* Alineado al fondo de la pantalla */
+  position: fixed;
+  bottom: 0;
   left: 0;
-  width: 100%; /* Ancho completo */
-  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
   color: white;
-  padding: 10px 5px; /* Padding ajustado para mejor visualización */
+  padding: 5px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  z-index: 1000; /* Alto z-index para mantenerlo por encima de otros elementos */
+  justify-content: space-around; /* Distribuye los elementos uniformemente */
+  z-index: 1000;
 }
 
-button, input[type="range"], select, input[type="color"] {
+.control-bar label {
+  color: white; /* Asegura que las etiquetas en la barra de controles sean blancas */
+}
+
+.controls-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 5px; /* Espacio entre los elementos */
+}
+
+button, input[type="range"], select {
   padding: 10px;
   min-width: 60px;
   min-height: 44px;
@@ -41,15 +53,17 @@ button, input[type="range"], select, input[type="color"] {
   background-color: #333;
   color: white;
   border-radius: 5px;
-  margin: 5px;
+  margin: 5px; /* Espacio entre botones */
   cursor: pointer;
   font-size: 16px;
 }
 
 input[type="color"] {
   padding: 0;
+  border: none;
   width: 44px;
   height: 44px;
+  cursor: pointer;
 }
 
 button:focus, input[type="range"]:focus, select:focus {
