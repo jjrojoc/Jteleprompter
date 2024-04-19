@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_027'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_028'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -85,7 +85,7 @@ self.addEventListener('activate', event => {
   var cacheKeeplist = [CACHE_NAME];
 
   event.waitUntil(
-    clients.claim();// Toma el control de las páginas abiertas inmediatamente
+    clients.claim();
     caches.keys().then(keyList => {
       return Promise.all(keyList.map(key => {
         if (cacheKeeplist.indexOf(key) === -1) {
