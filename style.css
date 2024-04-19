@@ -1,36 +1,36 @@
 body, html {
   height: 100%;
   margin: 0;
-  background-color: black;
-  color: white;
+  padding: 0;
+  box-sizing: border-box; /* Asegúrate de que el box-sizing esté configurado como border-box */
 }
 
 #teleprompter {
+  margin-bottom: 50px; /* Espacio para la barra de control */
   width: 100%;
-  height: 90%;
-  overflow: scroll;
-  cursor: pointer;
+  height: calc(100% - 50px); /* Ajusta el alto considerando la barra de control */
+  overflow: auto;
   background-color: black;
   color: white;
   padding: 20px;
   box-sizing: border-box;
-  font-size: 36px; /* Initial font size, adjustable via slider */
+  font-size: 36px;
   font-family: Helvetica;
 }
 
 .control-bar {
-  position: fixed;
-  bottom: 0;
+  position: fixed; /* Posición fija en la parte inferior */
+  bottom: 0; /* Alineado al fondo de la pantalla */
   left: 0;
-  width: 100%;
+  width: 100%; /* Ancho completo */
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 5px;
+  padding: 10px 5px; /* Padding ajustado para mejor visualización */
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  z-index: 1000;
+  z-index: 1000; /* Alto z-index para mantenerlo por encima de otros elementos */
 }
 
 button, input[type="range"], select, input[type="color"] {
