@@ -116,11 +116,11 @@ document.getElementById('editToggle').addEventListener('click', function() {
     
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
-    //icon.className = "fas fa-edit";
+    icon.className = "fas fa-edit";
     teleprompter.contentEditable = !isEditable;  // Toggle the state
     this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
     if (isEditable){
-        //icon.className = "fas fa-ban";
+        icon.className = "fas fa-ban";
         const scriptText = document.getElementById('teleprompter').innerHTML;
         localStorage.setItem('savedScript', scriptText);
         alert('Text edited saved!');
@@ -128,9 +128,9 @@ document.getElementById('editToggle').addEventListener('click', function() {
 });
 
 document.getElementById('speedControl').addEventListener('input', function() {
-     const speedValueSpan = document.getElementById('scrollSpeedValue');
-     speedValueSpan.textContent = this.value;
- });
+    const speedValueSpan = document.getElementById('scrollSpeedValue');
+    speedValueSpan.textContent = this.value;
+});
 
 document.getElementById('textSizeControl').addEventListener('input', function() {
     const sizeValueSpan = document.getElementById('textSizeValue');
