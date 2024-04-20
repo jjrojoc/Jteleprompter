@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_061'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_063'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -19,24 +19,51 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Respond with cached resources
-self.addEventListener('fetch', function (e) {
-  console.log('fetch request : ' + e.request.url)
-  e.respondWith(
-    caches.match(e.request).then(function (request) {
-      if (request) { // if cache is available, respond with cache
-        console.log('responding with cache : ' + e.request.url)
-        return request
-      } else {       // if there are no cache, try fetching request
-        console.log('file is not cached, fetching : ' + e.request.url)
-        return fetch(e.request)
-      }
+// // Respond with cached resources
+// self.addEventListener('fetch', function (e) {
+//   console.log('fetch request : ' + e.request.url)
+//   e.respondWith(
+//     caches.match(e.request).then(function (request) {
+//       if (request) { // if cache is available, respond with cache
+//         console.log('responding with cache : ' + e.request.url)
+//         return request
+//       } else {       // if there are no cache, try fetching request
+//         console.log('file is not cached, fetching : ' + e.request.url)
+//         return fetch(e.request)
+//       }
 
-      // You can omit if/else for console.log & put one line below like this too.
-      // return request || fetch(e.request)
-    })
-  )
+//       // You can omit if/else for console.log & put one line below like this too.
+//       // return request || fetch(e.request)
+//     })
+//   )
+// });
+
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+      fetch(event.request)
+          .then(function(response) {
+              // Si la respuesta es válida, la almacena en caché y la devuelve
+              if (!response || response.status !== 200 || response.type !== 'basic') {
+                  return response;
+              }
+
+              var responseToCache = response.clone();
+
+              caches.open(CACHE_NAME)
+                  .then(function(cache) {
+                      cache.put(event.request, responseToCache);
+                  });
+
+              return response;
+          })
+          .catch(function(error) {
+              // Si la red falla, intenta recuperar la respuesta desde la caché
+              console.log('Fetching failed; returning cached page instead.', error);
+              return caches.match(event.request);
+          })
+  );
 });
+
 
 
 
