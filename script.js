@@ -199,6 +199,15 @@ document.getElementById('editToggle').addEventListener('click', function() {
     if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
         teleprompter.innerText = '';  // Borra el texto
         icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
+        window.setTimeout(function() {
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.setStart(teleprompter, 0);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
+        }, 1);
     }
 
     this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Actualiza el texto del botón
