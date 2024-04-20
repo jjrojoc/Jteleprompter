@@ -218,6 +218,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
         if (scriptText === '') {
             scriptText = '1º Click en Menú --> Editar <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto <br>3º Click en Menú --> Parar Editar <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
         }
+        teleprompter.innerHTML = scriptText;
         localStorage.setItem('savedScript', scriptText);
         alert('Texto editado guardado!');
     }
