@@ -210,7 +210,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
         }, 1);
     }
 
-    this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Actualiza el texto del botón
+    // this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Actualiza el texto del botón
 
     if (isEditable){
         icon.className = 'fas fa-edit'; // Cambia el icono a editar
