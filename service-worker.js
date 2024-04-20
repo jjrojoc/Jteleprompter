@@ -32,15 +32,14 @@ self.addEventListener('fetch', function (e) {
   )
 });
 
-
-self.addEventListener('message', (event) => {
-  if (event.data === 'SKIP_WAITING') {
-      self.skipWaiting();
-  }
-});
-
 // Cache resources
 self.addEventListener('install', function (e) {
+  self.addEventListener('message', (event) => {
+    if (event.data === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+  });
+  
   e.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
       console.log('installing cache : ' + CACHE_NAME)
