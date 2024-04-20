@@ -103,7 +103,8 @@ function toggleAutoScroll() {
         }, speed);
     } else {
         icon.className = "fas fa-play"; // Cambia el ícono a "play"
-        document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
+        // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
+        document.getElementById('toggleScroll').style.backgroundColor = "#555555";
         isAutoScrolling = false; // Actualiza el estado
         // Detener el autoscroll aquí
         clearInterval(scrollInterval);
