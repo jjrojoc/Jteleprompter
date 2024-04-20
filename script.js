@@ -190,16 +190,56 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
 //     }
 // });
 
+// // document.getElementById('editToggle').addEventListener('click', function() {
+// //     const teleprompter = document.getElementById('teleprompter');
+// //     const isEditable = teleprompter.contentEditable === "true";
+// //     teleprompter.contentEditable = !isEditable;  // Alternar el estado de edición
+// //     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
+
+// //     // Verifica si el contenido debe ser borrado
+// //     if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
+// //         teleprompter.innerHTML = '';  // Borra el texto
+// //         icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
+// //         window.setTimeout(function() {
+// //             const range = document.createRange();
+// //             const sel = window.getSelection();
+// //             range.setStart(teleprompter, 0);
+// //             range.collapse(true);
+// //             sel.removeAllRanges();
+// //             sel.addRange(range);
+// //             teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
+// //         }, 1);
+// //     }
+
+// //     // this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Actualiza el texto del botón
+
+// //     if (isEditable){
+// //         icon.className = 'fas fa-edit'; // Cambia el icono a editar
+// //         let textoVacio = teleprompter.innerText.trim();
+// //         if (textoVacio === '') {
+// //             teleprompter.innerHTML = '1º Click en Menú --> Editar \
+// //                          <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+// //                          <br>3º Click en Menú --> Parar Editar \
+// //                          <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
+// //         }
+// //         const  scriptText = document.getElementById('teleprompter').innerHTML;
+// //         localStorage.setItem('savedScript', scriptText);
+// //         alert('Texto editado guardado!');
+// //     }
+// // });
+
 document.getElementById('editToggle').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
-    teleprompter.contentEditable = !isEditable;  // Alternar el estado de edición
     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
+
+    // Alternar el estado de edición
+    teleprompter.contentEditable = !isEditable;
 
     // Verifica si el contenido debe ser borrado
     if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
         teleprompter.innerHTML = '';  // Borra el texto
-        icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
+        teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
         window.setTimeout(function() {
             const range = document.createRange();
             const sel = window.getSelection();
@@ -207,26 +247,25 @@ document.getElementById('editToggle').addEventListener('click', function() {
             range.collapse(true);
             sel.removeAllRanges();
             sel.addRange(range);
-            teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
         }, 1);
     }
 
-    // this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Actualiza el texto del botón
-
-    if (isEditable){
-        icon.className = 'fas fa-edit'; // Cambia el icono a editar
-        let textoVacio = teleprompter.innerText.trim();
-        if (textoVacio === '') {
+    if (!isEditable) {
+        icon.className = 'fas fa-stop-circle'; // Cambia el icono a 'parar editar' cuando es editable
+    } else {
+        icon.className = 'fas fa-edit'; // Cambia el icono a 'editar' cuando deja de ser editable
+        const scriptText = document.getElementById('teleprompter').innerHTML;
+        if (scriptText.trim() === '') {
             teleprompter.innerHTML = '1º Click en Menú --> Editar \
                          <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
                          <br>3º Click en Menú --> Parar Editar \
                          <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
         }
-        const scripText = document.getElementById('teleprompter').innerHTML;
         localStorage.setItem('savedScript', scriptText);
         alert('Texto editado guardado!');
     }
 });
+
 
 
 
