@@ -268,10 +268,10 @@ document.getElementById('resetButton').addEventListener('click', function() {
         let scriptText = teleprompter.innerText.trim();
         if (scriptText === '') {
             scriptText = '1º Click en Menú --> Editar <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto <br>3º Click en Menú --> Parar Editar <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
+            localStorage.setItem('savedScript', scriptText);
+            alert('Texto reseteado!');
         }
         teleprompter.innerHTML = scriptText;
-        localStorage.setItem('savedScript', scriptText);
-        alert('Texto editado guardado!');
     }
         localStorage.setItem('savedScript', scriptText); // guarda datos
 });
