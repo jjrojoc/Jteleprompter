@@ -274,5 +274,4 @@ document.getElementById('resetButton').addEventListener('click', function() {
         alert('Texto editado guardado!');
     }
         localStorage.setItem('savedScript', scriptText); // guarda datos
-    }
 });
