@@ -216,7 +216,10 @@ document.getElementById('editToggle').addEventListener('click', function() {
         icon.className = 'fas fa-edit'; // Cambia el icono a editar
         let scriptText = teleprompter.innerText.trim();
         if (scriptText === '') {
-            scriptText = '1º Click en Menú --> Editar <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto <br>3º Click en Menú --> Parar Editar <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
+            scriptText = '1º Click en Menú --> Editar \
+                         <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+                         <br>3º Click en Menú --> Parar Editar \
+                         <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
         }
         teleprompter.innerHTML = scriptText;
         localStorage.setItem('savedScript', scriptText);
@@ -261,13 +264,16 @@ window.onclick = function(event) {
 
 
 document.getElementById('resetButton').addEventListener('click', function() {
-    if (confirm('Estás seguro que quieres resetear el contenido del teleprompter? Esta acción no puede ser deshecha.')) {
+    if (confirm('¿Quieres resetear el contenido del teleprompter? \nEsta acción no se puede deshacer.')) {
         // Borra específicamente el contenido del párrafo con ID 'script'
         document.getElementById('teleprompter').innerHTML = ''; // Restablece el contenido a vacío
         //alert('Teleprompter content has been reset.'); // Opcional: Muestra un mensaje de confirmación
         let scriptText = teleprompter.innerText.trim();
         if (scriptText === '') {
-            scriptText = '1º Click en Menú --> Editar <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto <br>3º Click en Menú --> Parar Editar <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
+            scriptText = '1º Click en Menú --> Editar \
+                        <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+                        <br>3º Click en Menú --> Parar Editar \
+                        <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
             localStorage.setItem('savedScript', scriptText);
             alert('Texto reseteado!');
         }
