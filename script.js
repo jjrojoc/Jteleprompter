@@ -160,17 +160,34 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
 });
 
 
+// document.getElementById('editToggle').addEventListener('click', function() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const isEditable = teleprompter.contentEditable === "true";
+//     teleprompter.contentEditable = !isEditable;  // Toggle the state
+//     this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
+//     if (isEditable){
+//         const scriptText = document.getElementById('teleprompter').innerHTML;
+//         localStorage.setItem('savedScript', scriptText);
+//         alert('Text edited saved!');
+//     }
+// });
+
 document.getElementById('editToggle').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
     teleprompter.contentEditable = !isEditable;  // Toggle the state
-    this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
-    if (isEditable){
+    const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
+    
+    if (isEditable) {
+        icon.className = 'fas fa-edit'; // Cambia el icono a editar
         const scriptText = document.getElementById('teleprompter').innerHTML;
         localStorage.setItem('savedScript', scriptText);
         alert('Text edited saved!');
+    } else {
+        icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
     }
 });
+
 
 document.getElementById('speedControl').addEventListener('input', function() {
     const speedValueSpan = document.getElementById('scrollSpeedValue');
