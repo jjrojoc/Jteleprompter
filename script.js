@@ -326,3 +326,17 @@ document.getElementById('resetButton').addEventListener('click', function() {
         alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
     }
 });
+
+document.getElementById('teleprompter').addEventListener('paste', function(e) {
+    e.preventDefault();
+    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+    // Inserta el texto directamente en el elemento, manteniendo el foco y la posición del cursor
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return false;
+    selection.deleteFromDocument();
+    selection.getRangeAt(0).insertNode(document.createTextNode(text));
+
+    // Puede que necesites mover el cursor después del texto insertado
+    selection.collapseToEnd();
+});
