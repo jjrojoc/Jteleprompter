@@ -272,6 +272,6 @@ document.getElementById('resetButton').addEventListener('click', function() {
             alert('Texto reseteado!');
         }
         teleprompter.innerHTML = scriptText;
-    }
         localStorage.setItem('savedScript', scriptText); // guarda datos
+    }
 });
