@@ -198,7 +198,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
 
     // Verifica si el contenido debe ser borrado
     if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
-        teleprompter.innerText = '';  // Borra el texto
+        teleprompter.innerHTML = '';  // Borra el texto
         icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
         window.setTimeout(function() {
             const range = document.createRange();
@@ -215,14 +215,14 @@ document.getElementById('editToggle').addEventListener('click', function() {
 
     if (isEditable){
         icon.className = 'fas fa-edit'; // Cambia el icono a editar
-        let scriptText = teleprompter.innerText.trim();
-        if (scriptText === '') {
-            scriptText = '1º Click en Menú --> Editar \
+        let textoVacio = teleprompter.innerText.trim();
+        if (textoVacio === '') {
+            teleprompter.innerHTML = '1º Click en Menú --> Editar \
                          <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
                          <br>3º Click en Menú --> Parar Editar \
                          <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
-                         const scripthtml = document.getElementById('teleprompter').innerHTML;
-            localStorage.setItem('savedScript', scriptText.innerHTML);
+            const scripText = document.getElementById('teleprompter').innerHTML;
+            localStorage.setItem('savedScript', scriptText);
             alert('Texto editado guardado!');
         }
     }
