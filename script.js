@@ -173,21 +173,44 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
 //     }
 // });
 
+// document.getElementById('editToggle').addEventListener('click', function() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const isEditable = teleprompter.contentEditable === "true";
+//     teleprompter.contentEditable = !isEditable;  // Toggle the state
+//     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
+    
+//     if (isEditable) {
+//         icon.className = 'fas fa-edit'; // Cambia el icono a editar
+//         const scriptText = document.getElementById('teleprompter').innerHTML;
+//         localStorage.setItem('savedScript', scriptText);
+//         alert('Text edited saved!');
+//     } else {
+//         icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
+//     }
+// });
+
 document.getElementById('editToggle').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
-    teleprompter.contentEditable = !isEditable;  // Toggle the state
+    teleprompter.contentEditable = !isEditable;  // Alternar el estado de edición
     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
-    
-    if (isEditable) {
-        icon.className = 'fas fa-edit'; // Cambia el icono a editar
-        const scriptText = document.getElementById('teleprompter').innerHTML;
-        localStorage.setItem('savedScript', scriptText);
-        alert('Text edited saved!');
-    } else {
+
+    // Verifica si el contenido debe ser borrado
+    if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
+        teleprompter.innerText = '';  // Borra el texto
         icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
     }
+
+    this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Actualiza el texto del botón
+
+    if (isEditable){
+        icon.className = 'fas fa-edit'; // Cambia el icono a editar
+        const scriptText = teleprompter.innerText;
+        localStorage.setItem('savedScript', scriptText);
+        alert('Texto editado guardado!');
+    }
 });
+
 
 
 document.getElementById('speedControl').addEventListener('input', function() {
