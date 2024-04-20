@@ -157,7 +157,7 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
     range.insertNode(span);
     selection.removeAllRanges();
     selection.addRange(range);
-    window.removeAllRanges(selection);
+    window.removeAllRanges();
 });
 
 
