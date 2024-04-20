@@ -331,12 +331,23 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     e.preventDefault();
     var text = (e.originalEvent || e).clipboardData.getData('text/plain');
 
-    // Inserta el texto directamente en el elemento, manteniendo el foco y la posición del cursor
+    const formattedText = text.replace(/\n/g, '<br>');
+
+    // Inserta el texto manteniendo el foco y la posición del cursor
     const selection = window.getSelection();
     if (!selection.rangeCount) return false;
     selection.deleteFromDocument();
-    selection.getRangeAt(0).insertNode(document.createTextNode(text));
 
-    // Puede que necesites mover el cursor después del texto insertado
+    // Inserta HTML directamente, respetando saltos de línea
+    const div = document.createElement('div');
+    div.innerHTML = formattedText;
+    const fragment = document.createDocumentFragment();
+    let child;
+    while ((child = div.firstChild)) {
+        fragment.appendChild(child);
+    }
+    selection.getRangeAt(0).insertNode(fragment);
+
+    // Mueve el cursor al final del texto insertado
     selection.collapseToEnd();
 });
