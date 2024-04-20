@@ -18,7 +18,7 @@ function invokeServiceWorkerUpdateFlow(registration) {
             registration.waiting.postMessage('SKIP_WAITING')
         }
     })
-}
+};
 
 // check if the browser supports serviceWorker at all
 if ('serviceWorker' in navigator) {
