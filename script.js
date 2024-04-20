@@ -125,7 +125,7 @@ speedControl.addEventListener('input', () => {
 document.getElementById('saveText').addEventListener('click', function() {
     const scriptText = document.getElementById('teleprompter').innerHTML;
     localStorage.setItem('savedScript', scriptText);
-    alert('Text saved!');
+    alert('Texto guardado!');
 });
 
 document.getElementById('loadText').addEventListener('click', function() {

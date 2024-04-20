@@ -96,9 +96,9 @@ button:focus, input[type="range"]:focus, select:focus {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-button#toggleScroll {
+/* button#toggleScroll {
   background-color: #007BFF;  /* Bootstrap blue */
-}
+} */
 
 .menu-items {
   display: none;
