@@ -9,11 +9,6 @@
 //     });
 //   }
 
-self.addEventListener('controllerchange', () => {
-    window.location.reload();
-    console.log('Reloading Page')
-  });
-
 function invokeServiceWorkerUpdateFlow(registration) {
     // TODO implement your own UI notification element
     if (confirm("New version of the app is available. Refresh now?")) {
