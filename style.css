@@ -71,9 +71,9 @@ button:focus, input[type="range"]:focus, select:focus {
   outline: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .controls-container {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
 }
 
