@@ -222,10 +222,10 @@ document.getElementById('editToggle').addEventListener('click', function() {
                          <br>3º Click en Menú --> Parar Editar \
                          <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
         }
-        const scripthtml = document.getElementById('teleprompter').innerHTML;
-        localStorage.setItem('savedScript', scripthtml);
-        alert('Texto editado guardado!');
     }
+    const scripthtml = document.getElementById('teleprompter').innerHTML;
+    localStorage.setItem('savedScript', scripthtml);
+    alert('Texto editado guardado!');
 });
 
 
