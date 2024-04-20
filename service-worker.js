@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_054'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_055'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -50,18 +50,19 @@ self.addEventListener('install', function (e) {
 
 self.addEventListener('activate', function (e) {
   e.waitUntil(
-    caches.keys().then(function (keyList) {
-      var cacheWhitelist = keyList.filter(function (key) {
-        return key.startsWith(APP_PREFIX) && key !== CACHE_NAME;
-      });
-      cacheWhitelist.push(CACHE_NAME);
-
-      return Promise.all(keyList.map(function (key) {
-        if (!cacheWhitelist.includes(key)) {
-          console.log('deleting cache : ', key);
-          return caches.delete(key);
-        }
-      }));
-    })
-  );
+      caches.keys().then(function (keyList) {
+          // El Promise.all espera por todas las promesas pasadas a ser resueltas.
+          return Promise.all(keyList.map(function (key) {
+              // Eliminar todas las caches que no son la caché actual.
+              if (key.startsWith(APP_PREFIX) && key !== CACHE_NAME) {
+                  console.log('Deleting old cache:', key);
+                  return caches.delete(key);
+              }
+          }));
+      })
+  ).then(() => {
+      console.log('Service Worker activated and old caches cleaned');
+      // Cuando el nuevo SW se activa, toma el control inmediatamente de las páginas abiertas.
+      self.clients.claim();
+  });
 });
