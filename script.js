@@ -353,31 +353,33 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // });
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault();  // Previene el comportamiento de pegado predeterminado
+    e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
 
-    // Accede al texto pegado desde el portapapeles
-    var text = e.clipboardData.getData('text/plain');
-    
-    // Crear un contenedor temporal para el contenido HTML
+    // Accede al contenido HTML pegado desde el portapapeles.
+    var htmlContent = e.clipboardData.getData('text/html');
+
+    // Si no hay contenido HTML, intenta obtener el texto plano.
+    if (!htmlContent) {
+        htmlContent = e.clipboardData.getData('text/plain');
+    }
+
+    // Crear un contenedor temporal para el contenido HTML.
     var tempDiv = document.createElement('div');
-    tempDiv.innerHTML = text;  // Inserta el texto como HTML
+    tempDiv.innerHTML = htmlContent; // Inserta el texto como HTML.
 
-    // Filtrar solo los estilos de color del texto
-    var spans = tempDiv.querySelectorAll('span');
-    spans.forEach(function(span) {
-        var color = span.style.color;
-        if (color) {
-            // Crear un nuevo span solo con el color
-            var newSpan = document.createElement('span');
-            newSpan.style.color = color;
-            newSpan.textContent = span.textContent;
-            span.parentNode.replaceChild(newSpan, span);
-        } else {
-            // Eliminar cualquier otro estilo no deseado
-            span.removeAttribute('style');
-        }
-    });
+    // Elimina todos los estilos excepto los de color de texto.
+    stripStylesExceptColor(tempDiv);
 
-    // Inserta el HTML filtrado
+    // Inserta el HTML filtrado en el contenido editable.
     document.execCommand('insertHTML', false, tempDiv.innerHTML);
 });
+
+// Función para eliminar todos los estilos excepto el color del texto.
+function stripStylesExceptColor(element) {
+    if (element.style) {
+        const textColor = element.style.color;
+        element.removeAttribute('style');
+        if (textColor) element.style.color = textColor;
+    }
+    Array.from(element.children).forEach(stripStylesExceptColor);
+}
