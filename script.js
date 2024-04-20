@@ -75,6 +75,7 @@ const textColorControl = document.getElementById('textColorControl');
 
 document.getElementById('toggleScroll').addEventListener('click', toggleAutoScroll);
 
+document.getElementById('loadText').style.display = 'none';
 
 textSizeControl.addEventListener('input', () => {
     const newSize = textSizeControl.value + 'px';
