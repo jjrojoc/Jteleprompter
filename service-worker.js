@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_057'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_058'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -49,20 +49,19 @@ self.addEventListener('install', function (e) {
 });
 
 self.addEventListener('activate', function (e) {
-  e.waitUntil(
-      caches.keys().then(function (keyList) {
-          // El Promise.all espera por todas las promesas pasadas a ser resueltas.
-          return Promise.all(keyList.map(function (key) {
-              // Eliminar todas las caches que no son la caché actual.
-              if (key.startsWith(APP_PREFIX) && key !== CACHE_NAME) {
-                  console.log('Deleting old cache:', key);
-                  return caches.delete(key);
-              }
-          }));
-      })
-  ).then(() => {
-      console.log('Service Worker activated and old caches cleaned');
-      // Cuando el nuevo SW se activa, toma el control inmediatamente de las páginas abiertas.
-      self.clients.claim();
-  });
+    e.waitUntil(
+        caches.keys().then(function (keyList) {
+            let cacheDeletePromises = keyList.map(function (key) {
+                if (key.startsWith(APP_PREFIX) && key !== CACHE_NAME) {
+                    console.log('Deleting old cache:', key);
+                    return caches.delete(key);
+                }
+            }).filter(promise => promise !== undefined); // Filtramos undefined de la matriz.
+
+            return Promise.all(cacheDeletePromises);
+        }).then(() => {
+            console.log('Service Worker activated and old caches cleaned');
+            self.clients.claim(); // Este paso es importante para que el nuevo SW tome control inmediato.
+        })
+    );
 });
