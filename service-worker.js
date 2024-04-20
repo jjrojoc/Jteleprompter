@@ -13,6 +13,12 @@ const URLS = [
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'
 ];
 
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') {
+      self.skipWaiting();
+  }
+});
+
 // Respond with cached resources
 self.addEventListener('fetch', function (e) {
   console.log('fetch request : ' + e.request.url)
@@ -34,12 +40,6 @@ self.addEventListener('fetch', function (e) {
 
 // Cache resources
 self.addEventListener('install', function (e) {
-  self.addEventListener('message', (event) => {
-    if (event.data === 'SKIP_WAITING') {
-        self.skipWaiting();
-    }
-  });
-  
   e.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
       console.log('installing cache : ' + CACHE_NAME)
