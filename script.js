@@ -388,13 +388,15 @@ function stripStylesExceptColor(element) {
 
 // Función para normalizar los saltos de línea eliminando <div> y <p>, reemplazándolos por <br>
 function normalizeLineBreaks(element) {
-    if (element.nodeName === 'DIV' || element.nodeName === 'P') {
-        if (!element.previousElementSibling) {
-            element.outerHTML = element.innerHTML + '<br>'; // Agrega un salto de línea al final si es necesario.
-        } else {
-            element.outerHTML = '<br>' + element.innerHTML;
+    var children = Array.from(element.childNodes);
+    for (var child of children) {
+        normalizeLineBreaks(child); // Primero normaliza recursivamente
+    }
+
+    if (element.nodeType === Node.ELEMENT_NODE && (element.tagName === 'DIV' || element.tagName === 'P')) {
+        var replacementHtml = element.innerHTML + '<br>'; // Prepara el contenido con un <br>
+        if (element.parentNode) {
+            element.outerHTML = replacementHtml; // Solo reemplaza si tiene un nodo padre
         }
-    } else {
-        Array.from(element.children).forEach(normalizeLineBreaks);
     }
 }
