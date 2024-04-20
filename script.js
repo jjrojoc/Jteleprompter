@@ -327,27 +327,34 @@ document.getElementById('resetButton').addEventListener('click', function() {
     }
 });
 
+// 
+
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault();
-    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+    e.preventDefault();  // Previene el comportamiento de pegado predeterminado
 
-    const formattedText = text.replace(/\n/g, '<br>');
+    // Accede al texto pegado desde el portapapeles
+    var text = e.clipboardData.getData('text/plain');
+    
+    // Crear un contenedor temporal para el contenido HTML
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text;  // Inserta el texto como HTML
 
-    // Inserta el texto manteniendo el foco y la posición del cursor
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return false;
-    selection.deleteFromDocument();
+    // Filtrar solo los estilos de color del texto
+    var spans = tempDiv.querySelectorAll('span');
+    spans.forEach(function(span) {
+        var color = span.style.color;
+        if (color) {
+            // Crear un nuevo span solo con el color
+            var newSpan = document.createElement('span');
+            newSpan.style.color = color;
+            newSpan.textContent = span.textContent;
+            span.parentNode.replaceChild(newSpan, span);
+        } else {
+            // Eliminar cualquier otro estilo no deseado
+            span.removeAttribute('style');
+        }
+    });
 
-    // Inserta HTML directamente, respetando saltos de línea
-    const div = document.createElement('div');
-    div.innerHTML = formattedText;
-    const fragment = document.createDocumentFragment();
-    let child;
-    while ((child = div.firstChild)) {
-        fragment.appendChild(child);
-    }
-    selection.getRangeAt(0).insertNode(fragment);
-
-    // Mueve el cursor al final del texto insertado
-    selection.collapseToEnd();
+    // Inserta el HTML filtrado
+    document.execCommand('insertHTML', false, tempDiv.innerHTML);
 });
