@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_052'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_053'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -65,8 +65,3 @@ self.addEventListener('activate', function (e) {
     })
   );
 });
-
-self.addEventListener('controllerchange', () => {
-  window.location.reload();
-});
-
