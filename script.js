@@ -327,7 +327,30 @@ document.getElementById('resetButton').addEventListener('click', function() {
     }
 });
 
-// 
+// document.getElementById('teleprompter').addEventListener('paste', function(e) {
+//     e.preventDefault();
+//     var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+//     const formattedText = text.replace(/\n/g, '<br>');
+
+//     // Inserta el texto manteniendo el foco y la posición del cursor
+//     const selection = window.getSelection();
+//     if (!selection.rangeCount) return false;
+//     selection.deleteFromDocument();
+
+//     // Inserta HTML directamente, respetando saltos de línea
+//     const div = document.createElement('div');
+//     div.innerHTML = formattedText;
+//     const fragment = document.createDocumentFragment();
+//     let child;
+//     while ((child = div.firstChild)) {
+//         fragment.appendChild(child);
+//     }
+//     selection.getRangeAt(0).insertNode(fragment);
+
+//     // Mueve el cursor al final del texto insertado
+//     selection.collapseToEnd();
+// });
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
     e.preventDefault();  // Previene el comportamiento de pegado predeterminado
