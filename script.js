@@ -361,14 +361,16 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     // Si no hay contenido HTML, intenta obtener el texto plano.
     if (!htmlContent) {
         htmlContent = e.clipboardData.getData('text/plain');
+        htmlContent = htmlContent.replace(/(?:\r\n|\r|\n)/g, '<br>'); // Reemplaza saltos de línea por <br>
     }
 
     // Crear un contenedor temporal para el contenido HTML.
     var tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlContent; // Inserta el texto como HTML.
 
-    // Elimina todos los estilos excepto los de color de texto.
+    // Elimina todos los estilos excepto los de color de texto y normaliza saltos de línea.
     stripStylesExceptColor(tempDiv);
+    normalizeLineBreaks(tempDiv);
 
     // Inserta el HTML filtrado en el contenido editable.
     document.execCommand('insertHTML', false, tempDiv.innerHTML);
@@ -382,4 +384,17 @@ function stripStylesExceptColor(element) {
         if (textColor) element.style.color = textColor;
     }
     Array.from(element.children).forEach(stripStylesExceptColor);
+}
+
+// Función para normalizar los saltos de línea eliminando <div> y <p>, reemplazándolos por <br>
+function normalizeLineBreaks(element) {
+    if (element.nodeName === 'DIV' || element.nodeName === 'P') {
+        if (!element.previousElementSibling) {
+            element.outerHTML = element.innerHTML + '<br>'; // Agrega un salto de línea al final si es necesario.
+        } else {
+            element.outerHTML = '<br>' + element.innerHTML;
+        }
+    } else {
+        Array.from(element.children).forEach(normalizeLineBreaks);
+    }
 }
