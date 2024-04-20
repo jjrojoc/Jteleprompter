@@ -1,5 +1,5 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_048'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_049'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
@@ -56,10 +56,10 @@ self.addEventListener('activate', function (e) {
       });
       cacheWhitelist.push(CACHE_NAME);
 
-      return Promise.all(keyList.map(function (key, i) {
+      return Promise.all(keyList.map(function (key) {
         if (cacheWhitelist.indexOf(key) === -1) {
-          console.log('deleting cache : ' + keyList[i]);
-          return caches.delete(keyList[i]);
+          console.log('deleting cache : ' + keyList);
+          return caches.delete(key);
         }
       }));
     })
