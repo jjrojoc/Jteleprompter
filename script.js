@@ -262,6 +262,7 @@ window.onclick = function(event) {
 
 document.getElementById('resetButton').addEventListener('click', function() {
     if (confirm('Are you sure you want to reset the teleprompter content? This action cannot be undone.')) {
+        let scriptText = teleprompter.innerText;
         // Borra específicamente el contenido del párrafo con ID 'script'
         document.getElementById('teleprompter').innerHTML = ''; // Restablece el contenido a vacío
         alert('Teleprompter content has been reset.'); // Opcional: Muestra un mensaje de confirmación
