@@ -304,20 +304,25 @@ window.onclick = function(event) {
 
 
 document.getElementById('resetButton').addEventListener('click', function() {
+    const teleprompter = document.getElementById('teleprompter');
+    const editButton = document.getElementById('editToggle');
+    const editIcon = editButton.querySelector('i'); // Asumiendo que el botón tiene un elemento <i> para el ícono
+
     if (confirm('¿Quieres resetear el contenido del teleprompter? \nEsta acción no se puede deshacer.')) {
-        // Borra específicamente el contenido del párrafo con ID 'script'
-        document.getElementById('teleprompter').innerHTML = ''; // Restablece el contenido a vacío
-        //alert('Teleprompter content has been reset.'); // Opcional: Muestra un mensaje de confirmación
-        let scriptText = teleprompter.innerText.trim();
-        if (scriptText === '') {
-            scriptText = '1º Click en Menú --> Editar \
+        // Verifica y ajusta el estado editable si es necesario
+        if (teleprompter.contentEditable === "true") {
+            teleprompter.contentEditable = "false"; // Asegúrate de que el teleprompter no esté editable
+            editIcon.className = 'fas fa-edit'; // Cambia el ícono a editar
+        }
+
+        // Restablece el contenido a un mensaje predeterminado
+        let scriptText = '1º Click en Menú --> Editar \
                         <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
                         <br>3º Click en Menú --> Parar Editar \
-                        <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
-            localStorage.setItem('savedScript', scriptText);
-            alert('Texto reseteado!');
-        }
-        teleprompter.innerHTML = scriptText;
-        localStorage.setItem('savedScript', scriptText); // guarda datos
+                        <br>Listo, click en Start para iniciar teleprompt'; // Texto predeterminado
+
+        teleprompter.innerHTML = scriptText; // Establece el nuevo contenido HTML
+        localStorage.setItem('savedScript', scriptText); // Guarda en localStorage
+        alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
     }
 });
