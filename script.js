@@ -61,7 +61,7 @@ if ('serviceWorker' in navigator) {
             }
         })
     })
-}
+};
 
 let isAutoScrolling = false;
 let scrollInterval;
