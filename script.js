@@ -469,6 +469,12 @@ function applySettings() {
     // Asume que 'setScrollSpeed' es una función existente para ajustar la velocidad del scroll
     //setScrollSpeed(scrollSpeed);
     speedControl.value = scrollSpeed;
+    textSizeControl.value = fontSize;
+    const speedValueSpan = document.getElementById('scrollSpeedValue');
+    speedValueSpan.textContent = scrollSpeed;
+
+    const sizeValueSpan = document.getElementById('textSizeValue');
+    sizeValueSpan.textContent = fontSize + 'px';
   }
   
   document.addEventListener('DOMContentLoaded', loadSettings);
