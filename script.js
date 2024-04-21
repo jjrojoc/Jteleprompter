@@ -89,6 +89,9 @@ textColorControl.addEventListener('change', () => {
 });
 
 function toggleAutoScroll() {
+    const controls = document.querySelector('.controls');
+    const isScrolling = this.getAttribute('data-scrolling') === 'true';
+
     var button = this;
     var icon = button.querySelector('i');
 
@@ -96,6 +99,7 @@ function toggleAutoScroll() {
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true; // Actualiza el estado
+        controls.style.display = 'none'; // Mostrar controles cuando se detiene el scroll
         // Iniciar el autoscroll aquí
         const speed = 100 - speedControl.value;
         scrollInterval = setInterval(() => {
@@ -106,6 +110,7 @@ function toggleAutoScroll() {
         // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
         isAutoScrolling = false; // Actualiza el estado
+        controls.style.display = 'block'; // Ocultar controles durante el scroll
         // Detener el autoscroll aquí
         clearInterval(scrollInterval);
     }
@@ -403,16 +408,16 @@ function normalizeLineBreaks(element) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    // esconder todos los controles por defecto
-    const controls = document.querySelectorAll('.control:not(#toggleUI)');
-    controls.forEach(control => {
-        control.style.display = 'none'; // Ocultar controles al cargar
-    });
-    // Establecer el icono inicial correcto en el botón de toggle
-    const toggleButton = document.getElementById('toggleUI');
-    const icon = toggleButton.querySelector('i');
-    icon.classList.remove('fa-eye-slash');
-    icon.classList.add('fa-eye');
+    // // esconder todos los controles por defecto
+    // const controls = document.querySelectorAll('.control:not(#toggleUI)');
+    // controls.forEach(control => {
+    //     control.style.display = 'none'; // Ocultar controles al cargar
+    // });
+    // // Establecer el icono inicial correcto en el botón de toggle
+    // const toggleButton = document.getElementById('toggleUI');
+    // const icon = toggleButton.querySelector('i');
+    // icon.classList.remove('fa-eye-slash');
+    // icon.classList.add('fa-eye');
 
     // Obtener referencias a los elementos de la interfaz
     const speedControl = document.getElementById('speedControl');
@@ -463,21 +468,21 @@ function adjustSpeed(speed) {
     }
 }
 
-document.getElementById('toggleUI').addEventListener('click', function() {
-    const controls = document.querySelectorAll('.control:not(#toggleUI)'); // Excluir el botón de toggle del selector
-    const icon = this.querySelector('i');
-    const isHidden = icon.classList.contains('fa-eye-slash');
+// document.getElementById('toggleUI').addEventListener('click', function() {
+//     const controls = document.querySelectorAll('.control:not(#toggleUI)'); // Excluir el botón de toggle del selector
+//     const icon = this.querySelector('i');
+//     const isHidden = icon.classList.contains('fa-eye-slash');
     
-    controls.forEach(control => {
-        control.style.display = control.style.display === 'none' ? '' : 'none';
-    });
+//     controls.forEach(control => {
+//         control.style.display = control.style.display === 'none' ? '' : 'none';
+//     });
     
-    // Alternar el icono
-    if (isHidden) {
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    } else {
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    }
-});
+//     // Alternar el icono
+//     if (isHidden) {
+//         icon.classList.remove('fa-eye-slash');
+//         icon.classList.add('fa-eye');
+//     } else {
+//         icon.classList.remove('fa-eye');
+//         icon.classList.add('fa-eye-slash');
+//     }
+// });
