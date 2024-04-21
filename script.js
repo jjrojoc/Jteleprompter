@@ -54,9 +54,13 @@ if ('serviceWorker' in navigator) {
 let isAutoScrolling = false;
 let scrollInterval;
 let lastScrollTop = 0;
+let startTime;
+let totalDuration;  // Duración total estimada del scroll en milisegundos
 
 const teleprompter = document.getElementById('teleprompter');
 const speedControl = document.getElementById('speedControl');
+const timerDisplay = document.getElementById('timer');  // Asegúrate de tener un elemento para mostrar el tiempo
+const controls = document.querySelectorAll('.control');  // Asume que todos los elementos de control tienen la c
 // Existing variables and toggleAutoScroll function remain the same
 
 const textSizeControl = document.getElementById('textSizeControl');
@@ -100,46 +104,49 @@ let startTime;
 
 let endTime;
 
-function startScrolling() {
-    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;  // Altura total del contenido menos la altura visible
-    const speed = parseInt(document.getElementById('speedControl').value, 10);  // Velocidad desde el slider
-    const intervalTime = Math.max(10, 110 - speed);  // Tiempo entre cada intervalo de scroll, ajustable para que sea más rápido o más lento
+function calculateDuration() {
+    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
+    const speed = parseInt(speedControl.value, 10);  // Velocidad desde el slider
+    const pixelsPerInterval = 1;  // Cuántos píxeles se desplazan por intervalo
+    const intervalTime = 110 - speed;  // Ajusta este valor según tus necesidades
+    return (totalHeight / pixelsPerInterval) * intervalTime;
+}
 
-    let startPosition = 0;
-    const startTime = Date.now();
-    const estimatedEndTime = (totalHeight / 1) * intervalTime;  // Se ajusta para calcular el tiempo basado en la altura y la velocidad
+function startAutoScroll() {
+    const intervalTime = 110 - parseInt(speedControl.value, 10);
+    totalDuration = calculateDuration();
+    startTime = Date.now();
 
     scrollInterval = setInterval(() => {
-        if (startPosition < totalHeight) {
-            teleprompter.scrollBy(0, 1);  // Scroll de 1 píxel por intervalo
-            startPosition++;
-        } else {
-            clearInterval(scrollInterval);
+        teleprompter.scrollBy(0, 1);
+        updateTimer();
+        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+            stopAutoScroll();
         }
-        updateTimer(startTime, estimatedEndTime);
     }, intervalTime);
+
+    controls.forEach(control => control.style.display = 'none');  // Ocultar controles
 }
 
-function stopScrolling() {
+function stopAutoScroll() {
     clearInterval(scrollInterval);
+    isAutoScrolling = false;
+    timerDisplay.textContent = 'Done';
+    controls.forEach(control => control.style.display = '');  // Mostrar controles
 }
 
-function updateTimer(startTime, duration) {
-    const elapsed = Date.now() - startTime;
-    const remaining = Math.max(0, (duration - elapsed) / 1000).toFixed(0);  // Tiempo restante en segundos
-    document.getElementById('timeRemaining').textContent = remaining + "s";  // Asumiendo que hay un elemento con id 'timer' para mostrar el tiempo
+function updateTimer() {
+    const elapsedTime = Date.now() - startTime;
+    const remainingTime = Math.max(0, (totalDuration - elapsedTime) / 1000).toFixed(0);
+    timerDisplay.textContent = `${remainingTime}s`;
 }
 
 function toggleAutoScroll() {
-    const icon = this.querySelector('i');
     if (!isAutoScrolling) {
-        icon.className = "fas fa-stop";
+        startAutoScroll();
         isAutoScrolling = true;
-        startScrolling();
     } else {
-        icon.className = "fas fa-play";
-        isAutoScrolling = false;
-        stopScrolling();
+        stopAutoScroll();
     }
 }
 
