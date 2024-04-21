@@ -411,8 +411,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Establecer el icono inicial correcto en el botón de toggle
     const toggleButton = document.getElementById('toggleUI');
     const icon = toggleButton.querySelector('i');
-    icon.classList.remove('fa-eye');
-    icon.classList.add('fa-eye-slash');
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
 
     // Obtener referencias a los elementos de la interfaz
     const speedControl = document.getElementById('speedControl');
@@ -469,7 +469,7 @@ document.getElementById('toggleUI').addEventListener('click', function() {
     const isHidden = icon.classList.contains('fa-eye-slash');
     
     controls.forEach(control => {
-        control.style.display = control.style.display === isHidden ? '' : 'none';
+        control.style.display = control.style.display === 'none' ? '' : 'none';
     });
     
     // Alternar el icono
