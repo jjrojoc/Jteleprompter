@@ -133,16 +133,19 @@ function toggleAutoScroll() {
 }
 
 function startTimer() {
+    const teleprompterStyle = window.getComputedStyle(teleprompter);
+    const fontSize = parseInt(teleprompterStyle.fontSize, 10); // Obtener el tamaño de la fuente en píxeles
+
     const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
     const currentPosition = teleprompter.scrollTop;
     const remainingHeight = totalHeight - currentPosition;
     const speedControlValue = parseInt(document.getElementById('speedControl').value);
-    const pixelsPerInterval = 1; // Cuántos píxeles se desplazan en cada intervalo de autoscroll
+    const pixelsPerInterval = fontSize; // Usar el tamaño de la fuente como desplazamiento por intervalo
 
     // El intervalo actual basado en la velocidad del control
     const interval = 100 - speedControlValue;
 
-    // Tiempo para terminar en milisegundos, teniendo en cuenta los píxeles por intervalo y el intervalo en ms
+    // Tiempo para terminar en milisegundos, considerando el desplazamiento por intervalo y el intervalo en ms
     const timeToFinish = remainingHeight * interval / pixelsPerInterval; // tiempo en milisegundos
     endTime = Date.now() + timeToFinish;
 }
@@ -412,6 +415,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function adjustSpeed(speed) {
+
+    const fontSize = parseInt(window.getComputedStyle(teleprompter).fontSize, 10);
+    const speedscroll = 100 - speed;
     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
     console.log('Adjusting speed to:', speed);
     // Asigna una lógica adecuada para ajustar la velocidad de scroll aquí.
@@ -420,7 +426,7 @@ function adjustSpeed(speed) {
         clearInterval(scrollInterval);
         const speedscroll = 100 - speed;
         scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, 1);
+            teleprompter.scrollBy(0, fontSize);
         }, speedscroll);
     }
 }
