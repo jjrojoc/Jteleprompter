@@ -136,12 +136,11 @@ function pad(num) {
 //     }
 // }
 
+let scrollAtEnd = false; // Esta bandera nos ayudará a saber si el scroll ha llegado al final.
+
 function toggleAutoScroll() {
-    // test
     const controls = document.querySelectorAll('.control');
     const isScrolling = this.classList.toggle('active');
-    const atStart = teleprompter.scrollTop === 0;
-    const atEnd = teleprompter.scrollTop + teleprompter.clientHeight === teleprompter.scrollHeight;
 
     controls.forEach(control => {
         control.style.display = isScrolling ? 'none' : 'block';
@@ -151,8 +150,9 @@ function toggleAutoScroll() {
     var icon = button.querySelector('i');
 
     if (!isAutoScrolling) {
-        if (atStart || atEnd) {
-            resetTimer();  // Solo reinicia si está al inicio o al final
+        if (scrollAtEnd || teleprompter.scrollTop === 0) {
+            resetTimer();  // Reiniciar solo si está al final o al inicio
+            scrollAtEnd = false;  // Restablecer la bandera
         }
 
         icon.className = "fas fa-stop";
@@ -162,6 +162,9 @@ function toggleAutoScroll() {
         const speed = 100 - speedControl.value;
         scrollInterval = setInterval(() => {
             teleprompter.scrollBy(0, 1);
+            if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+                scrollAtEnd = true; // Actualiza la bandera si alcanzamos el final
+            }
         }, speed);
     } else {
         icon.className = "fas fa-play";
@@ -172,16 +175,22 @@ function toggleAutoScroll() {
     }
 }
 
-
 function resetTimer() {
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
-    startTime = Date.now(); // Restablece la hora de inicio
-    updateTimer(); // Actualizar el cronómetro de inmediato
-    timerInterval = setInterval(updateTimer, 1000); // Continuar actualizando cada segundo
+    stopTimer();
+    startTimer();
 }
+
+
+
+// function resetTimer() {
+//     if (timerInterval) {
+//         clearInterval(timerInterval);
+//         timerInterval = null;
+//     }
+//     startTime = Date.now(); // Restablece la hora de inicio
+//     updateTimer(); // Actualizar el cronómetro de inmediato
+//     timerInterval = setInterval(updateTimer, 1000); // Continuar actualizando cada segundo
+//}
 
 document.getElementById('saveText').addEventListener('click', function() {
     const scriptText = document.getElementById('teleprompter').innerHTML;
