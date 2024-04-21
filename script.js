@@ -467,7 +467,8 @@ function applySettings() {
     const teleprompter = document.getElementById('teleprompter');
     teleprompter.style.fontSize = fontSize + 'px';
     // Asume que 'setScrollSpeed' es una función existente para ajustar la velocidad del scroll
-    setScrollSpeed(scrollSpeed);
+    //setScrollSpeed(scrollSpeed);
+    speedControl.value = scrollSpeed;
   }
   
   document.addEventListener('DOMContentLoaded', loadSettings);
