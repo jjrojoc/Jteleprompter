@@ -74,7 +74,7 @@ textColorControl.addEventListener('change', () => {
 
 class Cronometro {
     constructor(displayElement) {
-      this.displayElement = displayElement;  // Elemento del DOM donde se muestra el tiempo
+      this.displayElement = displayElement;
       this.tiempoAcumulado = 0;
       this.tiempoInicio = 0;
       this.intervalo = null;
@@ -82,28 +82,29 @@ class Cronometro {
   
     start() {
       if (this.intervalo === null) {
-        this.tiempoInicio = Date.now();
-        this.intervalo = setInterval(() => this.update(), 1000);
+        this.tiempoInicio = Date.now();  // Establece el tiempo de inicio al tiempo actual
+        this.intervalo = setInterval(() => this.update(), 1000);  // Actualiza el tiempo cada segundo
       }
     }
   
     stop() {
       if (this.intervalo !== null) {
+        // Actualiza el tiempo acumulado sumando el tiempo transcurrido desde el último inicio
         this.tiempoAcumulado += Date.now() - this.tiempoInicio;
-        clearInterval(this.intervalo);
+        clearInterval(this.intervalo);  // Detiene el intervalo
         this.intervalo = null;
       }
     }
   
     reset() {
-      this.stop();
-      this.tiempoAcumulado = 0;
-      this.display();
+      this.stop();  // Detiene el cronómetro y actualiza el tiempo acumulado
+      this.tiempoAcumulado = 0;  // Resetea el tiempo acumulado a cero
+      this.display();  // Muestra el tiempo reseteado
     }
   
     update() {
-      let tiempoTotal = this.tiempoAcumulado + (Date.now() - this.tiempoInicio);
-      this.display(tiempoTotal);
+      let tiempoTotal = Date.now() - this.tiempoInicio + this.tiempoAcumulado;
+      this.display(tiempoTotal);  // Muestra el tiempo total actualizado
     }
   
     display(tiempo = this.tiempoAcumulado) {
@@ -118,8 +119,6 @@ class Cronometro {
     }
   }
   
-
-
 
 
 const timerDisplay = document.getElementById('timer');
