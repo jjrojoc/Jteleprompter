@@ -98,43 +98,79 @@ function pad(num) {
   return num.toString().padStart(2, '0');
 }
 
-function toggleAutoScroll() {
-    const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
-    const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+// function toggleAutoScroll() {
+//     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+//     const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
     
+//     controls.forEach(control => {
+//         control.style.display = isScrolling ? 'none' : 'block'; // Cambia la vi
+//     });
+//     var button = this;
+//     var icon = button.querySelector('i');
+
+//     if (!isAutoScrolling) {
+//         // Verificar si el teleprompter está al principio del contenido
+//         if (teleprompter.scrollTop === 0) {
+//             console.log("scrollTop");
+//             resetTimer();  // Reinicia el cronómetro si está al principio
+//         }
+//         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
+//         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
+//         isAutoScrolling = true; // Actualiza el estado
+//         startTimer();
+
+//         // Iniciar el autoscroll aquí
+//         const speed = 100 - speedControl.value;
+//         scrollInterval = setInterval(() => {
+//             teleprompter.scrollBy(0, 1);
+//         }, speed);
+//     } else {
+//         icon.className = "fas fa-play"; // Cambia el ícono a "play"
+//         // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
+//         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
+//         isAutoScrolling = false; // Actualiza el estado
+//         stopTimer();
+    
+//         // Detener el autoscroll aquí
+//         clearInterval(scrollInterval);
+//     }
+// }
+
+function toggleAutoScroll() {
+    const controls = document.querySelectorAll('.control');
+    const isScrolling = this.classList.toggle('active');
+    const atStart = teleprompter.scrollTop === 0;
+    const atEnd = teleprompter.scrollTop + teleprompter.clientHeight === teleprompter.scrollHeight;
+
     controls.forEach(control => {
-        control.style.display = isScrolling ? 'none' : 'block'; // Cambia la vi
+        control.style.display = isScrolling ? 'none' : 'block';
     });
+
     var button = this;
     var icon = button.querySelector('i');
 
     if (!isAutoScrolling) {
-        // Verificar si el teleprompter está al principio del contenido
-        if (teleprompter.scrollTop === 0) {
-            console.log("scrollTop");
-            resetTimer();  // Reinicia el cronómetro si está al principio
+        if (atStart || atEnd) {
+            resetTimer();  // Solo reinicia si está al inicio o al final
         }
-        icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
-        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
-        isAutoScrolling = true; // Actualiza el estado
-        startTimer();
 
-        // Iniciar el autoscroll aquí
+        icon.className = "fas fa-stop";
+        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
+        isAutoScrolling = true;
+        startTimer();
         const speed = 100 - speedControl.value;
         scrollInterval = setInterval(() => {
             teleprompter.scrollBy(0, 1);
         }, speed);
     } else {
-        icon.className = "fas fa-play"; // Cambia el ícono a "play"
-        // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
+        icon.className = "fas fa-play";
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
-        isAutoScrolling = false; // Actualiza el estado
+        isAutoScrolling = false;
         stopTimer();
-    
-        // Detener el autoscroll aquí
         clearInterval(scrollInterval);
     }
 }
+
 
 function resetTimer() {
     if (timerInterval) {
