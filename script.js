@@ -101,34 +101,27 @@ let startTime;
 let endTime;
 
 function toggleAutoScroll() {
-    const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
-    const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
-    
-    controls.forEach(control => {
-        control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad de los controles
-    });
-    var button = this;
-    var icon = button.querySelector('i');
+    const isScrolling = this.classList.toggle('active');
+    const controls = document.querySelectorAll('.control');
+    const button = this;
+    const icon = button.querySelector('i');
+
+    controls.forEach(control => control.style.display = isScrolling ? 'none' : 'block');
 
     if (!isAutoScrolling) {
-        icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
+        icon.className = "fas fa-stop";
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
-        isAutoScrolling = true; // Actualiza el estado
+        isAutoScrolling = true;
+        startTimer();
 
-        startTimer(); // Iniciar el cronómetro regresivo
-        
-        const speed = 100 - speedControl.value; // Asume speedControl ya está definido
-        scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, 1);
-            updateCountdown(); // Actualizar el cronómetro en cada intervalo
-        }, speed);
+        // Inicia el autoscroll
+        adjustSpeed(parseInt(document.getElementById('speedControl').value));
     } else {
-        icon.className = "fas fa-play"; // Cambia el ícono a "play"
+        icon.className = "fas fa-play";
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
-        isAutoScrolling = false; // Actualiza el estado
-
-        stopTimer(); // Detener el cronómetro regresivo
-        clearInterval(scrollInterval); // Detener el autoscroll
+        isAutoScrolling = false;
+        clearInterval(scrollInterval);
+        stopTimer(); // Detener el cronómetro
     }
 }
 
