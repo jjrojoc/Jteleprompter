@@ -157,47 +157,48 @@ function pad(num) {
 let scrollAtEnd = false; // Esta bandera nos ayudará a saber si el scroll ha llegado al final.
 
 function toggleAutoScroll() {
-    const controls = document.querySelectorAll('.control');
-    const isScrolling = this.classList.toggle('active');
+    const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+    const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
 
     controls.forEach(control => {
-        control.style.display = isScrolling ? 'none' : 'block';
+        control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad
     });
 
     var button = this;
     var icon = button.querySelector('i');
+    var teleprompter = document.getElementById('teleprompter');
 
-    console.log("Auto Scroll Status:", isAutoScrolling);
-    console.log("Teleprompter Scroll Top:", teleprompter.scrollTop);
+    // Verificar si el teleprompter está al inicio para decidir sobre reiniciar el temporizador
+    const isAtStart = teleprompter.scrollTop === 0;
 
     if (!isAutoScrolling) {
-        if (scrollAtEnd || teleprompter.scrollTop === 0) {
-            console.log("Resetting Timer - Scroll at end or at top");
-            resetTimer();  // Reiniciar solo si está al final o al inicio
-            scrollAtEnd = false;  // Restablecer la bandera
+        icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
+        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
+        isAutoScrolling = true; // Actualiza el estado
+
+        if (isAtStart) {
+            startTimer();
         }
 
-        icon.className = "fas fa-stop";
-        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
-        isAutoScrolling = true;
-        startTimer();
+        // Iniciar el autoscroll aquí
         const speed = 100 - speedControl.value;
         scrollInterval = setInterval(() => {
             teleprompter.scrollBy(0, 1);
             if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-                scrollAtEnd = true; // Actualiza la bandera si alcanzamos el final
-                console.log("Reached end of content.");
+                toggleAutoScroll.call(button); // Detener scroll al alcanzar el final
             }
         }, speed);
     } else {
-        icon.className = "fas fa-play";
+        icon.className = "fas fa-play"; // Cambia el ícono a "play"
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
-        isAutoScrolling = false;
+        isAutoScrolling = false; // Actualiza el estado
         stopTimer();
+
+        // Detener el autoscroll aquí
         clearInterval(scrollInterval);
-        console.log("Stopping Auto Scroll.");
     }
 }
+
 
 function resetTimer() {
     stopTimer();
