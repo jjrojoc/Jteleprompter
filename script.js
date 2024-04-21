@@ -73,65 +73,61 @@ textColorControl.addEventListener('change', () => {
 });
 
 class Cronometro {
-    constructor(display) {
-        this.display = display;
+    constructor(displayElement) {
+        this.displayElement = displayElement;
         this.running = false;
-        this.elapsedTime = 0;
-        this.lastStartTime = 0;
+        this.startTime = 0;
+        this.accumulatedTime = 0;
         this.timerInterval = null;
     }
 
     start() {
         if (!this.running) {
-            this.running = true;
-            this.lastStartTime = Date.now();
+            this.startTime = Date.now() - this.accumulatedTime; // Restar tiempo acumulado al iniciar
             this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+            this.running = true;
         }
     }
 
     stop() {
         if (this.running) {
-            this.elapsedTime += Date.now() - this.lastStartTime;
-            this.running = false;
             clearInterval(this.timerInterval);
+            this.accumulatedTime = Date.now() - this.startTime; // Actualizar tiempo acumulado al detener
+            this.running = false;
         }
     }
 
     reset() {
-        this.stop();
-        this.elapsedTime = 0;
-        this.updateDisplay();
+        clearInterval(this.timerInterval);
+        this.running = false;
+        this.accumulatedTime = 0;
+        this.displayElement.textContent = "00:00:00"; // Restablecer la visualización
     }
 
     updateDisplay() {
-        const totalElapsed = this.elapsedTime + (this.running ? Date.now() - this.lastStartTime : 0);
-        const hours = Math.floor(totalElapsed / 3600000);
-        const minutes = Math.floor((totalElapsed % 3600000) / 60000);
-        const seconds = Math.floor((totalElapsed % 60000) / 1000);
-        this.display.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+        const elapsed = Date.now() - this.startTime;
+        const hours = Math.floor(elapsed / 3600000);
+        const minutes = Math.floor((elapsed % 3600000) / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+        this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
     }
 
-    pad(number) {
-        return number.toString().padStart(2, '0');
+    pad(num) {
+        return num.toString().padStart(2, '0');
     }
 }
 
-
-function pad(number) {
-    return number.toString().padStart(2, '0');
-}
-
-
-document.getElementById('timer').addEventListener('click', function() {
-    if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
-      accumulatedTime = 0;  // Resetea el tiempo acumulado
-      updateDisplay(0);  // Actualiza el display a 00:00:00
-      console.log('Timer reset to 00:00:00');
-    }
-});
 
 const timerDisplay = document.getElementById('timer');
 const cronometro = new Cronometro(timerDisplay);
+
+document.getElementById('timer').addEventListener('click', function() {
+    if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
+      //accumulatedTime = 0;  // Resetea el tiempo acumulado
+      cronometro.reset();  // Actualiza el display a 00:00:00
+      console.log('Timer reset to 00:00:00');
+    }
+});
 
 function toggleAutoScroll() {
   const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
@@ -149,9 +145,9 @@ function toggleAutoScroll() {
     document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
     isAutoScrolling = true;
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-      //accumulatedTime = 0; // Resetea el tiempo acumulado
-      cronometro.reset();
-      cronometro.start();
+        //accumulatedTime = 0; // Resetea el tiempo acumulado
+        cronometro.reset();
+        cronometro.start();
     } else {
         cronometro.start();  // Continúa el temporizador sin resetear
     }
