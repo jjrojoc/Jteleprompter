@@ -103,7 +103,7 @@ class Cronometro {
     }
 
     updateDisplay() {
-        const elapsed = this.accumulatedTime;
+        let elapsed = this.accumulatedTime;
         if (this.running) {
             elapsed += Date.now() - this.startTime; // Añade tiempo desde el último inicio si está corriendo
         }
