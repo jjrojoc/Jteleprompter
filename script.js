@@ -111,7 +111,7 @@ function toggleAutoScroll() {
     if (!isAutoScrolling) {
         // Verificar si el teleprompter está al principio del contenido
         if (teleprompter.scrollTop === 0) {
-            console.log("scrollTop:" `${teleprompter.scrollTop}`)
+            console.log("scrollTop");
             resetTimer();  // Reinicia el cronómetro si está al principio
         }
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
