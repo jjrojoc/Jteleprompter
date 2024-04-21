@@ -401,32 +401,40 @@ function normalizeLineBreaks(element) {
     }
 }
 
-function prepareTeleprompter() {
+function applySettings() {
+    const fontSize = document.getElementById('fontSizeInput').value;
+    const scrollSpeed = document.getElementById('scrollSpeedInput').value;
+  
+    // Aplicar configuración al teleprompter
     const teleprompter = document.getElementById('teleprompter');
-    const viewportHeight = window.innerHeight;
+    teleprompter.style.fontSize = fontSize + 'px';
+    // Asume que tienes una función que ajusta la velocidad de desplazamiento
+    setScrollSpeed(scrollSpeed);
   
-    // Utilizar un elemento temporal para medir la altura de una línea de texto
-    let tempLine = document.createElement('div');
-    tempLine.style.visibility = 'hidden';
-    tempLine.style.position = 'absolute';
-    tempLine.innerHTML = 'A';  // Asegurar algo de contenido
-    document.body.appendChild(tempLine);
-    const lineHeight = tempLine.clientHeight;
-    document.body.removeChild(tempLine);
-  
-    // Calcular cuántas líneas vacías son necesarias para alcanzar aproximadamente la mitad de la pantalla
-    const linesNeeded = Math.floor(viewportHeight / 2 / lineHeight);
-  
-    // Crear las líneas vacías
-    let paddingLines = '';
-    for (let i = 0; i < linesNeeded; i++) {
-      paddingLines += '<br>';
-    }
-  
-    // Añadir líneas al principio y al final
-    teleprompter.innerHTML = paddingLines + teleprompter.innerHTML + paddingLines;
+    // Guardar configuración en localStorage
+    localStorage.setItem('teleprompterFontSize', fontSize);
+    localStorage.setItem('teleprompterScrollSpeed', scrollSpeed);
   }
   
-  // Preparar teleprompter cuando se cargue la página o antes de iniciar el scroll
-  window.onload = prepareTeleprompter;
+  // Función para cargar configuraciones al iniciar la página
+  function loadSettings() {
+    const storedFontSize = localStorage.getItem('teleprompterFontSize');
+    const storedScrollSpeed = localStorage.getItem('teleprompterScrollSpeed');
+  
+    if (storedFontSize) {
+      document.getElementById('fontSizeInput').value = storedFontSize;
+      document.getElementById('teleprompter').style.fontSize = storedFontSize + 'px';
+    }
+    if (storedScrollSpeed) {
+      document.getElementById('scrollSpeedInput').value = storedScrollSpeed;
+      setScrollSpeed(storedScrollSpeed);
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', loadSettings);
+  
+  function setScrollSpeed(speed) {
+    // Implementa esta función según cómo manejes el scroll en tu teleprompter
+    console.log('Scroll speed set to', speed);
+  }
   

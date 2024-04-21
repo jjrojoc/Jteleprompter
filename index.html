@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JTeleprompter</title>
-<link rel="stylesheet" href="style.css?v=107">
+<link rel="stylesheet" href="style.css?v=108">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -26,6 +26,19 @@
         <div class="menu-container">
             <button id="menuButton" title="Menú"><i class="fas fa-bars"></i></button>
             <div id="menuItems" class="menu-items" style="display: none;">
+                <div id="settings">
+                    <h2>Configuración del Teleprompter</h2>
+                    <form id="settingsForm">
+                      <label for="font-size">Tamaño de la fuente:</label>
+                      <input type="number" id="fontSizeInput" min="12" max="72" step="1" value="24"> px<br><br>
+                  
+                      <label for="scroll-speed">Velocidad de desplazamiento:</label>
+                      <input type="number" id="scrollSpeedInput" min="1" max="100" step="1" value="50"><br><br>
+                  
+                      <button type="button" onclick="applySettings()">Aplicar Configuración</button>
+                    </form>
+                  </div>
+                  
                 <button id="editToggle" title="Editar"><i class="fas fa-edit"></i></button>
                 <button id="loadText" title="Cargar"><i class="fas fa-folder-open"></i></button>
                 <button id="saveText" title="Guardar"><i class="fas fa-save"></i></button>
@@ -63,6 +76,6 @@
     </div>
 </div>
 
-<script src="script.js?v=v107"></script>
+<script src="script.js?v=v108"></script>
 </body>
 </html>
