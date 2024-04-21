@@ -72,48 +72,82 @@ textColorControl.addEventListener('change', () => {
     teleprompter.style.color = newColor;
 });
 
-let timerInterval = null;
-let startTime;
-
 function resetTimer() {
     stopTimer();
     startTimer();
     console.log("Timer Reset.");
 }
 
+let timerInterval = null;
+let startTime;
+let accumulatedTime = 0;  // Tiempo acumulado cuando el temporizador está pausado
+
 function startTimer() {
-    if (timerInterval !== null) {
-        clearInterval(timerInterval); // Asegurarse de detener cualquier intervalo existente
-        console.log("Existing timer interval cleared.");
-    }
+  if (timerInterval === null) { // Solo inicia el timer si no está ya corriendo
     startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
-    console.log("Timer Started.");
+    timerInterval = setInterval(updateTimer, 1000);  // Actualizar cada segundo
+  }
 }
 
 function stopTimer() {
-    if (timerInterval !== null) {
-        clearInterval(timerInterval);
-        console.log("Timer Stopped.");
-        timerInterval = null;
-    } else {
-        console.log("No timer interval to stop."); // Informar si no hay intervalo activo
-    }
+  if (timerInterval) {
+    const elapsed = Date.now() - startTime;
+    accumulatedTime += elapsed;
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 }
 
 function updateTimer() {
-    const elapsed = Date.now() - startTime;
-    const hours = Math.floor(elapsed / 3600000);
-    const minutes = Math.floor((elapsed % 3600000) / 60000);
-    const seconds = Math.floor((elapsed % 60000) / 1000);
-    document.getElementById('timer').textContent = 
-        `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-    console.log("Timer Updated:", document.getElementById('timer').textContent);
+  const now = Date.now();
+  const totalElapsed = accumulatedTime + (now - startTime);
+  const hours = Math.floor(totalElapsed / 3600000);
+  const minutes = Math.floor((totalElapsed % 3600000) / 60000);
+  const seconds = Math.floor((totalElapsed % 60000) / 1000);
+  document.getElementById('timer').textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
 function pad(num) {
-    return num.toString().padStart(2, '0');
+  return num.toString().padStart(2, '0');
 }
+
+function toggleAutoScroll() {
+  const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+  const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+  
+  controls.forEach(control => {
+    control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad de los controles
+  });
+  
+  var button = this;
+  var icon = button.querySelector('i');
+
+  if (!isAutoScrolling) {
+    icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
+    document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
+    isAutoScrolling = true;
+    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
+      accumulatedTime = 0; // Resetea el tiempo acumulado
+      startTimer();  // Inicia el temporizador
+    } else {
+      startTimer();  // Continúa el temporizador sin resetear
+    }
+
+    // Iniciar el auto-scroll aquí
+    const speed = 100 - speedControl.value;
+    scrollInterval = setInterval(() => {
+      teleprompter.scrollBy(0, 1);
+    }, speed);
+  } else {
+    icon.className = "fas fa-play"; // Cambia el ícono a "play"
+    document.getElementById('toggleScroll').style.backgroundColor = "#555555";
+    isAutoScrolling = false;
+    stopTimer();  // Pausa el temporizador
+    clearInterval(scrollInterval);  // Detiene el auto-scroll
+  }
+}
+
+
 
 
 // function toggleAutoScroll() {
@@ -153,47 +187,6 @@ function pad(num) {
 //         clearInterval(scrollInterval);
 //     }
 // }
-
-let scrollAtEnd = false; // Esta bandera nos ayudará a saber si el scroll ha llegado al final.
-
-function toggleAutoScroll() {
-    const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
-    const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
-
-    controls.forEach(control => {
-        control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad
-    });
-
-    var button = this;
-    var icon = button.querySelector('i');
-    var teleprompter = document.getElementById('teleprompter');
-
-    if (!isAutoScrolling) {
-        icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
-        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
-        isAutoScrolling = true; // Actualiza el estado
-
-        // Si el scroll comienza desde el principio, reinicia el temporizador
-        if (teleprompter.scrollTop === 0) {
-            startTimer();
-        }
-
-        // Iniciar el autoscroll aquí
-        const speed = 100 - speedControl.value;
-        scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, 1);
-            if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-                toggleAutoScroll.call(button); // Detener scroll al alcanzar el final
-            }
-        }, speed);
-    } else {
-        icon.className = "fas fa-play"; // Cambia el ícono a "play"
-        document.getElementById('toggleScroll').style.backgroundColor = "#555555";
-        isAutoScrolling = false; // Actualiza el estado
-        clearInterval(scrollInterval);
-        stopTimer();
-    }
-}
 
 
 
