@@ -75,35 +75,37 @@ textColorControl.addEventListener('change', () => {
 let timerInterval = null;
 let startTime;
 
-function startTimer() {
-  startTime = Date.now();
-  timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
-}
+// function startTimer() {
+//   startTime = Date.now();
+//   timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
+// }
 
-function stopTimer() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
+// function stopTimer() {
+//   clearInterval(timerInterval);
+//   timerInterval = null;
+// }
 
-function updateTimer() {
-  const elapsed = Date.now() - startTime;
-  const hours = Math.floor(elapsed / 3600000);
-  const minutes = Math.floor((elapsed % 3600000) / 60000);
-  const seconds = Math.floor((elapsed % 60000) / 1000);
-  document.getElementById('timer').textContent = 
-    `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-}
+// function updateTimer() {
+//   const elapsed = Date.now() - startTime;
+//   const hours = Math.floor(elapsed / 3600000);
+//   const minutes = Math.floor((elapsed % 3600000) / 60000);
+//   const seconds = Math.floor((elapsed % 60000) / 1000);
+//   document.getElementById('timer').textContent = 
+//     `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+// }
 
-function pad(num) {
-  return num.toString().padStart(2, '0');
-}
+// function pad(num) {
+//   return num.toString().padStart(2, '0');
+// }
+
+let endTime;
 
 function toggleAutoScroll() {
     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
     const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
     
     controls.forEach(control => {
-        control.style.display = isScrolling ? 'none' : 'block'; // Cambia la vi
+        control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad de los controles
     });
     var button = this;
     var icon = button.querySelector('i');
@@ -112,24 +114,85 @@ function toggleAutoScroll() {
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true; // Actualiza el estado
-        startTimer();
 
-        // Iniciar el autoscroll aquí
-        const speed = 100 - speedControl.value;
+        startTimer(); // Iniciar el cronómetro regresivo
+        
+        const speed = 100 - speedControl.value; // Asume speedControl ya está definido
         scrollInterval = setInterval(() => {
             teleprompter.scrollBy(0, 1);
+            updateCountdown(); // Actualizar el cronómetro en cada intervalo
         }, speed);
     } else {
         icon.className = "fas fa-play"; // Cambia el ícono a "play"
-        // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
         isAutoScrolling = false; // Actualiza el estado
-        stopTimer();
-    
-        // Detener el autoscroll aquí
-        clearInterval(scrollInterval);
+
+        stopTimer(); // Detener el cronómetro regresivo
+        clearInterval(scrollInterval); // Detener el autoscroll
     }
 }
+
+function startTimer() {
+    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
+    const currentPosition = teleprompter.scrollTop;
+    const remainingHeight = totalHeight - currentPosition;
+    const scrollSpeed = 100 - parseInt(document.getElementById('speedControl').value);
+
+    const timeToFinish = remainingHeight / (1 / (scrollSpeed * 0.01)); // Ajustar según necesidad
+    endTime = Date.now() + timeToFinish;
+}
+
+function stopTimer() {
+    updateCountdown(true); // Actualizar una última vez pasando true para forzar a 00:00
+}
+
+function updateCountdown(forceStop = false) {
+    const timeLeft = forceStop ? 0 : Math.max(endTime - Date.now(), 0);
+    const minutes = Math.floor(timeLeft / 60000);
+    const seconds = Math.floor((timeLeft % 60000) / 1000);
+    document.getElementById('timeRemaining').textContent = `${padZero(minutes)}:${padZero(seconds)}`;
+
+    if (timeLeft === 0) {
+        toggleAutoScroll.apply(document.getElementById('toggleScroll')); // Detener autoscroll y cambiar icono
+    }
+}
+
+function padZero(num) {
+    return num.toString().padStart(2, '0');
+}
+
+// function toggleAutoScroll() {
+//     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+//     const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+    
+//     controls.forEach(control => {
+//         control.style.display = isScrolling ? 'none' : 'block'; // Cambia la vi
+//     });
+//     var button = this;
+//     var icon = button.querySelector('i');
+
+//     if (!isAutoScrolling) {
+//         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
+//         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
+//         isAutoScrolling = true; // Actualiza el estado
+//         startTimer();
+
+//         // Iniciar el autoscroll aquí
+//         const speed = 100 - speedControl.value;
+//         scrollInterval = setInterval(() => {
+//             teleprompter.scrollBy(0, 1);
+//         }, speed);
+//     } else {
+//         icon.className = "fas fa-play"; // Cambia el ícono a "play"
+//         // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
+//         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
+//         isAutoScrolling = false; // Actualiza el estado
+//         stopTimer();
+    
+//         // Detener el autoscroll aquí
+//         clearInterval(scrollInterval);
+//     }
+// }
 
 document.getElementById('saveText').addEventListener('click', function() {
     const scriptText = document.getElementById('teleprompter').innerHTML;
