@@ -451,3 +451,10 @@ function adjustSpeed(speed) {
         }, speedscroll);
     }
 }
+
+document.getElementById('toggleUI').addEventListener('click', function() {
+    const controls = document.querySelectorAll('.control'); // Asegúrate de que todos los elementos controlables tengan la clase 'control'
+    controls.forEach(control => {
+        control.style.display = control.style.display === 'none' ? '' : 'none';
+    });
+});

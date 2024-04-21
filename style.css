@@ -109,3 +109,7 @@ button:focus, input[type="range"]:focus, select:focus {
   bottom: 50px;
   left: 10px;
 }
+
+.control {
+  display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño */
+}
