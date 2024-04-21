@@ -147,6 +147,10 @@ function startTimer() {
     endTime = Date.now() + timeToFinish;
 }
 
+function stopTimer() {
+    updateCountdown(true); // Actualizar una última vez pasando true para forzar a 00:00
+}
+
 function updateCountdown(forceStop = false) {
     const timeLeft = forceStop ? 0 : Math.max(endTime - Date.now(), 0);
     const minutes = Math.floor(timeLeft / 60000);
