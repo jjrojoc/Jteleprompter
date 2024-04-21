@@ -89,9 +89,11 @@ textColorControl.addEventListener('change', () => {
 });
 
 function toggleAutoScroll() {
-    const controls = document.querySelector('.control');
-    console.log(controls);
-    const isScrolling = this.getAttribute('data-scrolling') === 'true';
+    const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+    const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+    
+    controls.forEach(control => {
+        control.style.display = isScrolling ? 'none' : 'block'; // Cambia la vi
 
     var button = this;
     var icon = button.querySelector('i');
@@ -100,7 +102,7 @@ function toggleAutoScroll() {
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true; // Actualiza el estado
-        controls.style.display = 'none'; // Mostrar controles cuando se detiene el scroll
+
         // Iniciar el autoscroll aquí
         const speed = 100 - speedControl.value;
         scrollInterval = setInterval(() => {
@@ -111,7 +113,7 @@ function toggleAutoScroll() {
         // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
         isAutoScrolling = false; // Actualiza el estado
-        controls.style.display = 'block'; // Ocultar controles durante el scroll
+    
         // Detener el autoscroll aquí
         clearInterval(scrollInterval);
     }
