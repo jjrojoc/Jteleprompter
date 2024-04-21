@@ -453,8 +453,20 @@ function adjustSpeed(speed) {
 }
 
 document.getElementById('toggleUI').addEventListener('click', function() {
-    const controls = document.querySelectorAll('.control'); // Asegúrate de que todos los elementos controlables tengan la clase 'control'
+    const controls = document.querySelectorAll('.control:not(#toggleUI)'); // Excluir el botón de toggle del selector
+    const icon = this.querySelector('i');
+    const isHidden = icon.classList.contains('fa-eye-slash');
+    
     controls.forEach(control => {
-        control.style.display = control.style.display === 'none' ? '' : 'none';
+        control.style.display = isHidden ? '' : 'none';
     });
+    
+    // Alternar el icono
+    if (isHidden) {
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    } else {
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    }
 });

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JTeleprompter</title>
-<link rel="stylesheet" href="style.css?v=123">
+<link rel="stylesheet" href="style.css?v=124">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -23,10 +23,11 @@
 
 <div id="controlBar" class="control-bar">
     <div id="controls" class="controls-container">
-        <button id="toggleUI">Ocultar/Mostrar Controles</button>
+        <button id="toggleUI" class="control"><i class="fas fa-eye"></i></button>
+
 
         <div class="menu-container" class="control">
-            <button id="menuButton" title="Menú"><i class="fas fa-bars"></i></button>
+            <button id="menuButton" title="Menú"><i class="fas fa-bars" class="control"></i></button>
             <div id="menuItems" class="menu-items" style="display: none;">
                 <button id="editToggle" title="Editar"><i class="fas fa-edit"></i></button>
                 <button id="loadText" title="Cargar"><i class="fas fa-folder-open"></i></button>
@@ -63,6 +64,6 @@
     </div>
 </div>
 
-<script src="script.js?v=v123"></script>
+<script src="script.js?v=v124"></script>
 </body>
 </html>
