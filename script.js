@@ -98,6 +98,7 @@ function stopTimer() {
   }
 }
 
+
 function updateTimer() {
   const now = Date.now();
   const totalElapsed = accumulatedTime + (now - startTime);
@@ -114,7 +115,7 @@ function pad(num) {
 document.getElementById('timer').addEventListener('click', function() {
     if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
       accumulatedTime = 0;  // Resetea el tiempo acumulado
-      updateDisplay(0);  // Actualiza el display a 00:00:00
+      updateTimer(0);  // Actualiza el display a 00:00:00
       console.log('Timer reset to 00:00:00');
     }
 });
