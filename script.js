@@ -460,3 +460,20 @@ function adjustSpeed(speed) {
         }, speedscroll);
     }
 }
+
+function prepareTeleprompter() {
+    const teleprompter = document.getElementById('teleprompter');
+    const content = teleprompter.innerHTML.trim();
+
+    // Asegurarse de que el contenido no comienza ni termina con múltiples <br>
+    if (!content.startsWith('<br><br><br><br>') || !content.endsWith('<br><br><br><br>')) {
+        const linesToAdd = 4;
+        const padding = '<br>'.repeat(linesToAdd);
+
+        // Añadir saltos de línea al principio y al final
+        teleprompter.innerHTML = padding + content + padding;
+    }
+}
+
+// Preparar teleprompter cuando se cargue la página o cuando sea necesario
+document.addEventListener('DOMContentLoaded', prepareTeleprompter);
