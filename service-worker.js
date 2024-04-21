@@ -4,9 +4,9 @@ var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
   './manifest.json',
-  './index.html?v=103',
-  './style.css?v=103',
-  './script.js?v=103',
+  './index.html?v=104',
+  './style.css?v=104',
+  './script.js?v=104',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png',
   './icons/favicon.ico',
