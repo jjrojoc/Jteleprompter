@@ -403,6 +403,17 @@ function normalizeLineBreaks(element) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+    // esconder todos los controles por defecto
+    const controls = document.querySelectorAll('.control:not(#toggleUI)');
+    controls.forEach(control => {
+        control.style.display = 'none'; // Ocultar controles al cargar
+    });
+    // Establecer el icono inicial correcto en el botón de toggle
+    const toggleButton = document.getElementById('toggleUI');
+    const icon = toggleButton.querySelector('i');
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+
     // Obtener referencias a los elementos de la interfaz
     const speedControl = document.getElementById('speedControl');
     const scrollSpeedValue = document.getElementById('scrollSpeedValue');
