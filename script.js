@@ -73,48 +73,49 @@ textColorControl.addEventListener('change', () => {
 });
 
 class Cronometro {
-    constructor(displayElement) {
-        this.displayElement = displayElement;
-        this.startTime = 0;
-        this.accumulatedTime = 0;
+    constructor(display) {
+        this.display = display;
+        this.running = false;
+        this.elapsedTime = 0;
+        this.lastStartTime = 0;
         this.timerInterval = null;
     }
 
     start() {
-        if (!this.timerInterval) {
-            this.startTime = Date.now();
-            this.timerInterval = setInterval(() => this.update(), 1000);
+        if (!this.running) {
+            this.running = true;
+            this.lastStartTime = Date.now();
+            this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
         }
     }
 
     stop() {
-        if (this.timerInterval) {
-            this.accumulatedTime += Date.now() - this.startTime;
+        if (this.running) {
+            this.elapsedTime += Date.now() - this.lastStartTime;
+            this.running = false;
             clearInterval(this.timerInterval);
-            this.timerInterval = null;
-            this.display(this.accumulatedTime);  // Muestra el tiempo acumulado cuando se detiene.
         }
     }
 
     reset() {
         this.stop();
-        this.accumulatedTime = 0;
-        this.display();
+        this.elapsedTime = 0;
+        this.updateDisplay();
     }
 
-    update() {
-        const currentElapsedTime = Date.now() - this.startTime;
-        const totalElapsedTime = this.accumulatedTime + currentElapsedTime;
-        this.display(totalElapsedTime);
+    updateDisplay() {
+        const totalElapsed = this.elapsedTime + (this.running ? Date.now() - this.lastStartTime : 0);
+        const hours = Math.floor(totalElapsed / 3600000);
+        const minutes = Math.floor((totalElapsed % 3600000) / 60000);
+        const seconds = Math.floor((totalElapsed % 60000) / 1000);
+        this.display.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
     }
 
-    display(elapsedTime = 0) {
-        const seconds = Math.floor(elapsedTime / 1000) % 60;
-        const minutes = Math.floor(elapsedTime / 60000) % 60;
-        const hours = Math.floor(elapsedTime / 3600000);
-        this.displayElement.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    pad(number) {
+        return number.toString().padStart(2, '0');
     }
 }
+
 
 function pad(number) {
     return number.toString().padStart(2, '0');
