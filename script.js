@@ -111,6 +111,14 @@ function pad(num) {
   return num.toString().padStart(2, '0');
 }
 
+document.getElementById('timer').addEventListener('click', function() {
+    if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
+      accumulatedTime = 0;  // Resetea el tiempo acumulado
+      updateDisplay(0);  // Actualiza el display a 00:00:00
+      console.log('Timer reset to 00:00:00');
+    }
+});
+
 function toggleAutoScroll() {
   const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
   const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
