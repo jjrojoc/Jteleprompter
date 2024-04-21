@@ -109,11 +109,3 @@ button:focus, input[type="range"]:focus, select:focus {
   bottom: 50px;
   left: 10px;
 }
-
-#countdown {
-  position: absolute;
-  width: 100%;
-  top: 50%; /* Centra verticalmente */
-  transform: translateY(-50%);
-  z-index: 10; /* Asegúrate de que está sobre otros elementos */
-}

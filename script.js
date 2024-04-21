@@ -73,7 +73,7 @@ const speedControl = document.getElementById('speedControl');
 const textSizeControl = document.getElementById('textSizeControl');
 const textColorControl = document.getElementById('textColorControl');
 
-document.getElementById('toggleScroll').addEventListener('click', startTeleprompter);
+document.getElementById('toggleScroll').addEventListener('click', toggleAutoScroll);
 
 document.getElementById('loadText').style.display = 'none';
 
@@ -400,23 +400,3 @@ function normalizeLineBreaks(element) {
         }
     }
 }
-
-
-function startTeleprompter() {
-    const countdownElement = document.getElementById('countdown');
-    let counter = 3;
-  
-    countdownElement.style.display = 'block';
-  
-    const interval = setInterval(() => {
-      countdownElement.textContent = counter;
-      counter--;
-  
-      if (counter < 0) {
-        clearInterval(interval);
-        countdownElement.style.display = 'none';
-        // Inicia el scroll del teleprompter
-        toggleAutoScroll();
-      }
-    }, 1000);
-  }
