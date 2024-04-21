@@ -437,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function adjustTextSize(size) {
     // Aquí puedes ajustar el tamaño de texto en tu aplicación
     console.log('Adjusting text size to:', size + 'px');
-    teleprompter.style.fontSize = size;
+    teleprompter.style.fontSize = size + 'px';
 }
 
 function adjustSpeed(speed) {
