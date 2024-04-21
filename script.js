@@ -82,15 +82,23 @@ function resetTimer() {
 }
 
 function startTimer() {
+    if (timerInterval !== null) {
+        clearInterval(timerInterval); // Asegurarse de detener cualquier intervalo existente
+        console.log("Existing timer interval cleared.");
+    }
     startTime = Date.now();
     timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
     console.log("Timer Started.");
 }
 
 function stopTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    console.log("Timer Stopped.");
+    if (timerInterval !== null) {
+        clearInterval(timerInterval);
+        console.log("Timer Stopped.");
+        timerInterval = null;
+    } else {
+        console.log("No timer interval to stop."); // Informar si no hay intervalo activo
+    }
 }
 
 function updateTimer() {
@@ -106,6 +114,7 @@ function updateTimer() {
 function pad(num) {
     return num.toString().padStart(2, '0');
 }
+
 
 // function toggleAutoScroll() {
 //     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
