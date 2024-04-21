@@ -109,6 +109,10 @@ function toggleAutoScroll() {
     var icon = button.querySelector('i');
 
     if (!isAutoScrolling) {
+        // Verificar si el teleprompter está al principio del contenido
+        if (teleprompter.scrollTop === 0) {
+            resetTimer();  // Reinicia el cronómetro si está al principio
+        }
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true; // Actualiza el estado
@@ -129,6 +133,16 @@ function toggleAutoScroll() {
         // Detener el autoscroll aquí
         clearInterval(scrollInterval);
     }
+}
+
+function resetTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    startTime = Date.now(); // Restablece la hora de inicio
+    updateTimer(); // Actualizar el cronómetro de inmediato
+    timerInterval = setInterval(updateTimer, 1000); // Continuar actualizando cada segundo
 }
 
 document.getElementById('saveText').addEventListener('click', function() {
