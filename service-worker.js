@@ -1,12 +1,12 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_133'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_134'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
   './manifest.json',
-  './index.html?v=133',
-  './style.css?v=133',
-  './script.js?v=133',
+  './index.html?v=134',
+  './style.css?v=134',
+  './script.js?v=134',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png',
   './icons/favicon.ico',

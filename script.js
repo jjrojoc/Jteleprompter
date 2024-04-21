@@ -94,7 +94,7 @@ function toggleAutoScroll() {
     
     controls.forEach(control => {
         control.style.display = isScrolling ? 'none' : 'block'; // Cambia la vi
-
+    });
     var button = this;
     var icon = button.querySelector('i');
 
