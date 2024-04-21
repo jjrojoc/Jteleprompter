@@ -443,6 +443,7 @@ document.addEventListener('DOMContentLoaded', function() {
     textSizeControl.addEventListener('input', function() {
         localStorage.setItem('textSize', textSizeControl.value);
         textSizeValue.textContent = textSizeControl.value + 'px';
+        console.log('Adjusting text size to:', textSizeControl.value + 'px');
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
     });
 });
