@@ -462,7 +462,7 @@ function applySettings() {
   
   function updateTeleprompterControls(fontSize, scrollSpeed) {
     document.getElementById('fontSizeValue').textContent = fontSize + 'px';
-    document.getElementById('scrollSpeedValue').textContent = scrollSpeed;
+    document.getElementById('scrollSpeedValuedefault').textContent = scrollSpeed;
   
     const teleprompter = document.getElementById('teleprompter');
     teleprompter.style.fontSize = fontSize + 'px';
