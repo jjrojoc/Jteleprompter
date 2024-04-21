@@ -74,15 +74,15 @@ textColorControl.addEventListener('change', () => {
 
 class Cronometro {
     constructor(display) {
-        this.display = display; // Elemento del DOM para mostrar el tiempo
-        this.timer = null;      // ID del intervalo de tiempo
-        this.startTime = 0;     // Tiempo en que el cronómetro empezó o fue reanudado
-        this.acumulado = 0;     // Tiempo acumulado en milisegundos
+        this.display = display;       // Elemento del DOM para mostrar el tiempo
+        this.timer = null;            // ID del intervalo de tiempo
+        this.startTime = 0;           // Tiempo en que el cronómetro empezó o fue reanudado
+        this.acumulado = 0;           // Tiempo acumulado en milisegundos
     }
 
     start() {
         if (!this.timer) {
-            this.startTime = Date.now();
+            this.startTime = Date.now() - this.acumulado; // Ajustar el inicio con respecto al tiempo acumulado
             this.timer = setInterval(() => {
                 this.updateDisplay();
             }, 1000);
@@ -92,9 +92,10 @@ class Cronometro {
 
     stop() {
         if (this.timer) {
-            this.acumulado += Date.now() - this.startTime;
+            this.acumulado = Date.now() - this.startTime; // Actualiza el tiempo acumulado
             clearInterval(this.timer);
             this.timer = null;
+            this.updateDisplay(); // Asegurarse de que la última lectura del tiempo se muestra
             console.log('Cronómetro detenido. Tiempo acumulado:', this.acumulado);
         }
     }
@@ -107,7 +108,7 @@ class Cronometro {
     }
 
     updateDisplay() {
-        const elapsed = Date.now() - this.startTime + this.acumulado;
+        const elapsed = Date.now() - this.startTime;
         const hours = Math.floor(elapsed / 3600000);
         const minutes = Math.floor((elapsed % 3600000) / 60000);
         const seconds = Math.floor((elapsed % 60000) / 1000);
@@ -118,6 +119,7 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
+
 
   
 
