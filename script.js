@@ -73,51 +73,52 @@ textColorControl.addEventListener('change', () => {
 });
 
 class Cronometro {
-    constructor(displayElement) {
-      this.displayElement = displayElement;
-      this.tiempoAcumulado = 0;
-      this.tiempoInicio = 0;
-      this.intervalo = null;
+    constructor(display) {
+        this.display = display; // Elemento del DOM para mostrar el tiempo
+        this.timer = null;      // ID del intervalo de tiempo
+        this.startTime = 0;     // Tiempo en que el cronómetro empezó o fue reanudado
+        this.acumulado = 0;     // Tiempo acumulado en milisegundos
     }
-  
+
     start() {
-      if (this.intervalo === null) {
-        this.tiempoInicio = Date.now();  // Establece el tiempo de inicio al tiempo actual
-        this.intervalo = setInterval(() => this.update(), 1000);  // Actualiza el tiempo cada segundo
-      }
+        if (!this.timer) {
+            this.startTime = Date.now();
+            this.timer = setInterval(() => {
+                this.updateDisplay();
+            }, 1000);
+            console.log('Cronómetro iniciado');
+        }
     }
-  
+
     stop() {
-      if (this.intervalo !== null) {
-        // Actualiza el tiempo acumulado sumando el tiempo transcurrido desde el último inicio
-        this.tiempoAcumulado += Date.now() - this.tiempoInicio;
-        clearInterval(this.intervalo);  // Detiene el intervalo
-        this.intervalo = null;
-      }
+        if (this.timer) {
+            this.acumulado += Date.now() - this.startTime;
+            clearInterval(this.timer);
+            this.timer = null;
+            console.log('Cronómetro detenido. Tiempo acumulado:', this.acumulado);
+        }
     }
-  
+
     reset() {
-      this.stop();  // Detiene el cronómetro y actualiza el tiempo acumulado
-      this.tiempoAcumulado = 0;  // Resetea el tiempo acumulado a cero
-      this.display();  // Muestra el tiempo reseteado
+        this.stop();
+        this.acumulado = 0;
+        this.updateDisplay(); // Actualizar el display inmediatamente después de reset
+        console.log('Cronómetro reseteado');
     }
-  
-    update() {
-      let tiempoTotal = Date.now() - this.tiempoInicio + this.tiempoAcumulado;
-      this.display(tiempoTotal);  // Muestra el tiempo total actualizado
+
+    updateDisplay() {
+        const elapsed = Date.now() - this.startTime + this.acumulado;
+        const hours = Math.floor(elapsed / 3600000);
+        const minutes = Math.floor((elapsed % 3600000) / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+        this.display.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
     }
-  
-    display(tiempo = this.tiempoAcumulado) {
-      const hours = Math.floor(tiempo / 3600000);
-      const minutes = Math.floor((tiempo % 3600000) / 60000);
-      const seconds = Math.floor((tiempo % 60000) / 1000);
-      this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
-    }
-  
+
     pad(num) {
-      return num.toString().padStart(2, '0');
+        return num.toString().padStart(2, '0');
     }
-  }
+}
+
   
 
 
