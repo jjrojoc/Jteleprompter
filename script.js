@@ -168,15 +168,13 @@ function toggleAutoScroll() {
     var icon = button.querySelector('i');
     var teleprompter = document.getElementById('teleprompter');
 
-    // Verificar si el teleprompter está al inicio para decidir sobre reiniciar el temporizador
-    const isAtStart = teleprompter.scrollTop === 0;
-
     if (!isAutoScrolling) {
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true; // Actualiza el estado
 
-        if (isAtStart) {
+        // Si el scroll comienza desde el principio, reinicia el temporizador
+        if (teleprompter.scrollTop === 0) {
             startTimer();
         }
 
@@ -192,12 +190,11 @@ function toggleAutoScroll() {
         icon.className = "fas fa-play"; // Cambia el ícono a "play"
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
         isAutoScrolling = false; // Actualiza el estado
-        stopTimer();
-
-        // Detener el autoscroll aquí
         clearInterval(scrollInterval);
+        stopTimer();
     }
 }
+
 
 
 function resetTimer() {
