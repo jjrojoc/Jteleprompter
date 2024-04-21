@@ -93,6 +93,18 @@ function toggleAutoScroll() {
     var icon = button.querySelector('i');
 
     if (!isAutoScrolling) {
+        const countdownElement = document.getElementById('countdown');
+  let counter = 3;
+
+  countdownElement.style.display = 'block';
+
+  const interval = setInterval(() => {
+    countdownElement.textContent = counter;
+    counter--;
+
+    if (counter < 0) {
+      clearInterval(interval);
+      countdownElement.style.display = 'none';
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true; // Actualiza el estado
