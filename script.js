@@ -137,6 +137,7 @@ function pad(num) {
 // }
 
 function toggleAutoScroll() {
+    // test
     const controls = document.querySelectorAll('.control');
     const isScrolling = this.classList.toggle('active');
     const atStart = teleprompter.scrollTop === 0;
