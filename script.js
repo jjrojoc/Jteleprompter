@@ -411,22 +411,12 @@ function normalizeLineBreaks(element) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    // // esconder todos los controles por defecto
-    // const controls = document.querySelectorAll('.control:not(#toggleUI)');
-    // controls.forEach(control => {
-    //     control.style.display = 'none'; // Ocultar controles al cargar
-    // });
-    // // Establecer el icono inicial correcto en el botón de toggle
-    // const toggleButton = document.getElementById('toggleUI');
-    // const icon = toggleButton.querySelector('i');
-    // icon.classList.remove('fa-eye-slash');
-    // icon.classList.add('fa-eye');
-
     // Obtener referencias a los elementos de la interfaz
     const speedControl = document.getElementById('speedControl');
     const scrollSpeedValue = document.getElementById('scrollSpeedValue');
     const textSizeControl = document.getElementById('textSizeControl');
     const textSizeValue = document.getElementById('textSizeValue');
+    const teleprompter = document.getElementById('teleprompter'); // Asegúrate de que este ID exista
 
     // Cargar valores guardados al iniciar
     const savedSpeed = localStorage.getItem('speed') || '42';  // Valor por defecto
@@ -436,7 +426,11 @@ document.addEventListener('DOMContentLoaded', function() {
     speedControl.value = savedSpeed;
     scrollSpeedValue.textContent = savedSpeed;
     textSizeControl.value = savedTextSize;
-    textSizeValue.textContent = savedTextSize + 'px';
+    textSizeValue.textContent = `${savedTextSize}px`;
+
+    // Aplicar los valores iniciales al teleprompter
+    teleprompter.style.fontSize = `${savedTextSize}px`;
+    adjustSpeed(speedControl.value);  // Ajustar la velocidad inicial
 
     // Evento para cuando el valor del control de velocidad cambia
     speedControl.addEventListener('input', function() {
@@ -449,19 +443,15 @@ document.addEventListener('DOMContentLoaded', function() {
     textSizeControl.addEventListener('input', function() {
         localStorage.setItem('textSize', textSizeControl.value);
         textSizeValue.textContent = textSizeControl.value + 'px';
-        adjustTextSize(textSizeControl.value);  // Ajustar el tamaño de texto en la aplicación
+        teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
     });
 });
-
-function adjustTextSize(size) {
-    // Aquí puedes ajustar el tamaño de texto en tu aplicación
-    console.log('Adjusting text size to:', size + 'px');
-    teleprompter.style.fontSize = size + 'px';
-}
 
 function adjustSpeed(speed) {
     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
     console.log('Adjusting speed to:', speed);
+    // Asigna una lógica adecuada para ajustar la velocidad de scroll aquí.
+    // Esto podría implicar ajustar intervalos de tiempo, modificar CSS, etc.
     if (isAutoScrolling) {
         clearInterval(scrollInterval);
         const speedscroll = 100 - speed;
@@ -470,22 +460,3 @@ function adjustSpeed(speed) {
         }, speedscroll);
     }
 }
-
-// document.getElementById('toggleUI').addEventListener('click', function() {
-//     const controls = document.querySelectorAll('.control:not(#toggleUI)'); // Excluir el botón de toggle del selector
-//     const icon = this.querySelector('i');
-//     const isHidden = icon.classList.contains('fa-eye-slash');
-    
-//     controls.forEach(control => {
-//         control.style.display = control.style.display === 'none' ? '' : 'none';
-//     });
-    
-//     // Alternar el icono
-//     if (isHidden) {
-//         icon.classList.remove('fa-eye-slash');
-//         icon.classList.add('fa-eye');
-//     } else {
-//         icon.classList.remove('fa-eye');
-//         icon.classList.add('fa-eye-slash');
-//     }
-// });
