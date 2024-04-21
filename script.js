@@ -127,7 +127,7 @@ function stopScrolling() {
 function updateTimer(startTime, duration) {
     const elapsed = Date.now() - startTime;
     const remaining = Math.max(0, (duration - elapsed) / 1000).toFixed(0);  // Tiempo restante en segundos
-    document.getElementById('timer').textContent = remaining + "s";  // Asumiendo que hay un elemento con id 'timer' para mostrar el tiempo
+    document.getElementById('timeRemaining').textContent = remaining + "s";  // Asumiendo que hay un elemento con id 'timer' para mostrar el tiempo
 }
 
 function toggleAutoScroll() {
