@@ -90,6 +90,7 @@ textColorControl.addEventListener('change', () => {
 
 function toggleAutoScroll() {
     const controls = document.querySelector('.controls');
+    console.log(controls);
     const isScrolling = this.getAttribute('data-scrolling') === 'true';
 
     var button = this;
