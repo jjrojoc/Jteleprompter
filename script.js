@@ -75,27 +75,36 @@ textColorControl.addEventListener('change', () => {
 let timerInterval = null;
 let startTime;
 
+function resetTimer() {
+    stopTimer();
+    startTimer();
+    console.log("Timer Reset.");
+}
+
 function startTimer() {
-  startTime = Date.now();
-  timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
+    console.log("Timer Started.");
 }
 
 function stopTimer() {
-  clearInterval(timerInterval);
-  timerInterval = null;
+    clearInterval(timerInterval);
+    timerInterval = null;
+    console.log("Timer Stopped.");
 }
 
 function updateTimer() {
-  const elapsed = Date.now() - startTime;
-  const hours = Math.floor(elapsed / 3600000);
-  const minutes = Math.floor((elapsed % 3600000) / 60000);
-  const seconds = Math.floor((elapsed % 60000) / 1000);
-  document.getElementById('timer').textContent = 
-    `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    const elapsed = Date.now() - startTime;
+    const hours = Math.floor(elapsed / 3600000);
+    const minutes = Math.floor((elapsed % 3600000) / 60000);
+    const seconds = Math.floor((elapsed % 60000) / 1000);
+    document.getElementById('timer').textContent = 
+        `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    console.log("Timer Updated:", document.getElementById('timer').textContent);
 }
 
 function pad(num) {
-  return num.toString().padStart(2, '0');
+    return num.toString().padStart(2, '0');
 }
 
 // function toggleAutoScroll() {
@@ -149,8 +158,12 @@ function toggleAutoScroll() {
     var button = this;
     var icon = button.querySelector('i');
 
+    console.log("Auto Scroll Status:", isAutoScrolling);
+    console.log("Teleprompter Scroll Top:", teleprompter.scrollTop);
+
     if (!isAutoScrolling) {
         if (scrollAtEnd || teleprompter.scrollTop === 0) {
+            console.log("Resetting Timer - Scroll at end or at top");
             resetTimer();  // Reiniciar solo si está al final o al inicio
             scrollAtEnd = false;  // Restablecer la bandera
         }
@@ -164,6 +177,7 @@ function toggleAutoScroll() {
             teleprompter.scrollBy(0, 1);
             if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
                 scrollAtEnd = true; // Actualiza la bandera si alcanzamos el final
+                console.log("Reached end of content.");
             }
         }, speed);
     } else {
@@ -172,6 +186,7 @@ function toggleAutoScroll() {
         isAutoScrolling = false;
         stopTimer();
         clearInterval(scrollInterval);
+        console.log("Stopping Auto Scroll.");
     }
 }
 
