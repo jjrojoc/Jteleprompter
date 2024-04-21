@@ -113,3 +113,8 @@ button:focus, input[type="range"]:focus, select:focus {
 .control {
   display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño */
 }
+
+#timer {
+  font-size: 16px; /* Ajusta según necesario */
+  font-family: Arial, sans-serif; /* Fuente legible */
+}

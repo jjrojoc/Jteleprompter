@@ -1,14 +1,3 @@
-// if ('serviceWorker' in navigator) {
-//     window.addEventListener('load', function() {
-//       navigator.serviceWorker.register('./service-worker.js')
-//         .then(function(registration) {
-//           console.log('ServiceWorker registration successful with scope: ', registration.scope);
-//         }, function(err) {
-//           console.log('ServiceWorker registration failed: ', err);
-//         });
-//     });
-//   }
-
 function invokeServiceWorkerUpdateFlow(registration) {
     // TODO implement your own UI notification element
     if (confirm("New version of the app is available. Refresh now?")) {
@@ -77,16 +66,37 @@ document.getElementById('toggleScroll').addEventListener('click', toggleAutoScro
 
 document.getElementById('loadText').style.display = 'none';
 
-// textSizeControl.addEventListener('input', () => {
-//     const newSize = textSizeControl.value + 'px';
-//     teleprompter.style.fontSize = newSize;
-// });
-
 textColorControl.addEventListener('change', () => {
     // const newColor = document.getElementById('textColorPicker').value; // toma el color del colorpicker
     const newColor = textColorControl.value;
     teleprompter.style.color = newColor;
 });
+
+let timerInterval = null;
+let startTime;
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+function updateTimer() {
+  const elapsed = Date.now() - startTime;
+  const hours = Math.floor(elapsed / 3600000);
+  const minutes = Math.floor((elapsed % 3600000) / 60000);
+  const seconds = Math.floor((elapsed % 60000) / 1000);
+  document.getElementById('timer').textContent = 
+    `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+function pad(num) {
+  return num.toString().padStart(2, '0');
+}
 
 function toggleAutoScroll() {
     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
@@ -102,6 +112,7 @@ function toggleAutoScroll() {
         icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
         document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true; // Actualiza el estado
+        startTimer();
 
         // Iniciar el autoscroll aquí
         const speed = 100 - speedControl.value;
@@ -113,23 +124,12 @@ function toggleAutoScroll() {
         // document.getElementById('toggleScroll').style.backgroundColor = "#007BFF";
         document.getElementById('toggleScroll').style.backgroundColor = "#555555";
         isAutoScrolling = false; // Actualiza el estado
+        stopTimer();
     
         // Detener el autoscroll aquí
         clearInterval(scrollInterval);
     }
 }
-
-
-// speedControl.addEventListener('input', () => {
-//     if (isAutoScrolling) {
-//         clearInterval(scrollInterval);
-//         const speed = 100 - speedControl.value;
-//         scrollInterval = setInterval(() => {
-//             teleprompter.scrollBy(0, 1);
-//         }, speed);
-//     }
-    
-// });
 
 document.getElementById('saveText').addEventListener('click', function() {
     const scriptText = document.getElementById('teleprompter').innerHTML;
@@ -169,73 +169,6 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
     selection.addRange(range);
 });
 
-
-// document.getElementById('editToggle').addEventListener('click', function() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const isEditable = teleprompter.contentEditable === "true";
-//     teleprompter.contentEditable = !isEditable;  // Toggle the state
-//     this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Update button text
-//     if (isEditable){
-//         const scriptText = document.getElementById('teleprompter').innerHTML;
-//         localStorage.setItem('savedScript', scriptText);
-//         alert('Text edited saved!');
-//     }
-// });
-
-// document.getElementById('editToggle').addEventListener('click', function() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const isEditable = teleprompter.contentEditable === "true";
-//     teleprompter.contentEditable = !isEditable;  // Toggle the state
-//     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
-    
-//     if (isEditable) {
-//         icon.className = 'fas fa-edit'; // Cambia el icono a editar
-//         const scriptText = document.getElementById('teleprompter').innerHTML;
-//         localStorage.setItem('savedScript', scriptText);
-//         alert('Text edited saved!');
-//     } else {
-//         icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
-//     }
-// });
-
-// // document.getElementById('editToggle').addEventListener('click', function() {
-// //     const teleprompter = document.getElementById('teleprompter');
-// //     const isEditable = teleprompter.contentEditable === "true";
-// //     teleprompter.contentEditable = !isEditable;  // Alternar el estado de edición
-// //     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
-
-// //     // Verifica si el contenido debe ser borrado
-// //     if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
-// //         teleprompter.innerHTML = '';  // Borra el texto
-// //         icon.className = 'fas fa-stop-circle'; // Cambia el icono a parar editar
-// //         window.setTimeout(function() {
-// //             const range = document.createRange();
-// //             const sel = window.getSelection();
-// //             range.setStart(teleprompter, 0);
-// //             range.collapse(true);
-// //             sel.removeAllRanges();
-// //             sel.addRange(range);
-// //             teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
-// //         }, 1);
-// //     }
-
-// //     // this.textContent = isEditable ? 'Editar' : 'Parar Editar'; // Actualiza el texto del botón
-
-// //     if (isEditable){
-// //         icon.className = 'fas fa-edit'; // Cambia el icono a editar
-// //         let textoVacio = teleprompter.innerText.trim();
-// //         if (textoVacio === '') {
-// //             teleprompter.innerHTML = '1º Click en Menú --> Editar \
-// //                          <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
-// //                          <br>3º Click en Menú --> Parar Editar \
-// //                          <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
-// //         }
-// //         const  scriptText = document.getElementById('teleprompter').innerHTML;
-// //         localStorage.setItem('savedScript', scriptText);
-// //         alert('Texto editado guardado!');
-// //     }
-// // });
-
 document.getElementById('editToggle').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
@@ -273,19 +206,6 @@ document.getElementById('editToggle').addEventListener('click', function() {
         alert('Texto editado guardado!');
     }
 });
-
-
-
-
-// document.getElementById('speedControl').addEventListener('input', function() {
-//     const speedValueSpan = document.getElementById('scrollSpeedValue');
-//     speedValueSpan.textContent = this.value;
-// });
-
-// document.getElementById('textSizeControl').addEventListener('input', function() {
-//     const sizeValueSpan = document.getElementById('textSizeValue');
-//     sizeValueSpan.textContent = this.value + 'px';
-// });
 
 document.getElementById('menuButton').addEventListener('click', function() {
     var menuItems = document.getElementById("menuItems");
@@ -334,31 +254,6 @@ document.getElementById('resetButton').addEventListener('click', function() {
         alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
     }
 });
-
-// document.getElementById('teleprompter').addEventListener('paste', function(e) {
-//     e.preventDefault();
-//     var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-
-//     const formattedText = text.replace(/\n/g, '<br>');
-
-//     // Inserta el texto manteniendo el foco y la posición del cursor
-//     const selection = window.getSelection();
-//     if (!selection.rangeCount) return false;
-//     selection.deleteFromDocument();
-
-//     // Inserta HTML directamente, respetando saltos de línea
-//     const div = document.createElement('div');
-//     div.innerHTML = formattedText;
-//     const fragment = document.createDocumentFragment();
-//     let child;
-//     while ((child = div.firstChild)) {
-//         fragment.appendChild(child);
-//     }
-//     selection.getRangeAt(0).insertNode(fragment);
-
-//     // Mueve el cursor al final del texto insertado
-//     selection.collapseToEnd();
-// });
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
     e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
