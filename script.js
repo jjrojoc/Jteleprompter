@@ -148,8 +148,8 @@ function toggleAutoScroll() {
     document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
     isAutoScrolling = true;
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-      accumulatedTime = 0; // Resetea el tiempo acumulado
-      cronometro.start();
+      //accumulatedTime = 0; // Resetea el tiempo acumulado
+      cronometro.reset();
     } else {
         cronometro.start();  // Continúa el temporizador sin resetear
     }
