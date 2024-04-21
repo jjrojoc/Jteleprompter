@@ -77,10 +77,10 @@ document.getElementById('toggleScroll').addEventListener('click', toggleAutoScro
 
 document.getElementById('loadText').style.display = 'none';
 
-textSizeControl.addEventListener('input', () => {
-    const newSize = textSizeControl.value + 'px';
-    teleprompter.style.fontSize = newSize;
-});
+// textSizeControl.addEventListener('input', () => {
+//     const newSize = textSizeControl.value + 'px';
+//     teleprompter.style.fontSize = newSize;
+// });
 
 textColorControl.addEventListener('change', () => {
     // const newColor = document.getElementById('textColorPicker').value; // toma el color del colorpicker
@@ -112,16 +112,16 @@ function toggleAutoScroll() {
 }
 
 
-speedControl.addEventListener('input', () => {
-    if (isAutoScrolling) {
-        clearInterval(scrollInterval);
-        const speed = 100 - speedControl.value;
-        scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, 1);
-        }, speed);
-    }
+// speedControl.addEventListener('input', () => {
+//     if (isAutoScrolling) {
+//         clearInterval(scrollInterval);
+//         const speed = 100 - speedControl.value;
+//         scrollInterval = setInterval(() => {
+//             teleprompter.scrollBy(0, 1);
+//         }, speed);
+//     }
     
-});
+// });
 
 document.getElementById('saveText').addEventListener('click', function() {
     const scriptText = document.getElementById('teleprompter').innerHTML;
@@ -269,15 +269,15 @@ document.getElementById('editToggle').addEventListener('click', function() {
 
 
 
-document.getElementById('speedControl').addEventListener('input', function() {
-    const speedValueSpan = document.getElementById('scrollSpeedValue');
-    speedValueSpan.textContent = this.value;
-});
+// document.getElementById('speedControl').addEventListener('input', function() {
+//     const speedValueSpan = document.getElementById('scrollSpeedValue');
+//     speedValueSpan.textContent = this.value;
+// });
 
-document.getElementById('textSizeControl').addEventListener('input', function() {
-    const sizeValueSpan = document.getElementById('textSizeValue');
-    sizeValueSpan.textContent = this.value + 'px';
-});
+// document.getElementById('textSizeControl').addEventListener('input', function() {
+//     const sizeValueSpan = document.getElementById('textSizeValue');
+//     sizeValueSpan.textContent = this.value + 'px';
+// });
 
 document.getElementById('menuButton').addEventListener('click', function() {
     var menuItems = document.getElementById("menuItems");
@@ -401,95 +401,53 @@ function normalizeLineBreaks(element) {
     }
 }
 
-function applySettings() {
-  const fontSize = document.getElementById('fontSizeInput').value;
-  const scrollSpeed = document.getElementById('scrollSpeedInput').value;
 
-  // Aplicar configuración al teleprompter
-  const teleprompter = document.getElementById('teleprompter');
-  teleprompter.style.fontSize = fontSize + 'px';
-  // Asume que tienes una función que ajusta la velocidad de desplazamiento
-  setScrollSpeed(scrollSpeed);
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener referencias a los elementos de la interfaz
+    const speedControl = document.getElementById('speedControl');
+    const scrollSpeedValue = document.getElementById('scrollSpeedValue');
+    const textSizeControl = document.getElementById('textSizeControl');
+    const textSizeValue = document.getElementById('textSizeValue');
 
-  // Guardar configuración en localStorage
-  localStorage.setItem('teleprompterFontSize', fontSize);
-  localStorage.setItem('teleprompterScrollSpeed', scrollSpeed);
+    // Cargar valores guardados al iniciar
+    const savedSpeed = localStorage.getItem('speed') || '42';  // Valor por defecto
+    const savedTextSize = localStorage.getItem('textSize') || '36';  // Valor por defecto
+
+    // Ajustar los sliders y mostrar los valores actuales
+    speedControl.value = savedSpeed;
+    scrollSpeedValue.textContent = savedSpeed;
+    textSizeControl.value = savedTextSize;
+    textSizeValue.textContent = savedTextSize + 'px';
+
+    // Evento para cuando el valor del control de velocidad cambia
+    speedControl.addEventListener('input', function() {
+        localStorage.setItem('speed', speedControl.value);
+        scrollSpeedValue.textContent = speedControl.value;
+        adjustSpeed(speedControl.value);  // Ajustar la velocidad en la aplicación
+    });
+
+    // Evento para cuando el valor del control de tamaño de texto cambia
+    textSizeControl.addEventListener('input', function() {
+        localStorage.setItem('textSize', textSizeControl.value);
+        textSizeValue.textContent = textSizeControl.value + 'px';
+        adjustTextSize(textSizeControl.value);  // Ajustar el tamaño de texto en la aplicación
+    });
+});
+
+function adjustTextSize(size) {
+    // Aquí puedes ajustar el tamaño de texto en tu aplicación
+    console.log('Adjusting text size to:', size + 'px');
+    teleprompter.style.fontSize = size;
 }
 
-// Función para cargar configuraciones al iniciar la página
-function loadSettings() {
-  const storedFontSize = localStorage.getItem('teleprompterFontSize');
-  const storedScrollSpeed = localStorage.getItem('teleprompterScrollSpeed');
-
-  if (storedFontSize) {
-    document.getElementById('fontSizeInput').value = storedFontSize;
-    document.getElementById('teleprompter').style.fontSize = storedFontSize + 'px';
-  }
-  if (storedScrollSpeed) {
-    document.getElementById('scrollSpeedInput').value = storedScrollSpeed;
-    setScrollSpeed(storedScrollSpeed);
-  }
+function adjustSpeed(speed) {
+    // Aquí puedes ajustar la velocidad del scroll en tu aplicación
+    console.log('Adjusting speed to:', speed);
+    if (isAutoScrolling) {
+        clearInterval(scrollInterval);
+        const speedscroll = 100 - speed;
+        scrollInterval = setInterval(() => {
+            teleprompter.scrollBy(0, 1);
+        }, speedscroll);
+    }
 }
-
-document.addEventListener('DOMContentLoaded', loadSettings);
-
-function setScrollSpeed(speed) {
-  // Implementa esta función según cómo manejes el scroll en tu teleprompter
-  console.log('Scroll speed set to', speed);
-}
-
-function applySettings() {
-    const fontSize = document.getElementById('fontSizeSlider').value;
-    const scrollSpeed = document.getElementById('scrollSpeedSlider').value;
-  
-    // Actualizar los controles del teleprompter
-    updateTeleprompterControls(fontSize, scrollSpeed);
-  
-    // Guardar configuración en localStorage
-    localStorage.setItem('teleprompterFontSize', fontSize);
-    localStorage.setItem('teleprompterScrollSpeed', scrollSpeed);
-  }
-  
-  function loadSettings() {
-    const storedFontSize = localStorage.getItem('teleprompterFontSize') || '24';
-    const storedScrollSpeed = localStorage.getItem('teleprompterScrollSpeed') || '50';
-  
-    document.getElementById('fontSizeSlider').value = storedFontSize;
-    document.getElementById('scrollSpeedSlider').value = storedScrollSpeed;
-  
-    updateTeleprompterControls(storedFontSize, storedScrollSpeed);
-  }
-  
-  function updateTeleprompterControls(fontSize, scrollSpeed) {
-    document.getElementById('fontSizeValue').textContent = fontSize + 'px';
-    document.getElementById('scrollSpeedValuedefault').textContent = scrollSpeed;
-  
-    const teleprompter = document.getElementById('teleprompter');
-    teleprompter.style.fontSize = fontSize + 'px';
-    // Asume que 'setScrollSpeed' es una función existente para ajustar la velocidad del scroll
-    //setScrollSpeed(scrollSpeed);
-    speedControl.value = scrollSpeed;
-    textSizeControl.value = fontSize;
-    const speedValueSpan = document.getElementById('scrollSpeedValue');
-    speedValueSpan.textContent = scrollSpeed;
-
-    const sizeValueSpan = document.getElementById('textSizeValue');
-    sizeValueSpan.textContent = fontSize + 'px';
-  }
-  
-  document.addEventListener('DOMContentLoaded', loadSettings);
-  
-  function setScrollSpeed(speed) {
-    // Aquí deberías ajustar la velocidad real de desplazamiento del teleprompter
-    console.log('Scroll speed set to', speed);
-  }
-  
-  // Event listeners para actualizar instantáneamente los valores mostrados al usuario
-  document.getElementById('fontSizeSlider').addEventListener('input', function() {
-    document.getElementById('fontSizeValue').textContent = this.value + 'px';
-  });
-  
-  document.getElementById('scrollSpeedSlider').addEventListener('input', function() {
-    document.getElementById('scrollSpeedValuedefault').textContent = this.value;
-  });
-  
