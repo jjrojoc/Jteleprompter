@@ -108,6 +108,13 @@ function updateTimer() {
   document.getElementById('timer').textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
+function updateDisplay(milliseconds) {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    document.getElementById('timer').textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
 function pad(num) {
   return num.toString().padStart(2, '0');
 }
@@ -115,7 +122,7 @@ function pad(num) {
 document.getElementById('timer').addEventListener('click', function() {
     if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
       accumulatedTime = 0;  // Resetea el tiempo acumulado
-      updateTimer(0);  // Actualiza el display a 00:00:00
+      updateDisplay(0);  // Actualiza el display a 00:00:00
       console.log('Timer reset to 00:00:00');
     }
 });
