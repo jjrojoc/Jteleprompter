@@ -400,3 +400,25 @@ function normalizeLineBreaks(element) {
         }
     }
 }
+
+function prepareTeleprompter() {
+    const teleprompter = document.getElementById('teleprompter');
+    const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight);
+    const viewportHeight = window.innerHeight;
+    
+    // Calcular cuántas líneas vacías son necesarias para alcanzar aproximadamente la mitad de la pantalla
+    const linesNeeded = Math.floor(viewportHeight / 2 / lineHeight);
+  
+    // Crear las líneas vacías
+    let paddingLines = '';
+    for (let i = 0; i < linesNeeded; i++) {
+      paddingLines += '<br>';
+    }
+  
+    // Añadir líneas al principio y al final
+    teleprompter.innerHTML = paddingLines + teleprompter.innerHTML + paddingLines;
+  }
+  
+  // Preparar teleprompter cuando se cargue la página o antes de iniciar el scroll
+  document.addEventListener('DOMContentLoaded', prepareTeleprompter);
+  
