@@ -113,10 +113,3 @@ button:focus, input[type="range"]:focus, select:focus {
 .control {
   display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño */
 }
-
-#toggleUI {
-  background: none;
-  border: none;
-  font-size: 1.5em; /* Ajusta según necesidad */
-  cursor: pointer;
-}
