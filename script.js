@@ -402,39 +402,87 @@ function normalizeLineBreaks(element) {
 }
 
 function applySettings() {
-    const fontSize = document.getElementById('fontSizeInput').value;
-    const scrollSpeed = document.getElementById('scrollSpeedInput').value;
+  const fontSize = document.getElementById('fontSizeInput').value;
+  const scrollSpeed = document.getElementById('scrollSpeedInput').value;
+
+  // Aplicar configuración al teleprompter
+  const teleprompter = document.getElementById('teleprompter');
+  teleprompter.style.fontSize = fontSize + 'px';
+  // Asume que tienes una función que ajusta la velocidad de desplazamiento
+  setScrollSpeed(scrollSpeed);
+
+  // Guardar configuración en localStorage
+  localStorage.setItem('teleprompterFontSize', fontSize);
+  localStorage.setItem('teleprompterScrollSpeed', scrollSpeed);
+}
+
+// Función para cargar configuraciones al iniciar la página
+function loadSettings() {
+  const storedFontSize = localStorage.getItem('teleprompterFontSize');
+  const storedScrollSpeed = localStorage.getItem('teleprompterScrollSpeed');
+
+  if (storedFontSize) {
+    document.getElementById('fontSizeInput').value = storedFontSize;
+    document.getElementById('teleprompter').style.fontSize = storedFontSize + 'px';
+  }
+  if (storedScrollSpeed) {
+    document.getElementById('scrollSpeedInput').value = storedScrollSpeed;
+    setScrollSpeed(storedScrollSpeed);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadSettings);
+
+function setScrollSpeed(speed) {
+  // Implementa esta función según cómo manejes el scroll en tu teleprompter
+  console.log('Scroll speed set to', speed);
+}
+
+function applySettings() {
+    const fontSize = document.getElementById('fontSizeSlider').value;
+    const scrollSpeed = document.getElementById('scrollSpeedSlider').value;
   
-    // Aplicar configuración al teleprompter
-    const teleprompter = document.getElementById('teleprompter');
-    teleprompter.style.fontSize = fontSize + 'px';
-    // Asume que tienes una función que ajusta la velocidad de desplazamiento
-    setScrollSpeed(scrollSpeed);
+    // Actualizar los controles del teleprompter
+    updateTeleprompterControls(fontSize, scrollSpeed);
   
     // Guardar configuración en localStorage
     localStorage.setItem('teleprompterFontSize', fontSize);
     localStorage.setItem('teleprompterScrollSpeed', scrollSpeed);
   }
   
-  // Función para cargar configuraciones al iniciar la página
   function loadSettings() {
-    const storedFontSize = localStorage.getItem('teleprompterFontSize');
-    const storedScrollSpeed = localStorage.getItem('teleprompterScrollSpeed');
+    const storedFontSize = localStorage.getItem('teleprompterFontSize') || '24';
+    const storedScrollSpeed = localStorage.getItem('teleprompterScrollSpeed') || '50';
   
-    if (storedFontSize) {
-      document.getElementById('fontSizeInput').value = storedFontSize;
-      document.getElementById('teleprompter').style.fontSize = storedFontSize + 'px';
-    }
-    if (storedScrollSpeed) {
-      document.getElementById('scrollSpeedInput').value = storedScrollSpeed;
-      setScrollSpeed(storedScrollSpeed);
-    }
+    document.getElementById('fontSizeSlider').value = storedFontSize;
+    document.getElementById('scrollSpeedSlider').value = storedScrollSpeed;
+  
+    updateTeleprompterControls(storedFontSize, storedScrollSpeed);
+  }
+  
+  function updateTeleprompterControls(fontSize, scrollSpeed) {
+    document.getElementById('fontSizeValue').textContent = fontSize + 'px';
+    document.getElementById('scrollSpeedValue').textContent = scrollSpeed;
+  
+    const teleprompter = document.getElementById('teleprompter');
+    teleprompter.style.fontSize = fontSize + 'px';
+    // Asume que 'setScrollSpeed' es una función existente para ajustar la velocidad del scroll
+    setScrollSpeed(scrollSpeed);
   }
   
   document.addEventListener('DOMContentLoaded', loadSettings);
   
   function setScrollSpeed(speed) {
-    // Implementa esta función según cómo manejes el scroll en tu teleprompter
+    // Aquí deberías ajustar la velocidad real de desplazamiento del teleprompter
     console.log('Scroll speed set to', speed);
   }
+  
+  // Event listeners para actualizar instantáneamente los valores mostrados al usuario
+  document.getElementById('fontSizeSlider').addEventListener('input', function() {
+    document.getElementById('fontSizeValue').textContent = this.value + 'px';
+  });
+  
+  document.getElementById('scrollSpeedSlider').addEventListener('input', function() {
+    document.getElementById('scrollSpeedValue').textContent = this.value;
+  });
   
