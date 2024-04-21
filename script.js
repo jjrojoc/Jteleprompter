@@ -403,9 +403,17 @@ function normalizeLineBreaks(element) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight);
     const viewportHeight = window.innerHeight;
-    
+  
+    // Utilizar un elemento temporal para medir la altura de una línea de texto
+    let tempLine = document.createElement('div');
+    tempLine.style.visibility = 'hidden';
+    tempLine.style.position = 'absolute';
+    tempLine.innerHTML = 'A';  // Asegurar algo de contenido
+    document.body.appendChild(tempLine);
+    const lineHeight = tempLine.clientHeight;
+    document.body.removeChild(tempLine);
+  
     // Calcular cuántas líneas vacías son necesarias para alcanzar aproximadamente la mitad de la pantalla
     const linesNeeded = Math.floor(viewportHeight / 2 / lineHeight);
   
@@ -420,5 +428,5 @@ function prepareTeleprompter() {
   }
   
   // Preparar teleprompter cuando se cargue la página o antes de iniciar el scroll
-  document.addEventListener('DOMContentLoaded', prepareTeleprompter);
+  window.onload = prepareTeleprompter;
   
