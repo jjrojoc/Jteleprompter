@@ -76,9 +76,6 @@ textColorControl.addEventListener('change', () => {
     teleprompter.style.color = newColor;
 });
 
-let timerInterval = null;
-let startTime;
-
 // function startTimer() {
 //   startTime = Date.now();
 //   timerInterval = setInterval(updateTimer, 1000); // Actualizar cada segundo
