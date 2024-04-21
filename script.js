@@ -100,67 +100,50 @@ let startTime;
 
 let endTime;
 
+function startScrolling() {
+    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;  // Altura total del contenido menos la altura visible
+    const speed = parseInt(document.getElementById('speedControl').value, 10);  // Velocidad desde el slider
+    const intervalTime = Math.max(10, 110 - speed);  // Tiempo entre cada intervalo de scroll, ajustable para que sea más rápido o más lento
+
+    let startPosition = 0;
+    const startTime = Date.now();
+    const estimatedEndTime = (totalHeight / 1) * intervalTime;  // Se ajusta para calcular el tiempo basado en la altura y la velocidad
+
+    scrollInterval = setInterval(() => {
+        if (startPosition < totalHeight) {
+            teleprompter.scrollBy(0, 1);  // Scroll de 1 píxel por intervalo
+            startPosition++;
+        } else {
+            clearInterval(scrollInterval);
+        }
+        updateTimer(startTime, estimatedEndTime);
+    }, intervalTime);
+}
+
+function stopScrolling() {
+    clearInterval(scrollInterval);
+}
+
+function updateTimer(startTime, duration) {
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, (duration - elapsed) / 1000).toFixed(0);  // Tiempo restante en segundos
+    document.getElementById('timer').textContent = remaining + "s";  // Asumiendo que hay un elemento con id 'timer' para mostrar el tiempo
+}
+
 function toggleAutoScroll() {
-    const isScrolling = this.classList.toggle('active');
-    const controls = document.querySelectorAll('.control');
-    const button = this;
-    const icon = button.querySelector('i');
-
-    controls.forEach(control => control.style.display = isScrolling ? 'none' : 'block');
-
+    const icon = this.querySelector('i');
     if (!isAutoScrolling) {
         icon.className = "fas fa-stop";
-        document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
         isAutoScrolling = true;
-        startTimer();
-
-        // Inicia el autoscroll
-        adjustSpeed(parseInt(document.getElementById('speedControl').value));
+        startScrolling();
     } else {
         icon.className = "fas fa-play";
-        document.getElementById('toggleScroll').style.backgroundColor = "#555555";
         isAutoScrolling = false;
-        clearInterval(scrollInterval);
-        stopTimer(); // Detener el cronómetro
+        stopScrolling();
     }
 }
 
-function startTimer() {
-    const teleprompterStyle = window.getComputedStyle(teleprompter);
-    const fontSize = parseInt(teleprompterStyle.fontSize, 10); // Obtener el tamaño de la fuente en píxeles
-
-    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
-    const currentPosition = teleprompter.scrollTop;
-    const remainingHeight = totalHeight - currentPosition;
-    const speedControlValue = parseInt(document.getElementById('speedControl').value);
-    const pixelsPerInterval = fontSize; // Usar el tamaño de la fuente como desplazamiento por intervalo
-
-    // El intervalo actual basado en la velocidad del control
-    const interval = 100 - speedControlValue;
-
-    // Tiempo para terminar en milisegundos, considerando el desplazamiento por intervalo y el intervalo en ms
-    const timeToFinish = remainingHeight * interval / pixelsPerInterval; // tiempo en milisegundos
-    endTime = Date.now() + timeToFinish;
-}
-
-function stopTimer() {
-    updateCountdown(true); // Actualizar una última vez pasando true para forzar a 00:00
-}
-
-function updateCountdown(forceStop = false) {
-    const timeLeft = forceStop ? 0 : Math.max(endTime - Date.now(), 0);
-    const minutes = Math.floor(timeLeft / 60000);
-    const seconds = Math.floor((timeLeft % 60000) / 1000);
-    document.getElementById('timeRemaining').textContent = `${padZero(minutes)}:${padZero(seconds)}`;
-
-    if (timeLeft === 0 && !forceStop) {
-        toggleAutoScroll.apply(document.getElementById('toggleScroll')); // Detener autoscroll y cambiar icono
-    }
-}
-
-function padZero(num) {
-    return num.toString().padStart(2, '0');
-}
+document.getElementById('toggleScroll').addEventListener('click', toggleAutoScroll);
 
 // function toggleAutoScroll() {
 //     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
@@ -408,9 +391,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function adjustSpeed(speed) {
-
-    const fontSize = parseInt(window.getComputedStyle(teleprompter).fontSize, 10);
-    const speedscroll = 100 - speed;
     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
     console.log('Adjusting speed to:', speed);
     // Asigna una lógica adecuada para ajustar la velocidad de scroll aquí.
@@ -419,8 +399,8 @@ function adjustSpeed(speed) {
         clearInterval(scrollInterval);
         const speedscroll = 100 - speed;
         scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, fontSize);
-        }, speedscroll);
+            teleprompter.scrollBy(0, 1);
+        }, speed);
     }
 }
 
