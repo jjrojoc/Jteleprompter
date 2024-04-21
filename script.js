@@ -458,7 +458,7 @@ document.getElementById('toggleUI').addEventListener('click', function() {
     const isHidden = icon.classList.contains('fa-eye-slash');
     
     controls.forEach(control => {
-        control.style.display = isHidden ? '' : 'none';
+        control.style.display = control.style.display === 'none' ? '' : 'none';
     });
     
     // Alternar el icono
