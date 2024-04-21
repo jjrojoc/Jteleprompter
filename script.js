@@ -490,6 +490,6 @@ function applySettings() {
   });
   
   document.getElementById('scrollSpeedSlider').addEventListener('input', function() {
-    document.getElementById('scrollSpeedValue').textContent = this.value;
+    document.getElementById('scrollSpeedValuedefault').textContent = this.value;
   });
   
