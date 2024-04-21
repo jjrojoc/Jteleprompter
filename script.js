@@ -136,14 +136,15 @@ function startTimer() {
     const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
     const currentPosition = teleprompter.scrollTop;
     const remainingHeight = totalHeight - currentPosition;
-    const scrollSpeed = 100 - parseInt(document.getElementById('speedControl').value);
+    const speedControlValue = parseInt(document.getElementById('speedControl').value);
+    const pixelsPerInterval = 1; // Cuántos píxeles se desplazan en cada intervalo de autoscroll
 
-    const timeToFinish = remainingHeight / (1 / (scrollSpeed * 0.01)); // Ajustar según necesidad
+    // El intervalo actual basado en la velocidad del control
+    const interval = 100 - speedControlValue;
+
+    // Tiempo para terminar en milisegundos, teniendo en cuenta los píxeles por intervalo y el intervalo en ms
+    const timeToFinish = remainingHeight * interval / pixelsPerInterval; // tiempo en milisegundos
     endTime = Date.now() + timeToFinish;
-}
-
-function stopTimer() {
-    updateCountdown(true); // Actualizar una última vez pasando true para forzar a 00:00
 }
 
 function updateCountdown(forceStop = false) {
@@ -152,7 +153,7 @@ function updateCountdown(forceStop = false) {
     const seconds = Math.floor((timeLeft % 60000) / 1000);
     document.getElementById('timeRemaining').textContent = `${padZero(minutes)}:${padZero(seconds)}`;
 
-    if (timeLeft === 0) {
+    if (timeLeft === 0 && !forceStop) {
         toggleAutoScroll.apply(document.getElementById('toggleScroll')); // Detener autoscroll y cambiar icono
     }
 }
