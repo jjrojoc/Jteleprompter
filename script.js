@@ -83,7 +83,7 @@ class Cronometro {
 
     start() {
         if (!this.running) {
-            this.startTime = Date.now() - this.accumulatedTime; // Restar tiempo acumulado al iniciar
+            this.startTime = Date.now(); // Inicia el tiempo actual
             this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
             this.running = true;
         }
@@ -91,21 +91,22 @@ class Cronometro {
 
     stop() {
         if (this.running) {
+            this.accumulatedTime += Date.now() - this.startTime; // Acumula el tiempo transcurrido
             clearInterval(this.timerInterval);
-            this.accumulatedTime = Date.now() - this.startTime; // Actualizar tiempo acumulado al detener
             this.running = false;
         }
     }
 
     reset() {
-        clearInterval(this.timerInterval);
-        this.running = false;
-        this.accumulatedTime = 0;
-        this.displayElement.textContent = "00:00:00"; // Restablecer la visualización
+        this.accumulatedTime = 0; // Resetea el tiempo acumulado
+        this.updateDisplay(); // Actualiza el display inmediatamente
     }
 
     updateDisplay() {
-        const elapsed = Date.now() - this.startTime;
+        const elapsed = this.accumulatedTime;
+        if (this.running) {
+            elapsed += Date.now() - this.startTime; // Añade tiempo desde el último inicio si está corriendo
+        }
         const hours = Math.floor(elapsed / 3600000);
         const minutes = Math.floor((elapsed % 3600000) / 60000);
         const seconds = Math.floor((elapsed % 60000) / 1000);
@@ -116,6 +117,7 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
+
 
 
 const timerDisplay = document.getElementById('timer');
