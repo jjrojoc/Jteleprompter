@@ -165,6 +165,7 @@ function toggleAutoScroll() {
       if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
         console.log('Reached End, stopping autoscroll.');
         toggleAutoScroll.call(button);
+        teleprompter.scrollTop = 0;
     }
     }, speed);
   } else {
