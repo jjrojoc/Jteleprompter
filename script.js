@@ -81,7 +81,7 @@ class Cronometro {
     }
 
     start() {
-        if (!this.timer) {
+        if (this.timer) {
             this.startTime = Date.now() - this.acumulado; // Ajustar el inicio con respecto al tiempo acumulado
             this.timer = setInterval(() => {
                 this.updateDisplay();
