@@ -80,48 +80,47 @@ class Cronometro {
         this.startTime = 0;
         this.timerInterval = null;
         this.paused = true;
+        this.displayPausedTime = false;
     }
 
     start() {
         if (!this.paused) return;
         this.paused = false;
+        this.displayPausedTime = false;
         this.startTime = Date.now() - this.elapsedTime;
         this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
     }
 
     pause() {
         if (this.paused) return;
-        this.paused = true;
-        clearInterval(this.timerInterval);
-        // Mantener elapsedTime sin reinicio
+        this.displayPausedTime = true;
+        this.updateDisplay(); // Update to show paused time
     }
 
     continue() {
-        if (!this.paused) return;
-        this.paused = false;
-        this.startTime = Date.now() - this.elapsedTime;
-        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+        if (!this.displayPausedTime) return;
+        this.displayPausedTime = false;
+        this.updateDisplay();
     }
 
     stop() {
         if (this.paused) return;
-        this.paused = true;
         clearInterval(this.timerInterval);
-        // No se reinicia elapsedTime a 0, solo detiene el intervalo
+        this.elapsedTime = Date.now() - this.startTime;
+        this.paused = true;
     }
 
     reset() {
-        this.stop();  // Asegura que el cronómetro está detenido antes de resetear
+        if (!this.paused) return;
         this.elapsedTime = 0;
-        this.updateDisplay();  // Actualiza la visualización después de resetear
+        this.updateDisplay();
     }
 
     updateDisplay() {
-        const now = Date.now();
-        this.elapsedTime = now - this.startTime;
-        const hours = Math.floor(this.elapsedTime / 3600000);
-        const minutes = Math.floor((this.elapsedTime % 3600000) / 60000);
-        const seconds = Math.floor((this.elapsedTime % 60000) / 1000);
+        let currentTime = this.displayPausedTime ? this.elapsedTime : Date.now() - this.startTime;
+        const hours = Math.floor(currentTime / 3600000);
+        const minutes = Math.floor((currentTime % 3600000) / 60000);
+        const seconds = Math.floor((currentTime % 60000) / 1000);
         this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
     }
 
@@ -129,6 +128,7 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
+
 
 
 
@@ -185,6 +185,7 @@ function toggleAutoScroll() {
         if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
             console.log('Reached End, stopping autoscroll.');
             toggleAutoScroll.call(button);
+            cronometro.stop();
             if (teleprompter.scrollTop != 0) {
                 mybutton.style.display = "block";
             }
