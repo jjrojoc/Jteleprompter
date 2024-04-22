@@ -136,6 +136,7 @@ class Cronometro {
 
 
 
+
 // Instancia del cronómetro
 const timerDisplay = document.getElementById("timer");
 const cronometro = new Cronometro(timerDisplay);
