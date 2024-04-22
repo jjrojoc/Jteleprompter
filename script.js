@@ -95,11 +95,10 @@ class Cronometro {
             this.acumulado = Date.now() - this.startTime; // Actualiza el tiempo acumulado
             clearInterval(this.timer);
             this.timer = setInterval(() => {
-                this.timer = setInterval(() => {
-                    this.acumulado = Date.now() - this.startTime;
-                }, 1000);
-            });
-            this.updateDisplay(); // Asegurarse de que la última lectura del tiempo se muestra
+                this.updateDisplay();
+            }, 1000);
+            this.timer = null;
+             // Asegurarse de que la última lectura del tiempo se muestra
             console.log('Cronómetro detenido. Tiempo acumulado:', this.acumulado);
         }
     }
