@@ -80,7 +80,7 @@ class Cronometro {
         this.startTime = 0;
         this.timerInterval = null;
         this.paused = true;
-        this.displayPausedTime = false; // Indica si mostrar tiempo pausado
+        this.displayPausedTime = false;
     }
 
     start() {
@@ -92,19 +92,16 @@ class Cronometro {
     }
 
     pause() {
-        if (this.paused) return;
-        this.paused = true;
-        clearInterval(this.timerInterval);
-        this.elapsedTime = Date.now() - this.startTime;  // Captura el tiempo transcurrido hasta la pausa
+        if (this.paused) return
+        this.totalElapsedTime = Date.now() - this.startTime;
         this.displayPausedTime = true;
-        this.updateDisplay();  // Muestra el tiempo en el momento de la pausa
+        this.updateDisplay(); // Update to show paused time
     }
 
     continue() {
-        if (!this.paused) return;
-        this.paused = false;
-        this.startTime = Date.now() - this.elapsedTime;
-        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+        if (!this.displayPausedTime) return;
+        this.displayPausedTime = false;
+        this.updateDisplay();
     }
 
     stop() {
@@ -112,8 +109,6 @@ class Cronometro {
         clearInterval(this.timerInterval);
         this.elapsedTime = Date.now() - this.startTime;
         this.paused = true;
-        this.displayPausedTime = true;
-        this.updateDisplay();  // Actualiza para mostrar el tiempo final antes de detener completamente
     }
 
     reset() {
@@ -123,10 +118,7 @@ class Cronometro {
     }
 
     updateDisplay() {
-        let currentTime = this.elapsedTime;
-        if (!this.paused) {
-            currentTime = Date.now() - this.startTime;
-        }
+        let currentTime = this.displayPausedTime ? this.elapsedTime : Date.now() - this.startTime;
         const hours = Math.floor(currentTime / 3600000);
         const minutes = Math.floor((currentTime % 3600000) / 60000);
         const seconds = Math.floor((currentTime % 60000) / 1000);
@@ -137,15 +129,6 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 // Instancia del cronómetro
