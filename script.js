@@ -177,7 +177,7 @@ function toggleAutoScroll() {
         } else {
             cronometro.stop();
         }
-
+    }
     // Iniciar el auto-scroll aquí
     const speed = 100 - speedControl.value;
     scrollInterval = setInterval(() => {
