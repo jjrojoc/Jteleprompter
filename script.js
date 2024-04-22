@@ -186,6 +186,7 @@ function toggleAutoScroll() {
 function topFunction() {
     teleprompter.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+    mybutton.style.display = 'none';
   }
 // function toggleAutoScroll() {
 //     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
