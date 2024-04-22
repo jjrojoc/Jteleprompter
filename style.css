@@ -140,8 +140,3 @@ button:focus, input[type="range"]:focus, select:focus {
 #myBtn:hover {
   background-color: #555;
 }
-
-#timer:active {
-  background-color: red; /* Más oscuro cuando está presionado */
-}
-

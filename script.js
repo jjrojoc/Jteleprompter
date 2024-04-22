@@ -130,6 +130,7 @@ const cronometro = new Cronometro(timerDisplay);
 let timer;
 document.getElementById('timer').addEventListener('touchstart', function(e) {
     if (!isAutoScrolling) { // Asegura que no esté auto desplazándose
+        this.style.backgroundColor = 'red';
         timer = setTimeout(function() {
             cronometro.stop();  // Detiene el cronómetro
             cronometro.reset(); // Resetea el cronómetro
@@ -140,6 +141,7 @@ document.getElementById('timer').addEventListener('touchstart', function(e) {
 
 document.getElementById('timer').addEventListener('touchend', function(e) {
     clearTimeout(timer);  // Cancela el reset si el usuario suelta el botón antes de los 3 segundos
+    this.style.backgroundColor = 'black';
 });
 
 
