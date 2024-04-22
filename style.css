@@ -134,7 +134,9 @@ button:focus, input[type="range"]:focus, select:focus {
   cursor: pointer;
   padding: 15px;
   border-radius: 4px;
+  z-index: 1100;
 }
 
 #myBtn:hover {
   background-color: #555;
+}
