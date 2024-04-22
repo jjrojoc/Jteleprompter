@@ -92,12 +92,11 @@ class Cronometro {
 
     stop() {
         if (this.timer) {
-            this.acumulado = Date.now() - this.startTime; // Actualiza el tiempo acumulado
+            this.acumulado = Date.now() - this.acumulado; // Actualiza el tiempo acumulado
             clearInterval(this.timer);
             this.timer = setInterval(() => {
-                this.updateDisplay();
+                this.update();
             }, 1000);
-            this.timer = null;
              // Asegurarse de que la última lectura del tiempo se muestra
             console.log('Cronómetro detenido. Tiempo acumulado:', this.acumulado);
         }
@@ -108,6 +107,13 @@ class Cronometro {
         this.acumulado = 0;
         this.updateDisplay(); // Actualizar el display inmediatamente después de reset
         console.log('Cronómetro reseteado');
+    }
+
+    updateDisplay() {
+        const elapsed = Date.now() - this.startTime;
+        const hours = Math.floor(elapsed / 3600000);
+        const minutes = Math.floor((elapsed % 3600000) / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
     }
 
     updateDisplay() {
