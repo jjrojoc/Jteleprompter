@@ -171,8 +171,8 @@ function toggleAutoScroll() {
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
         console.log("reset en el inicio");
-        cronometro.start();
-        console.log("start en inicio");
+        cronometro.continue();
+        console.log("continue en inicio");
     } else {
         cronometro.continue();  // Continúa el temporizador sin resetear
         console.log("continue");
