@@ -121,6 +121,7 @@ const cronometro = new Cronometro(timerDisplay);
 document.getElementById('timer').addEventListener('click', function() {
     if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
       //accumulatedTime = 0;  // Resetea el tiempo acumulado
+      cronometro.stop();     // Detiene el cronómetro
       cronometro.reset();  // Actualiza el display a 00:00:00
       console.log('Timer reset to 00:00:00');
     }
