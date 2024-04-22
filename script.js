@@ -181,6 +181,10 @@ function toggleAutoScroll() {
     cronometro.stop();
     clearInterval(scrollInterval);  // Detiene el auto-scroll
   }
+} else {
+    // Si no hay suficiente contenido para scrollear, simplemente desactiva el botón
+    this.classList.remove('active');
+    alert('No hay suficiente contenido para hacer scroll.');
 }
 }
 
