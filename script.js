@@ -109,7 +109,7 @@ class Cronometro {
         console.log('Cronómetro reseteado');
     }
 
-    updateDisplay() {
+    update() {
         const elapsed = Date.now() - this.startTime;
         const hours = Math.floor(elapsed / 3600000);
         const minutes = Math.floor((elapsed % 3600000) / 60000);
