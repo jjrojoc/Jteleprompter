@@ -136,6 +136,8 @@ document.getElementById('timer').addEventListener('click', function() {
 });
 
 function toggleAutoScroll() {
+    // Get the button
+    let mybutton = document.getElementById("myBtn");
   const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
   const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
   
@@ -165,7 +167,10 @@ function toggleAutoScroll() {
       if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
         console.log('Reached End, stopping autoscroll.');
         toggleAutoScroll.call(button);
-        teleprompter.scrollTop = 0;
+        //teleprompter.scrollTop = 0;
+        mybutton.style.display = "block";
+      } else {
+            mybutton.style.display = "none";
     }
     }, speed);
   } else {
@@ -178,8 +183,10 @@ function toggleAutoScroll() {
 }
 
 
-
-
+function topFunction() {
+    teleprompter.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
 // function toggleAutoScroll() {
 //     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
 //     const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
