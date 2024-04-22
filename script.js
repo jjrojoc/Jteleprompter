@@ -77,7 +77,7 @@ class Cronometro {
     constructor(displayElement) {
         this.displayElement = displayElement;
         this.elapsedTime = 0;
-        this.startTime = 0;
+        this.startTime = Date.now();
         this.timerInterval = null;
         this.paused = true;
         this.lapTime = 0;
@@ -86,38 +86,39 @@ class Cronometro {
     start() {
         if (!this.paused) return;
         this.paused = false;
-        this.startTime = Date.now() - this.elapsedTime;
-        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+        if (!this.timerInterval) { // Asegura que el intervalo se configure solo una vez
+            this.startTime = Date.now() - this.elapsedTime;
+            this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+        }
+        this.updateDisplay();
     }
 
-    stop() {
+    pause() {
         if (this.paused) return;
         this.paused = true;
-        clearInterval(this.timerInterval);
-        this.lapTime = Date.now() - this.startTime; // Guardar el tiempo actual para la "vuelta"
-        this.elapsedTime = this.lapTime; // Asegurarse de que el tiempo total sigue acumulando
-        this.displayElement.textContent = this.formatTime(this.lapTime); // Mostrar tiempo de "vuelta"
+        this.lapTime = Date.now() - this.startTime + this.elapsedTime;
+        this.displayElement.textContent = this.formatTime(this.lapTime);
     }
 
     continue() {
         if (!this.paused) return;
         this.paused = false;
-        this.startTime = Date.now() - this.elapsedTime;
-        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+        this.elapsedTime = this.lapTime;
+        this.startTime = Date.now();
     }
 
     reset() {
-        this.stop();
+        this.pause();
         this.elapsedTime = 0;
         this.lapTime = 0;
         this.displayElement.textContent = "00:00:00";
     }
 
     updateDisplay() {
-        if (!this.paused) {
+        if (!this.paused) { // Actualiza el display solo si no está pausado
             const now = Date.now();
-            this.elapsedTime = now - this.startTime;
-            this.displayElement.textContent = this.formatTime(this.elapsedTime);
+            const currentElapsedTime = now - this.startTime + this.elapsedTime;
+            this.displayElement.textContent = this.formatTime(currentElapsedTime);
         }
     }
 
@@ -132,6 +133,7 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
+
 
 
 
@@ -172,8 +174,8 @@ function toggleAutoScroll() {
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
         console.log("reset en el inicio");
-        cronometro.continue();
-        console.log("continue en inicio");
+        cronometro.start();
+        console.log("start en inicio");
     } else {
         cronometro.continue();  // Continúa el temporizador sin resetear
         console.log("continue");
