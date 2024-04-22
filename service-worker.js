@@ -7,7 +7,7 @@ const URLS = [
   './index.html?v=193',
   './style.css?v=193',
   './script.js?v=193',
-  './icons/icon-193x193.png',
+  './icons/icon-192x192.png',
   './icons/icon-512x512.png',
   './icons/favicon.ico',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'
