@@ -98,6 +98,13 @@ class Cronometro {
         this.lapTime = this.elapsedTime; // Guarda el tiempo visible al pausar
     }
 
+    reset() {
+        this.stop(); // Asegúrate de detener el cronómetro si está corriendo
+        this.elapsedTime = 0;
+        this.lapTime = 0; // Reinicia también el tiempo de la vuelta
+        this.displayElement.textContent = "00:00:00";
+    }
+
     updateDisplay() {
         const now = Date.now();
         const diff = now - this.startTime;
