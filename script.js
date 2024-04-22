@@ -184,6 +184,7 @@ function toggleAutoScroll() {
 
 
 function topFunction() {
+    let mybutton = document.getElementById("myBtn");
     teleprompter.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     mybutton.style.display = 'none';
