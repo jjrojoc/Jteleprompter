@@ -142,5 +142,7 @@ button:focus, input[type="range"]:focus, select:focus {
 }
 
 #timer:active {
-  background-color: #ccc; /* Cambio de color al presionar */
+  background-color: #333; /* Más oscuro cuando está presionado */
+  opacity: 1.0;           /* Menos transparente para destacar la presión */
 }
+

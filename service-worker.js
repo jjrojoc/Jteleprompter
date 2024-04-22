@@ -1,12 +1,12 @@
 var APP_PREFIX = 'ApplicationName_'     // Identifier for this app (this needs to be consistent across every cache update)
-var VERSION = 'version_221'              // Version of the off-line cache (change this value everytime you want to update cache)
+var VERSION = 'version_222'              // Version of the off-line cache (change this value everytime you want to update cache)
 var CACHE_NAME = APP_PREFIX + VERSION
 const URLS = [
   './',
   './manifest.json',
-  './index.html?v=221',
-  './style.css?v=221',
-  './script.js?v=221',
+  './index.html?v=222',
+  './style.css?v=222',
+  './script.js?v=222',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png',
   './icons/favicon.ico',
@@ -43,7 +43,7 @@ self.addEventListener('fetch', function(event) {
       fetch(event.request)
           .then(function(response) {
               // Si la respuesta es válida, la almacena en caché y la devuelve
-              if (!response || response.status !== 221 || response.type !== 'basic') {
+              if (!response || response.status !== 222 || response.type !== 'basic') {
                   return response;
               }
 
