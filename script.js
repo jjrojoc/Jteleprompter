@@ -161,6 +161,7 @@ function toggleAutoScroll() {
     }
 
     // Iniciar el auto-scroll aquí
+    if (teleprompter.scrollHeight > 0) {
     const speed = 100 - speedControl.value;
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
@@ -174,6 +175,7 @@ function toggleAutoScroll() {
                 mybutton.style.display = "none";
             }
     }, speed);
+    }   
   } else {
     icon.className = "fas fa-play"; // Cambia el ícono a "play"
     document.getElementById('toggleScroll').style.backgroundColor = "#555555";
