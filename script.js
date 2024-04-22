@@ -80,7 +80,7 @@ class Cronometro {
         this.startTime = 0;
         this.timerInterval = null;
         this.paused = true;
-        this.displayPausedTime = false;
+        this.displayPausedTime = false; // Indica si mostrar tiempo pausado
     }
 
     start() {
@@ -95,15 +95,14 @@ class Cronometro {
         if (this.paused) return;
         this.paused = true;
         clearInterval(this.timerInterval);
-        this.elapsedTime = Date.now() - this.startTime;  // Capture el tiempo transcurrido antes de pausar
+        this.elapsedTime = Date.now() - this.startTime;  // Captura el tiempo transcurrido hasta la pausa
         this.displayPausedTime = true;
-        this.updateDisplay(); // Update to show paused time
+        this.updateDisplay();  // Muestra el tiempo en el momento de la pausa
     }
 
     continue() {
-        if (!this.displayPausedTime) return;
+        if (!this.paused) return;
         this.paused = false;
-        this.displayPausedTime = false;
         this.startTime = Date.now() - this.elapsedTime;
         this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
     }
@@ -113,6 +112,8 @@ class Cronometro {
         clearInterval(this.timerInterval);
         this.elapsedTime = Date.now() - this.startTime;
         this.paused = true;
+        this.displayPausedTime = true;
+        this.updateDisplay();  // Actualiza para mostrar el tiempo final antes de detener completamente
     }
 
     reset() {
@@ -123,7 +124,7 @@ class Cronometro {
 
     updateDisplay() {
         let currentTime = this.elapsedTime;
-        if (!this.paused && !this.displayPausedTime) {
+        if (!this.paused) {
             currentTime = Date.now() - this.startTime;
         }
         const hours = Math.floor(currentTime / 3600000);
@@ -136,6 +137,7 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
+
 
 
 
