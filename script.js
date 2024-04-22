@@ -138,16 +138,19 @@ document.getElementById('timer').addEventListener('click', function() {
 function toggleAutoScroll() {
     // Get the button
     let mybutton = document.getElementById("myBtn");
-  const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
-  const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+    var button = this;
+    var icon = button.querySelector('i');
   
-  controls.forEach(control => {
+    // Verifica si el contenido es más alto que el contenedor
+    if (teleprompter.scrollHeight > teleprompter.clientHeight) {
+    const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+    const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+  
+    controls.forEach(control => {
     control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad de los controles
   });
   
-  var button = this;
-  var icon = button.querySelector('i');
-  if (teleprompter.scrollHeight > teleprompter.clientHeight) {
+
   if (!isAutoScrolling) {
     icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
     document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
@@ -183,7 +186,6 @@ function toggleAutoScroll() {
   }
 } else {
     // Si no hay suficiente contenido para scrollear, simplemente desactiva el botón
-    this.classList.remove('active');
     alert('No hay suficiente contenido para hacer scroll.');
 }
 }
