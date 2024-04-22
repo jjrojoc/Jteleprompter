@@ -77,62 +77,59 @@ class Cronometro {
     constructor(displayElement) {
         this.displayElement = displayElement;
         this.elapsedTime = 0;
-        this.startTime = Date.now();
+        this.startTime = 0;
         this.timerInterval = null;
         this.paused = true;
-        this.lapTime = 0;
     }
 
     start() {
         if (!this.paused) return;
         this.paused = false;
-        if (!this.timerInterval) { // Solo configura el intervalo si aún no se ha configurado
-            this.startTime = Date.now() - this.elapsedTime;
-            this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
-        }
-        this.updateDisplay();
+        this.startTime = Date.now() - this.elapsedTime;
+        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
     }
 
     pause() {
         if (this.paused) return;
         this.paused = true;
-        this.lapTime = Date.now() - this.startTime; // Tiempo desde el último start hasta ahora
-        this.elapsedTime += this.lapTime; // Acumula el tiempo total transcurrido
-        this.displayElement.textContent = this.formatTime(this.elapsedTime);
+        clearInterval(this.timerInterval);
+        // Mantener elapsedTime sin reinicio
     }
 
     continue() {
         if (!this.paused) return;
         this.paused = false;
-        this.startTime = Date.now(); // Establece nuevo startTime para el próximo periodo de tiempo activo
+        this.startTime = Date.now() - this.elapsedTime;
+        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+    }
+
+    stop() {
+        if (this.paused) return;
+        this.paused = true;
+        clearInterval(this.timerInterval);
+        // No se reinicia elapsedTime a 0, solo detiene el intervalo
     }
 
     reset() {
-        this.pause();
+        this.stop();  // Asegura que el cronómetro está detenido antes de resetear
         this.elapsedTime = 0;
-        this.lapTime = 0;
-        this.displayElement.textContent = "00:00:00";
+        this.updateDisplay();  // Actualiza la visualización después de resetear
     }
 
     updateDisplay() {
-        if (!this.paused) { // Actualiza el display solo si no está pausado
-            const now = Date.now();
-            const currentElapsedTime = now - this.startTime + this.elapsedTime;
-            this.displayElement.textContent = this.formatTime(currentElapsedTime);
-        }
-    }
-
-    formatTime(ms) {
-        const hours = Math.floor(ms / 3600000);
-        const minutes = Math.floor((ms % 3600000) / 60000);
-        const seconds = Math.floor((ms % 60000) / 1000);
-        return `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+        const now = Date.now();
+        this.elapsedTime = now - this.startTime;
+        const hours = Math.floor(this.elapsedTime / 3600000);
+        const minutes = Math.floor((this.elapsedTime % 3600000) / 60000);
+        const seconds = Math.floor((this.elapsedTime % 60000) / 1000);
+        this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
     }
 
     pad(num) {
         return num.toString().padStart(2, '0');
     }
 }
+
 
 
 
