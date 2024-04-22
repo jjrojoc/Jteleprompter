@@ -118,14 +118,30 @@ class Cronometro {
 const timerDisplay = document.getElementById("timer");
 const cronometro = new Cronometro(timerDisplay);
 
-document.getElementById('timer').addEventListener('click', function() {
-    if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
-      //accumulatedTime = 0;  // Resetea el tiempo acumulado
-      cronometro.stop();     // Detiene el cronómetro
-      cronometro.reset();  // Actualiza el display a 00:00:00
-      console.log('Timer reset to 00:00:00');
+// document.getElementById('timer').addEventListener('click', function() {
+//     if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
+//       //accumulatedTime = 0;  // Resetea el tiempo acumulado
+//       cronometro.stop();     // Detiene el cronómetro
+//       cronometro.reset();  // Actualiza el display a 00:00:00
+//       console.log('Timer reset to 00:00:00');
+//     }
+// });
+
+let timer;
+document.getElementById('timer').addEventListener('touchstart', function(e) {
+    if (!isAutoScrolling) { // Asegura que no esté auto desplazándose
+        timer = setTimeout(function() {
+            cronometro.stop();  // Detiene el cronómetro
+            cronometro.reset(); // Resetea el cronómetro
+            console.log('Timer stopped and reset to 00:00:00');
+        }, 3000);  // El usuario debe mantener presionado durante 3 segundos
     }
 });
+
+document.getElementById('timer').addEventListener('touchend', function(e) {
+    clearTimeout(timer);  // Cancela el reset si el usuario suelta el botón antes de los 3 segundos
+});
+
 
 function toggleAutoScroll() {
     // Get the button
