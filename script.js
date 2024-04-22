@@ -147,7 +147,7 @@ function toggleAutoScroll() {
   
   var button = this;
   var icon = button.querySelector('i');
-
+  if (teleprompter.scrollHeight > teleprompter.clientHeight) {
   if (!isAutoScrolling) {
     icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
     document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
@@ -161,7 +161,6 @@ function toggleAutoScroll() {
     }
 
     // Iniciar el auto-scroll aquí
-    if (teleprompter.scrollHeight > 0) {
     const speed = 100 - speedControl.value;
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
@@ -175,7 +174,6 @@ function toggleAutoScroll() {
                 mybutton.style.display = "none";
             }
     }, speed);
-    }   
   } else {
     icon.className = "fas fa-play"; // Cambia el ícono a "play"
     document.getElementById('toggleScroll').style.backgroundColor = "#555555";
@@ -183,6 +181,7 @@ function toggleAutoScroll() {
     cronometro.stop();
     clearInterval(scrollInterval);  // Detiene el auto-scroll
   }
+}
 }
 
 
