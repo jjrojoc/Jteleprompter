@@ -86,7 +86,7 @@ class Cronometro {
     start() {
         if (!this.paused) return;
         this.paused = false;
-        if (!this.timerInterval) { // Asegura que el intervalo se configure solo una vez
+        if (!this.timerInterval) { // Solo configura el intervalo si aún no se ha configurado
             this.startTime = Date.now() - this.elapsedTime;
             this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
         }
@@ -96,15 +96,15 @@ class Cronometro {
     pause() {
         if (this.paused) return;
         this.paused = true;
-        this.lapTime = Date.now() - this.startTime + this.elapsedTime;
-        this.displayElement.textContent = this.formatTime(this.lapTime);
+        this.lapTime = Date.now() - this.startTime; // Tiempo desde el último start hasta ahora
+        this.elapsedTime += this.lapTime; // Acumula el tiempo total transcurrido
+        this.displayElement.textContent = this.formatTime(this.elapsedTime);
     }
 
     continue() {
         if (!this.paused) return;
         this.paused = false;
-        this.elapsedTime = this.lapTime;
-        this.startTime = Date.now();
+        this.startTime = Date.now(); // Establece nuevo startTime para el próximo periodo de tiempo activo
     }
 
     reset() {
@@ -133,6 +133,7 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
+
 
 
 
