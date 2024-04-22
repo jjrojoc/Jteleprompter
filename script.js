@@ -163,15 +163,16 @@ function toggleAutoScroll() {
     // Iniciar el auto-scroll aquí
     const speed = 100 - speedControl.value;
     scrollInterval = setInterval(() => {
-      teleprompter.scrollBy(0, 1);
-      if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-        console.log('Reached End, stopping autoscroll.');
-        toggleAutoScroll.call(button);
-        //teleprompter.scrollTop = 0;
-        mybutton.style.display = "block";
-      } else {
-            mybutton.style.display = "none";
-    }
+        teleprompter.scrollBy(0, 1);
+        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+            console.log('Reached End, stopping autoscroll.');
+            toggleAutoScroll.call(button);
+            if (teleprompter.scrollTop != 0) {
+                mybutton.style.display = "block";
+            }
+            } else {
+                mybutton.style.display = "none";
+            }
     }, speed);
   } else {
     icon.className = "fas fa-play"; // Cambia el ícono a "play"
