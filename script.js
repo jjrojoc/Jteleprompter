@@ -198,7 +198,7 @@ function toggleAutoScroll() {
     icon.className = "fas fa-play"; // Cambia el ícono a "play"
     document.getElementById('toggleScroll').style.backgroundColor = "#555555";
     isAutoScrolling = false;
-    cronometro.stop();
+    cronometro.pause();
     console.log("stop");
     clearInterval(scrollInterval);  // Detiene el auto-scroll
   }
