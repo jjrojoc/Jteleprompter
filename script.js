@@ -94,7 +94,7 @@ class Cronometro {
     pause() {
         if (this.paused) return
         this.totalElapsedTime = Date.now() - this.startTime;
-        this.displayPausedTime = true;
+        this.displayPausedTime = false;
         this.updateDisplay(); // Update to show paused time
     }
 
