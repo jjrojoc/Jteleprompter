@@ -122,25 +122,6 @@ class Cronometro {
 const timerDisplay = document.getElementById("timer");
 const cronometro = new Cronometro(timerDisplay);
 
-// Configurar el botón para controlar el cronómetro
-document.getElementById("myButton").addEventListener("click", function(){
-    if (cronometro.paused) {
-        cronometro.start();
-        this.textContent = "Stop";
-    } else {
-        cronometro.stop();
-        this.textContent = "Start";
-    }
-});
-
-
-
-  
-
-
-const timerDisplay = document.getElementById('timer');
-const cronometro = new Cronometro(timerDisplay);
-
 document.getElementById('timer').addEventListener('click', function() {
     if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
       //accumulatedTime = 0;  // Resetea el tiempo acumulado
