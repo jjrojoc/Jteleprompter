@@ -169,11 +169,13 @@ function toggleAutoScroll() {
     document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
     isAutoScrolling = true;
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-        //accumulatedTime = 0; // Resetea el tiempo acumulado
         cronometro.reset();
+        console.log("reset en el inicio");
         cronometro.start();
+        console.log("start en inicio");
     } else {
         cronometro.continue();  // Continúa el temporizador sin resetear
+        console.log("continue");
     }
     // Iniciar el auto-scroll aquí
     const speed = 100 - speedControl.value;
@@ -194,6 +196,7 @@ function toggleAutoScroll() {
     document.getElementById('toggleScroll').style.backgroundColor = "#555555";
     isAutoScrolling = false;
     cronometro.stop();
+    console.log("stop");
     clearInterval(scrollInterval);  // Detiene el auto-scroll
   }
 } else {
