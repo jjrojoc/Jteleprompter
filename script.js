@@ -140,8 +140,8 @@ document.getElementById('timer').addEventListener('touchstart', function(e) {
 });
 
 document.getElementById('timer').addEventListener('touchend', function(e) {
-    clearTimeout(timer);  // Cancela el reset si el usuario suelta el botón antes de los 3 segundos
     this.style.backgroundColor = 'black';
+    clearTimeout(timer);  // Cancela el reset si el usuario suelta el botón antes de los 3 segundos
 });
 
 
