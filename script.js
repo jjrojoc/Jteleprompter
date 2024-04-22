@@ -127,6 +127,11 @@ const cronometro = new Cronometro(timerDisplay);
 //     }
 // });
 
+// Desactivar el menú contextual
+timerDisplay.addEventListener('contextmenu', function(event) {
+    event.preventDefault(); // Previene la aparición del menú contextual
+});
+
 let timer;
 document.getElementById('timer').addEventListener('touchstart', function(e) {
     if (!isAutoScrolling) { // Asegura que no esté auto desplazándose
