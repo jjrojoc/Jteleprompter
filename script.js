@@ -75,52 +75,44 @@ textColorControl.addEventListener('change', () => {
 // Clase Cronometro modificada para incluir la capacidad de pausa
 class Cronometro {
     constructor(displayElement) {
-      this.displayElement = displayElement;
-      this.tiempoAcumulado = 0;
-      this.tiempoInicio = 0;
-      this.intervalo = null;
+        this.displayElement = displayElement;
+        this.startTime = 0;
+        this.timerInterval = null;
+        this.isRunning = false;
     }
-  
-    start() {
-      if (this.intervalo === null) {
-        this.tiempoInicio = Date.now();  // Establece el tiempo de inicio al tiempo actual
-        this.intervalo = setInterval(() => this.update(), 1000);  // Actualiza el tiempo cada segundo
-      }
-    }
-  
-    stop() {
-      if (this.intervalo !== null) {
-        // Actualiza el tiempo acumulado sumando el tiempo transcurrido desde el último inicio
-        this.tiempoAcumulado += Date.now() - this.tiempoInicio;
-        clearInterval(this.intervalo);  // Detiene el intervalo
-        this.intervalo = null;
-      }
-    }
-  
-    reset() {
-      this.stop();  // Detiene el cronómetro y actualiza el tiempo acumulado
-      this.tiempoAcumulado = 0;  // Resetea el tiempo acumulado a cero
-      this.display();  // Muestra el tiempo reseteado
-    }
-  
-    update() {
-      let tiempoTotal = Date.now() - this.tiempoInicio + this.tiempoAcumulado;
-      this.display(tiempoTotal);  // Muestra el tiempo total actualizado
-    }
-  
-    display(tiempo = this.tiempoAcumulado) {
-      const hours = Math.floor(tiempo / 3600000);
-      const minutes = Math.floor((tiempo % 3600000) / 60000);
-      const seconds = Math.floor((tiempo % 60000) / 1000);
-      this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
-    }
-  
-    pad(num) {
-      return num.toString().padStart(2, '0');
-    }
-  }
-  
 
+    start() {
+        if (this.isRunning) return;
+        this.isRunning = true;
+        this.startTime = Date.now();
+        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
+    }
+
+    stop() {
+        if (!this.isRunning) return;
+        clearInterval(this.timerInterval);
+        this.updateDisplay();  // Aseguramos que la última visualización sea precisa
+        this.isRunning = false;
+    }
+
+    reset() {
+        this.displayElement.textContent = "00:00:00";
+        this.isRunning = false;
+        if (this.timerInterval) clearInterval(this.timerInterval);
+    }
+
+    updateDisplay() {
+        const elapsedTime = Date.now() - this.startTime;
+        const hours = Math.floor(elapsedTime / 3600000);
+        const minutes = Math.floor((elapsedTime % 3600000) / 60000);
+        const seconds = Math.floor((elapsedTime % 60000) / 1000);
+        this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+    }
+
+    pad(num) {
+        return num.toString().padStart(2, '0');
+    }
+}
 
 // Instancia del cronómetro
 const timerDisplay = document.getElementById("timer");
@@ -182,8 +174,8 @@ function toggleAutoScroll() {
     icon.className = "fas fa-play"; // Cambia el ícono a "play"
     document.getElementById('toggleScroll').style.backgroundColor = "#555555";
     isAutoScrolling = false;
-    cronometro.stop();
-    console.log("stop");
+    //cronometro.stop();
+    //console.log("stop");
     clearInterval(scrollInterval);  // Detiene el auto-scroll
   }
 } else {
