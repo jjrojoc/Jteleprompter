@@ -93,14 +93,19 @@ class Cronometro {
 
     pause() {
         if (this.paused) return;
+        this.paused = true;
+        clearInterval(this.timerInterval);
+        this.elapsedTime = Date.now() - this.startTime;  // Capture el tiempo transcurrido antes de pausar
         this.displayPausedTime = true;
         this.updateDisplay(); // Update to show paused time
     }
 
     continue() {
         if (!this.displayPausedTime) return;
+        this.paused = false;
         this.displayPausedTime = false;
-        this.updateDisplay();
+        this.startTime = Date.now() - this.elapsedTime;
+        this.timerInterval = setInterval(() => this.updateDisplay(), 1000);
     }
 
     stop() {
@@ -117,7 +122,10 @@ class Cronometro {
     }
 
     updateDisplay() {
-        let currentTime = this.displayPausedTime ? this.elapsedTime : Date.now() - this.startTime;
+        let currentTime = this.elapsedTime;
+        if (!this.paused && !this.displayPausedTime) {
+            currentTime = Date.now() - this.startTime;
+        }
         const hours = Math.floor(currentTime / 3600000);
         const minutes = Math.floor((currentTime % 3600000) / 60000);
         const seconds = Math.floor((currentTime % 60000) / 1000);
@@ -128,6 +136,7 @@ class Cronometro {
         return num.toString().padStart(2, '0');
     }
 }
+
 
 
 
