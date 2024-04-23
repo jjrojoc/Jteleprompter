@@ -149,6 +149,7 @@ button:focus, input[type="range"]:focus, select:focus {
   background-color: black; 
   color: white; 
   padding: 5px;
+  border-radius: 15px; /* Esto añade esquinas redondeadas */
   transition: transform 0.2s, background-color 0.2s; /* Suaviza las transiciones de transformación y color */
 }
 
