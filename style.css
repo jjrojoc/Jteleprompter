@@ -101,7 +101,7 @@ button:focus, input[type="range"]:focus, select:focus {
 } */
 
 .menu-items {
-  display: none;
+  display: block;
   flex-direction: column;
   background-color: #222;
   padding: 5px;
