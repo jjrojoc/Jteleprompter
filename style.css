@@ -3,16 +3,17 @@ body, html {
   margin: 0;
   background-color: black;
   color: white;
-  /* Prevent user to select text */
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer, Edge */
-            user-select: none; /* Non prefixed version: Chrome, Opera */
-  -webkit-tap-highlight-color: transparent; /* <-- this is new */
 }
 
+/* Desactivar el color de resalte para todos los elementos */
+* {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-tap-highlight-color: transparent; /* Chrome, Safari, Opera */
+  -webkit-user-select: none; /* Chrome, Safari, Opera */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Standard syntax */
+}
 #teleprompter {
   width: 100%;
   height: 90%;
