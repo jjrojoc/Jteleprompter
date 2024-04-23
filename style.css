@@ -161,3 +161,13 @@ button:focus, input[type="range"]:focus, select:focus {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+/* Desactiva la selección de texto para todos los elementos */
+* {
+  user-select: none;
+}
+
+/* Permite la selección de texto solo en el teleprompter cuando es editable */
+#teleprompter[contenteditable="true"] {
+  user-select: text;
+}
