@@ -65,6 +65,7 @@ const textColorControl = document.getElementById('textColorControl');
 document.getElementById('toggleScroll').addEventListener('click', toggleAutoScroll);
 
 document.getElementById('loadText').style.display = 'none';
+document.getElementById('saveText').style.display = 'none';
 
 textColorControl.addEventListener('change', () => {
     // const newColor = document.getElementById('textColorPicker').value; // toma el color del colorpicker
