@@ -102,14 +102,30 @@ class Cronometro {
         if (this.timerInterval) clearInterval(this.timerInterval);
     }
 
+    // updateDisplay() {
+    //     const elapsedTime = Date.now() - this.startTime;
+    //     const hours = Math.floor(elapsedTime / 3600000);
+    //     const minutes = Math.floor((elapsedTime % 3600000) / 60000);
+    //     const seconds = Math.floor((elapsedTime % 60000) / 1000);
+    //     this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+    // }
+
     updateDisplay() {
         const elapsedTime = Date.now() - this.startTime;
         const hours = Math.floor(elapsedTime / 3600000);
         const minutes = Math.floor((elapsedTime % 3600000) / 60000);
         const seconds = Math.floor((elapsedTime % 60000) / 1000);
-        this.displayElement.textContent = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+    
+        // Construir la visualización condicionalmente
+        let displayTime = '';
+        if (hours > 0) {
+            displayTime += `${this.pad(hours)}:`;  // Incluir horas solo si es mayor que 0
+        }
+        displayTime += `${this.pad(minutes)}:${this.pad(seconds)}`;
+    
+        this.displayElement.textContent = displayTime;
     }
-
+    
     pad(num) {
         return num.toString().padStart(2, '0');
     }
