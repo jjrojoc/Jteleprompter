@@ -3,7 +3,7 @@ body, html {
   margin: 0;
   background-color: black;
   color: white;
-  * Prevent user to select text */
+  /* Prevent user to select text */
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
