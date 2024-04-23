@@ -409,12 +409,9 @@ document.getElementById('editToggle').addEventListener('click', function() {
 
 document.getElementById('menuButton').addEventListener('click', function() {
     var menuItems = document.getElementById('menuItems');
-    if (menuItems.classList.contains('hide')) {
-        menuItems.classList.remove('hide');
-    } else {
-        menuItems.classList.add('hide');
-    }
+    menuItems.classList.toggle('hide');
 });
+
 
 
 // Opcional: Cerrar el menú si se hace clic fuera de él

@@ -121,7 +121,7 @@ button:focus, input[type="range"]:focus, select:focus {
   border-radius: 5px;
 }
 
-.menu-items .hide {
+.menu-items.hide {
   display: none;
 }
 
