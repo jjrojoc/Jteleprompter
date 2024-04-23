@@ -398,19 +398,31 @@ document.getElementById('editToggle').addEventListener('click', function() {
     }
 });
 
-document.getElementById('menuButton').addEventListener('click', function() {
+/* document.getElementById('menuButton').addEventListener('click', function() {
     var menuItems = document.getElementById("menuItems");
     if (menuItems.style.display === "none") {
         menuItems.style.display = "block";
     } else {
         menuItems.style.display = "none";
     }
+}); */
+
+document.getElementById('menuButton').addEventListener('click', function() {
+    var menu = document.getElementById('menuItems');
+    menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
+});
+
+// Añadir este evento al window para cerrar el menú cuando se hace clic fuera
+window.addEventListener('click', function(event) {
+    var menu = document.getElementById('menuItems');
+    if (!menu.contains(event.target) && event.target !== document.getElementById('menuButton')) {
+        menu.style.display = 'none';
+    }
 });
 
 
-
 // Opcional: Cerrar el menú si se hace clic fuera de él
-window.onclick = function(event) {
+/*window.onclick = function(event) {
     if (!event.target.matches('#menuButton')) {
         var dropdowns = document.getElementsByClassName("menu-items");
         for (var i = 0; i < dropdowns.length; i++) {
@@ -420,7 +432,7 @@ window.onclick = function(event) {
             }
         }
     }
-}
+}*/
 
 
 

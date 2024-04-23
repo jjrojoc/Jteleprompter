@@ -114,22 +114,26 @@ button:focus, input[type="range"]:focus, select:focus {
   display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño
 } */
 
+.menu-container {
+  position: relative; /* Establece el contenedor como referencia para el menú */
+}
+
 .menu-items {
   display: none;
   flex-direction: column;
-  background-color: #333; /* Color más oscuro para más contraste */
+  background-color: #333;
   padding: 10px;
   position: absolute;
-  bottom: 50px;
-  left: 10px;
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
-  transition: opacity 0.3s; /* Transición suave */
+  bottom: 100%; /* Desplaza el menú hacia arriba desde el borde inferior del botón */
+  left: 0; /* Alinea el menú con el lado izquierdo del botón */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: opacity 0.3s;
 }
 
 .control {
   display: block;
-  color: #FFF; /* Texto blanco para más contraste */
+  color: #FFF;
   padding: 8px 12px;
   text-align: left;
   font-size: 16px;
@@ -137,17 +141,14 @@ button:focus, input[type="range"]:focus, select:focus {
   background: none;
   outline: none;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s; /* Transición suave en interacción */
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .control:hover, .control:active {
-  background-color: #444; /* Color de fondo al interactuar */
-  color: #E0E0E0; /* Color de texto al interactuar */
+  background-color: #444;
+  color: #E0E0E0;
 }
 
-#menuButton {
-  margin-bottom: 5px; /* Espaciado entre el botón del menú y los ítems */
-}
 
 
 #timer {
