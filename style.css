@@ -115,9 +115,6 @@ button:focus, input[type="range"]:focus, select:focus {
 } */
 
 .menu-container {
-  position: fixed; /* Ajusta según necesidad */
-  top: 10px;
-  right: 10px;
   z-index: 1000; /* Asegura que el menú no se oculte detrás de otros elementos */
   background: #333;
   padding: 10px;
