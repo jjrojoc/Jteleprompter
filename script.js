@@ -364,8 +364,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
-    
-    
+
     // Alternar el estado de edición
     teleprompter.contentEditable = !isEditable;
 
@@ -442,6 +441,8 @@ window.addEventListener('click', function(event) {
         }
     }
 }*/
+
+
 
 document.getElementById('resetButton').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
