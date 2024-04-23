@@ -131,19 +131,6 @@ button:focus, input[type="range"]:focus, select:focus {
   transition: opacity 0.3s;
 }
 
-.control {
-  display: block;
-  color: #FFF;
-  padding: 8px 12px;
-  text-align: left;
-  font-size: 16px;
-  border: none;
-  background: none;
-  outline: none;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
 .control:hover, .control:active {
   background-color: #444;
   color: #E0E0E0;
