@@ -114,10 +114,31 @@ button:focus, input[type="range"]:focus, select:focus {
   display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño
 } */
 
+.menu-container {
+  position: fixed; /* Ajusta según necesidad */
+  top: 10px;
+  right: 10px;
+  z-index: 1000; /* Asegura que el menú no se oculte detrás de otros elementos */
+  background: #333;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.menu-items .hide {
+  display: none;
+}
+
 .menu-items button {
   display: block; /* Los botones aparecen uno debajo del otro */
-  width: 100%; /* Opcional: hace que los botones tengan el mismo ancho */
+  width: 100%; /* Asegura que los botones tengan el mismo ancho */
   margin-top: 2px; /* Espaciado entre botones */
+  color: white;
+  background: transparent;
+  border: none;
+}
+
+.menu-toggle i {
+  color: white; /* Cambia el color del ícono del menú para mayor visibilidad */
 }
 
 .control {
