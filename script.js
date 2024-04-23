@@ -511,7 +511,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, false);
 
     // Permitir el menú contextual solo en el área del teleprompter
-    var teleprompter = document.getElementById('teleprompter');
     teleprompter.addEventListener('contextmenu', function (event) {
         event.stopPropagation();  // Detiene la propagación del evento para evitar que el manejador global lo capture
     }, false)
