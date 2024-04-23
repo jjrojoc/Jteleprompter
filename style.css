@@ -140,3 +140,24 @@ button:focus, input[type="range"]:focus, select:focus {
 #myBtn:hover {
   background-color: #555;
 }
+
+#timer {
+  position: fixed; 
+  top: 10px; 
+  right: 10px; 
+  opacity: 0.7; 
+  background-color: black; 
+  color: white; 
+  padding: 5px;
+  transition: transform 0.2s, background-color 0.2s; /* Suaviza las transiciones de transformación y color */
+}
+
+#timer.active {
+  transform: scale(1.2); /* Aumenta el tamaño */
+  animation: blinkAnimation 1s linear infinite; /* Parpadeo */
+}
+
+@keyframes blinkAnimation {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
