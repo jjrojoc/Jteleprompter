@@ -177,6 +177,19 @@ function toggleAutoScroll() {
     let mybutton = document.getElementById("myBtn");
     var button = this;
     var icon = button.querySelector('i');
+
+    // Verifica si el teleprompter es editable
+    if (teleprompter.isContentEditable) {
+        if (confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
+            // Aquí puedes agregar la lógica para guardar los cambios
+            console.log("Cambios guardados.");
+            // Después de guardar, puedes deshabilitar la edición si lo consideras necesario
+            teleprompter.contentEditable = "false";
+        } else {
+            console.log("Cambios no guardados, auto-scroll no activado.");
+            return; // No activar el auto-scroll
+        }
+    }
   
     // Verifica si el contenido es más alto que el contenedor
     if (teleprompter.scrollHeight > teleprompter.clientHeight) {
