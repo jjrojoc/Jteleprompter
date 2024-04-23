@@ -504,6 +504,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Adjusting text size to:', textSizeControl.value + 'px');
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
     });
+
+    // prevent contextual menu in app
+    document.addEventListener('contextmenu', function (event) {
+        event.preventDefault();  // Prevenir la apertura del menú contextual
+    }, false);
 });
 
 function adjustSpeed(speed) {
