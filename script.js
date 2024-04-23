@@ -149,27 +149,25 @@ document.getElementById('timer').addEventListener('touchend', function(e) {
     clearTimeout(timer);  // Cancela el reset si el usuario suelta el botón antes de los 3 segundos
 });
 
-const timer = document.getElementById('timer');
-
 // Activar la clase 'active' cuando el temporizador es presionado
-timer.addEventListener('mousedown', function() {
+timerDisplay.addEventListener('mousedown', function() {
     this.classList.add('active');
 });
 
 // También manejar eventos táctiles
-timer.addEventListener('touchstart', function(e) {
+timerDisplay.addEventListener('touchstart', function(e) {
     this.classList.add('active');
     e.preventDefault();
 });
 
 // Remover la clase 'active' cuando el mouse o el toque terminan
-timer.addEventListener('mouseup', function() {
+timerDisplay.addEventListener('mouseup', function() {
     this.classList.remove('active');
 });
-timer.addEventListener('mouseleave', function() {
+timerDisplay.addEventListener('mouseleave', function() {
     this.classList.remove('active');
 });
-timer.addEventListener('touchend', function() {
+timerDisplay.addEventListener('touchend', function() {
     this.classList.remove('active');
 });
 
