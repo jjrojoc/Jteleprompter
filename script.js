@@ -97,7 +97,7 @@ class Cronometro {
     }
 
     reset() {
-        this.displayElement.textContent = "00:00:00";
+        this.displayElement.textContent = "00:00";
         this.isRunning = false;
         if (this.timerInterval) clearInterval(this.timerInterval);
     }
