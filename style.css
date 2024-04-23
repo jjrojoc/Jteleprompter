@@ -114,33 +114,45 @@ button:focus, input[type="range"]:focus, select:focus {
   display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño
 } */
 
-.menu-container {
-  z-index: 1000; /* Asegura que el menú no se oculte detrás de otros elementos */
-  background: #333;
-  padding: 10px;
-  border-radius: 5px;
+.control {
+  position: relative; /* Establece la referencia para el posicionamiento absoluto de los elementos internos */
 }
 
-.menu-items.hide {
-  display: none;
+.menu-items {
+  display: none; /* Oculta inicialmente el menú */
+  position: absolute; /* Posicionamiento absoluto para que no afecte el tamaño del contenedor */
+  background-color: #f9f9f9; /* Color de fondo para el menú */
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* Sombra para destacar el menú */
+  z-index: 1000; /* Asegúrate de que el menú esté sobre otros elementos */
+  right: 0; /* Alinea el menú a la derecha del botón */
+  width: 200px; /* Ancho del menú */
+}
+
+.menu-toggle {
+  /* Estilos para el botón que toggle el menú, ajusta según necesites */
+  background-color: #4CAF50; /* Color de fondo */
+  color: white; /* Color de texto */
+  padding: 10px; /* Padding para el botón */
+  border: none; /* Sin bordes */
+  cursor: pointer; /* Cursor tipo pointer */
+  width: 100%; /* Aprovecha todo el ancho posible */
+}
+
+.menu-toggle:hover {
+  background-color: #45a049; /* Cambio de color al pasar el mouse */
 }
 
 .menu-items button {
-  display: block; /* Los botones aparecen uno debajo del otro */
-  width: 100%; /* Asegura que los botones tengan el mismo ancho */
-  margin-top: 2px; /* Espaciado entre botones */
-  color: white;
-  background: transparent;
-  border: none;
+  color: black; /* Color del texto de los botones */
+  padding: 12px 16px; /* Padding */
+  text-decoration: none; /* Sin decoración de texto */
+  display: block; /* Hace que los botones se apilen verticalmente */
+  border: none; /* Sin bordes */
+  background: none; /* Sin fondo */
+  width: 100%; /* Aprovecha todo el ancho */
+  text-align: left; /* Alineación del texto */
 }
 
-.menu-toggle i {
-  color: white; /* Cambia el color del ícono del menú para mayor visibilidad */
-}
-
-.control {
-  cursor: pointer; /* Indica que es un elemento interactivo */
-}
 
 
 #timer {
