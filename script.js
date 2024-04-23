@@ -398,18 +398,13 @@ document.getElementById('editToggle').addEventListener('click', function() {
     }
 });
 
-// document.getElementById('menuButton').addEventListener('click', function() {
-//     var menuItems = document.getElementById("menuItems");
-//     if (menuItems.style.display === "none") {
-//         menuItems.style.display = "block";
-//     } else {
-//         menuItems.style.display = "none";
-//     }
-// });
-
 document.getElementById('menuButton').addEventListener('click', function() {
-    var menuItems = document.getElementById('menuItems');
-    menuItems.classList.toggle('hide');
+    var menuItems = document.getElementById("menuItems");
+    if (menuItems.style.display === "none") {
+        menuItems.style.display = "block";
+    } else {
+        menuItems.style.display = "none";
+    }
 });
 
 
