@@ -188,18 +188,13 @@ button:focus, input[type="range"]:focus, select:focus {
 }
 
 #timer.active {
-  transform: scale(2.0); /* Aumenta el tamaño */
+  transform: scale(1.2); /* Aumenta el tamaño */
   animation: blinkAnimation 1s linear infinite; /* Parpadeo */
 }
 
 @keyframes blinkAnimation {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
-}
-
-/* Desactiva la selección de texto para todos los elementos */
-* {
-  user-select: none;
 }
 
 /* Permite la selección de texto solo en el teleprompter cuando es editable */
