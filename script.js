@@ -360,11 +360,28 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
     selection.addRange(range);
 });
 
+document.getElementById('editToggle').addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    var menu = document.getElementById('menuItems');
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none'; // Oculta el menú
+    }
+});
+
 document.getElementById('editToggle').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
 
+    document.getElementById('otherButton').addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    var menu = document.getElementById('menuItems');
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none'; // Oculta el menú
+    }
+});
+    
+    
     // Alternar el estado de edición
     teleprompter.contentEditable = !isEditable;
 
@@ -442,7 +459,13 @@ window.addEventListener('click', function(event) {
     }
 }*/
 
-
+document.getElementById('resetButton').addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    var menu = document.getElementById('menuItems');
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none'; // Oculta el menú
+    }
+});
 
 document.getElementById('resetButton').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
