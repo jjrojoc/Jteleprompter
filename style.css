@@ -188,7 +188,7 @@ button:focus, input[type="range"]:focus, select:focus {
 }
 
 #timer.active {
-  transform: scale(1.2); /* Aumenta el tamaño */
+  transform: scale(1.3); /* Aumenta el tamaño */
   animation: blinkAnimation 1s linear infinite; /* Parpadeo */
 }
 
