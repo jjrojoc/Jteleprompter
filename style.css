@@ -100,7 +100,7 @@ button:focus, input[type="range"]:focus, select:focus {
   background-color: #007BFF;  /* Bootstrap blue
 } */
 
-.menu-items {
+/* .menu-items {
   display: none;
   flex-direction: column;
   background-color: #222;
@@ -111,9 +111,43 @@ button:focus, input[type="range"]:focus, select:focus {
 }
 
 .control {
-  display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño */
+  display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño
+} */
+
+.menu-items {
+  display: none;
+  flex-direction: column;
+  background-color: #333; /* Color más oscuro para más contraste */
+  padding: 10px;
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
+  transition: opacity 0.3s; /* Transición suave */
 }
 
+.control {
+  display: block;
+  color: #FFF; /* Texto blanco para más contraste */
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 16px;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Transición suave en interacción */
+}
+
+.control:hover, .control:active {
+  background-color: #444; /* Color de fondo al interactuar */
+  color: #E0E0E0; /* Color de texto al interactuar */
+}
+
+#menuButton {
+  margin-bottom: 5px; /* Espaciado entre el botón del menú y los ítems */
+}
 
 
 #timer {
