@@ -10,6 +10,7 @@ body, html {
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer, Edge */
             user-select: none; /* Non prefixed version: Chrome, Opera */
+  -webkit-tap-highlight-color: transparent; /* <-- this is new */
 }
 
 #teleprompter {
