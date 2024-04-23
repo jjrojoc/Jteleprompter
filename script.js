@@ -366,6 +366,7 @@ document.getElementById('editToggle').addEventListener('touchstart', function(ev
     if (menu.style.display === 'block') {
         menu.style.display = 'none'; // Oculta el menú
     }
+    document.getElementById('editToggle').click();
 });
 
 document.getElementById('editToggle').addEventListener('click', function() {
@@ -465,6 +466,7 @@ document.getElementById('resetButton').addEventListener('touchstart', function(e
     if (menu.style.display === 'block') {
         menu.style.display = 'none'; // Oculta el menú
     }
+    document.getElementById('resetButton').click();
 });
 
 document.getElementById('resetButton').addEventListener('click', function() {
