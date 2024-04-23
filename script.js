@@ -509,6 +509,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('contextmenu', function (event) {
         event.preventDefault();  // Prevenir la apertura del menú contextual
     }, false);
+
+    // Permitir el menú contextual solo en el área del teleprompter
+    var teleprompter = document.getElementById('teleprompter');
+    teleprompter.addEventListener('contextmenu', function (event) {
+        event.stopPropagation();  // Detiene la propagación del evento para evitar que el manejador global lo capture
+    }, false)
 });
 
 function adjustSpeed(speed) {
