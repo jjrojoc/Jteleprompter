@@ -505,15 +505,27 @@ document.addEventListener('DOMContentLoaded', function() {
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
     });
 
-    // prevent contextual menu in app
-    document.addEventListener('contextmenu', function (event) {
-        event.preventDefault();  // Prevenir la apertura del menú contextual
-    }, false);
+    // // prevent contextual menu in app
+    // document.addEventListener('contextmenu', function (event) {
+    //     event.preventDefault();  // Prevenir la apertura del menú contextual
+    // }, false);
 
     // Permitir el menú contextual solo en el área del teleprompter
     // teleprompter.addEventListener('contextmenu', function (event) {
     //     event.stopPropagation();  // Detiene la propagación del evento para evitar que el manejador global lo capture
     // }, false)
+});
+
+document.addEventListener('contextmenu', function(event) {
+    let teleprompter = document.getElementById('teleprompter');
+    if (teleprompter.getAttribute('contenteditable') === 'true') {
+        // Permite el menú contextual solo si teleprompter es editable
+        return true;
+    } else {
+        // Previene el menú contextual en otros elementos
+        event.preventDefault();
+        return false;
+    }
 });
 
 function adjustSpeed(speed) {
