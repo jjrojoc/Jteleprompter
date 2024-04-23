@@ -100,8 +100,8 @@ button:focus, input[type="range"]:focus, select:focus {
   background-color: #007BFF;  /* Bootstrap blue
 } */
 
-.menu-items {
-  display: block;
+/* .menu-items {
+  display: none;
   flex-direction: column;
   background-color: #222;
   padding: 5px;
@@ -111,8 +111,26 @@ button:focus, input[type="range"]:focus, select:focus {
 }
 
 .control {
-  display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño */
+  display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño
+} */
+
+.menu-container {
+  position: fixed; /* Ajusta según necesidad */
+  top: 10px;
+  right: 10px;
+  z-index: 1000; /* Asegúrate de que el menú no esté oculto detrás de otros elementos */
 }
+
+.menu-items button {
+  display: block; /* Los botones aparecen uno debajo del otro */
+  width: 100%; /* Opcional: hace que los botones tengan el mismo ancho */
+  margin-top: 2px; /* Espaciado entre botones */
+}
+
+.control {
+  cursor: pointer; /* Indica que es un elemento interactivo */
+}
+
 
 #timer {
   font-size: 16px; /* Ajusta según necesario */
