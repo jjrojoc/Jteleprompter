@@ -407,6 +407,14 @@ document.getElementById('editToggle').addEventListener('click', function() {
     }
 }); */
 
+
+document.getElementById('menuButton').addEventListener('touchstart', function(event) {
+    event.preventDefault();  // Previene eventos adicionales como click
+    var menu = document.getElementById('menuItems');
+    menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
+});
+
+// Si quieres que también funcione con click, puedes agregar ambos eventos
 document.getElementById('menuButton').addEventListener('click', function() {
     var menu = document.getElementById('menuItems');
     menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
