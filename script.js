@@ -73,6 +73,41 @@ textColorControl.addEventListener('change', () => {
     teleprompter.style.color = newColor;
 });
 
+
+ 
+
+
+// test teleprompter scroll evento
+// teleprompter.addEventListener('scroll', function() {
+//     // Verificar si el teleprompter está en modo edición
+//     if (teleprompter.contentEditable === "true") {
+//         if (confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
+//             console.log("En modo edición, función de fin de scroll desactivada.");
+//             document.getElementById('editToggle').click();
+//         }
+//         return; // Salir si está en modo edición
+//     }
+
+//     // Comprobar si hemos llegado al final del scroll
+//     if (teleprompter.scrollHeight - teleprompter.scrollTop === teleprompter.clientHeight) {
+//         // Llegamos al final del scroll
+//         performEndOfScrollFunction(); // Función que se ejecuta al llegar al final
+//     }
+// });
+
+// function performEndOfScrollFunction() {
+//     // Función que deseas ejecutar al llegar al final del scroll
+//     console.log("Función al final del scroll activada.");
+    
+//     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+//     const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+  
+//     controls.forEach(control => {
+//     control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad de los controles
+//     }
+// };
+
+
 document.getElementById('timer').textContent = '00:00';
 
 // Clase Cronometro modificada para incluir la capacidad de pausa
@@ -134,73 +169,128 @@ class Cronometro {
 }
 
 
+// function toggleAutoScroll() {
+//     // Get the button
+//     let mybutton = document.getElementById("myBtn");
+//     var button = this;
+//     var icon = button.querySelector('i');
+
+//     // Verifica si el teleprompter es editable
+//     if (teleprompter.contentEditable === "true") {
+//         if (confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
+//             // Llama a la función que maneja la edición y el guardado de cambios
+//             document.getElementById('editToggle').click();
+//         } else {
+//             console.log("Cambios no guardados, auto-scroll no activado.");
+//             return; // No activar el auto-scroll
+//         }
+//     }
+  
+//     // Verifica si el contenido es más alto que el contenedor
+//     if (teleprompter.scrollHeight > teleprompter.clientHeight) {
+//     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
+//     const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
+  
+//     controls.forEach(control => {
+//     control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad de los controles
+//   });
+  
+
+//   if (!isAutoScrolling) {
+//     icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
+//     document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
+//     isAutoScrolling = true;
+//     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
+//         cronometro.reset();
+//         console.log("reset en el inicio");
+//         cronometro.start();
+//         console.log("start en inicio");
+//     } else {
+//         cronometro.start();  // Continúa el temporizador sin resetear
+//         console.log("continue");
+//     }
+//     // Iniciar el auto-scroll aquí
+//     const speed = 100 - speedControl.value;
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1);
+//         if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+//             console.log('Reached End, stopping autoscroll.');
+//             toggleAutoScroll.call(button);
+//             cronometro.stop();
+//             if (teleprompter.scrollTop != 0) {
+//                 mybutton.style.display = "block";
+//             }
+//             } else {
+//                 mybutton.style.display = "none";
+//             }
+//     }, speed);
+//   } else {
+//     icon.className = "fas fa-play"; // Cambia el ícono a "play"
+//     document.getElementById('toggleScroll').style.backgroundColor = "#555555";
+//     isAutoScrolling = false;
+//     //cronometro.stop();
+//     //console.log("stop");
+//     clearInterval(scrollInterval);  // Detiene el auto-scroll
+//   }
+// } else {
+//     // Si no hay suficiente contenido para scrollear, simplemente desactiva el botón
+//     alert('No hay suficiente contenido para hacer scroll.');
+// }
+// }
+
 function toggleAutoScroll() {
-    // Get the button
-    let mybutton = document.getElementById("myBtn");
-    var button = this;
-    var icon = button.querySelector('i');
+    const teleprompter = document.getElementById('teleprompter');
+    const button = document.getElementById('toggleScroll');
+    const icon = button.querySelector('i');
+    const controls = document.querySelectorAll('.control');
 
-    // Verifica si el teleprompter es editable
-    if (teleprompter.contentEditable === "true") {
-        if (confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
-            // Llama a la función que maneja la edición y el guardado de cambios
-            document.getElementById('editToggle').click();
-        } else {
-            console.log("Cambios no guardados, auto-scroll no activado.");
-            return; // No activar el auto-scroll
-        }
+    // Confirmar guardado si el contenido está siendo editado
+    if (teleprompter.contentEditable === "true" && 
+        !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
+        console.log("Cambios no guardados, auto-scroll no activado.");
+        return; // No activar el auto-scroll
     }
-  
+
     // Verifica si el contenido es más alto que el contenedor
-    if (teleprompter.scrollHeight > teleprompter.clientHeight) {
-    const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
-    const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
-  
-    controls.forEach(control => {
-    control.style.display = isScrolling ? 'none' : 'block'; // Cambia la visibilidad de los controles
-  });
-  
-
-  if (!isAutoScrolling) {
-    icon.className = "fas fa-stop"; // Cambia el ícono a "stop"
-    document.getElementById('toggleScroll').style.backgroundColor = "#ff0000";
-    isAutoScrolling = true;
-    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-        cronometro.reset();
-        console.log("reset en el inicio");
-        cronometro.start();
-        console.log("start en inicio");
-    } else {
-        cronometro.start();  // Continúa el temporizador sin resetear
-        console.log("continue");
+    if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
+        alert('No hay suficiente contenido para hacer scroll.');
+        return;
     }
-    // Iniciar el auto-scroll aquí
-    const speed = 100 - speedControl.value;
+
+    // Alterna la clase 'active' en el botón y actualiza el ícono y el fondo
+    const isScrolling = button.classList.toggle('active');
+    icon.className = isScrolling ? "fas fa-stop" : "fas fa-play";
+    button.style.backgroundColor = isScrolling ? "#ff0000" : "#555555";
+
+    // Muestra u oculta los controles
+    controls.forEach(control => {
+        control.style.display = isScrolling ? 'none' : 'block';
+    });
+
+    if (isScrolling) {
+        startAutoScroll();
+    } else {
+        stopAutoScroll();
+    }
+}
+
+function startAutoScroll() {
+    const speed = 100 - document.getElementById('speedControl').value;
+    cronometro.reset();
+    cronometro.start();
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
         if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            console.log('Reached End, stopping autoscroll.');
-            toggleAutoScroll.call(button);
-            cronometro.stop();
-            if (teleprompter.scrollTop != 0) {
-                mybutton.style.display = "block";
-            }
-            } else {
-                mybutton.style.display = "none";
-            }
+            console.log('Reached end, stopping autoscroll.');
+            stopAutoScroll();
+            document.getElementById("myBtn").style.display = teleprompter.scrollTop ? "none" : "block";
+        }
     }, speed);
-  } else {
-    icon.className = "fas fa-play"; // Cambia el ícono a "play"
-    document.getElementById('toggleScroll').style.backgroundColor = "#555555";
-    isAutoScrolling = false;
-    //cronometro.stop();
-    //console.log("stop");
-    clearInterval(scrollInterval);  // Detiene el auto-scroll
-  }
-} else {
-    // Si no hay suficiente contenido para scrollear, simplemente desactiva el botón
-    alert('No hay suficiente contenido para hacer scroll.');
 }
+
+function stopAutoScroll() {
+    clearInterval(scrollInterval);
+    cronometro.stop();
 }
 
 
@@ -648,24 +738,3 @@ function stopCountdown() {
 // timerDisplay.addEventListener('touchend', function() {
 //     this.classList.remove('active');
 // });
-
-// test teleprompter scroll evento
-
-teleprompter.addEventListener('scroll', function() {
-    // Verificar si el teleprompter está en modo edición
-    if (teleprompter.contentEditable === "true") {
-        console.log("En modo edición, función de fin de scroll desactivada.");
-        return; // Salir si está en modo edición
-    }
-
-    // Comprobar si hemos llegado al final del scroll
-    if (teleprompter.scrollHeight - teleprompter.scrollTop === teleprompter.clientHeight) {
-        // Llegamos al final del scroll
-        performEndOfScrollFunction(); // Función que se ejecuta al llegar al final
-    }
-});
-
-function performEndOfScrollFunction() {
-    // Función que deseas ejecutar al llegar al final del scroll
-    console.log("Función al final del scroll activada.");
-}
