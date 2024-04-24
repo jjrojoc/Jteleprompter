@@ -301,6 +301,7 @@ function startAutoScroll() {
         if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
             console.log('Reached end, stopping autoscroll.');
             stopAutoScroll();
+            cronometro.stop();
             // Mostrar myBtn y mostrar controles
             myBtn.style.display = "block"; // Asegúrate de que este elemento debería mostrarse
             toggleControlsDisplay(true);  // Asegura que los controles se muestren
@@ -323,7 +324,7 @@ function topFunction() {
     teleprompter.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     cronometro.stop();
-    chronometro.reset();
+    cronometro.reset();
     mybutton.style.display = 'none';
   }
 // function toggleAutoScroll() {
