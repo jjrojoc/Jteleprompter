@@ -274,13 +274,35 @@ function toggleAutoScroll() {
     }
 }
 
+function stopAutoScroll() {
+    clearInterval(scrollInterval);
+    cronometro.stop();
+    toggleControlsDisplay(true); // Mostrar los controles al detener el autoscroll
+    updateToggleButton(false); // Actualiza el botón a su estado no activo
+}
+
+function updateToggleButton(isActive) {
+    const toggleButton = document.getElementById('toggleScroll');
+    const icon = toggleButton.querySelector('i');
+    
+    if (isActive) {
+        icon.className = "fas fa-stop";
+        toggleButton.style.backgroundColor = "#ff0000";
+    } else {
+        icon.className = "fas fa-play";
+        toggleButton.style.backgroundColor = "#555555";
+    }
+}
+
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const myBtn = document.getElementById("myBtn");
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
+    
     cronometro.reset();
     cronometro.start();
+    updateToggleButton(true); // Actualiza el botón a su estado activo
 
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
@@ -294,11 +316,6 @@ function startAutoScroll() {
     }, speed);
 }
 
-function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    cronometro.stop();
-    toggleControlsDisplay(true); // Mostrar los controles al detener el autoscroll
-}
 
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
