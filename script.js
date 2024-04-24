@@ -73,6 +73,8 @@ textColorControl.addEventListener('change', () => {
     teleprompter.style.color = newColor;
 });
 
+document.getElementById('timer').textContent('00:00');
+
 // Clase Cronometro modificada para incluir la capacidad de pausa
 class Cronometro {
     constructor(displayElement) {
