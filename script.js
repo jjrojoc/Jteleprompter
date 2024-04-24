@@ -248,13 +248,6 @@ function topFunction() {
 
 
 
-function resetTimer() {
-    stopTimer();
-    startTimer();
-}
-
-
-
 // function resetTimer() {
 //     if (timerInterval) {
 //         clearInterval(timerInterval);
@@ -573,7 +566,8 @@ function startCountdown(event) {
     event.preventDefault(); // Evita comportamientos no deseados como seleccionar texto, etc.
     timerButton.classList.add('active');
 
-    if (!isAutoScrolling) {
+    // if (!isAutoScrolling) {
+    if (!isAutoScrolling && timerButton.textContent !== "00:00") {
         let countdown = 3; // Debe definirse antes de usarla
         timerButton.style.backgroundColor = 'red'; // Suponiendo que `timerButton` está definido en algún lugar
         countdownElement.textContent = countdown;
