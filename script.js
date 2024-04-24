@@ -568,6 +568,7 @@ function startCountdown(event) {
 
     // if (!isAutoScrolling) {
     if (!isAutoScrolling && timerButton.textContent !== "00:00") {
+        console.log(timerButton.textContent)
         let countdown = 3; // Debe definirse antes de usarla
         timerButton.style.backgroundColor = 'red'; // Suponiendo que `timerButton` está definido en algún lugar
         countdownElement.textContent = countdown;
