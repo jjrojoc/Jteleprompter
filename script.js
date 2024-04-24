@@ -599,7 +599,7 @@ function stopCountdown() {
     clearInterval(countdownInterval);
     countdownElement.style.display = 'none';
     timerButton.style.backgroundColor = 'black';
-    this.classList.remove('active');
+    timerButton.classList.remove('active');
 }
 
 
