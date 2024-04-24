@@ -275,15 +275,21 @@ function toggleAutoScroll() {
 }
 
 function startAutoScroll() {
-    const speed = 100 - document.getElementById('speedControl').value;
+    const teleprompter = document.getElementById('teleprompter');
+    const myBtn = document.getElementById("myBtn");
+    const speedControl = document.getElementById('speedControl');
+    const speed = 100 - speedControl.value;
     cronometro.reset();
     cronometro.start();
+
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
         if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
             console.log('Reached end, stopping autoscroll.');
             stopAutoScroll();
-            document.getElementById("myBtn").style.display = teleprompter.scrollTop ? "none" : "block";
+            // Mostrar myBtn y mostrar controles
+            myBtn.style.display = "block"; // Asegúrate de que este elemento debería mostrarse
+            toggleControlsDisplay(true);  // Asegura que los controles se muestren
         }
     }, speed);
 }
@@ -291,7 +297,16 @@ function startAutoScroll() {
 function stopAutoScroll() {
     clearInterval(scrollInterval);
     cronometro.stop();
+    toggleControlsDisplay(true); // Mostrar los controles al detener el autoscroll
 }
+
+function toggleControlsDisplay(show) {
+    const controls = document.querySelectorAll('.control');
+    controls.forEach(control => {
+        control.style.display = show ? 'block' : 'none';
+    });
+}
+
 
 
 function topFunction() {
