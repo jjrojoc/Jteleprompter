@@ -203,9 +203,10 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 }
 
 #countdown {
-    font-size: 18px;
-    color: red;
-    font-weight: bold;
-    transition: opacity 0.3s ease-out;
-    opacity: 1;  /* Empieza oculto */
+  font-size: 48px;
+  color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
