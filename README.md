@@ -1,2 +1,2 @@
 # Jteleprompter
-Simple web teleprompter
+Simple pwa teleprompter
