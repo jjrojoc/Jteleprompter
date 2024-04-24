@@ -131,63 +131,6 @@ class Cronometro {
     }
 }
 
-// Instancia del cronómetro
-const timerDisplay = document.getElementById("timer");
-const cronometro = new Cronometro(timerDisplay);
-
-// document.getElementById('timer').addEventListener('click', function() {
-//     if (!isAutoScrolling) {  // Solo permite resetear si el auto-scroll no está activo
-//       //accumulatedTime = 0;  // Resetea el tiempo acumulado
-//       cronometro.stop();     // Detiene el cronómetro
-//       cronometro.reset();  // Actualiza el display a 00:00:00
-//       console.log('Timer reset to 00:00:00');
-//     }
-// });
-
-// Desactivar el menú contextual
-timerDisplay.addEventListener('contextmenu', function(event) {
-    event.preventDefault(); // Previene la aparición del menú contextual
-});
-
-let timer;
-document.getElementById('timer').addEventListener('touchstart', function(e) {
-    if (!isAutoScrolling) { // Asegura que no esté auto desplazándose
-        this.style.backgroundColor = 'red';
-        timer = setTimeout(function() {
-            cronometro.stop();  // Detiene el cronómetro
-            cronometro.reset(); // Resetea el cronómetro
-            console.log('Timer stopped and reset to 00:00:00');
-        }, 3000);  // El usuario debe mantener presionado durante 3 segundos
-    }
-});
-
-document.getElementById('timer').addEventListener('touchend', function(e) {
-    this.style.backgroundColor = 'black';
-    clearTimeout(timer);  // Cancela el reset si el usuario suelta el botón antes de los 3 segundos
-});
-
-// Activar la clase 'active' cuando el temporizador es presionado
-timerDisplay.addEventListener('mousedown', function() {
-    this.classList.add('active');
-});
-
-// También manejar eventos táctiles
-timerDisplay.addEventListener('touchstart', function(e) {
-    this.classList.add('active');
-    e.preventDefault();
-});
-
-// Remover la clase 'active' cuando el mouse o el toque terminan
-timerDisplay.addEventListener('mouseup', function() {
-    this.classList.remove('active');
-});
-timerDisplay.addEventListener('mouseleave', function() {
-    this.classList.remove('active');
-});
-timerDisplay.addEventListener('touchend', function() {
-    this.classList.remove('active');
-});
-
 
 function toggleAutoScroll() {
     // Get the button
@@ -609,6 +552,10 @@ function prepareTeleprompter() {
 // Preparar teleprompter cuando se cargue la página o cuando sea necesario
 document.addEventListener('DOMContentLoaded', prepareTeleprompter);
 
+
+
+// Instancia del cronómetro
+const cronometro = new Cronometro(timerDisplay);
 const timerButton = document.getElementById('timer');
 const countdownElement = document.getElementById('countdown');
 
@@ -623,23 +570,82 @@ timerButton.addEventListener('touchstart', startCountdown);
 timerButton.addEventListener('touchend', stopCountdown);
 
 function startCountdown(event) {
-    event.preventDefault(); // Evita comportamientos no deseados
-    let countdown = 3;
-    countdownElement.textContent = countdown;
-    countdownElement.style.display = 'block';
+    event.preventDefault(); // Evita comportamientos no deseados como seleccionar texto, etc.
 
-    countdownInterval = setInterval(() => {
-        countdown--;
+    if (!isAutoScrolling) {
+        let countdown = 3; // Debe definirse antes de usarla
+        timerButton.style.backgroundColor = 'red'; // Suponiendo que `timerButton` está definido en algún lugar
         countdownElement.textContent = countdown;
-        if (countdown === 0) {
-            stopCountdown();
-            // Aquí podrías colocar la función que quieres ejecutar después del conteo
-            console.log("Timer reseteado!");
-        }
-    }, 1000);
+        countdownElement.style.display = 'block'; // Asegura que el elemento sea visible
+
+        countdownInterval = setInterval(function() {
+            countdown--;
+            countdownElement.textContent = countdown;
+            if (countdown === 0) {
+                stopCountdown();
+                console.log("Timer reseteado!");
+                if (cronometro) { // Asegura que el cronómetro esté definido
+                    cronometro.stop();  // Detiene el cronómetro
+                    cronometro.reset(); // Resetea el cronómetro
+                }
+            }
+        }, 1000); // Actualiza el contador cada segundo
+    }
 }
+
 
 function stopCountdown() {
     clearInterval(countdownInterval);
     countdownElement.style.display = 'none';
+    timerButton.style.backgroundColor = 'black';
 }
+
+
+
+// // Instancia del cronómetro
+// const timerDisplay = document.getElementById("timer");
+// const cronometro = new Cronometro(timerDisplay);
+
+// // Desactivar el menú contextual
+// timerDisplay.addEventListener('contextmenu', function(event) {
+//     event.preventDefault(); // Previene la aparición del menú contextual
+// });
+
+// let timer;
+// document.getElementById('timer').addEventListener('touchstart', function(e) {
+//     if (!isAutoScrolling) { // Asegura que no esté auto desplazándose
+//         this.style.backgroundColor = 'red';
+//         timer = setTimeout(function() {
+//             cronometro.stop();  // Detiene el cronómetro
+//             cronometro.reset(); // Resetea el cronómetro
+//             console.log('Timer stopped and reset to 00:00:00');
+//         }, 3000);  // El usuario debe mantener presionado durante 3 segundos
+//     }
+// });
+
+// document.getElementById('timer').addEventListener('touchend', function(e) {
+//     this.style.backgroundColor = 'black';
+//     clearTimeout(timer);  // Cancela el reset si el usuario suelta el botón antes de los 3 segundos
+// });
+
+// // Activar la clase 'active' cuando el temporizador es presionado
+// timerDisplay.addEventListener('mousedown', function() {
+//     this.classList.add('active');
+// });
+
+// // También manejar eventos táctiles
+// timerDisplay.addEventListener('touchstart', function(e) {
+//     this.classList.add('active');
+//     e.preventDefault();
+// });
+
+// // Remover la clase 'active' cuando el mouse o el toque terminan
+// timerDisplay.addEventListener('mouseup', function() {
+//     this.classList.remove('active');
+// });
+// timerDisplay.addEventListener('mouseleave', function() {
+//     this.classList.remove('active');
+// });
+// timerDisplay.addEventListener('touchend', function() {
+//     this.classList.remove('active');
+// });
