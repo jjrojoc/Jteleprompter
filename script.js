@@ -571,6 +571,7 @@ timerButton.addEventListener('touchend', stopCountdown);
 
 function startCountdown(event) {
     event.preventDefault(); // Evita comportamientos no deseados como seleccionar texto, etc.
+    timerButton.classList.add('active');
 
     if (!isAutoScrolling) {
         let countdown = 3; // Debe definirse antes de usarla
@@ -598,6 +599,7 @@ function stopCountdown() {
     clearInterval(countdownInterval);
     countdownElement.style.display = 'none';
     timerButton.style.backgroundColor = 'black';
+    this.classList.remove('active');
 }
 
 
