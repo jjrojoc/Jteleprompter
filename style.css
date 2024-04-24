@@ -213,8 +213,8 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 }
 
 #textColorPicker {
-  width: 40px; /* Establece el ancho del picker */
-  height: 40px; /* Establece la altura del picker */
+  width: 36px; /* Establece el ancho del picker */
+  height: 36px; /* Establece la altura del picker */
   border: none; /* Elimina el borde predeterminado */
   cursor: pointer; /* Cambia el cursor a una mano para indicar que es interactivo */
   background: transparent; /* Fondo transparente para que sólo se vea el control de color */
