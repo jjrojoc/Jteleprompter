@@ -264,7 +264,6 @@ function toggleAutoScroll() {
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
-    cronometro.stop();
     toggleControlsDisplay(true);
     updateToggleButton(false); // Asegúrate de que esto refleja el estado actual
 }
@@ -284,8 +283,16 @@ function startAutoScroll() {
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
     
-    cronometro.reset();
-    cronometro.start();
+    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
+        cronometro.reset();
+        console.log("reset en el inicio");
+        cronometro.start();
+        console.log("start en inicio");
+    } else {
+            cronometro.start();  // Continúa el temporizador sin resetear
+            console.log("continue");
+    }
+    
     updateToggleButton(true); // Actualiza el botón a su estado activo
     toggleControlsDisplay(false);
 
@@ -315,6 +322,8 @@ function topFunction() {
     let mybutton = document.getElementById("myBtn");
     teleprompter.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+    cronometro.stop();
+    chronometro.reset();
     mybutton.style.display = 'none';
   }
 // function toggleAutoScroll() {
