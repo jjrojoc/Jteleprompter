@@ -650,11 +650,20 @@ function stopCountdown() {
 // });
 
 // test teleprompter scroll evento
+
+const teleprompter = document.getElementById('teleprompter');
+
 teleprompter.addEventListener('scroll', function() {
+    // Verificar si el teleprompter está en modo edición
+    if (teleprompter.contentEditable === "true") {
+        console.log("En modo edición, función de fin de scroll desactivada.");
+        return; // Salir si está en modo edición
+    }
+
+    // Comprobar si hemos llegado al final del scroll
     if (teleprompter.scrollHeight - teleprompter.scrollTop === teleprompter.clientHeight) {
-        // Estamos en el fondo
-        console.log("Llegó al final del scroll.");
-        performEndOfScrollFunction();
+        // Llegamos al final del scroll
+        performEndOfScrollFunction(); // Función que se ejecuta al llegar al final
     }
 });
 
