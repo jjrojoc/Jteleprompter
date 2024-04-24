@@ -648,3 +648,17 @@ function stopCountdown() {
 // timerDisplay.addEventListener('touchend', function() {
 //     this.classList.remove('active');
 // });
+
+// test teleprompter scroll evento
+teleprompter.addEventListener('scroll', function() {
+    if (teleprompter.scrollHeight - teleprompter.scrollTop === teleprompter.clientHeight) {
+        // Estamos en el fondo
+        console.log("Llegó al final del scroll.");
+        performEndOfScrollFunction();
+    }
+});
+
+function performEndOfScrollFunction() {
+    // Función que deseas ejecutar al llegar al final del scroll
+    console.log("Función al final del scroll activada.");
+}
