@@ -207,7 +207,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   font-weight: bold;
   color: red;
   position: absolute;
-  top: 10%;
+  top: 5%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
