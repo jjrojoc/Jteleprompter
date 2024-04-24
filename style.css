@@ -201,3 +201,12 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 #teleprompter[contenteditable="true"] {
   user-select: text;
 }
+
+#countdown {
+  font-size: 20px;
+  color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

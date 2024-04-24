@@ -608,3 +608,38 @@ function prepareTeleprompter() {
 
 // Preparar teleprompter cuando se cargue la página o cuando sea necesario
 document.addEventListener('DOMContentLoaded', prepareTeleprompter);
+
+const timerButton = document.getElementById('timer');
+const countdownElement = document.getElementById('countdown');
+
+let countdownInterval;
+
+timerButton.addEventListener('mousedown', startCountdown);
+timerButton.addEventListener('mouseup', stopCountdown);
+timerButton.addEventListener('mouseleave', stopCountdown); // Por si el cursor sale del botón sin soltar
+
+// Para dispositivos táctiles
+timerButton.addEventListener('touchstart', startCountdown);
+timerButton.addEventListener('touchend', stopCountdown);
+
+function startCountdown(event) {
+    event.preventDefault(); // Evita comportamientos no deseados
+    let countdown = 3;
+    countdownElement.textContent = countdown;
+    countdownElement.style.display = 'block';
+
+    countdownInterval = setInterval(() => {
+        countdown--;
+        countdownElement.textContent = countdown;
+        if (countdown === 0) {
+            stopCountdown();
+            // Aquí podrías colocar la función que quieres ejecutar después del conteo
+            console.log("Timer reseteado!");
+        }
+    }, 1000);
+}
+
+function stopCountdown() {
+    clearInterval(countdownInterval);
+    countdownElement.style.display = 'none';
+}
