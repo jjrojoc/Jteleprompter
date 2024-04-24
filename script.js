@@ -244,55 +244,39 @@ function toggleAutoScroll() {
     const icon = button.querySelector('i');
     const controls = document.querySelectorAll('.control');
 
-    // Confirmar guardado si el contenido está siendo editado
-    if (teleprompter.contentEditable === "true" && 
-        !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
+    if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
         console.log("Cambios no guardados, auto-scroll no activado.");
-        return; // No activar el auto-scroll
+        return;
     }
 
-    // Verifica si el contenido es más alto que el contenedor
     if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
         alert('No hay suficiente contenido para hacer scroll.');
         return;
     }
 
     // Alterna la clase 'active' en el botón y actualiza el ícono y el fondo
-    const isScrolling = button.classList.toggle('active');
-    icon.className = isScrolling ? "fas fa-stop" : "fas fa-play";
-    button.style.backgroundColor = isScrolling ? "#ff0000" : "#555555";
-
-    // Muestra u oculta los controles
-    controls.forEach(control => {
-        control.style.display = isScrolling ? 'none' : 'block';
-    });
-
-    if (isScrolling) {
-        startAutoScroll();
-    } else {
+    if (button.classList.contains('active')) {
         stopAutoScroll();
+    } else {
+        startAutoScroll();
     }
 }
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
     cronometro.stop();
-    toggleControlsDisplay(true); // Mostrar los controles al detener el autoscroll
-    updateToggleButton(false); // Actualiza el botón a su estado no activo
+    toggleControlsDisplay(true);
+    updateToggleButton(false); // Asegúrate de que esto refleja el estado actual
 }
 
 function updateToggleButton(isActive) {
     const toggleButton = document.getElementById('toggleScroll');
     const icon = toggleButton.querySelector('i');
-    
-    if (isActive) {
-        icon.className = "fas fa-stop";
-        toggleButton.style.backgroundColor = "#ff0000";
-    } else {
-        icon.className = "fas fa-play";
-        toggleButton.style.backgroundColor = "#555555";
-    }
+    toggleButton.classList.toggle('active', isActive);  // Asegura que la clase 'active' se maneje correctamente
+    icon.className = isActive ? "fas fa-stop" : "fas fa-play";
+    toggleButton.style.backgroundColor = isActive ? "#ff0000" : "#555555";
 }
+
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
