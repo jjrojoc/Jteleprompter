@@ -555,9 +555,9 @@ document.addEventListener('DOMContentLoaded', prepareTeleprompter);
 
 
 // Instancia del cronómetro
-const cronometro = new Cronometro(timerDisplay);
 const timerButton = document.getElementById('timer');
 const countdownElement = document.getElementById('countdown');
+const cronometro = new Cronometro(timerButton);
 
 let countdownInterval;
 
