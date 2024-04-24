@@ -626,7 +626,6 @@ function startCountdown(event) {
     event.preventDefault(); // Evita comportamientos no deseados
     let countdown = 3;
     countdownElement.textContent = countdown;
-    countdownElement.style.opacity = 1
     countdownElement.style.display = 'block';
 
     countdownInterval = setInterval(() => {

@@ -204,9 +204,10 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 
 #countdown {
   font-size: 48px;
+  font-weight: bold;
   color: red;
   position: absolute;
-  top: 50%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
