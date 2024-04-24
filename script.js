@@ -627,6 +627,7 @@ function startCountdown(event) {
     let countdown = 3;
     countdownElement.textContent = countdown;
     countdownElement.style.opacity = 1
+    countdownElement.style.display = 'block';
 
     countdownInterval = setInterval(() => {
         countdown--;
@@ -641,5 +642,5 @@ function startCountdown(event) {
 
 function stopCountdown() {
     clearInterval(countdownInterval);
-    countdownElement.style.opacity = 0;  // Hace que la cuenta regresiva desaparezca suavemente
+    countdownElement.style.display = 'none';
 }
