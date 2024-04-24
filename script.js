@@ -287,6 +287,7 @@ function startAutoScroll() {
     cronometro.reset();
     cronometro.start();
     updateToggleButton(true); // Actualiza el botón a su estado activo
+    toggleControlsDisplay(false);
 
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
