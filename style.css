@@ -211,3 +211,27 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+#textColorPicker {
+  width: 40px; /* Establece el ancho del picker */
+  height: 40px; /* Establece la altura del picker */
+  border: none; /* Elimina el borde predeterminado */
+  cursor: pointer; /* Cambia el cursor a una mano para indicar que es interactivo */
+  background: transparent; /* Fondo transparente para que sólo se vea el control de color */
+  -webkit-appearance: none; /* Intenta reducir cualquier estilo predeterminado en Chrome/Safari */
+  padding: 0; /* Elimina el padding interior */
+  border-radius: 5px; /* Bordes redondeados para el input */
+}
+
+/* Para mejorar la visualización en algunos navegadores, puedes intentar envolver el input en un div y estilizar ese div */
+.color-picker-wrapper {
+  padding: 5px;
+  background-color: #f8f8f8; /* Color de fondo suave para el contenedor */
+  border-radius: 5px; /* Bordes redondeados para el contenedor */
+  display: inline-block; /* Hace que el contenedor se alinee correctamente con otros elementos inline */
+  border: 1px solid #ccc; /* Un sutil borde para el contenedor */
+}
+
+#textColorPicker:focus {
+  outline: none; /* Elimina el contorno al hacer foco */
+}
