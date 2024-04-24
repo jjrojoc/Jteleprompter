@@ -651,8 +651,6 @@ function stopCountdown() {
 
 // test teleprompter scroll evento
 
-const teleprompter = document.getElementById('teleprompter');
-
 teleprompter.addEventListener('scroll', function() {
     // Verificar si el teleprompter está en modo edición
     if (teleprompter.contentEditable === "true") {
