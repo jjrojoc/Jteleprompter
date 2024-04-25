@@ -734,7 +734,7 @@ function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     window.onload = () => { // Asegurarse de que todo esté cargado
         // Posicionar el scroll para que el texto comience justo debajo de la pantalla visible
-        teleprompter.scrollTop = teleprompter.clientHeight - 2;
+        teleprompter.scrollTop = teleprompter.clientHeight + 2;
     };
 }
 
