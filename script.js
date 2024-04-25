@@ -270,6 +270,9 @@ function toggleAutoScroll() {
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
     const teleprompter = document.getElementById('teleprompter');
     if (teleprompter) {
         // Restaurar el contenido original desde el atributo 'data-original-content'
