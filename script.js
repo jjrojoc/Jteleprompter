@@ -261,12 +261,24 @@ function toggleAutoScroll() {
     }
 }
 
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+// }
+
 function stopAutoScroll() {
     clearInterval(scrollInterval);
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
+    const teleprompter = document.getElementById('teleprompter');
+    if (teleprompter) {
+        // Restaurar el contenido original desde el atributo 'data-original-content'
+        const originalContent = teleprompter.getAttribute('data-original-content');
+        teleprompter.innerHTML = originalContent;
+        teleprompter.removeAttribute('data-original-content'); // Limpiar el atributo para evitar confusión futura
+    }
 }
+
 
 function updateToggleButton(isActive) {
     const toggleButton = document.getElementById('toggleScroll');
@@ -731,17 +743,34 @@ function adjustSpeed(speed) {
 //     }
 // }
 
+
+//esta de abajo funciona relativamente bien
+
+// function prepareTeleprompter() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
+//     const clientHeight = teleprompter.clientHeight;
+
+//     // Calcular cuántos <br> se necesitan para llenar la pantalla
+//     const linesNeeded = Math.ceil(clientHeight / lineHeight);
+    
+//     const paddingHTML = '<br>'.repeat(linesNeeded);
+
+//     // Añadir padding al principio y al final
+//     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
+// }
+
+
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
+    // Almacenar el contenido original para restaurarlo después
+    teleprompter.setAttribute('data-original-content', teleprompter.innerHTML);
+
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
-
-    // Calcular cuántos <br> se necesitan para llenar la pantalla
     const linesNeeded = Math.ceil(clientHeight / lineHeight);
-    
-    const paddingHTML = '<br>'.repeat(linesNeeded);
 
-    // Añadir padding al principio y al final
+    const paddingHTML = '<br>'.repeat(linesNeeded - 3);
     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
 }
 
