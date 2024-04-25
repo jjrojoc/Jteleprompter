@@ -310,7 +310,7 @@ function startAutoScroll() {
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
-    prepareTeleprompter();
+    // prepareTeleprompter();
 
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
