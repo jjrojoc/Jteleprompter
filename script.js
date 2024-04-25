@@ -266,7 +266,19 @@ function stopAutoScroll() {
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
+    const tempContainer = document.getElementById('tempTeleprompter');
+    if (tempContainer) {
+        tempContainer.remove(); // Eliminar el contenedor temporal
+    }
 }
+
+
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+// }
 
 function updateToggleButton(isActive) {
     const toggleButton = document.getElementById('toggleScroll');
@@ -277,7 +289,13 @@ function updateToggleButton(isActive) {
 }
 
 function startAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
+    const teleprompter = document.getElementById('tempTeleprompter');
+    if (!teleprompter) {
+        prepareTeleprompter();
+    }
+    teleprompter.scrollTop = teleprompter.clientHeight; // Iniciar scroll justo debajo de la primera pantalla llena
+    
+    // const teleprompter = document.getElementById('teleprompter');
     const myBtn = document.getElementById("myBtn");
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
@@ -285,7 +303,6 @@ function startAutoScroll() {
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
-    prepareTeleprompter();
 
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
