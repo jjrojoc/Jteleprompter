@@ -284,15 +284,15 @@ function startAutoScroll() {
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
     
-    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-        cronometro.reset();
-        console.log("reset en el inicio");
-        cronometro.start();
-        console.log("start en inicio");
-    } else {
-            cronometro.start();  // Continúa el temporizador sin resetear
-            console.log("continue");
-    }
+    // if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
+    //     cronometro.reset();
+    //     console.log("reset en el inicio");
+    //     cronometro.start();
+    //     console.log("start en inicio");
+    // } else {
+    //         cronometro.start();  // Continúa el temporizador sin resetear
+    //         console.log("continue");
+    // }
     
     isAutoScrolling = true;  // Actualiza el estado a activo
     updateToggleButton(true); // Actualiza el botón a su estado activo
