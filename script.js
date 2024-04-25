@@ -340,7 +340,7 @@ function toggleControlsDisplay(show) {
 
 function topFunction() {
     let mybutton = document.getElementById("myBtn");
-    teleprompter.scrollTop = 0;
+    // teleprompter.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     cronometro.stop();
     cronometro.reset();
