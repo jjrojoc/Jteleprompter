@@ -254,9 +254,9 @@ function toggleAutoScroll() {
 
     // Toggle 'active' class on the button
     if (button.classList.contains('active')) {
-        prepareTeleprompter();
         stopAutoScroll();
     } else {
+        prepareTeleprompter();
         startAutoScroll();
     }
 }
@@ -732,25 +732,33 @@ function adjustSpeed(speed) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    const content = teleprompter.innerHTML.trim();
-    const containerHeight = teleprompter.clientHeight;
-
-    // Calcula cuántos <br> son necesarios para cubrir la altura del contenedor y la mitad
-    const brHeight = 24; // Estima la altura de un <br> (puede variar según el estilo)
-    const brsNeededStart = Math.ceil(containerHeight / brHeight);
-    const brsNeededEnd = Math.ceil(containerHeight / (2 * brHeight));
-
-    // Asegurarse de que el contenido no comienza ni termina con el número de <br> necesario
-    const regexPatternStart = new RegExp(`^(${'<br>'.repeat(brsNeededStart)})`);
-    const regexPatternEnd = new RegExp(`(${'<br>'.repeat(brsNeededEnd)})$`);
-
-    if (!regexPatternStart.test(content) || !regexPatternEnd.test(content)) {
-        // Añadir saltos de línea al principio y al final
-        const paddingStart = '<br>'.repeat(brsNeededStart);
-        const paddingEnd = '<br>'.repeat(brsNeededEnd);
-        teleprompter.innerHTML = paddingStart + content + paddingEnd;
-    }
+    window.onload = () => { // Asegurarse de que todo esté cargado
+        // Posicionar el scroll para que el texto comience justo debajo de la pantalla visible
+        teleprompter.scrollTop = teleprompter.clientHeight;
+    };
 }
+
+// function prepareTeleprompter() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const content = teleprompter.innerHTML.trim();
+//     const containerHeight = teleprompter.clientHeight;
+
+//     // Calcula cuántos <br> son necesarios para cubrir la altura del contenedor y la mitad
+//     const brHeight = 24; // Estima la altura de un <br> (puede variar según el estilo)
+//     const brsNeededStart = Math.ceil(containerHeight / brHeight);
+//     const brsNeededEnd = Math.ceil(containerHeight / (2 * brHeight));
+
+//     // Asegurarse de que el contenido no comienza ni termina con el número de <br> necesario
+//     const regexPatternStart = new RegExp(`^(${'<br>'.repeat(brsNeededStart)})`);
+//     const regexPatternEnd = new RegExp(`(${'<br>'.repeat(brsNeededEnd)})$`);
+
+//     if (!regexPatternStart.test(content) || !regexPatternEnd.test(content)) {
+//         // Añadir saltos de línea al principio y al final
+//         const paddingStart = '<br>'.repeat(brsNeededStart);
+//         const paddingEnd = '<br>'.repeat(brsNeededEnd);
+//         teleprompter.innerHTML = paddingStart + content + paddingEnd;
+//     }
+// }
 
 
 // Preparar teleprompter cuando se cargue la página o cuando sea necesario
