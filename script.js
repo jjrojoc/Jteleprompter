@@ -261,46 +261,34 @@ function toggleAutoScroll() {
     }
 }
 
+function stopAutoScroll() {
+    clearInterval(scrollInterval);
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
+}
+
 // function stopAutoScroll() {
 //     clearInterval(scrollInterval);
+//     const teleprompter = document.getElementById('teleprompter');
+//     if (teleprompter) {
+//         // Asegurar que existe el contenido original para restaurar
+//         const originalContent = teleprompter.getAttribute('data-original-content');
+//         if (originalContent) {
+//             teleprompter.innerHTML = originalContent; // Restaurar el contenido
+//             teleprompter.removeAttribute('data-original-content'); // Limpiar el atributo
+//         } else {
+//             console.log("No original content found to restore.");
+//         }
+        
+//         // Reiniciar el scrollTop para visualizar desde el principio
+//         teleprompter.scrollTop = 0;
+//     }
 //     isAutoScrolling = false;
 //     updateToggleButton(false);
 //     toggleControlsDisplay(true);
 // }
 
-function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    const teleprompter = document.getElementById('teleprompter');
-    if (teleprompter) {
-        // Asegurar que existe el contenido original para restaurar
-        const originalContent = teleprompter.getAttribute('data-original-content');
-        if (originalContent) {
-            teleprompter.innerHTML = originalContent; // Restaurar el contenido
-            teleprompter.removeAttribute('data-original-content'); // Limpiar el atributo
-        } else {
-            console.log("No original content found to restore.");
-        }
-        
-        // Reiniciar el scrollTop para visualizar desde el principio
-        teleprompter.scrollTop = 0;
-    }
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-}
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-//     const teleprompter = document.getElementById('teleprompter');
-//     if (teleprompter) {
-//         // Restaurar el contenido original desde el atributo 'data-original-content'
-//         const originalContent = teleprompter.getAttribute('data-original-content');
-//         teleprompter.innerHTML = originalContent;
-//         teleprompter.removeAttribute('data-original-content'); // Limpiar el atributo para evitar confusión futura
-//     }
-// }
 
 
 function updateToggleButton(isActive) {
@@ -358,6 +346,16 @@ function topFunction() {
     cronometro.reset();
     mybutton.style.display = 'none';
     stopAutoScroll();  // Asegúrate de detener el auto-scroll si el botón se presiona
+
+    const teleprompter = document.getElementById('teleprompter');
+    const originalContent = teleprompter.getAttribute('data-original-content');
+    if (originalContent) {
+        teleprompter.innerHTML = originalContent;
+        teleprompter.removeAttribute('data-original-content'); // Limpia el atributo una vez restaurado
+        teleprompter.scrollTop = 0; // Opcional, resetear el scroll
+    } else {
+        console.log("No original content found to restore.");
+    }
 }
 
 
