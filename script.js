@@ -733,17 +733,24 @@ function adjustSpeed(speed) {
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     const content = teleprompter.innerHTML.trim();
+    const computedStyle = getComputedStyle(teleprompter);
 
-    // Añadir suficientes <br> al inicio para que el texto comience desde abajo
-    const lineHeight = parseInt(getComputedStyle(teleprompter).lineHeight, 10);
+    // Obtener el line-height como número, utilizar un valor de respaldo si es necesario
+    let lineHeight = parseInt(computedStyle.lineHeight, 10);
+    if (isNaN(lineHeight)) {
+        // Establecer un valor predeterminado, asumiendo que la altura de línea es aproximadamente 18px si no se puede calcular
+        lineHeight = 18;  // Puedes ajustar este valor basado en la fuente típica y tamaño del teleprompter
+    }
+
     const numLines = Math.ceil(teleprompter.clientHeight / lineHeight);
-    console.log(numLines);
     const padding = '<br>'.repeat(numLines);
-    teleprompter.innerHTML = padding + content; // Añadir el padding necesario
 
+    // Añadir saltos de línea al principio del contenido
+    teleprompter.innerHTML = padding + content;
     // Ajustar el scrollTop para que el texto inicial esté justo debajo de la vista visible
     teleprompter.scrollTop = teleprompter.scrollHeight - teleprompter.clientHeight;
 }
+
 
 
 
