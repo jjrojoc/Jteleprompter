@@ -256,7 +256,7 @@ function toggleAutoScroll() {
     if (button.classList.contains('active')) {
         stopAutoScroll();
     } else {
-        prepareTeleprompter();
+
         startAutoScroll();
     }
 }
@@ -285,6 +285,8 @@ function startAutoScroll() {
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
+    prepareTeleprompter();  // Asegurarse de que se prepara primero
+    teleprompter.scrollTop = teleprompter.clientHeight; // Iniciar scroll justo debajo de la primera pantalla llena
 
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
