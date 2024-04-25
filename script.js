@@ -51,7 +51,7 @@ if ('serviceWorker' in navigator) {
     })
 };
 
-let isAutoScrolling = false;
+let isAutoScrolling = false; // Estado inicial del autoscroll
 let scrollInterval = null;
 let lastScrollTop = 0;
 
@@ -264,6 +264,7 @@ function toggleAutoScroll() {
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
+    isAutoScrolling = false;
     toggleControlsDisplay(true);
     updateToggleButton(false); // Asegúrate de que esto refleja el estado actual
 }
@@ -293,6 +294,7 @@ function startAutoScroll() {
             console.log("continue");
     }
     
+    isAutoScrolling = true;  // Actualiza el estado a activo
     updateToggleButton(true); // Actualiza el botón a su estado activo
     toggleControlsDisplay(false);
 
