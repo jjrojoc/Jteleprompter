@@ -748,7 +748,7 @@ function prepareTeleprompter() {
     // Añadir saltos de línea al principio del contenido
     teleprompter.innerHTML = padding + content;
     // Ajustar el scrollTop para que el texto inicial esté justo debajo de la vista visible
-    teleprompter.scrollTop = teleprompter.scrollHeight - teleprompter.clientHeight;
+    //teleprompter.scrollTop = teleprompter.scrollHeight - teleprompter.clientHeight;
 }
 
 
