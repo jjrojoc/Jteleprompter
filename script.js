@@ -748,7 +748,7 @@ function adjustSpeed(speed) {
 //     }
 // }
 
-function prepareTeleprompter() {
+/*function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
@@ -760,6 +760,29 @@ function prepareTeleprompter() {
 
     // Añadir padding al principio y al final
     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
+}
+*/
+
+function prepareTeleprompter() {
+    const originalTeleprompter = document.getElementById('teleprompter');
+    const tempContainer = document.createElement('div');
+    tempContainer.id = 'tempTeleprompter';
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.top = '0';
+    tempContainer.style.left = '0';
+    tempContainer.style.width = '100%';
+    tempContainer.style.overflow = 'hidden';
+    tempContainer.style.height = originalTeleprompter.clientHeight + 'px';
+    document.body.appendChild(tempContainer);
+
+    const lineHeight = parseInt(window.getComputedStyle(originalTeleprompter).lineHeight, 10);
+    const clientHeight = originalTeleprompter.clientHeight;
+
+    // Calcular cuántos <br> se necesitan para llenar la pantalla
+    const linesNeeded = Math.ceil(clientHeight / lineHeight);
+
+    const paddingHTML = '<br>'.repeat(linesNeeded);
+    tempContainer.innerHTML = paddingHTML + originalTeleprompter.innerHTML + paddingHTML;
 }
 
 
