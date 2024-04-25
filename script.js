@@ -734,20 +734,17 @@ function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     const content = teleprompter.innerHTML.trim();
 
-    // Eliminar posibles múltiples <br> al inicio y al final
-    teleprompter.innerHTML = content; // Reiniciar el contenido si es necesario
-
     // Añadir suficientes <br> al inicio para que el texto comience desde abajo
-    const lineHeight = parseInt(getComputedStyle(teleprompter).lineHeight);
+    const lineHeight = parseInt(getComputedStyle(teleprompter).lineHeight, 10);
     const numLines = Math.ceil(teleprompter.clientHeight / lineHeight);
+    console.log(numLines);
     const padding = '<br>'.repeat(numLines);
     teleprompter.innerHTML = padding + content; // Añadir el padding necesario
 
-    // Configurar scrollTop para que el texto aparezca desde abajo
-    setTimeout(() => {
-        teleprompter.scrollTop = teleprompter.scrollHeight;
-    }, 0);
+    // Ajustar el scrollTop para que el texto inicial esté justo debajo de la vista visible
+    teleprompter.scrollTop = teleprompter.scrollHeight - teleprompter.clientHeight;
 }
+
 
 
 
