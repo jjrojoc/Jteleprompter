@@ -267,7 +267,7 @@ function stopAutoScroll() {
     clearInterval(scrollInterval);
     isAutoScrolling = false;
     updateToggleButton(false);
-    //toggleControlsDisplay(true);
+    toggleControlsDisplay(true);
 }
 
 // function stopAutoScroll() {
@@ -359,7 +359,6 @@ function topFunction() {
     } else {
         console.log("No original content found to restore.");
     }
-    toggleControlsDisplay(true);
 }
 
 

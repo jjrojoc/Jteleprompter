@@ -169,6 +169,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   padding: 15px;
   border-radius: 4px;
   z-index: 1100; /* Asegura que esté sobre la barra de controles */
+  bottom: 55px; /* Ajusta esto según el padding y altura real de la barra de controles */
 }
 
 
