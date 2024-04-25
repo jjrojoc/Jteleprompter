@@ -241,8 +241,6 @@ class Cronometro {
 function toggleAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const button = document.getElementById('toggleScroll');
-    const icon = button.querySelector('i');
-    const controls = document.querySelectorAll('.control');
 
     if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
         console.log("Cambios no guardados, auto-scroll no activado.");
@@ -254,7 +252,7 @@ function toggleAutoScroll() {
         return;
     }
 
-    // Alterna la clase 'active' en el botón y actualiza el ícono y el fondo
+    // Toggle 'active' class on the button
     if (button.classList.contains('active')) {
         stopAutoScroll();
     } else {
@@ -265,37 +263,26 @@ function toggleAutoScroll() {
 function stopAutoScroll() {
     clearInterval(scrollInterval);
     isAutoScrolling = false;
+    updateToggleButton(false);
     toggleControlsDisplay(true);
-    updateToggleButton(false); // Asegúrate de que esto refleja el estado actual
 }
 
 function updateToggleButton(isActive) {
     const toggleButton = document.getElementById('toggleScroll');
     const icon = toggleButton.querySelector('i');
-    toggleButton.classList.toggle('active', isActive);  // Asegura que la clase 'active' se maneje correctamente
+    toggleButton.classList.toggle('active', isActive);
     icon.className = isActive ? "fas fa-stop" : "fas fa-play";
     toggleButton.style.backgroundColor = isActive ? "#ff0000" : "#555555";
 }
-
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const myBtn = document.getElementById("myBtn");
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
-    
-    // if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-    //     cronometro.reset();
-    //     console.log("reset en el inicio");
-    //     cronometro.start();
-    //     console.log("start en inicio");
-    // } else {
-    //         cronometro.start();  // Continúa el temporizador sin resetear
-    //         console.log("continue");
-    // }
-    
-    isAutoScrolling = true;  // Actualiza el estado a activo
-    updateToggleButton(true); // Actualiza el botón a su estado activo
+
+    isAutoScrolling = true;
+    updateToggleButton(true);
     toggleControlsDisplay(false);
 
     scrollInterval = setInterval(() => {
@@ -303,14 +290,11 @@ function startAutoScroll() {
         if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
             console.log('Reached end, stopping autoscroll.');
             stopAutoScroll();
-            cronometro.stop();
-            // Mostrar myBtn y mostrar controles
-            myBtn.style.display = "block"; // Asegúrate de que este elemento debería mostrarse
-            toggleControlsDisplay(true);  // Asegura que los controles se muestren
+            myBtn.style.display = "block";
+            toggleControlsDisplay(true);
         }
     }, speed);
 }
-
 
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
@@ -319,16 +303,14 @@ function toggleControlsDisplay(show) {
     });
 }
 
-
-
 function topFunction() {
     let mybutton = document.getElementById("myBtn");
     teleprompter.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    cronometro.stop();
-    cronometro.reset();
     mybutton.style.display = 'none';
-  }
+    stopAutoScroll();  // Asegúrate de detener el auto-scroll si el botón se presiona
+}
+
 // function toggleAutoScroll() {
 //     const controls = document.querySelectorAll('.control'); // Obtiene todos los elementos con la clase 'control'
 //     const isScrolling = this.classList.toggle('active'); // Alterna la clase 'active'
