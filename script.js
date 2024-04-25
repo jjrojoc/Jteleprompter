@@ -739,7 +739,7 @@ function prepareTeleprompter() {
 
     // Espera a que el navegador procese cualquier cambio en el DOM
     setTimeout(() => {
-        teleprompter.scrollTop = teleprompter.clientHeight - 2;
+        teleprompter.scrollTop = teleprompter.clientHeight + 20;
     }, 0);
 }
 
