@@ -256,7 +256,9 @@ function toggleAutoScroll() {
     if (button.classList.contains('active')) {
         stopAutoScroll();
     } else {
-
+        if (!teleprompter.hasAttribute('data-original-content')) {
+            prepareTeleprompter();  // Solo prepara si no se ha preparado antes
+        }
         startAutoScroll();
     }
 }
@@ -347,6 +349,7 @@ function topFunction() {
     mybutton.style.display = 'none';
     stopAutoScroll();  // Asegúrate de detener el auto-scroll si el botón se presiona
 
+    // restaura contenido original
     const teleprompter = document.getElementById('teleprompter');
     const originalContent = teleprompter.getAttribute('data-original-content');
     if (originalContent) {
