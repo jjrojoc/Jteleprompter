@@ -734,14 +734,21 @@ function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     const content = teleprompter.innerHTML.trim();
 
-    // Asegúrate de que el contenido está listo y renderizado
-    teleprompter.innerHTML = content; // Reinicia el contenido si es necesario
+    // Eliminar posibles múltiples <br> al inicio y al final
+    teleprompter.innerHTML = content; // Reiniciar el contenido si es necesario
 
-    // Espera a que el navegador procese cualquier cambio en el DOM
+    // Añadir suficientes <br> al inicio para que el texto comience desde abajo
+    const lineHeight = parseInt(getComputedStyle(teleprompter).lineHeight);
+    const numLines = Math.ceil(teleprompter.clientHeight / lineHeight);
+    const padding = '<br>'.repeat(numLines);
+    teleprompter.innerHTML = padding + content; // Añadir el padding necesario
+
+    // Configurar scrollTop para que el texto aparezca desde abajo
     setTimeout(() => {
-        teleprompter.scrollTop = teleprompter.clientHeight + 20;
+        teleprompter.scrollTop = teleprompter.scrollHeight;
     }, 0);
 }
+
 
 
 // function prepareTeleprompter() {
