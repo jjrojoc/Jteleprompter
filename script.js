@@ -270,17 +270,37 @@ function toggleAutoScroll() {
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
+    const teleprompter = document.getElementById('teleprompter');
+    if (teleprompter) {
+        // Asegurar que existe el contenido original para restaurar
+        const originalContent = teleprompter.getAttribute('data-original-content');
+        if (originalContent) {
+            teleprompter.innerHTML = originalContent; // Restaurar el contenido
+            teleprompter.removeAttribute('data-original-content'); // Limpiar el atributo
+        } else {
+            console.log("No original content found to restore.");
+        }
+        
+        // Reiniciar el scrollTop para visualizar desde el principio
+        teleprompter.scrollTop = 0;
+    }
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
-    const teleprompter = document.getElementById('teleprompter');
-    if (teleprompter) {
-        // Restaurar el contenido original desde el atributo 'data-original-content'
-        const originalContent = teleprompter.getAttribute('data-original-content');
-        teleprompter.innerHTML = originalContent;
-        teleprompter.removeAttribute('data-original-content'); // Limpiar el atributo para evitar confusión futura
-    }
 }
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+//     const teleprompter = document.getElementById('teleprompter');
+//     if (teleprompter) {
+//         // Restaurar el contenido original desde el atributo 'data-original-content'
+//         const originalContent = teleprompter.getAttribute('data-original-content');
+//         teleprompter.innerHTML = originalContent;
+//         teleprompter.removeAttribute('data-original-content'); // Limpiar el atributo para evitar confusión futura
+//     }
+// }
 
 
 function updateToggleButton(isActive) {
@@ -767,7 +787,12 @@ function adjustSpeed(speed) {
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     // Almacenar el contenido original para restaurarlo después
-    teleprompter.setAttribute('data-original-content', teleprompter.innerHTML);
+    const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
+
+    // Guardar el contenido actual antes de modificarlo, si aún no se ha guardado
+    if (!teleprompter.getAttribute('data-original-content')) {
+        teleprompter.setAttribute('data-original-content', content);
+    }
 
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
