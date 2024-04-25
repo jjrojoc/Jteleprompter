@@ -513,12 +513,61 @@ document.getElementById('resetButton').addEventListener('click', function() {
                         <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
                         <br>3º Click en Menú --> Parar Editar \
                         <br>Listo, click en Start para iniciar teleprompt'; // Texto predeterminado
-
+        prepareTeleprompter();
         teleprompter.innerHTML = scriptText; // Establece el nuevo contenido HTML
         localStorage.setItem('savedScript', scriptText); // Guarda en localStorage
         alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
     }
 });
+
+// document.getElementById('teleprompter').addEventListener('paste', function(e) {
+//     e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
+
+//     // Accede al contenido HTML pegado desde el portapapeles.
+//     var htmlContent = e.clipboardData.getData('text/html');
+
+//     // Si no hay contenido HTML, intenta obtener el texto plano.
+//     if (!htmlContent) {
+//         htmlContent = e.clipboardData.getData('text/plain');
+//         htmlContent = htmlContent.replace(/(?:\r\n|\r|\n)/g, '<br>'); // Reemplaza saltos de línea por <br>
+//     }
+
+//     // Crear un contenedor temporal para el contenido HTML.
+//     var tempDiv = document.createElement('div');
+//     tempDiv.innerHTML = htmlContent; // Inserta el texto como HTML.
+
+//     // Elimina todos los estilos excepto los de color de texto y normaliza saltos de línea.
+//     stripStylesExceptColor(tempDiv);
+//     normalizeLineBreaks(tempDiv);
+
+//     // Inserta el HTML filtrado en el contenido editable.
+//     document.execCommand('insertHTML', false, tempDiv.innerHTML);
+// });
+
+// // Función para eliminar todos los estilos excepto el color del texto.
+// function stripStylesExceptColor(element) {
+//     if (element.style) {
+//         const textColor = element.style.color;
+//         element.removeAttribute('style');
+//         if (textColor) element.style.color = textColor;
+//     }
+//     Array.from(element.children).forEach(stripStylesExceptColor);
+// }
+
+// // Función para normalizar los saltos de línea eliminando <div> y <p>, reemplazándolos por <br>
+// function normalizeLineBreaks(element) {
+//     var children = Array.from(element.childNodes);
+//     for (var child of children) {
+//         normalizeLineBreaks(child); // Primero normaliza recursivamente
+//     }
+
+//     if (element.nodeType === Node.ELEMENT_NODE && (element.tagName === 'DIV' || element.tagName === 'P')) {
+//         var replacementHtml = element.innerHTML + '<br>'; // Prepara el contenido con un <br>
+//         if (element.parentNode) {
+//             element.outerHTML = replacementHtml; // Solo reemplaza si tiene un nodo padre
+//         }
+//     }
+// }
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
     e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
@@ -541,10 +590,34 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     normalizeLineBreaks(tempDiv);
 
     // Inserta el HTML filtrado en el contenido editable.
-    document.execCommand('insertHTML', false, tempDiv.innerHTML);
+    insertHTMLAtCaret(tempDiv.innerHTML);
 });
 
-// Función para eliminar todos los estilos excepto el color del texto.
+function insertHTMLAtCaret(html) {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    const el = document.createElement('div');
+    el.innerHTML = html;
+    let frag = document.createDocumentFragment(), node, lastNode;
+    while ((node = el.firstChild)) {
+        lastNode = frag.appendChild(node);
+    }
+    range.insertNode(frag);
+
+    // Preserva la selección
+    if (lastNode) {
+        range = range.cloneRange();
+        range.setStartAfter(lastNode);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+}
+
 function stripStylesExceptColor(element) {
     if (element.style) {
         const textColor = element.style.color;
@@ -554,7 +627,6 @@ function stripStylesExceptColor(element) {
     Array.from(element.children).forEach(stripStylesExceptColor);
 }
 
-// Función para normalizar los saltos de línea eliminando <div> y <p>, reemplazándolos por <br>
 function normalizeLineBreaks(element) {
     var children = Array.from(element.childNodes);
     for (var child of children) {
