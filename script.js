@@ -597,7 +597,7 @@ function insertHTMLAtCaret(html) {
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
 
-    const range = selection.getRangeAt(0);
+    let range = selection.getRangeAt(0);
     range.deleteContents();
 
     const el = document.createElement('div');
