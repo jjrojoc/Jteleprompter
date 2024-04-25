@@ -256,6 +256,9 @@ function toggleAutoScroll() {
     if (button.classList.contains('active')) {
         stopAutoScroll();
     } else {
+        if (!teleprompter.hasAttribute('data-prepared')) {
+            prepareTeleprompter();  // Solo prepara si no se ha preparado antes
+        }
 
         startAutoScroll();
     }
@@ -782,24 +785,38 @@ function adjustSpeed(speed) {
 // }
 
 
+
+/////esta funciona muy bien/////
+
+// function prepareTeleprompter() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     // Almacenar el contenido original para restaurarlo después
+//     const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
+
+//     // Guardar el contenido actual antes de modificarlo, si aún no se ha guardado
+//     if (!teleprompter.getAttribute('data-original-content')) {
+//         teleprompter.setAttribute('data-original-content', content);
+//     }
+
+//     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
+//     const clientHeight = teleprompter.clientHeight;
+//     const linesNeeded = Math.ceil(clientHeight / lineHeight);
+
+//     const paddingHTML = '<br>'.repeat(linesNeeded - 3);
+//     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
+// }
+
+
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    // Almacenar el contenido original para restaurarlo después
-    const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
-
-    // Guardar el contenido actual antes de modificarlo, si aún no se ha guardado
-    if (!teleprompter.getAttribute('data-original-content')) {
-        teleprompter.setAttribute('data-original-content', content);
+    if (!teleprompter.hasAttribute('data-prepared')) {
+        const content = teleprompter.innerHTML.trim();
+        const linesToAdd = 4;
+        const padding = '<br>'.repeat(linesToAdd);
+        teleprompter.innerHTML = padding + content + padding;
+        teleprompter.setAttribute('data-prepared', 'true');
     }
-
-    const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
-    const clientHeight = teleprompter.clientHeight;
-    const linesNeeded = Math.ceil(clientHeight / lineHeight);
-
-    const paddingHTML = '<br>'.repeat(linesNeeded - 3);
-    teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
 }
-
 
 
 
