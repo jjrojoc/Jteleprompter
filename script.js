@@ -285,8 +285,7 @@ function startAutoScroll() {
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
-    prepareTeleprompter();  // Asegurarse de que se prepara primero
-    teleprompter.scrollTop = teleprompter.clientHeight; // Iniciar scroll justo debajo de la primera pantalla llena
+    prepareTeleprompter();
 
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
@@ -734,24 +733,18 @@ function adjustSpeed(speed) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    const content = teleprompter.innerHTML.trim();
-    const computedStyle = getComputedStyle(teleprompter);
+    const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
+    const clientHeight = teleprompter.clientHeight;
 
-    // Obtener el line-height como número, utilizar un valor de respaldo si es necesario
-    let lineHeight = parseInt(computedStyle.lineHeight, 10);
-    if (isNaN(lineHeight)) {
-        // Establecer un valor predeterminado, asumiendo que la altura de línea es aproximadamente 18px si no se puede calcular
-        lineHeight = 18;  // Puedes ajustar este valor basado en la fuente típica y tamaño del teleprompter
-    }
+    // Calcular cuántos <br> se necesitan para llenar la pantalla
+    const linesNeeded = Math.ceil(clientHeight / lineHeight);
+    
+    const paddingHTML = '<br>'.repeat(linesNeeded);
 
-    const numLines = Math.ceil(teleprompter.clientHeight / lineHeight);
-    const padding = '<br>'.repeat(numLines);
-
-    // Añadir saltos de línea al principio del contenido
-    teleprompter.innerHTML = padding + content;
-    // Ajustar el scrollTop para que el texto inicial esté justo debajo de la vista visible
-    //teleprompter.scrollTop = teleprompter.scrollHeight - teleprompter.clientHeight;
+    // Añadir padding al principio y al final
+    teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
 }
+
 
 
 
