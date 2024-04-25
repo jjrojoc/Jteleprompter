@@ -732,11 +732,17 @@ function adjustSpeed(speed) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    window.onload = () => { // Asegurarse de que todo esté cargado
-        // Posicionar el scroll para que el texto comience justo debajo de la pantalla visible
-        teleprompter.scrollTop = teleprompter.clientHeight + 2;
-    };
+    const content = teleprompter.innerHTML.trim();
+
+    // Asegúrate de que el contenido está listo y renderizado
+    teleprompter.innerHTML = content; // Reinicia el contenido si es necesario
+
+    // Espera a que el navegador procese cualquier cambio en el DOM
+    setTimeout(() => {
+        teleprompter.scrollTop = teleprompter.clientHeight - 2;
+    }, 0);
 }
+
 
 // function prepareTeleprompter() {
 //     const teleprompter = document.getElementById('teleprompter');
