@@ -266,19 +266,7 @@ function stopAutoScroll() {
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
-    const tempContainer = document.getElementById('tempTeleprompter');
-    if (tempContainer) {
-        tempContainer.remove(); // Eliminar el contenedor temporal
-    }
 }
-
-
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-// }
 
 function updateToggleButton(isActive) {
     const toggleButton = document.getElementById('toggleScroll');
@@ -289,13 +277,7 @@ function updateToggleButton(isActive) {
 }
 
 function startAutoScroll() {
-    const teleprompter = document.getElementById('tempTeleprompter');
-    if (!teleprompter) {
-        prepareTeleprompter();
-    }
-    teleprompter.scrollTop = teleprompter.clientHeight; // Iniciar scroll justo debajo de la primera pantalla llena
-    
-    // const teleprompter = document.getElementById('teleprompter');
+    const teleprompter = document.getElementById('teleprompter');
     const myBtn = document.getElementById("myBtn");
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
@@ -303,6 +285,7 @@ function startAutoScroll() {
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
+    prepareTeleprompter();
 
     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
@@ -748,7 +731,7 @@ function adjustSpeed(speed) {
 //     }
 // }
 
-/*function prepareTeleprompter() {
+function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
@@ -760,29 +743,6 @@ function adjustSpeed(speed) {
 
     // Añadir padding al principio y al final
     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
-}
-*/
-
-function prepareTeleprompter() {
-    const originalTeleprompter = document.getElementById('teleprompter');
-    const tempContainer = document.createElement('div');
-    tempContainer.id = 'tempTeleprompter';
-    tempContainer.style.position = 'absolute';
-    tempContainer.style.top = '0';
-    tempContainer.style.left = '0';
-    tempContainer.style.width = '100%';
-    tempContainer.style.overflow = 'hidden';
-    tempContainer.style.height = originalTeleprompter.clientHeight + 'px';
-    document.body.appendChild(tempContainer);
-
-    const lineHeight = parseInt(window.getComputedStyle(originalTeleprompter).lineHeight, 10);
-    const clientHeight = originalTeleprompter.clientHeight;
-
-    // Calcular cuántos <br> se necesitan para llenar la pantalla
-    const linesNeeded = Math.ceil(clientHeight / lineHeight);
-
-    const paddingHTML = '<br>'.repeat(linesNeeded);
-    tempContainer.innerHTML = paddingHTML + originalTeleprompter.innerHTML + paddingHTML;
 }
 
 
