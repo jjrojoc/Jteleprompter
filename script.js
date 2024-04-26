@@ -714,7 +714,21 @@ document.addEventListener('DOMContentLoaded', function() {
         textSizeValue.textContent = textSizeControl.value + 'px';
         console.log('Adjusting text size to:', textSizeControl.value + 'px');
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
+        setTimeout(checkScrollPosition, 50);
     });
+
+    function checkScrollPosition() {
+        const teleprompter = document.getElementById('teleprompter');
+        // Verifica si se ha llegado al final
+        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+            console.log('Scrolled to end after font size change');
+            // Aquí puedes manejar el evento, como mostrar un botón u otra acción
+            myBtn.style.display = "block";
+        } else {
+            myBtn.style.display = "none";
+        }
+    }
+    
 
     // // prevent contextual menu in app
     // document.addEventListener('contextmenu', function (event) {
