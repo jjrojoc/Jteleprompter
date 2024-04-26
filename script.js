@@ -413,7 +413,7 @@ function updateToggleButton(isActive) {
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    const myBtn = document.getElementById("myBtn");
+    // const myBtn = document.getElementById("myBtn");
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
 
@@ -434,12 +434,12 @@ function startAutoScroll() {
 
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
-        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+        /*if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
             console.log('Reached end, stopping autoscroll.');
             stopAutoScroll();
-            myBtn.style.display = "block";
+            // myBtn.style.display = "block";
             toggleControlsDisplay(true);
-        }
+        } */
     }, speed);
 }
 
