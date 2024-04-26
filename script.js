@@ -266,7 +266,7 @@ function handleStartLongPress() {
 
 function handleStopLongPress() {
     clearTimeout(holdTimeout);
-    stopCountdown(); // Detiene la cuenta atrás si estaba corriendo
+    stopCountdownRestart(); // Detiene la cuenta atrás si estaba corriendo
 }
 
 function handlePressDown() {
@@ -297,8 +297,10 @@ function handlePressUp() {
         // No revertir el color si el auto-scroll está activo
         toggleButton.style.backgroundColor = "red"; // Indicar que el botón está bloqueado
     } else {
-        clearTimeout(holdTimeout);
+        clearTimeout(holdTimeout); // Detiene el temporizador que inicia la cuenta atrás
+    if (countdownIntervalo) {
         stopCountdown(); // Detiene la cuenta atrás si estaba corriendo
+    }
         // Limpiar los temporizadores y revertir cambios visuales
         clearTimeout(pressTimer);
         clearTimeout(visualTimer);
@@ -322,7 +324,7 @@ function countdownRestart() {
     }, 1000);
 }
 
-function stopCountdown() {
+function stopCountdownRestart() {
     clearInterval(countdownIntervalo);
     countdownDisplay.style.display = 'none'; // Oculta el contador
 }
