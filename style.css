@@ -213,3 +213,12 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+#endMarker {
+  font-size: 24px; /* Tamaño grande de texto */
+  font-weight: bold; /* Texto en negrita */
+  color: #FF0000; /* Color del texto */
+  text-align: center; /* Centrar texto horizontalmente */
+  padding: 20px; /* Espacio alrededor del texto */
+  background-color: #FFFF00; /* Fondo amarillo para destacar */
+}

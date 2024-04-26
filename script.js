@@ -911,9 +911,22 @@ function prepareTeleprompter() {
 
     const paddingHTML = '<br>'.repeat(linesNeeded - 3);
     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
+    // Al final, añades el marcador del final
+    teleprompter.innerHTML += '<div id="endMarker">FIN DEL CONTENIDO</div>';
 }
 
 
+document.addEventListener("scroll", function() {
+    const endMarker = document.getElementById("endMarker");
+    const mybtn = document.getElementById("mybtn");
+    
+    let markerPosition = endMarker.getBoundingClientRect();
+    if (markerPosition.top < window.innerHeight && markerPosition.bottom >= 0) {
+        mybtn.style.display = "block";
+    } else {
+        mybtn.style.display = "none";
+    }
+});
 
 
 
