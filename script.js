@@ -450,26 +450,26 @@ function toggleControlsDisplay(show) {
     });
 }
 
-function topFunction() {
-    let mybutton = document.getElementById("myBtn");
-    // teleprompter.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    cronometro.stop();
-    cronometro.reset();
-    mybutton.style.display = 'none';
-    stopAutoScroll();  // Asegúrate de detener el auto-scroll si el botón se presiona
+// function topFunction() {
+//     let mybutton = document.getElementById("myBtn");
+//     // teleprompter.scrollTop = 0;
+//     document.documentElement.scrollTop = 0;
+//     cronometro.stop();
+//     cronometro.reset();
+//     mybutton.style.display = 'none';
+//     stopAutoScroll();  // Asegúrate de detener el auto-scroll si el botón se presiona
 
-    // restaura contenido original
-    const teleprompter = document.getElementById('teleprompter');
-    const originalContent = teleprompter.getAttribute('data-original-content');
-    if (originalContent) {
-        teleprompter.innerHTML = originalContent;
-        teleprompter.removeAttribute('data-original-content'); // Limpia el atributo una vez restaurado
-        teleprompter.scrollTop = 0; // Opcional, resetear el scroll
-    } else {
-        console.log("No original content found to restore.");
-    }
-}
+//     // restaura contenido original
+//     const teleprompter = document.getElementById('teleprompter');
+//     const originalContent = teleprompter.getAttribute('data-original-content');
+//     if (originalContent) {
+//         teleprompter.innerHTML = originalContent;
+//         teleprompter.removeAttribute('data-original-content'); // Limpia el atributo una vez restaurado
+//         teleprompter.scrollTop = 0; // Opcional, resetear el scroll
+//     } else {
+//         console.log("No original content found to restore.");
+//     }
+// }
 
 
 // function toggleAutoScroll() {
