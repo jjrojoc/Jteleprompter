@@ -238,6 +238,54 @@ class Cronometro {
 // }
 // }
 
+const toggleButton = document.getElementById('toggleScroll');
+let pressTimer;
+
+toggleButton.addEventListener('mousedown', function() {
+    // Iniciar un temporizador cuando el botón es presionado
+    pressTimer = setTimeout(function() {
+        // La función que quieres ejecutar después de mantener presionado 3 segundos
+        executeLongPressAction();
+    }, 3000); // 3000 ms = 3 segundos
+});
+
+toggleButton.addEventListener('mouseup', function() {
+    // Limpiar el temporizador si el botón es soltado antes de 3 segundos
+    clearTimeout(pressTimer);
+});
+
+toggleButton.addEventListener('mouseleave', function() {
+    // Limpiar el temporizador si el cursor sale del botón sin soltarlo
+    clearTimeout(pressTimer);
+});
+
+function executeLongPressAction() {
+    console.log("Long press action executed");
+    // Aquí puedes colocar cualquier código que quieras ejecutar después de la presión prolongada
+}
+
+
+
+let longPressActivated = false;
+
+toggleButton.addEventListener('mousedown', function() {
+    longPressActivated = false; // Restablecer la bandera al comenzar a presionar
+    pressTimer = setTimeout(function() {
+        longPressActivated = true;
+        executeLongPressAction();
+    }, 3000);
+});
+
+toggleButton.addEventListener('mouseup', function() {
+    clearTimeout(pressTimer);
+    if (!longPressActivated) {
+        toggleAutoScroll(); // Solo toggle el auto-scroll si no se activó la presión larga
+    }
+});
+
+
+
+
 function toggleAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const button = document.getElementById('toggleScroll');
@@ -714,20 +762,7 @@ document.addEventListener('DOMContentLoaded', function() {
         textSizeValue.textContent = textSizeControl.value + 'px';
         console.log('Adjusting text size to:', textSizeControl.value + 'px');
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
-        setTimeout(checkScrollPosition, 50);
     });
-
-    function checkScrollPosition() {
-        const teleprompter = document.getElementById('teleprompter');
-        // Verifica si se ha llegado al final
-        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            console.log('Scrolled to end after font size change');
-            // Aquí puedes manejar el evento, como mostrar un botón u otra acción
-            myBtn.style.display = "block";
-        } else {
-            myBtn.style.display = "none";
-        }
-    }
     
 
     // // prevent contextual menu in app
