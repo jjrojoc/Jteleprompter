@@ -256,25 +256,7 @@ toggleButton.addEventListener('touchstart', handlePressDown, { passive: true });
 toggleButton.addEventListener('touchend', handlePressUp);
 toggleButton.addEventListener('touchcancel', handlePressUp);
 
-function handlePressDown() {
-    // Primero, verificamos si el auto-scrolling está activo
-    if (isAutoScrolling) {
-        console.log('Auto-scroll en ejecución, acción bloqueada.');
-        toggleButton.style.backgroundColor = "red"; // Muestra que el botón está bloqueado
-        return;
-    }
 
-    // Si no está activo el auto-scrolling, procedemos a configurar los temporizadores
-    holdTimeout = setTimeout(countdownRestart, 1000);
-    visualTimer = setTimeout(() => {
-        toggleButton.style.backgroundColor = "orange"; // Cambio visual al mantener presionado más de 1 segundo
-    }, 1000);
-
-    pressTimer = setTimeout(() => {
-        activateSpecialFunction();
-        toggleButton.style.backgroundColor = "green"; // Función especial activada
-    }, 3000);
-}
 
 function handlePressUp() {
     // Limpiar los temporizadores
@@ -297,18 +279,41 @@ function handlePressUp() {
 
 
 
+function handlePressDown() {
+    if (isAutoScrolling) {
+        console.log('Auto-scroll en ejecución, acción bloqueada.');
+        return;  // No hacer nada si el auto-scroll está activo
+    }
+    
+    // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
+    holdTimeout = setTimeout(countdownRestart, 1000);
+
+    // Cambio visual inmediato
+    toggleButton.style.backgroundColor = "red";
+
+    // Cambio visual después de 1 segundo para indicar acción próxima
+    visualTimer = setTimeout(() => {
+        toggleButton.style.backgroundColor = "orange";
+    }, 1000);
+}
+
 function countdownRestart() {
-    countdown = 3;
+    countdown = 3; // Restablece la cuenta atrás cada vez
     countdownDisplay.textContent = countdown;
     countdownDisplay.style.display = 'block';
+
     countdownIntervalo = setInterval(function() {
         countdown--;
         countdownDisplay.textContent = countdown;
-        if (countdown <= 0) {
-            stopCountdownRestart();
+        if (countdown === 0) {
+            clearInterval(countdownIntervalo);
+            activateSpecialFunction();  // Ahora activa la función especial aquí
+            toggleButton.style.backgroundColor = "green"; // Indica que la función especial se ha activado
+            countdownDisplay.style.display = 'none'; // Oculta el contador
         }
     }, 1000);
 }
+
 
 function stopCountdownRestart() {
     clearInterval(countdownIntervalo);
