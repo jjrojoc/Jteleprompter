@@ -240,8 +240,12 @@ class Cronometro {
 
 
 const toggleButton = document.getElementById('toggleScroll');
+const countdownDisplay = document.getElementById('countdownDisplay'); // Asegúrate de tener este elemento en tu HTML
 let pressTimer;
 let visualTimer;
+let holdTimeout; // Para gestionar el temporizador de presión prolongada
+let countdownInterval; // Intervalo para la cuenta regresiva
+let countdown = 3; // Duración de la cuenta regresiva en segundos
 
 // Eventos para dispositivos con mouse
 toggleButton.addEventListener('mousedown', handlePressDown);
@@ -253,11 +257,26 @@ toggleButton.addEventListener('touchstart', handlePressDown, { passive: true });
 toggleButton.addEventListener('touchend', handlePressUp);
 toggleButton.addEventListener('touchcancel', handlePressUp);
 
+
+function handleStartLongPress() {
+    if (!isAutoScrolling) {
+        holdTimeout = setTimeout(startCountdown, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
+    }
+}
+
+function handleStopLongPress() {
+    clearTimeout(holdTimeout);
+    stopCountdown(); // Detiene la cuenta atrás si estaba corriendo
+}
+
 function handlePressDown() {
     if (isAutoScrolling) {
         console.log('Auto-scroll en ejecución, acción bloqueada.');
         return;  // No hacer nada si el auto-scroll está activo
     }
+    
+    holdTimeout = setTimeout(startCountdown, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
+
     // Cambio visual inmediato
     toggleButton.style.backgroundColor = "red";
 
@@ -278,11 +297,34 @@ function handlePressUp() {
         // No revertir el color si el auto-scroll está activo
         toggleButton.style.backgroundColor = "red"; // Indicar que el botón está bloqueado
     } else {
+        clearTimeout(holdTimeout);
+        stopCountdown(); // Detiene la cuenta atrás si estaba corriendo
         // Limpiar los temporizadores y revertir cambios visuales
         clearTimeout(pressTimer);
         clearTimeout(visualTimer);
         toggleButton.style.backgroundColor = "rgb(255, 255, 255, 0.2)"; // Color original
     }
+}
+
+
+function startCountdown() {
+    countdown = 3; // Restablece la cuenta atrás cada vez
+    countdownDisplay.textContent = countdown;
+    countdownDisplay.style.display = 'block';
+
+    countdownInterval = setInterval(function() {
+        countdown--;
+        countdownDisplay.textContent = countdown;
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            // Aquí puedes agregar acciones adicionales al terminar la cuenta atrás
+        }
+    }, 1000);
+}
+
+function stopCountdown() {
+    clearInterval(countdownInterval);
+    countdownDisplay.style.display = 'none'; // Oculta el contador
 }
 
 
