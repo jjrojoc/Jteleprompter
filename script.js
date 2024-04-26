@@ -244,7 +244,7 @@ const countdownDisplay = document.getElementById('countdownDisplay'); // Asegúr
 let pressTimer;
 let visualTimer;
 let holdTimeout; // Para gestionar el temporizador de presión prolongada
-let countdownInterval; // Intervalo para la cuenta regresiva
+//let countdownInterval; // Intervalo para la cuenta regresiva
 let countdown = 3; // Duración de la cuenta regresiva en segundos
 
 // Eventos para dispositivos con mouse
