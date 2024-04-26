@@ -277,18 +277,24 @@ function handlePressDown() {
 }
 
 function handlePressUp() {
-    // Limpieza de temporizadores independientemente del estado de auto-scrolling
+    // Limpiar los temporizadores
     clearTimeout(holdTimeout);
     clearTimeout(visualTimer);
     clearTimeout(pressTimer);
 
+    // Detener la cuenta atrás si está activa
     if (countdownIntervalo) {
         stopCountdownRestart();
     }
 
-    // Restablece el color del botón a uno neutral
-    toggleButton.style.backgroundColor = "rgb(255, 255, 255, 0.2)"; // Revertir a color original
+    // Restablecer el color del botón solo si auto-scrolling no está activo
+    if (!isAutoScrolling) {
+        toggleButton.style.backgroundColor = "rgb(255, 255, 255, 0.2)"; // Revertir a color original
+    } else {
+        toggleButton.style.backgroundColor = "red"; // Mantener rojo si auto-scrolling está activo
+    }
 }
+
 
 
 function countdownRestart() {
