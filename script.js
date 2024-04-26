@@ -262,7 +262,7 @@ function handlePressUp() {
     // Limpiar los temporizadores
     clearTimeout(holdTimeout);
     clearTimeout(visualTimer);
-    clearTimeout(pressTimer);
+    // clearTimeout(pressTimer);
 
     // Detener la cuenta atrás si está activa
     if (countdownIntervalo) {
@@ -289,7 +289,7 @@ function handlePressDown() {
     holdTimeout = setTimeout(countdownRestart, 1000);
 
     // Cambio visual inmediato
-    toggleButton.style.backgroundColor = "red";
+    // toggleButton.style.backgroundColor = "red";
 
     // Cambio visual después de 1 segundo para indicar acción próxima
     visualTimer = setTimeout(() => {
@@ -308,7 +308,7 @@ function countdownRestart() {
         if (countdown === 0) {
             clearInterval(countdownIntervalo);
             activateSpecialFunction();  // Ahora activa la función especial aquí
-            toggleButton.style.backgroundColor = "green"; // Indica que la función especial se ha activado
+            // toggleButton.style.backgroundColor = "green"; // Indica que la función especial se ha activado
             countdownDisplay.style.display = 'none'; // Oculta el contador
         }
     }, 1000);
