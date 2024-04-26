@@ -254,6 +254,10 @@ toggleButton.addEventListener('touchend', handlePressUp);
 toggleButton.addEventListener('touchcancel', handlePressUp);
 
 function handlePressDown() {
+    if (isAutoScrolling) {
+        console.log('Auto-scroll en ejecución, acción bloqueada.');
+        return;  // No hacer nada si el auto-scroll está activo
+    }
     // Cambio visual inmediato
     toggleButton.style.backgroundColor = "red";
 
