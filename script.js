@@ -244,7 +244,7 @@ const countdownDisplay = document.getElementById('countdownDisplay'); // Asegúr
 let pressTimer;
 let visualTimer;
 let holdTimeout; // Para gestionar el temporizador de presión prolongada
-//let countdownInterval; // Intervalo para la cuenta regresiva
+let countdownIntervalo; // Intervalo para la cuenta regresiva
 let countdown = 3; // Duración de la cuenta regresiva en segundos
 
 // Eventos para dispositivos con mouse
@@ -260,7 +260,7 @@ toggleButton.addEventListener('touchcancel', handlePressUp);
 
 function handleStartLongPress() {
     if (!isAutoScrolling) {
-        holdTimeout = setTimeout(startCountdown, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
+        holdTimeout = setTimeout(countdownRestart, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
     }
 }
 
@@ -275,7 +275,7 @@ function handlePressDown() {
         return;  // No hacer nada si el auto-scroll está activo
     }
     
-    holdTimeout = setTimeout(startCountdown, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
+    holdTimeout = setTimeout(countdownRestart, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
 
     // Cambio visual inmediato
     toggleButton.style.backgroundColor = "red";
@@ -307,23 +307,23 @@ function handlePressUp() {
 }
 
 
-function startCountdown() {
+function countdownRestart() {
     countdown = 3; // Restablece la cuenta atrás cada vez
     countdownDisplay.textContent = countdown;
     countdownDisplay.style.display = 'block';
 
-    countdownInterval = setInterval(function() {
+    countdownIntervalo = setInterval(function() {
         countdown--;
         countdownDisplay.textContent = countdown;
         if (countdown <= 0) {
-            clearInterval(countdownInterval);
+            clearIntervalo(countdownInterval);
             // Aquí puedes agregar acciones adicionales al terminar la cuenta atrás
         }
     }, 1000);
 }
 
 function stopCountdown() {
-    clearInterval(countdownInterval);
+    clearInterval(countdownIntervalo);
     countdownDisplay.style.display = 'none'; // Oculta el contador
 }
 
