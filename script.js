@@ -242,29 +242,36 @@ class Cronometro {
 const toggleButton = document.getElementById('toggleScroll');
 let pressTimer;
 
-toggleButton.addEventListener('mousedown', () => {
+// Eventos para dispositivos con mouse
+toggleButton.addEventListener('mousedown', startPressTimer);
+toggleButton.addEventListener('mouseup', clearPressTimer);
+toggleButton.addEventListener('mouseleave', clearPressTimer);
+
+// Eventos para dispositivos táctiles
+toggleButton.addEventListener('touchstart', startPressTimer, { passive: true });
+toggleButton.addEventListener('touchend', clearPressTimer);
+toggleButton.addEventListener('touchcancel', clearPressTimer); // Asegura que el timer se cancela si el toque es interrumpido
+
+function startPressTimer() {
     // Iniciar el temporizador al presionar el botón
     pressTimer = setTimeout(() => {
         // Función que se ejecutará tras mantener presionado 3 segundos
         activateSpecialFunction();
     }, 3000);
-});
+}
 
-toggleButton.addEventListener('mouseup', () => {
+function clearPressTimer() {
     // Limpiar el temporizador si el botón es soltado antes de 3 segundos
     clearTimeout(pressTimer);
-});
-
-toggleButton.addEventListener('mouseleave', () => {
-    // Asegurarse de limpiar el temporizador si el mouse sale del botón
-    clearTimeout(pressTimer);
-});
+    pressTimer = null; // Restablece el timer para evitar problemas en dispositivos táctiles
+}
 
 function activateSpecialFunction() {
     // Acción especial a ejecutar después de mantener presionado 3 segundos
     console.log('Acción especial activada');
     // Aquí puedes agregar cualquier código que quieras ejecutar
 }
+
 
 
 
