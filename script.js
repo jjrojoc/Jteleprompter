@@ -257,12 +257,14 @@ toggleButton.addEventListener('touchend', handlePressUp);
 toggleButton.addEventListener('touchcancel', handlePressUp);
 
 function handlePressDown() {
+    // Primero, verificamos si el auto-scrolling está activo
     if (isAutoScrolling) {
         console.log('Auto-scroll en ejecución, acción bloqueada.');
-        toggleButton.style.backgroundColor = "red";
+        toggleButton.style.backgroundColor = "red"; // Muestra que el botón está bloqueado
         return;
     }
 
+    // Si no está activo el auto-scrolling, procedemos a configurar los temporizadores
     holdTimeout = setTimeout(countdownRestart, 1000);
     visualTimer = setTimeout(() => {
         toggleButton.style.backgroundColor = "orange"; // Cambio visual al mantener presionado más de 1 segundo
@@ -275,15 +277,19 @@ function handlePressDown() {
 }
 
 function handlePressUp() {
+    // Limpieza de temporizadores independientemente del estado de auto-scrolling
     clearTimeout(holdTimeout);
     clearTimeout(visualTimer);
     clearTimeout(pressTimer);
+
     if (countdownIntervalo) {
         stopCountdownRestart();
     }
 
+    // Restablece el color del botón a uno neutral
     toggleButton.style.backgroundColor = "rgb(255, 255, 255, 0.2)"; // Revertir a color original
 }
+
 
 function countdownRestart() {
     countdown = 3;
