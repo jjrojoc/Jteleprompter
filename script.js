@@ -273,7 +273,7 @@ function handlePressUp() {
     // Limpiar los temporizadores y revertir cambios visuales si el botón es soltado antes de 3 segundos
     clearTimeout(pressTimer);
     clearTimeout(visualTimer);
-    toggleButton.style.backgroundColor = "blue"; // Color original
+    toggleButton.style.backgroundColor = (255, 255, 255, 0.2); // Color original
 }
 
 function activateSpecialFunction() {
