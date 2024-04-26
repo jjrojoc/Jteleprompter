@@ -259,6 +259,7 @@ toggleButton.addEventListener('touchcancel', handlePressUp);
 function handlePressDown() {
     if (isAutoScrolling) {
         console.log('Auto-scroll en ejecución, acción bloqueada.');
+        toggleButton.style.backgroundColor = "red";
         return;
     }
 
