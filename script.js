@@ -240,11 +240,10 @@ class Cronometro {
 
 
 const toggleButton = document.getElementById('toggleScroll');
-const countdownDisplay = document.getElementById('countdownDisplay'); // Asegúrate de tener este elemento en tu HTML
-let pressTimer;
+const countdownDisplay = document.getElementById('countdownDisplay');
+let holdTimeout;
 let visualTimer;
-let holdTimeout; // Para gestionar el temporizador de presión prolongada
-let countdownIntervalo; // Intervalo para la cuenta regresiva
+let countdownIntervalo; // Asegúrate de que el nombre sea consistente
 let countdown = 3; // Duración de la cuenta regresiva en segundos
 
 // Eventos para dispositivos con mouse
@@ -257,78 +256,53 @@ toggleButton.addEventListener('touchstart', handlePressDown, { passive: true });
 toggleButton.addEventListener('touchend', handlePressUp);
 toggleButton.addEventListener('touchcancel', handlePressUp);
 
-
-function handleStartLongPress() {
-    if (!isAutoScrolling) {
-        holdTimeout = setTimeout(countdownRestart, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
-    }
-}
-
-function handleStopLongPress() {
-    clearTimeout(holdTimeout);
-    stopCountdownRestart(); // Detiene la cuenta atrás si estaba corriendo
-}
-
 function handlePressDown() {
     if (isAutoScrolling) {
         console.log('Auto-scroll en ejecución, acción bloqueada.');
-        return;  // No hacer nada si el auto-scroll está activo
+        return;
     }
-    
-    holdTimeout = setTimeout(countdownRestart, 1000); // Comienza la cuenta atrás si se mantiene presionado por más de 1 segundo
 
-    // Cambio visual inmediato
-    toggleButton.style.backgroundColor = "red";
-
-    // Cambio visual después de 1 segundo para indicar acción próxima
+    holdTimeout = setTimeout(countdownRestart, 1000);
     visualTimer = setTimeout(() => {
-        toggleButton.style.backgroundColor = "orange";
+        toggleButton.style.backgroundColor = "orange"; // Cambio visual al mantener presionado más de 1 segundo
     }, 1000);
 
-    // Iniciar el temporizador para la función especial después de 3 segundos
     pressTimer = setTimeout(() => {
         activateSpecialFunction();
-        toggleButton.style.backgroundColor = "green"; // Indica que la función especial se ha activado
+        toggleButton.style.backgroundColor = "green"; // Función especial activada
     }, 3000);
 }
 
 function handlePressUp() {
-    if (isAutoScrolling) {
-        // No revertir el color si el auto-scroll está activo
-        toggleButton.style.backgroundColor = "red"; // Indicar que el botón está bloqueado
-    } else {
-        clearTimeout(holdTimeout); // Detiene el temporizador que inicia la cuenta atrás
+    clearTimeout(holdTimeout);
+    clearTimeout(visualTimer);
+    clearTimeout(pressTimer);
     if (countdownIntervalo) {
-        stopCountdown(); // Detiene la cuenta atrás si estaba corriendo
+        stopCountdownRestart();
     }
-        // Limpiar los temporizadores y revertir cambios visuales
-        clearTimeout(pressTimer);
-        clearTimeout(visualTimer);
-        toggleButton.style.backgroundColor = "rgb(255, 255, 255, 0.2)"; // Color original
-    }
+
+    toggleButton.style.backgroundColor = "rgb(255, 255, 255, 0.2)"; // Revertir a color original
 }
 
-
 function countdownRestart() {
-    countdown = 3; // Restablece la cuenta atrás cada vez
+    countdown = 3;
     countdownDisplay.textContent = countdown;
     countdownDisplay.style.display = 'block';
-
     countdownIntervalo = setInterval(function() {
         countdown--;
         countdownDisplay.textContent = countdown;
         if (countdown <= 0) {
-            clearInterval(countdownIntervalo);
-            // Aquí puedes agregar acciones adicionales al terminar la cuenta atrás
+            stopCountdownRestart();
         }
     }, 1000);
 }
 
 function stopCountdownRestart() {
     clearInterval(countdownIntervalo);
-    countdownIntervalo = null; // Limpia la referencia al intervalo
-    countdownDisplay.style.display = 'none'; // Oculta el contador
+    countdownIntervalo = null;
+    countdownDisplay.style.display = 'none';
 }
+
 
 
 function activateSpecialFunction() {
