@@ -238,50 +238,33 @@ class Cronometro {
 // }
 // }
 
+
 const toggleButton = document.getElementById('toggleScroll');
 let pressTimer;
 
-toggleButton.addEventListener('mousedown', function() {
-    // Iniciar un temporizador cuando el botón es presionado
-    pressTimer = setTimeout(function() {
-        // La función que quieres ejecutar después de mantener presionado 3 segundos
-        executeLongPressAction();
-    }, 3000); // 3000 ms = 3 segundos
+toggleButton.addEventListener('mousedown', () => {
+    // Iniciar el temporizador al presionar el botón
+    pressTimer = setTimeout(() => {
+        // Función que se ejecutará tras mantener presionado 3 segundos
+        activateSpecialFunction();
+    }, 3000);
 });
 
-toggleButton.addEventListener('mouseup', function() {
+toggleButton.addEventListener('mouseup', () => {
     // Limpiar el temporizador si el botón es soltado antes de 3 segundos
     clearTimeout(pressTimer);
 });
 
-toggleButton.addEventListener('mouseleave', function() {
-    // Limpiar el temporizador si el cursor sale del botón sin soltarlo
+toggleButton.addEventListener('mouseleave', () => {
+    // Asegurarse de limpiar el temporizador si el mouse sale del botón
     clearTimeout(pressTimer);
 });
 
-function executeLongPressAction() {
-    console.log("Long press action executed");
-    // Aquí puedes colocar cualquier código que quieras ejecutar después de la presión prolongada
+function activateSpecialFunction() {
+    // Acción especial a ejecutar después de mantener presionado 3 segundos
+    console.log('Acción especial activada');
+    // Aquí puedes agregar cualquier código que quieras ejecutar
 }
-
-
-
-let longPressActivated = false;
-
-toggleButton.addEventListener('mousedown', function() {
-    longPressActivated = false; // Restablecer la bandera al comenzar a presionar
-    pressTimer = setTimeout(function() {
-        longPressActivated = true;
-        executeLongPressAction();
-    }, 3000);
-});
-
-toggleButton.addEventListener('mouseup', function() {
-    clearTimeout(pressTimer);
-    if (!longPressActivated) {
-        toggleAutoScroll(); // Solo toggle el auto-scroll si no se activó la presión larga
-    }
-});
 
 
 
@@ -763,7 +746,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Adjusting text size to:', textSizeControl.value + 'px');
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
     });
-    
 
     // // prevent contextual menu in app
     // document.addEventListener('contextmenu', function (event) {
