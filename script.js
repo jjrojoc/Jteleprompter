@@ -316,7 +316,7 @@ function countdownRestart() {
         countdown--;
         countdownDisplay.textContent = countdown;
         if (countdown <= 0) {
-            clearIntervalo(countdownInterval);
+            clearInterval(countdownIntervalo);
             // Aquí puedes agregar acciones adicionales al terminar la cuenta atrás
         }
     }, 1000);
