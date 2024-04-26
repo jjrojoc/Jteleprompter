@@ -912,25 +912,23 @@ function prepareTeleprompter() {
     const paddingHTML = '<br>'.repeat(linesNeeded - 3);
     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
     // Al final, añades el marcador del final
-    teleprompter.innerHTML += '<div id="endMarker">FIN DEL CONTENIDO</div>';
+    // Suponiendo que ya tienes contenido en 'content', añades el marcador al final.
+    teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
+
+    // Añade el manejador de eventos
+    const endMarker = document.getElementById("endMarker");
+    endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
+    endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
 }
 
 
-document.addEventListener("scroll", function() {
-    const endMarker = document.getElementById("endMarker");
-    const mybtn = document.getElementById("mybtn");
-    
-    let markerPosition = endMarker.getBoundingClientRect();
-    console.log(markerPosition);
-    if (markerPosition.top < window.innerHeight && markerPosition.bottom >= 0) {
-        mybtn.style.display = "block";
-    } else {
-        mybtn.style.display = "none";
-    }
-});
 
-
-
+function handleEndMarkerTouch(event) {
+    event.preventDefault(); // Evita que se produzcan comportamientos predeterminados indeseados en touch
+    console.log("El endMarker ha sido tocado o clickeado.");
+    // Aquí ejecutas lo que necesitas hacer al tocar el marcador
+    activateSpecialFunction();
+}
 
 // function prepareTeleprompter() {
 //     const teleprompter = document.getElementById('teleprompter');
