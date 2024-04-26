@@ -326,7 +326,7 @@ function countdownRestart() {
 
 function stopCountdownRestart() {
     clearInterval(countdownIntervalo);
-    countdownInterval = null; // Limpia la referencia al intervalo
+    countdownIntervalo = null; // Limpia la referencia al intervalo
     countdownDisplay.style.display = 'none'; // Oculta el contador
 }
 
