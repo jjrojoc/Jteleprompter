@@ -274,6 +274,19 @@ function handlePressDown() {
 }
 
 function handlePressUp() {
+    if (isAutoScrolling) {
+        // No revertir el color si el auto-scroll está activo
+        toggleButton.style.backgroundColor = "red"; // Indicar que el botón está bloqueado
+    } else {
+        // Limpiar los temporizadores y revertir cambios visuales
+        clearTimeout(pressTimer);
+        clearTimeout(visualTimer);
+        toggleButton.style.backgroundColor = "rgb(255, 255, 255, 0.2)"; // Color original
+    }
+}
+
+
+function handlePressUp() {
     // Limpiar los temporizadores y revertir cambios visuales si el botón es soltado antes de 3 segundos
     clearTimeout(pressTimer);
     clearTimeout(visualTimer);
@@ -284,6 +297,21 @@ function activateSpecialFunction() {
     // Acción especial a ejecutar después de mantener presionado 3 segundos
     console.log('Acción especial activada');
     // Puedes agregar cualquier código adicional aquí
+    document.documentElement.scrollTop = 0;
+    cronometro.stop();
+    cronometro.reset();
+    stopAutoScroll();  // Asegúrate de detener el auto-scroll si el botón se presiona
+
+    // restaura contenido original
+    const teleprompter = document.getElementById('teleprompter');
+    const originalContent = teleprompter.getAttribute('data-original-content');
+    if (originalContent) {
+        teleprompter.innerHTML = originalContent;
+        teleprompter.removeAttribute('data-original-content'); // Limpia el atributo una vez restaurado
+        teleprompter.scrollTop = 0; // Opcional, resetear el scroll
+    } else {
+        console.log("No original content found to restore.");
+    }
 }
 
 
