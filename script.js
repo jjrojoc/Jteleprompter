@@ -241,35 +241,45 @@ class Cronometro {
 
 const toggleButton = document.getElementById('toggleScroll');
 let pressTimer;
+let visualTimer;
 
 // Eventos para dispositivos con mouse
-toggleButton.addEventListener('mousedown', startPressTimer);
-toggleButton.addEventListener('mouseup', clearPressTimer);
-toggleButton.addEventListener('mouseleave', clearPressTimer);
+toggleButton.addEventListener('mousedown', handlePressDown);
+toggleButton.addEventListener('mouseup', handlePressUp);
+toggleButton.addEventListener('mouseleave', handlePressUp);
 
 // Eventos para dispositivos táctiles
-toggleButton.addEventListener('touchstart', startPressTimer, { passive: true });
-toggleButton.addEventListener('touchend', clearPressTimer);
-toggleButton.addEventListener('touchcancel', clearPressTimer); // Asegura que el timer se cancela si el toque es interrumpido
+toggleButton.addEventListener('touchstart', handlePressDown, { passive: true });
+toggleButton.addEventListener('touchend', handlePressUp);
+toggleButton.addEventListener('touchcancel', handlePressUp);
 
-function startPressTimer() {
-    // Iniciar el temporizador al presionar el botón
+function handlePressDown() {
+    // Cambio visual inmediato
+    toggleButton.style.backgroundColor = "red";
+
+    // Cambio visual después de 1 segundo para indicar acción próxima
+    visualTimer = setTimeout(() => {
+        toggleButton.style.backgroundColor = "orange";
+    }, 1000);
+
+    // Iniciar el temporizador para la función especial después de 3 segundos
     pressTimer = setTimeout(() => {
-        // Función que se ejecutará tras mantener presionado 3 segundos
         activateSpecialFunction();
+        toggleButton.style.backgroundColor = "green"; // Indica que la función especial se ha activado
     }, 3000);
 }
 
-function clearPressTimer() {
-    // Limpiar el temporizador si el botón es soltado antes de 3 segundos
+function handlePressUp() {
+    // Limpiar los temporizadores y revertir cambios visuales si el botón es soltado antes de 3 segundos
     clearTimeout(pressTimer);
-    pressTimer = null; // Restablece el timer para evitar problemas en dispositivos táctiles
+    clearTimeout(visualTimer);
+    toggleButton.style.backgroundColor = "blue"; // Color original
 }
 
 function activateSpecialFunction() {
     // Acción especial a ejecutar después de mantener presionado 3 segundos
     console.log('Acción especial activada');
-    // Aquí puedes agregar cualquier código que quieras ejecutar
+    // Puedes agregar cualquier código adicional aquí
 }
 
 
