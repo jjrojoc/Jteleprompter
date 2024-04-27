@@ -573,7 +573,7 @@ let lastSavedContent = localStorage.getItem('savedScript') || teleprompter.inner
 
 function toggleEditableState(isEditable) {
     teleprompter.contentEditable = isEditable;
-    editToggle.querySelector('i').className = isEditable ? 'fas fa-stop-circle' : 'fas fa-edit';
+    editToggle.querySelector('i').className = isEditable ? 'fas fa-save' : 'fas fa-edit';
     if (isEditable) {
         teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
     }
@@ -627,12 +627,12 @@ editToggle.addEventListener('click', function() {
     toggleEditableState(!isEditable);
 });
 
-// Guardar cambios
-document.getElementById('saveButton').addEventListener('click', function() {
-    lastSavedContent = teleprompter.innerHTML;
-    localStorage.setItem('savedScript', lastSavedContent);
-    alert('Texto guardado exitosamente!');
-});
+// // Guardar cambios
+// document.getElementById('saveButton').addEventListener('click', function() {
+//     lastSavedContent = teleprompter.innerHTML;
+//     localStorage.setItem('savedScript', lastSavedContent);
+//     alert('Texto guardado exitosamente!');
+// });
 
 
 
