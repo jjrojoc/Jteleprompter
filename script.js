@@ -561,63 +561,81 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
 });
 
 
-document.getElementById('editToggle').addEventListener('click', toggleEdit);
+const btnShowControlBar = document.getElementById('btnShowControlBar');
+const btnShowMenuBar = document.getElementById('btnShowMenuBar');
 
-function toggleEdit() {
-    const teleprompter = document.getElementById('teleprompter');
-    const isEditable = teleprompter.contentEditable === "true";
-    const icon = this.querySelector('i');
+const controlBar = document.getElementById('controlBar');
+const menuBar = document.getElementById('menuBar');
+const teleprompter = document.getElementById('teleprompter');
+const editToggle = document.getElementById('editToggle');
 
-    toggleEditing(isEditable, teleprompter, icon);
-}
+let lastSavedContent = localStorage.getItem('savedScript') || teleprompter.innerHTML;
 
-function toggleEditing(isEditable, teleprompter, icon) {
-    if (!isEditable) {
-        teleprompter.contentEditable = true;
-        teleprompter.focus();
-        icon.className = 'fas fa-save';
-    } else {
-        if (confirm('¿Quieres salir sin guardar los cambios?')) {
-            saveAndExit(teleprompter, icon);
-        }
+function toggleEditableState(isEditable) {
+    teleprompter.contentEditable = isEditable;
+    editToggle.querySelector('i').className = isEditable ? 'fas fa-stop-circle' : 'fas fa-edit';
+    if (isEditable) {
+        teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
     }
-}
-
-function saveAndExit(teleprompter, icon) {
-    teleprompter.contentEditable = false;
-    const scriptText = teleprompter.innerHTML;
-    if (scriptText.trim() === '') {
-        setDefaultTeleprompterText(teleprompter);
-    }
-    localStorage.setItem('savedScript', scriptText);
-    icon.className = 'fas fa-edit';
-    alert('Texto editado guardado!');
-}
-
-function setDefaultTeleprompterText(teleprompter) {
-    teleprompter.innerHTML = '1º Click en Menú --> Editar \
-                             <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
-                             <br>3º Click en Menú --> Parar Editar \
-                             <br>Listo, click en Start para iniciar teleprompt';
-}
-
-// Lógica para mostrar y ocultar barras
-function showMenuBar() {
-    document.getElementById('menuBar').style.display = 'block';
-    document.getElementById('controlBar').style.display = 'none';
-    toggleEditing(false, document.getElementById('teleprompter'), document.getElementById('editToggle').querySelector('i'));
 }
 
 function showControlBar() {
-    document.getElementById('menuBar').style.display = 'none';
-    document.getElementById('controlBar').style.display = 'block';
-    if (document.getElementById('teleprompter').contentEditable === "true") {
-        if (!confirm('¿Estás seguro de que quieres dejar de editar sin guardar cambios?')) {
-            return; // Si el usuario decide no guardar, no se cierra la barra de menú
+    if (teleprompter.contentEditable === "true" && teleprompter.innerHTML !== lastSavedContent) {
+        if (!confirm('Hay cambios no guardados. ¿Deseas salir sin guardar?')) {
+            return; // No continuar si el usuario cancela
         }
     }
-    saveAndExit(document.getElementById('teleprompter'), document.getElementById('editToggle').querySelector('i'));
+    controlBar.style.display = 'flex';
+    menuBar.style.display = 'none';
+    toggleEditableState(false); // Desactivar edición
 }
+
+function showMenuBar() {
+    controlBar.style.display = 'none';
+    menuBar.style.display = 'flex';
+    toggleEditableState(true); // Activar edición
+}
+
+btnShowControlBar.addEventListener('click', showControlBar);
+btnShowMenuBar.addEventListener('click', showMenuBar);
+
+editToggle.addEventListener('click', function() {
+    const isEditable = teleprompter.contentEditable === "true";
+    if (!isEditable) {
+        if (teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
+            teleprompter.innerHTML = '';
+            window.setTimeout(function() {
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.setStart(teleprompter, 0);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }, 1);
+        }
+    } else {
+        const scriptText = teleprompter.innerHTML;
+        if (scriptText.trim() === '') {
+            teleprompter.innerHTML = '1º Click en Menú --> Editar \
+                         <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+                         <br>3º Click en Menú --> Parar Editar \
+                         <br>Listo, click en Start para iniciar teleprompt';
+        }
+        localStorage.setItem('savedScript', scriptText);
+        alert('Texto editado guardado!');
+    }
+    toggleEditableState(!isEditable);
+});
+
+// Guardar cambios
+document.getElementById('saveButton').addEventListener('click', function() {
+    lastSavedContent = teleprompter.innerHTML;
+    localStorage.setItem('savedScript', lastSavedContent);
+    alert('Texto guardado exitosamente!');
+});
+
+
+
 
 
 
