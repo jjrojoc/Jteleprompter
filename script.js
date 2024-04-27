@@ -854,39 +854,52 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     var plainText = e.clipboardData.getData('text/plain');
 
     const selection = window.getSelection();
-    if (!selection.rangeCount) return;
+    if (!selection.rangeCount) return false;
     const range = selection.getRangeAt(0);
     range.deleteContents();
 
     if (htmlContent) {
+        // Crear un contenedor para el HTML y ajustar el contenido
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
-        cleanAndAdjustColors(tempDiv);
-        Array.from(tempDiv.childNodes).forEach(child => {
-            range.insertNode(child.cloneNode(true));
+        processHTML(tempDiv);
+        Array.from(tempDiv.childNodes).forEach(node => {
+            range.insertNode(node.cloneNode(true));
         });
     } else if (plainText) {
-        const textNode = document.createTextNode(plainText);
-        range.insertNode(textNode);
+        // Insertar texto plano respetando los saltos de línea
+        const lines = plainText.split(/[\r\n]+/);
+        lines.forEach((line, index) => {
+            if (index > 0) {
+                range.insertNode(document.createElement('br'));
+            }
+            range.insertNode(document.createTextNode(line));
+        });
     }
 
+    // Colocar el cursor después del texto insertado
     range.collapse(false);
     selection.removeAllRanges();
     selection.addRange(range);
 
-    function cleanAndAdjustColors(element) {
-        if (element.style) {
-            if (element.style.color === 'black' || element.style.color === 'rgb(0, 0, 0)') {
-                element.style.color = 'white';
-            } else if (!element.style.color) {
-                element.style.color = ''; // Remove style if not needed
+    // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
+    function processHTML(element) {
+        Array.from(element.querySelectorAll('*')).forEach(node => {
+            if (node.style) {
+                // Cambiar el color negro a blanco, dejar otros colores intactos
+                if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
+                    node.style.color = 'white';
+                }
+                // Eliminar estilos no necesarios
+                node.style.fontSize = '';
+                node.style.fontFamily = '';
+                node.style.backgroundColor = '';
             }
-            element.style.backgroundColor = ''; // Always clear background color
-        }
-        Array.from(element.children).forEach(cleanAndAdjustColors);
+        });
     }
     autoguardado();
 });
+
 
 
 
