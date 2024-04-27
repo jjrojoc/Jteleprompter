@@ -793,7 +793,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
                         <br>Listo, click en Start para iniciar teleprompt'; // Texto predeterminado
         teleprompter.innerHTML = scriptText; // Establece el nuevo contenido HTML
         localStorage.setItem('savedScript', scriptText); // Guarda en localStorage
-        teleprompter.contentEditable === "true";
+        teleprompter.setAttribute("contentEditable", true);
         // alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
     }
 });
@@ -887,7 +887,8 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
             if (node.style) {
                 // Cambiar el color negro a blanco, dejar otros colores intactos
-                if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
+                if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)'
+                    || node.style.color ==='white' || node.style.color ==='rgb(255, 255, 255') {
                     node.style.color = '';
                 }
                 // Eliminar estilos no necesarios
