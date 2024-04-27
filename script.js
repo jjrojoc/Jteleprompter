@@ -888,7 +888,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             if (node.style) {
                 // Cambiar el color negro a blanco, dejar otros colores intactos
                 if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
-                    node.style.color = 'white';
+                    node.style.color = '';
                 }
                 // Eliminar estilos no necesarios
                 node.style.fontSize = '';
