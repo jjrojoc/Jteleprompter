@@ -857,43 +857,34 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
 
-        cleanStylesAndFormat(tempDiv);
-        insertFormattedContent(this, tempDiv);
+        var cleanedContent = cleanStylesAndFormat(tempDiv);
+        this.appendChild(cleanedContent); // Añade el contenido limpio directamente al final del div teleprompter
     } else {
         plainText = plainText.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        this.innerHTML += plainText;
+        this.innerHTML += plainText; // Añade texto plano como HTML
     }
 });
 
 function cleanStylesAndFormat(element) {
+    var fragment = document.createDocumentFragment();
+
     Array.from(element.childNodes).forEach(child => {
         if (child.nodeType === Node.ELEMENT_NODE) {
             if (child.style) {
                 let color = child.style.color;
-                if (color === 'black' || color === '') {
-                    child.style.removeProperty('color');
-                }
-                if (color === 'white') {
-                    child.style.removeProperty('color');
+                if (color === 'black' || color === 'white') {
+                    child.style.removeProperty('color'); // Quita solo los colores negro y blanco
                 }
             }
-            cleanStylesAndFormat(child);
+            var newChild = child.cloneNode(true); // Clona el nodo
+            cleanStylesAndFormat(newChild); // Limpia el clon recursivamente
+            fragment.appendChild(newChild);
+        } else if (child.nodeType === Node.TEXT_NODE) {
+            fragment.appendChild(child.cloneNode(true)); // Clona y añade nodos de texto
         }
     });
 
-    if (element.tagName === 'DIV' || element.tagName === 'P') {
-        element.parentNode.insertBefore(document.createElement('br'), element);
-        while (element.firstChild) {
-            element.parentNode.insertBefore(element.firstChild, element);
-        }
-        element.parentNode.removeChild(element);
-    }
-}
-
-function insertFormattedContent(editableDiv, contentElement) {
-    while (contentElement.firstChild) {
-        editableDiv.appendChild(contentElement.firstChild);
-    }
+    return fragment; // Retorna el fragmento limpio
 }
 
 
