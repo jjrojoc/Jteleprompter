@@ -567,86 +567,73 @@ const btnShowMenuBar = document.getElementById('btnShowMenuBar');
 const controlBar = document.getElementById('controlBar');
 const menuBar = document.getElementById('menuBar');
 // const teleprompter = document.getElementById('teleprompter');
-const editToggle = document.getElementById('editToggle');
+// const editToggle = document.getElementById('editToggle');
 
-let originalContent = '';  // Almacena el contenido original al entrar en modo edición
 
-function toggleEditableState(isEditable) {
+
+function initializeEditable() {
     const teleprompter = document.getElementById('teleprompter');
-    teleprompter.contentEditable = isEditable;
-
-    if (isEditable) {
-        // Guarda el contenido original solo si está entrando en modo edición
-        originalContent = teleprompter.innerHTML;
-    } else {
-        // Comprueba si hay cambios antes de salir del modo edición
-        if (originalContent !== teleprompter.innerHTML) {
-            if (!confirm("Hay cambios sin guardar. ¿Quieres salir sin guardar?")) {
-                return;  // Si el usuario decide no salir, detiene la función
-            }
+    const undoStack = [];
+    teleprompter.addEventListener('input', () => {
+        localStorage.setItem('savedScript', teleprompter.innerHTML);
+        if (undoStack.length === 0 || undoStack[undoStack.length - 1] !== teleprompter.innerHTML) {
+            undoStack.push(teleprompter.innerHTML);
         }
-        // Procedimientos adicionales para cuando se guarda o no interesa guardar
-        saveContentIfNeeded();
-    }
+    });
+
+    document.getElementById('undoButton').addEventListener('click', () => {
+        if (undoStack.length > 1) {
+            undoStack.pop();
+            teleprompter.innerHTML = undoStack[undoStack.length - 1];
+        }
+    });
 }
 
-function saveContentIfNeeded() {
-    const teleprompter = document.getElementById('teleprompter');
-    const scriptText = teleprompter.innerHTML;
-    localStorage.setItem('savedScript', scriptText);
-    alert('Texto editado guardado!');
-}
 
 function showControlBar() {
-    const teleprompter = document.getElementById('teleprompter');
-    if (teleprompter.contentEditable === "true" && originalContent !== teleprompter.innerHTML) {
-        if (!confirm("Hay cambios sin guardar. ¿Quieres salir sin guardar?")) {
-            return;  // El usuario elige quedarse en la página para no perder cambios
-        }
-    }
-
     menuBar.style.display = 'none';
     controlBar.style.display = 'flex';
-    toggleEditableState(false); // Desactivar edición
+    teleprompter.contentEditable = "false";
 }
 
 function showMenuBar() {
     controlBar.style.display = 'none';
     menuBar.style.display = 'flex';
-    toggleEditableState(true); // Activar edición
+    teleprompter.contentEditable = "true";
+    initializeEditable();  // Inicializa el editor con autoguardado y deshacer
 }
 
 document.getElementById('btnShowControlBar').addEventListener('click', showControlBar);
 document.getElementById('btnShowMenuBar').addEventListener('click', showMenuBar);
 
 
-editToggle.addEventListener('click', function() {
-    const isEditable = teleprompter.contentEditable === "true";
-    if (!isEditable) {
-        if (teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
-            teleprompter.innerHTML = '';
-            window.setTimeout(function() {
-                const range = document.createRange();
-                const sel = window.getSelection();
-                range.setStart(teleprompter, 0);
-                range.collapse(true);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }, 1);
-        }
-    } else {
-        const scriptText = teleprompter.innerHTML;
-        if (scriptText.trim() === '') {
-            teleprompter.innerHTML = '1º Click en Menú --> Editar \
-                         <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
-                         <br>3º Click en Menú --> Parar Editar \
-                         <br>Listo, click en Start para iniciar teleprompt';
-        }
-        localStorage.setItem('savedScript', scriptText);
-        alert('Texto editado guardado!');
-    }
-    toggleEditableState(!isEditable);
-});
+// editToggle.addEventListener('click', function() {
+//     const isEditable = teleprompter.contentEditable === "true";
+//     if (!isEditable) {
+//         if (teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
+//             teleprompter.innerHTML = '';
+//             window.setTimeout(function() {
+//                 const range = document.createRange();
+//                 const sel = window.getSelection();
+//                 range.setStart(teleprompter, 0);
+//                 range.collapse(true);
+//                 sel.removeAllRanges();
+//                 sel.addRange(range);
+//             }, 1);
+//         }
+//     } else {
+//         const scriptText = teleprompter.innerHTML;
+//         if (scriptText.trim() === '') {
+//             teleprompter.innerHTML = '1º Click en Menú --> Editar \
+//                          <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+//                          <br>3º Click en Menú --> Parar Editar \
+//                          <br>Listo, click en Start para iniciar teleprompt';
+//         }
+//         localStorage.setItem('savedScript', scriptText);
+//         alert('Texto editado guardado!');
+//     }
+//     toggleEditableState(!isEditable);
+// });
 
 // // Guardar cambios
 // document.getElementById('saveButton').addEventListener('click', function() {
