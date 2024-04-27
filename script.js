@@ -906,6 +906,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 function autoguardado() {
     const contenido = document.getElementById('teleprompter').innerHTML;
     localStorage.setItem('savedScript', contenido);
+    showMenuBar();
 }
 
 
