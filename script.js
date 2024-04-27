@@ -891,7 +891,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
                     node.removeAttribute('style');
                 } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
-                    node.style.color = 'white'; // Cambia el negro a blanco
+                    node.removeAttribute('style'); // Cambia el negro a blanco
                 }
                 // Eliminar estilos no necesarios
                 node.style.fontSize = '';
