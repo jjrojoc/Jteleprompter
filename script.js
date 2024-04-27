@@ -590,10 +590,28 @@ function showControlBar() {
     toggleEditableState(false); // Desactivar edición
 }
 
+const defaultText = '1º Click en Menú --> Editar \
+                     <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+                     <br>3º Click en Menú --> Parar Editar \
+                     <br>Listo, click en Start para iniciar teleprompt';
+
 function showMenuBar() {
     controlBar.style.display = 'none';
     menuBar.style.display = 'flex';
     toggleEditableState(true); // Activar edición
+
+    // Limpiar el contenido si es el texto por defecto
+    if (teleprompter.innerHTML.trim() === defaultText.replace(/\s+/g, ' ').trim()) {
+        teleprompter.innerHTML = '';
+        window.setTimeout(function() {
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.setStart(teleprompter, 0);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }, 1);
+    }
 }
 
 btnShowControlBar.addEventListener('click', showControlBar);
