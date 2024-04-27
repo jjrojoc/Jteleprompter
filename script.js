@@ -848,7 +848,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // }
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
+    e.preventDefault(); // Previene el comportamiento de pegado predeterminado
 
     var text = e.clipboardData.getData('text/plain');
     var htmlContent = e.clipboardData.getData('text/html');
@@ -856,36 +856,45 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     if (htmlContent) {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
-
         cleanStyles(tempDiv); // Limpia el estilo del HTML
-
-        document.execCommand('insertHTML', false, tempDiv.innerHTML);
+        insertCleanContent(this, tempDiv);
     } else {
         text = text.replace(/(?:\r\n|\r|\n)/g, '<br>'); // Respeta los saltos de línea
-        document.execCommand('insertHTML', false, text);
+        insertPlainText(this, text);
     }
-    autoguardado();
 });
 
 function cleanStyles(element) {
-    // Revisa y ajusta los colores
     if (element.style) {
-        if (element.style.color === 'black' || element.style.color === 'white') {
+        if (element.style.color === 'black' || element.style.color === 'white' ||
+        element.style.color === 'rgb(255, 255, 255') {
             element.style.color = ''; // Elimina solo negro o blanco
         }
         element.style.textDecoration = ''; // Elimina decoraciones de texto
     }
     Array.from(element.childNodes).forEach(cleanStyles);
 
-    // Convierte elementos DIV y P a BR para mantener saltos de línea
+    // Convierte elementos DIV y P en BR para mantener saltos de línea
     if (element.tagName === 'DIV' || element.tagName === 'P') {
-        var replacementHtml = '';
-        for (let child of element.childNodes) {
-            replacementHtml += child.outerHTML || child.textContent;
-        }
-        replacementHtml += '<br>';
-        element.outerHTML = replacementHtml;
+        element.outerHTML = element.innerHTML + '<br>';
     }
+}
+
+function insertCleanContent(editableDiv, contentElement) {
+    while (contentElement.firstChild) {
+        editableDiv.appendChild(contentElement.firstChild);
+    }
+}
+
+function insertPlainText(editableDiv, text) {
+    const lines = text.split('<br>');
+    lines.forEach((line, index) => {
+        const textNode = document.createTextNode(line);
+        editableDiv.appendChild(textNode);
+        if (index < lines.length - 1) {
+            editableDiv.appendChild(document.createElement('br'));
+        }
+    });
 }
 
 
