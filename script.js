@@ -545,6 +545,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+document.getElementById('textColorPicker').addEventListener('input', function() {
+    var color = this.value;
+    //document.getElementById('textSample').style.color = color;
+    const selection = window.getSelection();
+
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+    selection.removeAllRanges();
+    selection.addRange(range);
+});
+
+
 document.getElementById('changeTextColor').addEventListener('click', function() {
     const color = document.getElementById('textColorPicker').value;
     const selection = window.getSelection();
