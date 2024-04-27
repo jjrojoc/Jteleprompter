@@ -570,24 +570,49 @@ const menuBar = document.getElementById('menuBar');
 // const editToggle = document.getElementById('editToggle');
 
 
+function deleteDefaultText() {
+    if (teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
+        teleprompter.innerHTML = '';
+        window.setTimeout(function() {
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.setStart(teleprompter, 0);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }, 1);
+    }
+}
+
+
 
 function initializeEditable() {
     const teleprompter = document.getElementById('teleprompter');
-    const undoStack = [];
+    let undoStack = [];  // Almacena estados pasados del contenido
+    let redoStack = [];  // Almacena estados para la función de rehacer
+
     teleprompter.addEventListener('input', () => {
         localStorage.setItem('savedScript', teleprompter.innerHTML);
-        if (undoStack.length === 0 || undoStack[undoStack.length - 1] !== teleprompter.innerHTML) {
-            undoStack.push(teleprompter.innerHTML);
-        }
+        undoStack.push(teleprompter.innerHTML);
+        redoStack = [];  // Limpia el redo stack cada vez que se hace un nuevo cambio
     });
 
     document.getElementById('undoButton').addEventListener('click', () => {
         if (undoStack.length > 1) {
-            undoStack.pop();
-            teleprompter.innerHTML = undoStack[undoStack.length - 1];
+            redoStack.push(undoStack.pop());  // Mueve el último estado al stack de rehacer
+            teleprompter.innerHTML = undoStack[undoStack.length - 1];  // Restaura el último estado
+        }
+    });
+
+    document.getElementById('redoButton').addEventListener('click', () => {
+        if (redoStack.length > 0) {
+            const redoState = redoStack.pop();  // Obtiene el último estado guardado para rehacer
+            undoStack.push(redoState);  // Mueve el estado de rehacer de vuelta al undo stack
+            teleprompter.innerHTML = redoState;  // Aplica el estado de rehacer
         }
     });
 }
+
 
 
 function showControlBar() {
@@ -601,6 +626,7 @@ function showMenuBar() {
     menuBar.style.display = 'flex';
     teleprompter.contentEditable = "true";
     initializeEditable();  // Inicializa el editor con autoguardado y deshacer
+    deleteDefaultText();
 }
 
 document.getElementById('btnShowControlBar').addEventListener('click', showControlBar);
@@ -750,14 +776,14 @@ window.addEventListener('click', function(event) {
 
 document.getElementById('resetButton').addEventListener('click', function() {
     const teleprompter = document.getElementById('teleprompter');
-    const editButton = document.getElementById('editToggle');
-    const editIcon = editButton.querySelector('i'); // Asumiendo que el botón tiene un elemento <i> para el ícono
+    //const editButton = document.getElementById('editToggle');
+    //const editIcon = editButton.querySelector('i'); // Asumiendo que el botón tiene un elemento <i> para el ícono
 
-    if (confirm('¿Quieres resetear el contenido del teleprompter? \nEsta acción no se puede deshacer.')) {
+    if (confirm('¿Quieres resetear todo el texto?')) {
         // Verifica y ajusta el estado editable si es necesario
         if (teleprompter.contentEditable === "true") {
             teleprompter.contentEditable = "false"; // Asegúrate de que el teleprompter no esté editable
-            editIcon.className = 'fas fa-edit'; // Cambia el ícono a editar
+            //editIcon.className = 'fas fa-edit'; // Cambia el ícono a editar
         }
 
         // Restablece el contenido a un mensaje predeterminado
