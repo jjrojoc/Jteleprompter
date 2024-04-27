@@ -865,7 +865,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 });
 
 function cleanStyles(element) {
-    // Eliminar estilos no deseados de un solo elemento
     if (element.style) {
         if (element.style.color === 'black' || element.style.color === 'white') {
             element.style.color = ''; // Elimina solo negro o blanco
@@ -874,8 +873,7 @@ function cleanStyles(element) {
     }
     Array.from(element.childNodes).forEach(child => cleanStyles(child));
 
-    // Reemplazar <div> y <p> con <br> si es necesario
-    if (element.tagName === 'DIV' || element.tagName === 'P') {
+    if ((element.tagName === 'DIV' || element.tagName === 'P') && element.parentNode) {
         const fragment = document.createDocumentFragment();
         while (element.firstChild) {
             fragment.appendChild(element.firstChild); // Mueve todos los hijos al fragmento
@@ -887,14 +885,13 @@ function cleanStyles(element) {
 }
 
 function insertCleanContent(editableDiv, contentElement) {
-    // Antes de manipular los nodos, limpiar y reestructurar cualquier HTML entrante
     cleanStyles(contentElement);
 
-    // Adjuntar contenido limpio al div editable
     while (contentElement.firstChild) {
         editableDiv.appendChild(contentElement.firstChild);
     }
 }
+
 
 
 function insertPlainText(editableDiv, text) {
