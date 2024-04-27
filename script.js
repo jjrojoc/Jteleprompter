@@ -796,7 +796,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
         teleprompter.setAttribute("contentEditable", true);
         // alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
     }
-    showMenuBar();
+    showControlBar();
 });
 
 // document.getElementById('teleprompter').addEventListener('paste', function(e) {
