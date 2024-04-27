@@ -355,7 +355,9 @@ function toggleAutoScroll() {
     if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
         console.log("Cambios no guardados, auto-scroll no activado.");
         return;
-    } else 
+    } else {
+        document.getElementById('edittoggle').click();
+    }
 
     if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
         alert('No hay suficiente contenido para hacer scroll.');
