@@ -610,6 +610,20 @@ document.getElementById('editToggle').addEventListener('click', function() {
 
 document.getElementById('menuButton').addEventListener('touchstart', function(event) {
     event.preventDefault();  // Previene eventos adicionales como click
+    showMenuBar();
+    // var menu = document.getElementById('menuItems');
+    // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
+});
+
+// Si quieres que también funcione con click, puedes agregar ambos eventos
+document.getElementById('menuButton').addEventListener('click', function() {
+    showMenuBar();
+    // var menu = document.getElementById('menuItems');
+    // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
+});
+
+/* document.getElementById('menuButton').addEventListener('touchstart', function(event) {
+    event.preventDefault();  // Previene eventos adicionales como click
     var menu = document.getElementById('menuItems');
     menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
 });
@@ -627,7 +641,7 @@ window.addEventListener('click', function(event) {
         menu.style.display = 'none';
     }
 });
-
+*/
 
 // Opcional: Cerrar el menú si se hace clic fuera de él
 /*window.onclick = function(event) {
@@ -1057,3 +1071,14 @@ function stopCountdown() {
 // timerDisplay.addEventListener('touchend', function() {
 //     this.classList.remove('active');
 // });
+
+
+function showMenuBar() {
+    document.getElementById('controlBar').style.display = 'none';
+    document.getElementById('menuBar').style.display = 'flex'; // Mostrar menú
+  }
+  
+  function showControlBar() {
+    document.getElementById('menuBar').style.display = 'none';
+    document.getElementById('controlBar').style.display = 'flex'; // Mostrar controles
+  }
