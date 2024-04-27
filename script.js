@@ -796,6 +796,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
         teleprompter.setAttribute("contentEditable", true);
         // alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
     }
+    showMenuBar();
 });
 
 // document.getElementById('teleprompter').addEventListener('paste', function(e) {
@@ -886,9 +887,11 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     function processHTML(element) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
             if (node.style) {
-                // Cambiar el color negro a blanco, dejar otros colores intactos
-                if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
-                    node.style.color = 'white';
+                // Si el color es blanco, eliminar el estilo completamente
+                if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
+                    node.removeAttribute('style');
+                } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
+                    node.style.color = 'white'; // Cambia el negro a blanco
                 }
                 // Eliminar estilos no necesarios
                 node.style.fontSize = '';
@@ -903,10 +906,10 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
 
 
+
 function autoguardado() {
     const contenido = document.getElementById('teleprompter').innerHTML;
     localStorage.setItem('savedScript', contenido);
-    showMenuBar();
 }
 
 
