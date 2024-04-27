@@ -356,7 +356,7 @@ function toggleAutoScroll() {
         console.log("Cambios no guardados, auto-scroll no activado.");
         return;
     } else {
-        document.getElementById('edittoggle').click();
+        document.getElementById('editToggle').click();
     }
 
     if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
