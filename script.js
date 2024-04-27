@@ -575,7 +575,7 @@ function toggleEditing(isEditable, teleprompter, icon) {
     if (!isEditable) {
         teleprompter.contentEditable = true;
         teleprompter.focus();
-        icon.className = 'fas fa-save';
+        icon.className = 'fas fa-stop-circle';
     } else {
         if (confirm('¿Quieres salir sin guardar los cambios?')) {
             saveAndExit(teleprompter, icon);
@@ -601,23 +601,28 @@ function setDefaultTeleprompterText(teleprompter) {
                              <br>Listo, click en Start para iniciar teleprompt';
 }
 
-// Lógica para mostrar y ocultar barras
 function showMenuBar() {
+    console.log('Mostrando menuBar, activando edición');
     document.getElementById('menuBar').style.display = 'block';
     document.getElementById('controlBar').style.display = 'none';
     toggleEditing(false, document.getElementById('teleprompter'), document.getElementById('editToggle').querySelector('i'));
 }
 
 function showControlBar() {
-    document.getElementById('menuBar').style.display = 'none';
-    document.getElementById('controlBar').style.display = 'block';
-    if (document.getElementById('teleprompter').contentEditable === "true") {
+    console.log('Intentando mostrar controlBar');
+    const teleprompter = document.getElementById('teleprompter');
+    if (teleprompter.contentEditable === "true") {
+        console.log('Teleprompter está en modo de edición');
         if (!confirm('¿Estás seguro de que quieres dejar de editar sin guardar cambios?')) {
+            console.log('Usuario decidió no guardar cambios');
             return; // Si el usuario decide no guardar, no se cierra la barra de menú
         }
     }
-    saveAndExit(document.getElementById('teleprompter'), document.getElementById('editToggle').querySelector('i'));
+    document.getElementById('menuBar').style.display = 'none';
+    document.getElementById('controlBar').style.display = 'block';
+    saveAndExit(teleprompter, document.getElementById('editToggle').querySelector('i'));
 }
+
 
 
 
