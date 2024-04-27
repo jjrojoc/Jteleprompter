@@ -596,7 +596,6 @@ document.getElementById('editToggle').addEventListener('click', function() {
         localStorage.setItem('savedScript', scriptText);
         alert('Texto editado guardado!');
     }
-    showControlBar();
 });
 
 /* document.getElementById('menuButton').addEventListener('click', function() {
@@ -939,7 +938,7 @@ function prepareTeleprompter() {
 
 
 function handleEndMarkerTouch(event) {
-    // event.preventDefault(); // Evita que se produzcan comportamientos predeterminados indeseados en touch
+    //event.preventDefault(); // Evita que se produzcan comportamientos predeterminados indeseados en touch
     console.log("El endMarker ha sido tocado o clickeado.");
     // Aquí ejecutas lo que necesitas hacer al tocar el marcador
     activateSpecialFunction();
