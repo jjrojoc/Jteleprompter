@@ -867,34 +867,19 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     normalizeLineBreaks(tempDiv);
 
     // Inserta el HTML filtrado en el contenido editable.
-    insertHTMLAtCaret(tempDiv.innerHTML);
+    document.execCommand('insertHTML', false, tempDiv.innerHTML);
+
+    // Guardar el estado después de pegar
+    autoguardado();
 });
 
-function insertHTMLAtCaret(html) {
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return;
-
-    let range = selection.getRangeAt(0);
-    range.deleteContents();
-
-    const el = document.createElement('div');
-    el.innerHTML = html;
-    let frag = document.createDocumentFragment(), node, lastNode;
-    while ((node = el.firstChild)) {
-        lastNode = frag.appendChild(node);
-    }
-    range.insertNode(frag);
-
-    // Preserva la selección
-    if (lastNode) {
-        range = range.cloneRange();
-        range.setStartAfter(lastNode);
-        range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
+function autoguardado() {
+    const contenido = document.getElementById('teleprompter').innerHTML;
+    localStorage.setItem('savedScript', contenido);
 }
 
+
+// Función para eliminar todos los estilos excepto el color del texto.
 function stripStylesExceptColor(element) {
     if (element.style) {
         const textColor = element.style.color;
@@ -904,6 +889,7 @@ function stripStylesExceptColor(element) {
     Array.from(element.children).forEach(stripStylesExceptColor);
 }
 
+// Función para normalizar los saltos de línea eliminando <div> y <p>, reemplazándolos por <br>
 function normalizeLineBreaks(element) {
     var children = Array.from(element.childNodes);
     for (var child of children) {
@@ -913,10 +899,11 @@ function normalizeLineBreaks(element) {
     if (element.nodeType === Node.ELEMENT_NODE && (element.tagName === 'DIV' || element.tagName === 'P')) {
         var replacementHtml = element.innerHTML + '<br>'; // Prepara el contenido con un <br>
         if (element.parentNode) {
-            element.outerHTML = replacementHtml; // Solo reemplaza si tiene un nodo padre
+            element.outerHTML = replacementHtml; // Reemplaza el elemento por su contenido más un <br>
         }
     }
 }
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
