@@ -847,31 +847,62 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // }
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
+    e.preventDefault(); // Previene el comportamiento predeterminado de pegar.
 
-    // Accede al contenido HTML pegado desde el portapapeles.
     var htmlContent = e.clipboardData.getData('text/html');
+    var plainText = e.clipboardData.getData('text/plain');
 
-    // Si no hay contenido HTML, intenta obtener el texto plano.
-    if (!htmlContent) {
-        htmlContent = e.clipboardData.getData('text/plain');
-        htmlContent = htmlContent.replace(/(?:\r\n|\r|\n)/g, '<br>'); // Reemplaza saltos de línea por <br>
+    const selection = window.getSelection();
+    if (selection.rangeCount === 0) return;
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    if (htmlContent) {
+        // Se pega contenido HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlContent; // Inserta el HTML en un div temporal
+
+        // Procesa cada nodo para ajustar los estilos
+        processNodes(tempDiv);
+
+        range.insertNode(tempDiv);
+    } else if (plainText) {
+        // Se pega texto plano
+        const fragment = document.createDocumentFragment();
+        const lines = plainText.split(/\r?\n/);
+
+        lines.forEach((line, index) => {
+            if (index > 0) fragment.appendChild(document.createElement('br'));
+            const span = document.createElement('span');
+            span.textContent = line; // Usa textContent para evitar interpretación de HTML
+            span.style.color = 'white'; // Texto blanco por defecto
+            span.style.fontFamily = 'Helvetica, Arial, sans-serif';
+            span.style.fontSize = '16px';
+            fragment.appendChild(span);
+        });
+
+        range.insertNode(fragment);
     }
 
-    // Crear un contenedor temporal para el contenido HTML.
-    var tempDiv = document.createElement('div');
-    tempDiv.innerHTML = htmlContent; // Inserta el texto como HTML.
+    // Mueve el cursor al final del contenido insertado
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
 
-    // Elimina todos los estilos excepto los de color de texto y normaliza saltos de línea.
-    stripStylesExceptColor(tempDiv);
-    normalizeLineBreaks(tempDiv);
-
-    // Inserta el HTML filtrado en el contenido editable.
-    document.execCommand('insertHTML', false, tempDiv.innerHTML);
-
-    // Guardar el estado después de pegar
+    // Función para ajustar colores y eliminar estilos no deseados
+    function processNodes(element) {
+        Array.from(element.querySelectorAll('*')).forEach(node => {
+            if (node.style.color === 'black') {
+                node.style.color = 'white'; // Cambia negro a blanco
+            }
+            // Ajustar la fuente y el tamaño según tus necesidades
+            node.style.fontFamily = 'Helvetica, Arial, sans-serif';
+            node.style.fontSize = '16px';
+        });
+    }
     autoguardado();
 });
+
 
 function autoguardado() {
     const contenido = document.getElementById('teleprompter').innerHTML;
