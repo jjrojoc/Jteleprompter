@@ -701,19 +701,19 @@ function showMenuBar() {
 }); */
 
 
-document.getElementById('menuButton').addEventListener('touchstart', function(event) {
-    event.preventDefault();  // Previene eventos adicionales como click
-    showMenuBar();
-    // var menu = document.getElementById('menuItems');
-    // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
-});
+// document.getElementById('btnShowMenuBar').addEventListener('touchstart', function(event) {
+//     event.preventDefault();  // Previene eventos adicionales como click
+//     showMenuBar();
+//     // var menu = document.getElementById('menuItems');
+//     // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
+// });
 
-// Si quieres que también funcione con click, puedes agregar ambos eventos
-document.getElementById('menuButton').addEventListener('click', function() {
-    showMenuBar();
-    // var menu = document.getElementById('menuItems');
-    // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
-});
+// // Si quieres que también funcione con click, puedes agregar ambos eventos
+// document.getElementById('btnShowMenuBar').addEventListener('click', function() {
+//     showMenuBar();
+//     // var menu = document.getElementById('menuItems');
+//     // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
+// });
 
 /* document.getElementById('menuButton').addEventListener('touchstart', function(event) {
     event.preventDefault();  // Previene eventos adicionales como click
