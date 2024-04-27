@@ -853,12 +853,12 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     var plainText = e.clipboardData.getData('text/plain');
 
     const selection = window.getSelection();
-    if (selection.rangeCount === 0) return;
+    if (!selection.rangeCount) return;
     const range = selection.getRangeAt(0);
     range.deleteContents();
 
     if (htmlContent) {
-        // Si hay contenido HTML, se inserta con ajustes de color si es necesario
+        // Si hay contenido HTML, se inserta con ajustes de color y fondo si es necesario
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
         processHTMLNodes(tempDiv);
@@ -885,10 +885,12 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             if (node.style.color && node.style.color.toLowerCase() === 'black') {
                 node.style.color = 'white';  // Cambia solo el negro a blanco
             }
+            node.style.backgroundColor = '';  // Elimina cualquier color de fondo
         });
     }
     autoguardado();
 });
+
 
 
 
