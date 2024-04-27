@@ -848,58 +848,46 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // }
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault(); // Previene el comportamiento de pegado predeterminado
+    e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
 
+    var text = e.clipboardData.getData('text/plain');
     var htmlContent = e.clipboardData.getData('text/html');
-    var plainText = e.clipboardData.getData('text/plain');
-
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return false;
-    const range = selection.getRangeAt(0);
-    range.deleteContents();
 
     if (htmlContent) {
-        // Crear un contenedor para el HTML y ajustar el contenido
-        const tempDiv = document.createElement('div');
+        var tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
-        processHTML(tempDiv);
-        Array.from(tempDiv.childNodes).forEach(node => {
-            range.insertNode(node.cloneNode(true));
-        });
-    } else if (plainText) {
-        // Insertar texto plano respetando los saltos de línea
-        const lines = plainText.split(/[\r\n]+/);
-        lines.forEach((line, index) => {
-            if (index > 0) {
-                range.insertNode(document.createElement('br'));
-            }
-            range.insertNode(document.createTextNode(line));
-        });
-    }
 
-    // Colocar el cursor después del texto insertado
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
+        cleanStyles(tempDiv); // Limpia el estilo del HTML
 
-    // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
-    function processHTML(element) {
-        Array.from(element.querySelectorAll('*')).forEach(node => {
-            if (node.style) {
-                // Cambiar el color negro a blanco, dejar otros colores intactos
-                if (node.style.color === 'black' || node.style.color === 'white' || node.style.color === "rgb(255, 255, 255)") {
-                    node.style.color = 'none';
-                }
-                // Eliminar estilos no necesarios
-                node.style.fontSize = '';
-                node.style.fontFamily = '';
-                node.style.backgroundColor = '';
-                node.style.textDecoration = 'none'; // Quita subrayado
-            }
-        });
+        document.execCommand('insertHTML', false, tempDiv.innerHTML);
+    } else {
+        text = text.replace(/(?:\r\n|\r|\n)/g, '<br>'); // Respeta los saltos de línea
+        document.execCommand('insertHTML', false, text);
     }
     autoguardado();
 });
+
+function cleanStyles(element) {
+    // Revisa y ajusta los colores
+    if (element.style) {
+        if (element.style.color === 'black' || element.style.color === 'white') {
+            element.style.color = ''; // Elimina solo negro o blanco
+        }
+        element.style.textDecoration = ''; // Elimina decoraciones de texto
+    }
+    Array.from(element.childNodes).forEach(cleanStyles);
+
+    // Convierte elementos DIV y P a BR para mantener saltos de línea
+    if (element.tagName === 'DIV' || element.tagName === 'P') {
+        var replacementHtml = '';
+        for (let child of element.childNodes) {
+            replacementHtml += child.outerHTML || child.textContent;
+        }
+        replacementHtml += '<br>';
+        element.outerHTML = replacementHtml;
+    }
+}
+
 
 
 
