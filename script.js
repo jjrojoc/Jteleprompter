@@ -847,7 +847,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // }
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault(); // Previene el comportamiento predeterminado de pegar.
+    e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
 
     var htmlContent = e.clipboardData.getData('text/html');
     var plainText = e.clipboardData.getData('text/plain');
@@ -858,30 +858,21 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     range.deleteContents();
 
     if (htmlContent) {
-        // Se pega contenido HTML
+        // Si hay contenido HTML, se inserta con ajustes de color si es necesario
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlContent; // Inserta el HTML en un div temporal
-
-        // Procesa cada nodo para ajustar los estilos
-        processNodes(tempDiv);
-
+        tempDiv.innerHTML = htmlContent;
+        processHTMLNodes(tempDiv);
         range.insertNode(tempDiv);
     } else if (plainText) {
-        // Se pega texto plano
-        const fragment = document.createDocumentFragment();
-        const lines = plainText.split(/\r?\n/);
-
-        lines.forEach((line, index) => {
-            if (index > 0) fragment.appendChild(document.createElement('br'));
-            const span = document.createElement('span');
-            span.textContent = line; // Usa textContent para evitar interpretación de HTML
-            span.style.color = 'white'; // Texto blanco por defecto
-            //span.style.fontFamily = 'Helvetica, Arial, sans-serif';
-            //span.style.fontSize = '16px';
-            fragment.appendChild(span);
+        // Para texto plano, se respeta solo los saltos de línea
+        const textNode = document.createDocumentFragment();
+        plainText.split(/[\r\n]+/).forEach((line, index, array) => {
+            textNode.appendChild(document.createTextNode(line));
+            if (index < array.length - 1) {
+                textNode.appendChild(document.createElement('br')); // Agrega un salto de línea
+            }
         });
-
-        range.insertNode(fragment);
+        range.insertNode(textNode);
     }
 
     // Mueve el cursor al final del contenido insertado
@@ -889,19 +880,16 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     selection.removeAllRanges();
     selection.addRange(range);
 
-    // Función para ajustar colores y eliminar estilos no deseados
-    function processNodes(element) {
+    function processHTMLNodes(element) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
-            if (node.style.color === 'black') {
-                node.style.color = 'white'; // Cambia negro a blanco
+            if (node.style.color && node.style.color.toLowerCase() === 'black') {
+                node.style.color = 'white';  // Cambia solo el negro a blanco
             }
-            // Ajustar la fuente y el tamaño según tus necesidades
-            //node.style.fontFamily = 'Helvetica, Arial, sans-serif';
-            //node.style.fontSize = '16px';
         });
     }
     autoguardado();
 });
+
 
 
 
