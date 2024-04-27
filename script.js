@@ -887,14 +887,14 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
             if (node.style) {
                 // Cambiar el color negro a blanco, dejar otros colores intactos
-                if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)'
-                    || node.style.color ==='white' || node.style.color ==='rgb(255, 255, 255') {
+                if (node.style.color === 'black' || node.style.color ==='white') {
                     node.style.color = '';
                 }
                 // Eliminar estilos no necesarios
                 node.style.fontSize = '';
                 node.style.fontFamily = '';
                 node.style.backgroundColor = '';
+                node.style.textDecoration = 'none'; // Quita subrayado
             }
         });
     }
