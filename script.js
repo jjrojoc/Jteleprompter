@@ -355,7 +355,7 @@ function toggleAutoScroll() {
     if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
         console.log("Cambios no guardados, auto-scroll no activado.");
         return;
-    }
+    } else 
 
     if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
         alert('No hay suficiente contenido para hacer scroll.');
@@ -596,6 +596,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
         localStorage.setItem('savedScript', scriptText);
         alert('Texto editado guardado!');
     }
+    showControlBar();
 });
 
 /* document.getElementById('menuButton').addEventListener('click', function() {
@@ -611,6 +612,7 @@ document.getElementById('editToggle').addEventListener('click', function() {
 document.getElementById('menuButton').addEventListener('touchstart', function(event) {
     event.preventDefault();  // Previene eventos adicionales como click
     showMenuBar();
+    document.getElementById('editToggle').click();
     // var menu = document.getElementById('menuItems');
     // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
 });
@@ -618,6 +620,7 @@ document.getElementById('menuButton').addEventListener('touchstart', function(ev
 // Si quieres que también funcione con click, puedes agregar ambos eventos
 document.getElementById('menuButton').addEventListener('click', function() {
     showMenuBar();
+    document.getElementById('editToggle').click();
     // var menu = document.getElementById('menuItems');
     // menu.style.display = menu.style.display === 'none' ? 'flex' : 'none'; // Asegura que el menú se muestra en columna
 });
@@ -938,7 +941,7 @@ function prepareTeleprompter() {
 
 
 function handleEndMarkerTouch(event) {
-    event.preventDefault(); // Evita que se produzcan comportamientos predeterminados indeseados en touch
+    // event.preventDefault(); // Evita que se produzcan comportamientos predeterminados indeseados en touch
     console.log("El endMarker ha sido tocado o clickeado.");
     // Aquí ejecutas lo que necesitas hacer al tocar el marcador
     activateSpecialFunction();
