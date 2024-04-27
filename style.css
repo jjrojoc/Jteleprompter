@@ -57,12 +57,6 @@ body, html {
 }
 
 
-.control-bar .toggleScroll-center {
-  flex: 2; /* El botón central ocupa más espacio, asegurando que quede centrado */
-  display: flex;
-  justify-content: center; /* Centra el botón toggleScroll en su espacio */
-}
-
 
 button, input[type="range"], select {
   padding: 10px;
