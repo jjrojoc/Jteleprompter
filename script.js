@@ -566,7 +566,7 @@ const btnShowMenuBar = document.getElementById('btnShowMenuBar');
 
 const controlBar = document.getElementById('controlBar');
 const menuBar = document.getElementById('menuBar');
-const teleprompter = document.getElementById('teleprompter');
+// const teleprompter = document.getElementById('teleprompter');
 const editToggle = document.getElementById('editToggle');
 
 let lastSavedContent = localStorage.getItem('savedScript') || teleprompter.innerHTML;
