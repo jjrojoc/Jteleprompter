@@ -1166,12 +1166,12 @@ function stopCountdown() {
 // });
 
 
-function showMenuBar() {
-    document.getElementById('controlBar').style.display = 'none';
-    document.getElementById('menuBar').style.display = 'flex'; // Mostrar menú
-  }
+// function showMenuBar() {
+//     document.getElementById('controlBar').style.display = 'none';
+//     document.getElementById('menuBar').style.display = 'flex'; // Mostrar menú
+//   }
   
-  function showControlBar() {
-    document.getElementById('menuBar').style.display = 'none';
-    document.getElementById('controlBar').style.display = 'flex'; // Mostrar controles
-  }
+//   function showControlBar() {
+//     document.getElementById('menuBar').style.display = 'none';
+//     document.getElementById('controlBar').style.display = 'flex'; // Mostrar controles
+//   }
