@@ -573,18 +573,17 @@ function toggleEdit() {
 
 function showControlBar() {
     const teleprompter = document.getElementById('teleprompter');
-    const isEditable = teleprompter.contentEditable === "true";
-
-    // Comprueba si el teleprompter está en modo de edición antes de mostrar la controlBar.
-    if (isEditable) {
-        if (!confirm('¿Estás seguro de que quieres dejar de editar sin guardar cambios?')) {
-            return; // No cambiar a controlBar si el usuario decide continuar editando.
+    if (teleprompter.contentEditable === "true") {
+        // El teleprompter está en modo edición.
+        if (teleprompter.innerHTML !== localStorage.getItem('savedScript')) {
+            // Hay cambios no guardados.
+            if (!confirm('¿Estás seguro de que quieres salir sin guardar los cambios?')) {
+                return; // Si el usuario no confirma, no hacemos nada.
+            }
         }
-        // Si el usuario está de acuerdo en salir sin guardar, asegúrate de guardar y desactivar el modo edición.
-        saveAndExitEditing();
+        toggleEditing(false); // Cambiamos el estado de edición a no editable.
     }
-
-    // Mostrar controlBar y ocultar menuBar.
+    // Cambiamos la visibilidad de las barras.
     document.getElementById('menuBar').style.display = 'none';
     document.getElementById('controlBar').style.display = 'flex';
 }
@@ -604,23 +603,35 @@ function saveAndExitEditing() {
     alert('Cambios descartados y modo de edición desactivado.');
 }
 
-// Función para alternar el estado de edición
-function toggleEditing() {
+function toggleEditing(setEditable) {
     const teleprompter = document.getElementById('teleprompter');
-    const isEditable = teleprompter.contentEditable === "true";
     const icon = document.getElementById('editToggle').querySelector('i');
+    teleprompter.contentEditable = setEditable;
 
-    teleprompter.contentEditable = !isEditable;
-    if (!isEditable) {
-        icon.className = 'fas fa-stop-circle'; // Icono para 'parar editar' cuando es editable.
-        teleprompter.innerHTML = ''; // Limpiar el contenido previo.
-        teleprompter.focus(); // Enfocar el elemento para edición.
+    if (setEditable) {
+        // Activar edición
+        icon.className = 'fas fa-save'; // Cambiar icono a 'parar editar'.
+        teleprompter.focus(); // Enfocar el elemento para la edición.
     } else {
-        icon.className = 'fas fa-edit'; // Cambia el icono a 'editar'.
-        saveAndExitEditing(); // Guarda y sale de la edición.
+        // Desactivar edición
+        icon.className = 'fas fa-edit'; // Cambiar icono a 'editar'.
+        const scriptText = teleprompter.innerHTML;
+        localStorage.setItem('savedScript', scriptText); // Guardar el script en localStorage.
+        alert('Cambios guardados');
     }
 }
 
+document.getElementById('editToggle').addEventListener('click', function() {
+    const isCurrentlyEditable = document.getElementById('teleprompter').contentEditable === "true";
+    toggleEditing(!isCurrentlyEditable);
+});
+
+document.getElementById('btnShowControlBar').addEventListener('click', showControlBar);
+document.getElementById('btnShowMenuBar').addEventListener('click', function() {
+    document.getElementById('controlBar').style.display = 'none';
+    document.getElementById('menuBar').style.display = 'flex';
+    toggleEditing(true); // Hacer el teleprompter editable al mostrar la menú bar.
+});
 // Asegúrate de que estos métodos sean llamados correctamente en tus eventos y que los elementos HTML correspondan a los IDs y clases usados en el JavaScript.
 
 
