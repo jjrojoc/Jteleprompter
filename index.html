@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>JTeleprompter</title>
-<link rel="stylesheet" href="style.css?v=367">
+<link rel="stylesheet" href="style.css?v=368">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -25,12 +25,17 @@
 
 <div id="menuBar" class="control-bar" style="display: none;">
     <button onclick="showControlBar()">Control</button>
-    <button onclick="hideBars()">Fin</button>
+    <!-- <button onclick="hideBars()">Fin</button> -->
     <!-- Otros botones y controles del menú -->
+    <button id="editToggle" title="Editar"><i class="fas fa-edit"></i></button>
+    <button id="loadText" title="Cargar"><i class="fas fa-folder-open"></i></button>
+    <button id="saveText" title="Guardar"><i class="fas fa-save"></i></button>
+    <button id="resetButton" title="Resetear Teleprompter"><i class="fas fa-tra
   </div>
-<div id="controlBar" class="control-bar">
+
+  <div id="controlBar" class="control-bar">
     <div id="controls" class="controls-container">
-        <div class="menu-container" class="control">
+        <!-- <div class="menu-container" class="control">
             <button id="menuButton" title="Menú" class="control"><i class="fas fa-bars"></i></button>
             <div id="menuItems" class="menu-items" style="display: none">
                 <button id="editToggle" title="Editar"><i class="fas fa-edit"></i></button>
@@ -38,7 +43,7 @@
                 <button id="saveText" title="Guardar"><i class="fas fa-save"></i></button>
                 <button id="resetButton" title="Resetear Teleprompter"><i class="fas fa-trash"></i></button>
             </div>
-        </div>
+        </div> -->
         
         <input type="color" id="textColorPicker" value="#ffffff" class="control">
         
@@ -88,6 +93,6 @@
     Tiempo restante: <span id="timeRemaining">00:00</span>
 </div> -->
 
-<script src="script.js?v=v367"></script>
+<script src="script.js?v=v368"></script>
 
 </html>
