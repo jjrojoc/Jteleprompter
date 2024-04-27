@@ -876,8 +876,8 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             const span = document.createElement('span');
             span.textContent = line; // Usa textContent para evitar interpretación de HTML
             span.style.color = 'white'; // Texto blanco por defecto
-            span.style.fontFamily = 'Helvetica, Arial, sans-serif';
-            //span.style.fontSize = textSizeControl.value + 'px';
+            //span.style.fontFamily = 'Helvetica, Arial, sans-serif';
+            //span.style.fontSize = '16px';
             fragment.appendChild(span);
         });
 
@@ -896,12 +896,13 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 node.style.color = 'white'; // Cambia negro a blanco
             }
             // Ajustar la fuente y el tamaño según tus necesidades
-            node.style.fontFamily = 'Helvetica, Arial, sans-serif';
-            node.style.fontSize = 'textSizeControl.value = savedTextSize;px';
+            //node.style.fontFamily = 'Helvetica, Arial, sans-serif';
+            //node.style.fontSize = '16px';
         });
     }
     autoguardado();
 });
+
 
 
 function autoguardado() {
