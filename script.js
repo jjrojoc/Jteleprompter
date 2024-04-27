@@ -848,66 +848,52 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // }
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault(); // Previene el comportamiento de pegado predeterminado
+    e.preventDefault();
 
-    var text = e.clipboardData.getData('text/plain');
+    // Accede al contenido como texto plano o HTML del portapapeles.
+    var plainText = e.clipboardData.getData('text/plain');
     var htmlContent = e.clipboardData.getData('text/html');
 
+    // Verifica si hay contenido HTML.
     if (htmlContent) {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
-        cleanStyles(tempDiv); // Limpia el estilo del HTML
-        insertCleanContent(this, tempDiv);
+
+        // Aplica limpieza de estilos, excepto los colores específicos y maneja los saltos de línea.
+        cleanStylesAndFormat(tempDiv);
+        insertFormattedContent(this, tempDiv);
     } else {
-        text = text.replace(/(?:\r\n|\r|\n)/g, '<br>'); // Respeta los saltos de línea
-        insertPlainText(this, text);
+        // Inserta como texto plano, conservando saltos de línea.
+        plainText = plainText.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        this.innerHTML += plainText; // Añade al contenido existente
     }
 });
 
-function cleanStyles(element) {
-    if (element.style) {
-        if (element.style.color === 'black' || element.style.color === 'white') {
-            element.style.color = ''; // Elimina solo negro o blanco
+function cleanStylesAndFormat(element) {
+    Array.from(element.childNodes).forEach(child => {
+        if (child.style) {
+            let color = child.style.color;
+            if (color === 'black' || color === '') {
+                child.style.color = ''; // Elimina el color si es negro o vacío
+            }
         }
-        element.style.textDecoration = ''; // Elimina decoraciones de texto
-    }
-    Array.from(element.childNodes).forEach(child => cleanStyles(child));
+        cleanStylesAndFormat(child); // Recursividad para hijos
+    });
 
-    if ((element.tagName === 'DIV' || element.tagName === 'P') && element.parentNode) {
-        const fragment = document.createDocumentFragment();
+    if (element.nodeType === Node.ELEMENT_NODE && (element.tagName === 'DIV' || element.tagName === 'P')) {
+        var br = document.createElement('br');
         while (element.firstChild) {
-            fragment.appendChild(element.firstChild); // Mueve todos los hijos al fragmento
+            element.parentNode.insertBefore(element.firstChild, element);
         }
-        element.parentNode.insertBefore(fragment, element); // Inserta el fragmento antes del elemento
-        element.parentNode.insertBefore(document.createElement('br'), element); // Agrega un <br> después del contenido
-        element.parentNode.removeChild(element); // Elimina el elemento original
+        element.parentNode.replaceChild(br, element); // Reemplaza el elemento con un <br>
     }
 }
 
-function insertCleanContent(editableDiv, contentElement) {
-    cleanStyles(contentElement);
-
-    while (contentElement.firstChild) {
-        editableDiv.appendChild(contentElement.firstChild);
-    }
-}
-
-
-
-function insertPlainText(editableDiv, text) {
-    const lines = text.split('<br>');
-    lines.forEach((line, index) => {
-        const textNode = document.createTextNode(line);
-        editableDiv.appendChild(textNode);
-        if (index < lines.length - 1) {
-            editableDiv.appendChild(document.createElement('br'));
-        }
+function insertFormattedContent(editableDiv, contentElement) {
+    Array.from(contentElement.childNodes).forEach(child => {
+        editableDiv.appendChild(child); // Mueve el nodo al div editable
     });
 }
-
-
-
-
 
 
 
