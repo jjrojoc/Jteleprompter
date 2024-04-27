@@ -599,7 +599,7 @@ function showMenuBar() {
     controlBar.style.display = 'none';
     menuBar.style.display = 'flex';
     toggleEditableState(true); // Activar edición
-
+    const isEditable = teleprompter.contentEditable === "true";
     // Limpiar el contenido si es el texto por defecto
     if (!isEditable) {
         if (teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
