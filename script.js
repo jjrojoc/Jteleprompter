@@ -850,50 +850,52 @@ document.getElementById('resetButton').addEventListener('click', function() {
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
     e.preventDefault();
 
-    // Accede al contenido como texto plano o HTML del portapapeles.
     var plainText = e.clipboardData.getData('text/plain');
     var htmlContent = e.clipboardData.getData('text/html');
 
-    // Verifica si hay contenido HTML.
     if (htmlContent) {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
 
-        // Aplica limpieza de estilos, excepto los colores específicos y maneja los saltos de línea.
         cleanStylesAndFormat(tempDiv);
         insertFormattedContent(this, tempDiv);
     } else {
-        // Inserta como texto plano, conservando saltos de línea.
         plainText = plainText.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        this.innerHTML += plainText; // Añade al contenido existente
+        this.innerHTML += plainText;
     }
 });
 
 function cleanStylesAndFormat(element) {
     Array.from(element.childNodes).forEach(child => {
-        if (child.style) {
-            let color = child.style.color;
-            if (color === 'black' || color === '') {
-                child.style.color = ''; // Elimina el color si es negro o vacío
+        if (child.nodeType === Node.ELEMENT_NODE) {
+            if (child.style) {
+                let color = child.style.color;
+                if (color === 'black' || color === '') {
+                    child.style.removeProperty('color');
+                }
+                if (color === 'white') {
+                    child.style.removeProperty('color');
+                }
             }
+            cleanStylesAndFormat(child);
         }
-        cleanStylesAndFormat(child); // Recursividad para hijos
     });
 
-    if (element.nodeType === Node.ELEMENT_NODE && (element.tagName === 'DIV' || element.tagName === 'P')) {
-        var br = document.createElement('br');
+    if (element.tagName === 'DIV' || element.tagName === 'P') {
+        element.parentNode.insertBefore(document.createElement('br'), element);
         while (element.firstChild) {
             element.parentNode.insertBefore(element.firstChild, element);
         }
-        element.parentNode.replaceChild(br, element); // Reemplaza el elemento con un <br>
+        element.parentNode.removeChild(element);
     }
 }
 
 function insertFormattedContent(editableDiv, contentElement) {
-    Array.from(contentElement.childNodes).forEach(child => {
-        editableDiv.appendChild(child); // Mueve el nodo al div editable
-    });
+    while (contentElement.firstChild) {
+        editableDiv.appendChild(contentElement.firstChild);
+    }
 }
+
 
 
 
