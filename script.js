@@ -545,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('textColorPicker').addEventListener('input', function() {
+document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
     //document.getElementById('textSample').style.color = color;
     const selection = window.getSelection();
@@ -561,7 +561,7 @@ document.getElementById('textColorPicker').addEventListener('input', function() 
     selection.addRange(range);
 });
 
-
+/*
 document.getElementById('changeTextColor').addEventListener('click', function() {
     const color = document.getElementById('textColorPicker').value;
     const selection = window.getSelection();
@@ -576,6 +576,7 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
     selection.removeAllRanges();
     selection.addRange(range);
 });
+*/
 
 
 const btnShowControlBar = document.getElementById('btnShowControlBar');
