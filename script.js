@@ -865,26 +865,37 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 });
 
 function cleanStyles(element) {
+    // Eliminar estilos no deseados de un solo elemento
     if (element.style) {
-        if (element.style.color === 'black' || element.style.color === 'white' ||
-        element.style.color === 'rgb(255, 255, 255') {
+        if (element.style.color === 'black' || element.style.color === 'white') {
             element.style.color = ''; // Elimina solo negro o blanco
         }
         element.style.textDecoration = ''; // Elimina decoraciones de texto
     }
-    Array.from(element.childNodes).forEach(cleanStyles);
+    Array.from(element.childNodes).forEach(child => cleanStyles(child));
 
-    // Convierte elementos DIV y P en BR para mantener saltos de línea
+    // Reemplazar <div> y <p> con <br> si es necesario
     if (element.tagName === 'DIV' || element.tagName === 'P') {
-        element.outerHTML = element.innerHTML + '<br>';
+        const fragment = document.createDocumentFragment();
+        while (element.firstChild) {
+            fragment.appendChild(element.firstChild); // Mueve todos los hijos al fragmento
+        }
+        element.parentNode.insertBefore(fragment, element); // Inserta el fragmento antes del elemento
+        element.parentNode.insertBefore(document.createElement('br'), element); // Agrega un <br> después del contenido
+        element.parentNode.removeChild(element); // Elimina el elemento original
     }
 }
 
 function insertCleanContent(editableDiv, contentElement) {
+    // Antes de manipular los nodos, limpiar y reestructurar cualquier HTML entrante
+    cleanStyles(contentElement);
+
+    // Adjuntar contenido limpio al div editable
     while (contentElement.firstChild) {
         editableDiv.appendChild(contentElement.firstChild);
     }
 }
+
 
 function insertPlainText(editableDiv, text) {
     const lines = text.split('<br>');
