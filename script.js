@@ -560,43 +560,105 @@ document.getElementById('changeTextColor').addEventListener('click', function() 
     selection.addRange(range);
 });
 
-document.getElementById('editToggle').addEventListener('click', function() {
+
+document.getElementById('editToggle').addEventListener('click', toggleEdit);
+
+function toggleEdit() {
     const teleprompter = document.getElementById('teleprompter');
     const isEditable = teleprompter.contentEditable === "true";
-    const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
+    const icon = this.querySelector('i');
 
-    // Alternar el estado de edición
-    teleprompter.contentEditable = !isEditable;
+    toggleEditing(isEditable, teleprompter, icon);
+}
 
-    // Verifica si el contenido debe ser borrado
-    if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
-        teleprompter.innerHTML = '';  // Borra el texto
-        teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
-        window.setTimeout(function() {
-            const range = document.createRange();
-            const sel = window.getSelection();
-            range.setStart(teleprompter, 0);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-        }, 1);
-    }
-
+function toggleEditing(isEditable, teleprompter, icon) {
     if (!isEditable) {
-        icon.className = 'fas fa-stop-circle'; // Cambia el icono a 'parar editar' cuando es editable
+        teleprompter.contentEditable = true;
+        teleprompter.focus();
+        icon.className = 'fas fa-save';
     } else {
-        icon.className = 'fas fa-edit'; // Cambia el icono a 'editar' cuando deja de ser editable
-        const scriptText = document.getElementById('teleprompter').innerHTML;
-        if (scriptText.trim() === '') {
-            teleprompter.innerHTML = '1º Click en Menú --> Editar \
-                         <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
-                         <br>3º Click en Menú --> Parar Editar \
-                         <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
+        if (confirm('¿Quieres salir sin guardar los cambios?')) {
+            saveAndExit(teleprompter, icon);
         }
-        localStorage.setItem('savedScript', scriptText);
-        alert('Texto editado guardado!');
     }
-});
+}
+
+function saveAndExit(teleprompter, icon) {
+    teleprompter.contentEditable = false;
+    const scriptText = teleprompter.innerHTML;
+    if (scriptText.trim() === '') {
+        setDefaultTeleprompterText(teleprompter);
+    }
+    localStorage.setItem('savedScript', scriptText);
+    icon.className = 'fas fa-edit';
+    alert('Texto editado guardado!');
+}
+
+function setDefaultTeleprompterText(teleprompter) {
+    teleprompter.innerHTML = '1º Click en Menú --> Editar \
+                             <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+                             <br>3º Click en Menú --> Parar Editar \
+                             <br>Listo, click en Start para iniciar teleprompt';
+}
+
+// Lógica para mostrar y ocultar barras
+function showMenuBar() {
+    document.getElementById('menuBar').style.display = 'block';
+    document.getElementById('controlBar').style.display = 'none';
+    toggleEditing(false, document.getElementById('teleprompter'), document.getElementById('editToggle').querySelector('i'));
+}
+
+function showControlBar() {
+    document.getElementById('menuBar').style.display = 'none';
+    document.getElementById('controlBar').style.display = 'block';
+    if (document.getElementById('teleprompter').contentEditable === "true") {
+        if (!confirm('¿Estás seguro de que quieres dejar de editar sin guardar cambios?')) {
+            return; // Si el usuario decide no guardar, no se cierra la barra de menú
+        }
+    }
+    saveAndExit(document.getElementById('teleprompter'), document.getElementById('editToggle').querySelector('i'));
+}
+
+
+
+///// Código original /////
+// document.getElementById('editToggle').addEventListener('click', function() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const isEditable = teleprompter.contentEditable === "true";
+//     const icon = this.querySelector('i'); // Selecciona el icono dentro del botón
+
+//     // Alternar el estado de edición
+//     teleprompter.contentEditable = !isEditable;
+
+//     // Verifica si el contenido debe ser borrado
+//     if (!isEditable && teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
+//         teleprompter.innerHTML = '';  // Borra el texto
+//         teleprompter.focus();  // enfoca el elemento para que el cursor aparezca
+//         window.setTimeout(function() {
+//             const range = document.createRange();
+//             const sel = window.getSelection();
+//             range.setStart(teleprompter, 0);
+//             range.collapse(true);
+//             sel.removeAllRanges();
+//             sel.addRange(range);
+//         }, 1);
+//     }
+
+//     if (!isEditable) {
+//         icon.className = 'fas fa-stop-circle'; // Cambia el icono a 'parar editar' cuando es editable
+//     } else {
+//         icon.className = 'fas fa-edit'; // Cambia el icono a 'editar' cuando deja de ser editable
+//         const scriptText = document.getElementById('teleprompter').innerHTML;
+//         if (scriptText.trim() === '') {
+//             teleprompter.innerHTML = '1º Click en Menú --> Editar \
+//                          <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
+//                          <br>3º Click en Menú --> Parar Editar \
+//                          <br>Listo, click en Start para iniciar teleprompt'; // Establece texto predeterminado si está vacío
+//         }
+//         localStorage.setItem('savedScript', scriptText);
+//         alert('Texto editado guardado!');
+//     }
+// });
 
 /* document.getElementById('menuButton').addEventListener('click', function() {
     var menuItems = document.getElementById("menuItems");
