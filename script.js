@@ -848,45 +848,57 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // }
 
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault();
+    e.preventDefault(); // Previene el comportamiento de pegado predeterminado
 
-    var plainText = e.clipboardData.getData('text/plain');
     var htmlContent = e.clipboardData.getData('text/html');
+    var plainText = e.clipboardData.getData('text/plain');
+
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return false;
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
 
     if (htmlContent) {
-        var tempDiv = document.createElement('div');
+        // Crear un contenedor para el HTML y ajustar el contenido
+        const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
-
-        var cleanedContent = cleanStylesAndFormat(tempDiv);
-        this.appendChild(cleanedContent); // Añade el contenido limpio directamente al final del div teleprompter
-    } else {
-        plainText = plainText.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        this.innerHTML += plainText; // Añade texto plano como HTML
-    }
-});
-
-function cleanStylesAndFormat(element) {
-    var fragment = document.createDocumentFragment();
-
-    Array.from(element.childNodes).forEach(child => {
-        if (child.nodeType === Node.ELEMENT_NODE) {
-            if (child.style) {
-                let color = child.style.color;
-                if (color === 'black' || color === 'white') {
-                    child.style.removeProperty('color'); // Quita solo los colores negro y blanco
-                }
+        processHTML(tempDiv);
+        Array.from(tempDiv.childNodes).forEach(node => {
+            range.insertNode(node.cloneNode(true));
+        });
+    } else if (plainText) {
+        // Insertar texto plano respetando los saltos de línea
+        const lines = plainText.split(/[\r\n]+/);
+        lines.forEach((line, index) => {
+            if (index > 0) {
+                range.insertNode(document.createElement('br'));
             }
-            var newChild = child.cloneNode(true); // Clona el nodo
-            cleanStylesAndFormat(newChild); // Limpia el clon recursivamente
-            fragment.appendChild(newChild);
-        } else if (child.nodeType === Node.TEXT_NODE) {
-            fragment.appendChild(child.cloneNode(true)); // Clona y añade nodos de texto
-        }
-    });
+            range.insertNode(document.createTextNode(line));
+        });
+    }
 
-    return fragment; // Retorna el fragmento limpio
-}
+    // Colocar el cursor después del texto insertado
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
 
+    // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
+    function processHTML(element) {
+        Array.from(element.querySelectorAll('*')).forEach(node => {
+            if (node.style) {
+                // Cambiar el color negro a blanco, dejar otros colores intactos
+                if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
+                    node.style.color = 'white';
+                }
+                // Eliminar estilos no necesarios
+                node.style.fontSize = '';
+                node.style.fontFamily = '';
+                node.style.backgroundColor = '';
+            }
+        });
+    }
+    autoguardado();
+});
 
 
 
