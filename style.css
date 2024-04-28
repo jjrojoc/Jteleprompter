@@ -232,18 +232,22 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 }
 
 /*Para el nuevo timer */
-#controlReloj {
-  display: flex; /* Usa flexbox para alinear los elementos hijos */
-  align-items: center; /* Centra los elementos en el eje transversal */
-  justify-content: space-around; /* Distribuye espacio alrededor de los elementos */
-  padding: 10px;
-  background-color: #f4f4f4; /* Color de fondo opcional para el panel de control */
-  border-radius: 5px; /* Bordes redondeados para el panel de control */
+#timeControls {
+  position: fixed; 
+  top: 10px; 
+  right: 10px; 
+  opacity: 0.7; 
+  background-color: black; 
+  color: white; 
+  padding: 5px;
+  border-radius: 15px;
+  transition: transform 0.2s, background-color 0.2s;
+  display: flex; /* Organiza los elementos horizontalmente */
+  gap: 10px; /* Añade espacio entre el timer y el durationContainer */
 }
 
 #timer, #durationContainer {
-  font-size: 16px; /* Tamaño de fuente para los timers */
-  font-weight: bold; /* Fuente en negrita para mejor visibilidad */
-  padding: 5px 10px; /* Espaciado interno para cada elemento */
-  color: #333; /* Color de texto */
+  padding: 5px;
+  border-radius: 10px;
 }
+
