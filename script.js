@@ -1316,4 +1316,5 @@ function estimateDuration() {
 
     document.getElementById("durationContainer").innerHTML = result; // Muestra el resultado en la interfaz de usuario
     return duration;
+    console.log(duration);
 }
