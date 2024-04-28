@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>JTeleprompter</title>
-<link rel="stylesheet" href="style.css?v=433">
+<link rel="stylesheet" href="style.css?v=434">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -15,11 +15,10 @@
 
 <!-- <div id="teleprompter" onclick="toggleAutoScroll()"> -->
 <div id="teleprompter" contenteditable="false">
-    <p id="script">
-        1º Click en Menú --> Editar <br>
+    <p id="script" placeholder="1º Click en Menú --> Editar <br>
         2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto <br>
         3º Click en Menú --> Parar Editar <br>
-        Listo, click en Start para iniciar teleprompt 
+        Listo, click en Start para iniciar teleprompt"> 
     </p>
 </div>
 
@@ -95,15 +94,8 @@
     </div>
 </div>
 
-<!-- <div id="timer" style="position: fixed; top: 10px; right: 10px; opacity: 0.7; background-color: black; color: white; padding: 5px; user-select: none;">
+<div id="timer" style="position: fixed; top: 10px; right: 10px; opacity: 0.7; background-color: black; color: white; padding: 5px; user-select: none;">
     00:00
-</div> -->
-
-
-<div id="timerdiv" style="position: sticky; top: 10px; right: 10px; opacity: 0.7; background-color: black; color: white; padding: 5px; user-select: none;">
-    <span id="timer">00:00</span>
-    /
-    <span id="durationContainer">00:00</span>
 </div>
 
 
@@ -121,6 +113,6 @@
     Tiempo restante: <span id="timeRemaining">00:00</span>
 </div> -->
 
-<script src="script.js?v=v433"></script>
+<script src="script.js?v=v434"></script>
 
 </html>

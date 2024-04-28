@@ -589,19 +589,19 @@ const menuBar = document.getElementById('menuBar');
 // const editToggle = document.getElementById('editToggle');
 
 
-function deleteDefaultText() {
-    if (teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
-        teleprompter.innerHTML = '';
-        window.setTimeout(function() {
-            const range = document.createRange();
-            const sel = window.getSelection();
-            range.setStart(teleprompter, 0);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-        }, 1);
-    }
-}
+// function deleteDefaultText() {
+//     if (teleprompter.innerText.includes("click en Start para iniciar teleprompt")) {
+//         teleprompter.innerHTML = '';
+//         window.setTimeout(function() {
+//             const range = document.createRange();
+//             const sel = window.getSelection();
+//             range.setStart(teleprompter, 0);
+//             range.collapse(true);
+//             sel.removeAllRanges();
+//             sel.addRange(range);
+//         }, 1);
+//     }
+// }
 
 
 
@@ -645,7 +645,7 @@ function showMenuBar() {
     menuBar.style.display = 'flex';
     teleprompter.contentEditable = "true";
     initializeEditable();  // Inicializa el editor con autoguardado y deshacer
-    deleteDefaultText();
+    //deleteDefaultText();
 }
 
 document.getElementById('btnShowControlBar').addEventListener('click', showControlBar);
@@ -806,10 +806,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
         }
 
         // Restablece el contenido a un mensaje predeterminado
-        let scriptText = '1º Click en Menú --> Editar \
-                        <br>2º Copia y pega aquí el texto que desees, edítalo o escribe tu propio texto \
-                        <br>3º Click en Menú --> Parar Editar \
-                        <br>Listo, click en Start para iniciar teleprompt'; // Texto predeterminado
+        let scriptText = '' // texto predeterminado, ahora usa placeholder
         teleprompter.innerHTML = scriptText; // Establece el nuevo contenido HTML
         localStorage.setItem('savedScript', scriptText); // Guarda en localStorage
         teleprompter.setAttribute("contentEditable", true);
@@ -933,29 +930,29 @@ function autoguardado() {
 
 
 // Función para eliminar todos los estilos excepto el color del texto.
-function stripStylesExceptColor(element) {
-    if (element.style) {
-        const textColor = element.style.color;
-        element.removeAttribute('style');
-        if (textColor) element.style.color = textColor;
-    }
-    Array.from(element.children).forEach(stripStylesExceptColor);
-}
+// function stripStylesExceptColor(element) {
+//     if (element.style) {
+//         const textColor = element.style.color;
+//         element.removeAttribute('style');
+//         if (textColor) element.style.color = textColor;
+//     }
+//     Array.from(element.children).forEach(stripStylesExceptColor);
+// }
 
-// Función para normalizar los saltos de línea eliminando <div> y <p>, reemplazándolos por <br>
-function normalizeLineBreaks(element) {
-    var children = Array.from(element.childNodes);
-    for (var child of children) {
-        normalizeLineBreaks(child); // Primero normaliza recursivamente
-    }
+// // Función para normalizar los saltos de línea eliminando <div> y <p>, reemplazándolos por <br>
+// function normalizeLineBreaks(element) {
+//     var children = Array.from(element.childNodes);
+//     for (var child of children) {
+//         normalizeLineBreaks(child); // Primero normaliza recursivamente
+//     }
 
-    if (element.nodeType === Node.ELEMENT_NODE && (element.tagName === 'DIV' || element.tagName === 'P')) {
-        var replacementHtml = element.innerHTML + '<br>'; // Prepara el contenido con un <br>
-        if (element.parentNode) {
-            element.outerHTML = replacementHtml; // Reemplaza el elemento por su contenido más un <br>
-        }
-    }
-}
+//     if (element.nodeType === Node.ELEMENT_NODE && (element.tagName === 'DIV' || element.tagName === 'P')) {
+//         var replacementHtml = element.innerHTML + '<br>'; // Prepara el contenido con un <br>
+//         if (element.parentNode) {
+//             element.outerHTML = replacementHtml; // Reemplaza el elemento por su contenido más un <br>
+//         }
+//     }
+// }
 
 
 
@@ -1240,52 +1237,5 @@ function stopCountdown() {
 //   }
 
 
-// function estimateDuration() {
-//     height = prompterContentElement.offsetHeight;
-//     speed = speedElement.value;
-//     interval = Math.round(freq / speed);
-//     duration = height / (gap / interval) / 1000;
-//     date = new Date(null);
-//     date.setSeconds(Math.round(duration));
-//     result = date.toISOString().substr(11, 8);
-//     document.getElementById("durationContainer").innerHTML = result;
-//     return duration;
-//   }
 
-function estimateDuration() {
-    // Constantes
-    const freq = 250; // Frecuencia de actualización en ms
-    const gap = 1; // Unidad de desplazamiento por intervalo
-  
-    // Elementos del DOM
-    var speedControl = document.getElementById('speedControl');
-    var teleprompter = document.getElementById("teleprompter");
-    var durationContainer = document.getElementById("durationContainer");
-  
-    if (!speedControl || !teleprompter || !durationContainer) {
-      console.error("Error: uno o más elementos del DOM no están disponibles.");
-      return;
-    }
-  
-    // Extracción y validación de la velocidad
-    var speed = parseInt(speedControl.value, 10);
-    if (isNaN(speed) || speed <= 0) {
-      console.error("Valor de velocidad inválido o cero.");
-      return;
-    }
-  
-    // Cálculo de duración
-    var height = teleprompter.offsetHeight;
-    var interval = Math.round(freq / speed);
-    var duration = height / (gap / interval) / 1000;
-  
-    // Formateo y visualización del tiempo estimado
-    var date = new Date(null);
-    date.setSeconds(Math.round(duration));
-    var result = date.toISOString().substr(11, 8);
-    durationContainer.innerHTML = result;
-  
-    // Devolución de la duración calculada
-    return duration;
-  }
   
