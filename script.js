@@ -1321,7 +1321,7 @@ function estimateDuration() {
     var teleprompter = getTeleprompter();
     var speedControl = getSpeedControl();
 
-    height = teleprompter.offsetHeight;
+    height = teleprompter.scrollHeight;
     speed = speedControl.value;
     interval = Math.round(freq / speed);
     duration = height / (gap / interval) / 1000;
@@ -1330,6 +1330,9 @@ function estimateDuration() {
     result = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = result;
     return duration;
+    console.log('duration: ', duration);
+    console.log('result: ', result);
+    console.log('height: ', height)
 }
 
 // function estimateDuration() {
