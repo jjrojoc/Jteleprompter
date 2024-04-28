@@ -560,6 +560,8 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     selection.removeAllRanges();
     selection.addRange(range);
     selection.removeAllRanges();
+
+    autoguardado();
 });
 
 /*
