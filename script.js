@@ -1329,10 +1329,11 @@ function estimateDuration() {
     date.setSeconds(Math.round(duration));
     result = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = result;
-    return duration;
     console.log('duration: ', duration);
     console.log('result: ', result);
-    console.log('height: ', height)
+    console.log('height: ', height);
+    return duration;
+    
 }
 
 // function estimateDuration() {
