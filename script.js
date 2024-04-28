@@ -806,10 +806,11 @@ document.getElementById('resetButton').addEventListener('click', function() {
         }
 
         // Restablece el contenido a un mensaje predeterminado
-        //let scriptText = '' // texto predeterminado, ahora usa placeholder
-        //teleprompter.innerHTML = scriptText; // Establece el nuevo contenido HTML
-        teleprompter.innerHTML = ''; // Vacía el contenido
+        let scriptText = '' // vacía texto, ahora usa placeholder
+        teleprompter.innerHTML = scriptText; // Establece el nuevo contenido vacío HTML
+
         setPlaceholder(); // Establece el placeholder si es necesario
+        
         localStorage.setItem('savedScript', scriptText); // Guarda en localStorage
         teleprompter.setAttribute("contentEditable", true);
         // alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
