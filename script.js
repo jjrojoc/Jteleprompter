@@ -435,29 +435,40 @@ function toggleAutoScroll() {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value; // Ajusta esta fórmula según la necesidad real
+    let speed = parseInt(speedControl.value, 10);
 
-    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
-    const duration = totalHeight / speed; // Calcula la duración basándote en la velocidad
+    // Ajustar la velocidad de desplazamiento
+    let pixelsPerFrame = speed / 60; // Ajusta este valor según sea necesario
 
-    teleprompter.style.animationDuration = `${duration}s`;
-    teleprompter.classList.add('scrolling');
-
-    cronometro.start();
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
+    cronometro.start();
+
+    let currentTranslateY = 0;
+    const maxTranslateY = teleprompter.scrollHeight - teleprompter.clientHeight;
+
+    scrollInterval = setInterval(() => {
+        if (currentTranslateY < maxTranslateY) {
+            currentTranslateY += pixelsPerFrame;
+            teleprompter.style.transform = `translateY(-${currentTranslateY}px)`;
+        } else {
+            console.log('Reached end, stopping autoscroll.');
+            stopAutoScroll();
+        }
+    }, 1000 / 60); // Actualiza 60 veces por segundo
 }
 
 function stopAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
-    teleprompter.classList.remove('scrolling');
-    teleprompter.style.transform = 'translateY(0px)'; // Resetea la posición si necesitas empezar de nuevo
     clearInterval(scrollInterval);
+    const teleprompter = document.getElementById('teleprompter');
+    teleprompter.style.transform = ''; // Restablece la transformación
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
+    cronometro.stop();
 }
+
 
 
 
