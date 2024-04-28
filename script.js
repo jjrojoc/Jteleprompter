@@ -1066,11 +1066,11 @@ function adjustSpeed(speed) {
 //     teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
 // }
 
-
+teleprompter = document.getElementById('teleprompter');
 
 function prepareTeleprompter() {
     // Guardar la posición de scroll actual
-    teleprompter = document.getElementById('teleprompter');
+    
     teleprompter.scrollTop = 0;
 
     const teleprompter = document.getElementById('teleprompter');
