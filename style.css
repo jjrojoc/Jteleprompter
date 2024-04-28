@@ -29,12 +29,6 @@ body, html {
   line-height: 1.5em; /* Asegúrate de que el teleprompter tiene un line-height definido */
 }
 
-.teleprompter[contenteditable="true"]:empty:before {
-  content: attr(data-placeholder);
-  color: grey;
-  /* Añade más estilos aquí según necesites */
-}
-
 
 .control-bar {
   position: fixed;
