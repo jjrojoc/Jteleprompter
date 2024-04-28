@@ -349,11 +349,6 @@ function getTeleprompter() {
     return document.getElementById('teleprompter');
 }
 
-function resetScrollToStart() {
-    const teleprompter = getTeleprompter();
-    teleprompter.setAttribute('data-reset-scroll', 'true');
-}
-
 function toggleAutoScroll() {
     const teleprompter = getTeleprompter();
 
@@ -372,10 +367,9 @@ function toggleAutoScroll() {
     if (button.classList.contains('active')) {
         stopAutoScroll();
     } else {
-        if (!teleprompter.hasAttribute('data-original-content') || teleprompter.getAttribute('data-reset-scroll') === 'true') {
+        if (!teleprompter.hasAttribute('data-original-content')) {
             teleprompter.scrollTop = 0; // Restablece el scroll a 0
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
-            teleprompter.removeAttribute('data-reset-scroll'); // Quita la bandera para que no se reinicie innecesariamente
         }
         startAutoScroll();
     }
