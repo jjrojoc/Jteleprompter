@@ -372,6 +372,7 @@ function toggleAutoScroll() {
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
         startAutoScroll();
+        estimateDuration();
     }
 }
 /////    Original    /////
@@ -1320,15 +1321,23 @@ var result = "";
 function estimateDuration() {
     var teleprompter = getTeleprompter();
     var speedControl = getSpeedControl();
+    var speed = parseInt(speedControl.value, 10); // Obtener la velocidad desde el control de velocidad
 
-    height = teleprompter.scrollHeight;
-    speed = speedControl.value;
-    interval = Math.round(freq / speed);
-    duration = height / (gap / interval) / 1000;
-    date = new Date(null);
-    date.setSeconds(Math.round(duration));
-    result = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = result;
+    if (!speed || speed <= 0) {
+        console.error("Velocidad no definida o inválida.");
+        return;
+    }
+
+    var totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight; // Altura total que necesita ser recorrida
+    var pixelsPerSecond = speed; // Asumiendo que 'speed' define los píxeles por segundo
+    var duration = totalHeight / pixelsPerSecond; // Duración en segundos
+
+    var date = new Date(null);
+    date.setSeconds(Math.round(duration)); // Redondeo para obtener una estimación más clara
+    var result = date.toISOString().substr(11, 8); // Convertir a formato HH:MM:SS
+
+    document.getElementById("durationContainer").innerHTML = "Est. Duration: " + result;
+
     console.log('duration: ', duration);
     console.log('result: ', result);
     console.log('height: ', height);
