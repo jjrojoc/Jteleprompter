@@ -1237,5 +1237,16 @@ function stopCountdown() {
 //   }
 
 
+const teleprompter = document.getElementById('teleprompter');
 
-  
+teleprompter.addEventListener('focus', function() {
+    if (this.textContent === '') {
+        this.textContent = '';
+    }
+});
+
+teleprompter.addEventListener('blur', function() {
+    if (this.textContent === '') {
+        this.textContent = ''; // asegura que el placeholder se muestra si está vacío
+    }
+});
