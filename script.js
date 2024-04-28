@@ -559,6 +559,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     range.insertNode(span);
     selection.removeAllRanges();
     selection.addRange(range);
+    selection.removeAllRanges();
 });
 
 /*
