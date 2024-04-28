@@ -402,12 +402,13 @@ function toggleAutoScroll() {
 //     }
 // }
 
-function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-}
+//// ORIGINAL STOPAUTOSCROLL ////
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+// }
 
 // function stopAutoScroll() {
 //     clearInterval(scrollInterval);
@@ -431,6 +432,48 @@ function stopAutoScroll() {
 // }
 
 
+function startAutoScroll() {
+    const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    const maxSpeed = 100;  // Define la velocidad máxima del slider
+    const minSpeed = 1;    // Define la velocidad mínima del slider
+    const speed = maxSpeed - speedControl.value + minSpeed; // Calcula la velocidad de forma inversa
+
+    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
+    const duration = totalHeight / (100 / speed); // Ajustar esta fórmula según la necesidad real
+
+    isAutoScrolling = true;
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
+
+    if (teleprompter.scrollTop === 0) {
+        cronometro.reset();
+        console.log("reset en el inicio");
+        cronometro.start();
+        console.log("start en inicio");
+    } else {
+        cronometro.start();
+        console.log("continue");
+    }
+
+    teleprompter.style.transition = `transform ${duration}s linear`;
+    teleprompter.style.transform = `translateY(-${totalHeight}px)`;
+}
+
+function stopAutoScroll() {
+    const teleprompter = document.getElementById('teleprompter');
+
+    teleprompter.style.transition = '';
+    teleprompter.style.transform = '';
+    teleprompter.scrollTop = 0; // Esto reiniciará la posición del scroll si necesitas mantener la posición puedes eliminar esta línea
+
+    clearInterval(scrollInterval); // Si estás usando intervalos, asegúrate de limpiarlos, aunque aquí no son necesarios
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
+}
+
+
 
 function updateToggleButton(isActive) {
     const toggleButton = document.getElementById('toggleScroll');
@@ -440,37 +483,39 @@ function updateToggleButton(isActive) {
     toggleButton.style.backgroundColor = isActive ? "#ff0000" : "#555555";
 }
 
-function startAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
-    // const myBtn = document.getElementById("myBtn");
-    const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
+//// ORIGINAL START AUTOSCROLL ////
 
-    isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
-    // prepareTeleprompter();
+// function startAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     // const myBtn = document.getElementById("myBtn");
+//     const speedControl = document.getElementById('speedControl');
+//     const speed = 100 - speedControl.value;
 
-    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-        cronometro.reset();
-        console.log("reset en el inicio");
-        cronometro.start();
-        console.log("start en inicio");
-    } else {
-        cronometro.start();  // Continúa el temporizador sin resetear
-        console.log("continue");
-    }
+//     isAutoScrolling = true;
+//     updateToggleButton(true);
+//     toggleControlsDisplay(false);
+//     // prepareTeleprompter();
 
-    scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
-        /*if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            console.log('Reached end, stopping autoscroll.');
-            stopAutoScroll();
-            // myBtn.style.display = "block";
-            toggleControlsDisplay(true);
-        } */
-    }, speed);
-}
+//     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
+//         cronometro.reset();
+//         console.log("reset en el inicio");
+//         cronometro.start();
+//         console.log("start en inicio");
+//     } else {
+//         cronometro.start();  // Continúa el temporizador sin resetear
+//         console.log("continue");
+//     }
+
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1);
+//         /*if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+//             console.log('Reached end, stopping autoscroll.');
+//             stopAutoScroll();
+//             // myBtn.style.display = "block";
+//             toggleControlsDisplay(true);
+//         } */
+//     }, speed);
+// }
 
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
