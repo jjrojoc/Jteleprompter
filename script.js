@@ -345,33 +345,67 @@ function activateSpecialFunction() {
 }
 
 
+function getTeleprompter() {
+    return document.getElementById('teleprompter');
+}
 
-
+function resetScrollToStart() {
+    const teleprompter = getTeleprompter();
+    teleprompter.setAttribute('data-reset-scroll', 'true');
+}
 
 function toggleAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
-    const button = document.getElementById('toggleScroll');
+    const teleprompter = getTeleprompter();
 
-    if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
-        console.log("Cambios no guardados, auto-scroll no activado.");
+    if (!teleprompter) {
+        console.error('El elemento teleprompter no se encuentra en el DOM.');
         return;
     }
+
+    const button = document.getElementById('toggleScroll');
 
     if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
         alert('No hay suficiente contenido para hacer scroll.');
         return;
     }
 
-    // Toggle 'active' class on the button
     if (button.classList.contains('active')) {
         stopAutoScroll();
     } else {
-        if (!teleprompter.hasAttribute('data-original-content')) {
-            prepareTeleprompter();  // Solo prepara si no se ha preparado antes
+        if (!teleprompter.hasAttribute('data-original-content') || teleprompter.getAttribute('data-reset-scroll') === 'true') {
+            teleprompter.scrollTop = 0; // Restablece el scroll a 0
+            prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
+            teleprompter.removeAttribute('data-reset-scroll'); // Quita la bandera para que no se reinicie innecesariamente
         }
         startAutoScroll();
     }
 }
+/////    Original    /////
+// function toggleAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const button = document.getElementById('toggleScroll');
+    
+//     //// no usado desde que usamos autoguardado 
+//     // if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
+//     //     console.log("Cambios no guardados, auto-scroll no activado.");
+//     //     return;
+//     // }
+
+//     if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
+//         alert('No hay suficiente contenido para hacer scroll.');
+//         return;
+//     }
+
+//     // Toggle 'active' class on the button
+//     if (button.classList.contains('active')) {
+//         stopAutoScroll();
+//     } else {
+//         if (!teleprompter.hasAttribute('data-original-content')) {
+//             prepareTeleprompter();  // Solo prepara si no se ha preparado antes
+//         }
+//         startAutoScroll();
+//     }
+// }
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
