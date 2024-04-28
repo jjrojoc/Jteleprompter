@@ -440,7 +440,7 @@ function startAutoScroll() {
     const speed = maxSpeed - speedControl.value + minSpeed; // Calcula la velocidad de forma inversa
 
     const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
-    const duration = totalHeight / (100 / speed); // Ajustar esta fórmula según la necesidad real
+    const duration = totalHeight / (100 / speed); // Ajusta esta fórmula según la necesidad real
 
     isAutoScrolling = true;
     updateToggleButton(true);
@@ -459,6 +459,7 @@ function startAutoScroll() {
     teleprompter.style.transition = `transform ${duration}s linear`;
     teleprompter.style.transform = `translateY(-${totalHeight}px)`;
 }
+
 
 function stopAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
