@@ -225,3 +225,8 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   padding: 20px; /* Espacio alrededor del texto */
   background-color: #FFFF00; /* Fondo amarillo para destacar */
 }
+
+
+.placeholder {
+  color: grey; /* Estilo para el texto del placeholder */
+}

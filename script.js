@@ -1236,14 +1236,29 @@ function stopCountdown() {
 //     document.getElementById('controlBar').style.display = 'flex'; // Mostrar controles
 //   }
 
-teleprompter.addEventListener('focus', function() {
-    if (this.textContent === '') {
-        this.textContent = '';
+const teleprompter = document.getElementById('teleprompter');
+
+function setPlaceholder() {
+    if (teleprompter.textContent.trim() === '') {
+        teleprompter.textContent = teleprompter.getAttribute('data-placeholder');
+        teleprompter.classList.add('placeholder'); // Añade una clase para controlar el estilo del placeholder si es necesario.
     }
+}
+
+function removePlaceholder() {
+    if (teleprompter.textContent === teleprompter.getAttribute('data-placeholder')) {
+        teleprompter.textContent = '';
+        teleprompter.classList.remove('placeholder'); // Remueve la clase cuando el usuario empiece a escribir.
+    }
+}
+
+teleprompter.addEventListener('focus', function() {
+    removePlaceholder();
 });
 
 teleprompter.addEventListener('blur', function() {
-    if (this.textContent === '') {
-        this.textContent = ''; // asegura que el placeholder se muestra si está vacío
-    }
+    setPlaceholder();
 });
+
+// Inicializa el placeholder correctamente al cargar
+document.addEventListener('DOMContentLoaded', setPlaceholder);
