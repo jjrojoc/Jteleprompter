@@ -1306,8 +1306,8 @@ function getSpeedControl() {
 }
 
 function estimateDuration() {
-    teleprompter = getTeleprompter();
-    speedControl = getSpeedControl();
+    const teleprompter = getTeleprompter();
+    const speedControl = getSpeedControl();
     var height = teleprompter.scrollHeight; // Altura total del contenido del teleprompter
     var speed = parseInt(speedControl.value, 10); // Velocidad del scroll, normalmente un valor que el usuario puede ajustar
     var freq = 250; // Frecuencia en ms con la que se actualiza el scroll
