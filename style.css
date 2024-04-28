@@ -230,3 +230,20 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 .placeholder {
   color: grey; /* Estilo para el texto del placeholder */
 }
+
+/*Para el nuevo timer */
+#controlReloj {
+  display: flex; /* Usa flexbox para alinear los elementos hijos */
+  align-items: center; /* Centra los elementos en el eje transversal */
+  justify-content: space-around; /* Distribuye espacio alrededor de los elementos */
+  padding: 10px;
+  background-color: #f4f4f4; /* Color de fondo opcional para el panel de control */
+  border-radius: 5px; /* Bordes redondeados para el panel de control */
+}
+
+#timer, #durationContainer {
+  font-size: 16px; /* Tamaño de fuente para los timers */
+  font-weight: bold; /* Fuente en negrita para mejor visibilidad */
+  padding: 5px 10px; /* Espaciado interno para cada elemento */
+  color: #333; /* Color de texto */
+}
