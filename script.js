@@ -376,39 +376,39 @@ function toggleAutoScroll() {
     }
 }
 /////    Original    /////
-// function toggleAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const button = document.getElementById('toggleScroll');
+function toggleAutoScroll() {
+    const teleprompter = document.getElementById('teleprompter');
+    const button = document.getElementById('toggleScroll');
     
-//     //// no usado desde que usamos autoguardado 
-//     // if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
-//     //     console.log("Cambios no guardados, auto-scroll no activado.");
-//     //     return;
-//     // }
+    //// no usado desde que usamos autoguardado 
+    // if (teleprompter.contentEditable === "true" && !confirm("El contenido está siendo editado. ¿Desea guardar los cambios y continuar?")) {
+    //     console.log("Cambios no guardados, auto-scroll no activado.");
+    //     return;
+    // }
 
-//     if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
-//         alert('No hay suficiente contenido para hacer scroll.');
-//         return;
-//     }
+    if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
+        alert('No hay suficiente contenido para hacer scroll.');
+        return;
+    }
 
-//     // Toggle 'active' class on the button
-//     if (button.classList.contains('active')) {
-//         stopAutoScroll();
-//     } else {
-//         if (!teleprompter.hasAttribute('data-original-content')) {
-//             prepareTeleprompter();  // Solo prepara si no se ha preparado antes
-//         }
-//         startAutoScroll();
-//     }
-// }
+    // Toggle 'active' class on the button
+    if (button.classList.contains('active')) {
+        stopAutoScroll();
+    } else {
+        if (!teleprompter.hasAttribute('data-original-content')) {
+            prepareTeleprompter();  // Solo prepara si no se ha preparado antes
+        }
+        startAutoScroll();
+    }
+}
 
 //// ORIGINAL STOPAUTOSCROLL ////
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-// }
+function stopAutoScroll() {
+    clearInterval(scrollInterval);
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
+}
 
 // function stopAutoScroll() {
 //     clearInterval(scrollInterval);
@@ -430,46 +430,6 @@ function toggleAutoScroll() {
 //     updateToggleButton(false);
 //     toggleControlsDisplay(true);
 // }
-
-
-function startAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
-    const speedControl = document.getElementById('speedControl');
-    let speed = parseInt(speedControl.value, 10);
-
-    // Ajustar la velocidad de desplazamiento
-    let pixelsPerFrame = speed / 60; // Ajusta este valor según sea necesario
-
-    isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
-    cronometro.start();
-
-    let currentTranslateY = 0;
-    const maxTranslateY = teleprompter.scrollHeight - teleprompter.clientHeight;
-
-    scrollInterval = setInterval(() => {
-        if (currentTranslateY < maxTranslateY) {
-            currentTranslateY += pixelsPerFrame;
-            teleprompter.style.transform = `translateY(-${currentTranslateY}px)`;
-        } else {
-            console.log('Reached end, stopping autoscroll.');
-            stopAutoScroll();
-        }
-    }, 1000 / 60); // Actualiza 60 veces por segundo
-}
-
-function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    const teleprompter = document.getElementById('teleprompter');
-    teleprompter.style.transform = ''; // Restablece la transformación
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-    cronometro.stop();
-}
-
-
 
 
 
