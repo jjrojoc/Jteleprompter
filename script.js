@@ -1236,7 +1236,6 @@ function stopCountdown() {
 //     document.getElementById('controlBar').style.display = 'flex'; // Mostrar controles
 //   }
 
-const teleprompter = document.getElementById('teleprompter');
 
 function setPlaceholder() {
     if (teleprompter.textContent.trim() === '') {
