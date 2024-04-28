@@ -1299,8 +1299,8 @@ teleprompter.addEventListener('blur', function() {
 document.addEventListener('DOMContentLoaded', setPlaceholder);
 
 
-var speedControl = document.getElementById('speedControl');  // Control de velocidad del usuario
-var teleprompter = document.getElementById("teleprompter");  // Elemento del teleprompter
+//var speedControl = document.getElementById('speedControl');  // Control de velocidad del usuario
+//var teleprompter = document.getElementById("teleprompter");  // Elemento del teleprompter
 
 function estimateDuration() {
     var height = teleprompter.scrollHeight; // Altura total del contenido del teleprompter
