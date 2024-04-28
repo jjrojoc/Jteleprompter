@@ -992,9 +992,9 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             // Eliminar todos los estilos y atributos innecesarios, manteniendo solo el color.
             const currentColor = node.style.color;
             node.removeAttribute('style');
-            if (currentColor && currentColor !== 'black' && currentColor !== 'rgb(0, 0, 0)') {
+            if (currentColor && currentColor === 'black' || currentColor === 'rgb(0, 0, 0)') {
                 node.removeAttribute('style'); // Cambia el negro a defecto
-            }   else if (currentColor && currentColor !== 'white' && currentColor !== 'rgb(255, 255, 255)') {
+            }   else if (currentColor && currentColor === 'white' || currentColor === 'rgb(255, 255, 255)') {
                 node.removeAttribute('style'); // Cambia el blanco a defecto
                 }
 
