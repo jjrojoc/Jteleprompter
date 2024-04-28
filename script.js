@@ -967,7 +967,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     range.deleteContents();
 
     if (htmlContent) {
-        // Crear un contenedor para el HTML y ajustar el contenido
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
         processHTML(tempDiv);
@@ -975,7 +974,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             range.insertNode(node.cloneNode(true));
         });
     } else if (plainText) {
-        // Insertar texto plano respetando los saltos de línea
         const lines = plainText.split(/[\r\n]+/);
         lines.forEach((line, index) => {
             if (index > 0) {
@@ -985,33 +983,32 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         });
     }
 
-    // Colocar el cursor después del texto insertado
     range.collapse(false);
     selection.removeAllRanges();
     selection.addRange(range);
 
     function processHTML(element) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
-            // Eliminar todos los atributos
-            Array.from(node.attributes).forEach(attr => node.removeAttribute(attr.name));
-
-            // Aplicar los atributos deseados
-            if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
-                node.removeAttribute('style');
-            }   else if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
-                    node.removeAttribute('style'); // Cambia el negro a blanco
+            // Eliminar todos los estilos y atributos innecesarios, manteniendo solo el color.
+            const currentColor = node.style.color;
+            node.removeAttribute('style');
+            if (currentColor && currentColor !== 'black' && currentColor !== 'rgb(0, 0, 0)') {
+                node.style.color = currentColor;
+            }   else if (currentColor && currentColor !== 'white' && currentColor !== 'rgb(255, 255, 255)') {
+                    node.style.color = currentColor;
                 }
 
-            // Ajustar otros estilos necesarios según la lógica deseada
-            if (node.tagName === 'SPAN' && node.style.color) {
-                node.style.color = node.style.color; // Mantener el color si existe
-            } else {
-                node.removeAttribute('style'); // Eliminar cualquier estilo no deseado
-            }
+            // Eliminar todos los atributos innecesarios
+            Array.from(node.attributes).forEach(attr => {
+                if (attr.name !== 'style') {  // Mantener solo el atributo style si existe
+                    node.removeAttribute(attr.name);
+                }
+            });
         });
     }
     autoguardado();
 });
+
 
 
 
