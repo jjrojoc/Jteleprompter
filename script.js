@@ -1305,28 +1305,41 @@ function getSpeedControl() {
     return document.getElementById('speedControl');
 }
 
-var freq = 250; // Frecuencia de actualización en ms
-var gap = 1; // Esto debería representar la unidad de movimiento por intervalo, asegúrate de que está correcto
 
+
+//var timer = null;
+var height = 0;
+var speed = 0;
+var interval = 0;
+var duration = 0;
+var date = null;
+var value = 0;
+var freq = 250;
+var gap = 1;
+var result = "";
 function estimateDuration() {
     var teleprompter = getTeleprompter();
     var speedControl = getSpeedControl();
-    var speed = parseFloat(speedControl.value); // Asegurarse de que el valor es un número
 
-    if (!speed || speed <= 0) {
-        alert("Velocidad no definida o inválida.");
-        return;
-    }
-
-    var height = teleprompter.scrollHeight - teleprompter.clientHeight; // Altura que debe recorrer el scroll
-    var interval = Math.round(freq / speed); // Tiempo entre cada paso de scroll
-    var duration = (height / speed) * interval / 1000; // Duración en segundos
-
-    var date = new Date(null);
-    date.setSeconds(Math.round(duration)); // Redondeo para obtener una estimación más clara
-    var result = date.toISOString().substr(11, 8); // Convertir a formato HH:MM:SS
-
-    document.getElementById("durationContainer").innerHTML = "Est. Duration: " + result;
+    height = teleprompter.offsetHeight;
+    speed = speedControl.value;
+    interval = Math.round(freq / speed);
+    duration = height / (gap / interval) / 1000;
+    date = new Date(null);
+    date.setSeconds(Math.round(duration));
+    result = date.toISOString().substr(11, 8);
+    document.getElementById("durationContainer").innerHTML = result;
     return duration;
 }
 
+// function estimateDuration() {
+//     height = prompterContentElement.offsetHeight;
+//     speed = speedElement.value;
+//     interval = Math.round(freq / speed);
+//     duration = height / (gap / interval) / 1000;
+//     date = new Date(null);
+//     date.setSeconds(Math.round(duration));
+//     result = date.toISOString().substr(11, 8);
+//     document.getElementById("durationContainer").innerHTML = result;
+//     return duration;
+//   }
