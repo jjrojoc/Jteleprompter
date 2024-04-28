@@ -1301,8 +1301,13 @@ document.addEventListener('DOMContentLoaded', setPlaceholder);
 
 //var speedControl = document.getElementById('speedControl');  // Control de velocidad del usuario
 //var teleprompter = document.getElementById("teleprompter");  // Elemento del teleprompter
+function getSpeedControl() {
+    return document.getElementById('speedControl');
+}
 
 function estimateDuration() {
+    teleprompter = getTeleprompter();
+    speedControl = getSpeedControl();
     var height = teleprompter.scrollHeight; // Altura total del contenido del teleprompter
     var speed = parseInt(speedControl.value, 10); // Velocidad del scroll, normalmente un valor que el usuario puede ajustar
     var freq = 250; // Frecuencia en ms con la que se actualiza el scroll
@@ -1315,6 +1320,6 @@ function estimateDuration() {
     var result = date.toISOString().substr(11, 8); // Formatea el tiempo en HH:MM:SS
 
     document.getElementById("durationContainer").innerHTML = result; // Muestra el resultado en la interfaz de usuario
-    return duration;
     console.log(duration);
+    return duration;
 }
