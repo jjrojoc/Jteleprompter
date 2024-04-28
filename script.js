@@ -435,44 +435,30 @@ function toggleAutoScroll() {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const maxSpeed = 100;  // Define la velocidad máxima del slider
-    const minSpeed = 1;    // Define la velocidad mínima del slider
-    const speed = maxSpeed - speedControl.value + minSpeed; // Calcula la velocidad de forma inversa
+    const speed = 100 - speedControl.value + 1; // Ajusta esta fórmula según la necesidad real
 
     const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
-    const duration = totalHeight / (100 / speed); // Ajusta esta fórmula según la necesidad real
+    const duration = totalHeight / (100 / speed); // Calcula la duración basándote en la velocidad
 
+    teleprompter.style.animationDuration = `${duration}s`;
+    teleprompter.classList.add('scrolling');
+
+    cronometro.start();
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
-
-    if (teleprompter.scrollTop === 0) {
-        cronometro.reset();
-        console.log("reset en el inicio");
-        cronometro.start();
-        console.log("start en inicio");
-    } else {
-        cronometro.start();
-        console.log("continue");
-    }
-
-    teleprompter.style.transition = `transform ${duration}s linear`;
-    teleprompter.style.transform = `translateY(-${totalHeight}px)`;
 }
-
 
 function stopAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-
-    teleprompter.style.transition = '';
-    teleprompter.style.transform = '';
-    teleprompter.scrollTop = 0; // Esto reiniciará la posición del scroll si necesitas mantener la posición puedes eliminar esta línea
-
-    clearInterval(scrollInterval); // Si estás usando intervalos, asegúrate de limpiarlos, aunque aquí no son necesarios
+    teleprompter.classList.remove('scrolling');
+    teleprompter.style.transform = 'translateY(0)'; // Resetea la posición si necesitas empezar de nuevo
+    clearInterval(scrollInterval);
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
 }
+
 
 
 

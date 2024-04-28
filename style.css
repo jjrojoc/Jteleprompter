@@ -251,3 +251,15 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   border-radius: 10px;
 }
 
+
+
+@keyframes scrollContent {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-100%); }
+}
+
+.scrolling {
+  animation-name: scrollContent;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards; /* Mantiene el estado final después de terminar la animación */
+}
