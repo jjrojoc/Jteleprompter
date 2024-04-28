@@ -255,8 +255,9 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 
 @keyframes scrollContent {
   from { transform: translateY(0px); }
-  to { transform: translateY(-100%); }
+  to { transform: translateY(calc(-1 * (100% - 100vh))); }
 }
+
 
 .scrolling {
   animation-name: scrollContent;

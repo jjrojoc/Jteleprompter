@@ -435,10 +435,10 @@ function toggleAutoScroll() {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value + 1; // Ajusta esta fórmula según la necesidad real
+    const speed = 100 - speedControl.value; // Ajusta esta fórmula según la necesidad real
 
     const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
-    const duration = totalHeight / (100 / speed); // Calcula la duración basándote en la velocidad
+    const duration = totalHeight / speed; // Calcula la duración basándote en la velocidad
 
     teleprompter.style.animationDuration = `${duration}s`;
     teleprompter.classList.add('scrolling');
@@ -452,12 +452,13 @@ function startAutoScroll() {
 function stopAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     teleprompter.classList.remove('scrolling');
-    teleprompter.style.transform = 'translateY(0)'; // Resetea la posición si necesitas empezar de nuevo
+    teleprompter.style.transform = 'translateY(0px)'; // Resetea la posición si necesitas empezar de nuevo
     clearInterval(scrollInterval);
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
 }
+
 
 
 
