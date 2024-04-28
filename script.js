@@ -367,6 +367,7 @@ function toggleAutoScroll() {
         stopAutoScroll();
     } else {
         if (!teleprompter.hasAttribute('data-original-content')) {
+            teleprompter.scrollTop = 0;
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes
         }
         startAutoScroll();
@@ -1069,10 +1070,6 @@ function adjustSpeed(speed) {
 teleprompter = document.getElementById('teleprompter');
 
 function prepareTeleprompter() {
-    // Guardar la posición de scroll actual
-    
-    teleprompter.scrollTop = 0;
-
     const teleprompter = document.getElementById('teleprompter');
     // Almacenar el contenido original para restaurarlo después
     const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
