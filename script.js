@@ -900,66 +900,11 @@ document.getElementById('resetButton').addEventListener('click', function() {
 
 
 ////// Original, este funciona bien /////
-// document.getElementById('teleprompter').addEventListener('paste', function(e) {
-//     e.preventDefault(); // Previene el comportamiento de pegado predeterminado
-
-//     var htmlContent = e.clipboardData.getData('text/html');
-//     var plainText = e.clipboardData.getData('text/plain');
-
-//     const selection = window.getSelection();
-//     if (!selection.rangeCount) return false;
-//     const range = selection.getRangeAt(0);
-//     range.deleteContents();
-
-//     if (htmlContent) {
-//         // Crear un contenedor para el HTML y ajustar el contenido
-//         const tempDiv = document.createElement('div');
-//         tempDiv.innerHTML = htmlContent;
-//         processHTML(tempDiv);
-//         Array.from(tempDiv.childNodes).forEach(node => {
-//             range.insertNode(node.cloneNode(true));
-//         });
-//     } else if (plainText) {
-//         // Insertar texto plano respetando los saltos de línea
-//         const lines = plainText.split(/[\r\n]+/);
-//         lines.forEach((line, index) => {
-//             if (index > 0) {
-//                 range.insertNode(document.createElement('br'));
-//             }
-//             range.insertNode(document.createTextNode(line));
-//         });
-//     }
-
-//     // Colocar el cursor después del texto insertado
-//     range.collapse(false);
-//     selection.removeAllRanges();
-//     selection.addRange(range);
-
-//     // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
-//     function processHTML(element) {
-//         Array.from(element.querySelectorAll('*')).forEach(node => {
-//             if (node.style) {
-//                 // Si el color es blanco, eliminar el estilo completamente
-//                 if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
-//                     node.removeAttribute('style');
-//                 } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
-//                     node.removeAttribute('style'); // Cambia el negro a blanco
-//                 }
-//                 // Eliminar estilos no necesarios
-//                 node.style.fontSize = '';
-//                 node.style.fontFamily = '';
-//                 node.style.backgroundColor = '';
-//             }
-//         });
-//     }
-//     autoguardado();
-// });
-
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault(); // Previene el comportamiento de pegado predeterminado.
+    e.preventDefault(); // Previene el comportamiento de pegado predeterminado
 
-    const htmlContent = e.clipboardData.getData('text/html');
-    const plainText = e.clipboardData.getData('text/plain');
+    var htmlContent = e.clipboardData.getData('text/html');
+    var plainText = e.clipboardData.getData('text/plain');
 
     const selection = window.getSelection();
     if (!selection.rangeCount) return false;
@@ -967,6 +912,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     range.deleteContents();
 
     if (htmlContent) {
+        // Crear un contenedor para el HTML y ajustar el contenido
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
         processHTML(tempDiv);
@@ -974,6 +920,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             range.insertNode(node.cloneNode(true));
         });
     } else if (plainText) {
+        // Insertar texto plano respetando los saltos de línea
         const lines = plainText.split(/[\r\n]+/);
         lines.forEach((line, index) => {
             if (index > 0) {
@@ -983,33 +930,30 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         });
     }
 
+    // Colocar el cursor después del texto insertado
     range.collapse(false);
     selection.removeAllRanges();
     selection.addRange(range);
 
+    // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
     function processHTML(element) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
-            // Eliminar todos los estilos y atributos innecesarios, manteniendo solo el color.
-            const currentColor = node.style.color;
-            node.removeAttribute('style');
-            if (currentColor && currentColor === 'black' || currentColor === 'rgb(0, 0, 0)') {
-                node.removeAttribute('style'); // Cambia el negro a defecto
-            }   else if (currentColor && currentColor === 'white' || currentColor === 'rgb(255, 255, 255)') {
-                node.removeAttribute('style'); // Cambia el blanco a defecto
+            if (node.style) {
+                // Si el color es blanco, eliminar el estilo completamente
+                if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
+                    node.removeAttribute('style');
+                } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
+                    node.removeAttribute('style'); // Cambia el negro a blanco
                 }
-
-            // Eliminar todos los atributos innecesarios
-            Array.from(node.attributes).forEach(attr => {
-                if (attr.name !== 'style') {  // Mantener solo el atributo style si existe
-                    node.removeAttribute(attr.name);
-                }
-            });
+                // Eliminar estilos no necesarios
+                node.style.fontSize = '';
+                node.style.fontFamily = '';
+                node.style.backgroundColor = '';
+            }
         });
     }
     autoguardado();
 });
-
-
 
 
 
