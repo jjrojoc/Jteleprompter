@@ -1309,17 +1309,21 @@ function estimateDuration() {
     const teleprompter = getTeleprompter();
     const speedControl = getSpeedControl();
     var height = teleprompter.scrollHeight; // Altura total del contenido del teleprompter
+    console.log("height: ", height);
     var speed = parseInt(speedControl.value, 10); // Velocidad del scroll, normalmente un valor que el usuario puede ajustar
+    console.log(speed);
     var freq = 250; // Frecuencia en ms con la que se actualiza el scroll
     var gap = 1; // Cantidad de píxeles que se mueve el contenido por intervalo de tiempo
 
     var interval = Math.round(freq / speed); // Calcula el tiempo entre cada movimiento de scroll
+    console.log("interval: ", interval);
     var duration = height / (gap / interval) / 1000; // Duración total estimada para recorrer todo el contenido
+    console.log("duration: ", duration)
     var date = new Date(null);
     date.setSeconds(Math.round(duration)); // Configura los segundos calculados en un objeto Date
     var result = date.toISOString().substr(11, 8); // Formatea el tiempo en HH:MM:SS
 
     document.getElementById("durationContainer").innerHTML = result; // Muestra el resultado en la interfaz de usuario
-    console.log(duration);
+    console.log("result :", result);
     return duration;
 }
