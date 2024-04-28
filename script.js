@@ -1068,6 +1068,9 @@ function adjustSpeed(speed) {
 
 
 function prepareTeleprompter() {
+    // Guardar la posición de scroll actual
+    teleprompter.scrollTop = 0;
+
     const teleprompter = document.getElementById('teleprompter');
     // Almacenar el contenido original para restaurarlo después
     const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
