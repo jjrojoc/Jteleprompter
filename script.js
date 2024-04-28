@@ -993,9 +993,9 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             const currentColor = node.style.color;
             node.removeAttribute('style');
             if (currentColor && currentColor !== 'black' && currentColor !== 'rgb(0, 0, 0)') {
-                node.style.color = currentColor;
+                node.removeAttribute('style'); // Cambia el negro a defecto
             }   else if (currentColor && currentColor !== 'white' && currentColor !== 'rgb(255, 255, 255)') {
-                    node.style.color = currentColor;
+                node.removeAttribute('style'); // Cambia el blanco a defecto
                 }
 
             // Eliminar todos los atributos innecesarios
