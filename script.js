@@ -371,9 +371,9 @@ function toggleAutoScroll() {
             teleprompter.scrollTop = 0; // Restablece el scroll a 0
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
-        estimateDuration();
         startAutoScroll();
-        }
+        estimateDuration();    
+    }
 }
 /////    Original    /////
 // function toggleAutoScroll() {
