@@ -517,28 +517,18 @@ function stopAutoScroll() {
 
 function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
-    var totalHeight = teleprompter.scrollHeight;
-    var visibleHeight = teleprompter.clientHeight;
-    var scrollableHeight = totalHeight - visibleHeight;
-    var remainingHeight = scrollableHeight - teleprompter.scrollTop;
+    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value * 0.30) / 1000; // ajusta la escala de velocidad a ms por pixel
+    var speedPerPixel = (100 - speedControl.value) * 10; // Ajusta este valor según la realidad del desplazamiento
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
-    var hours = Math.floor(remainingTime / 3600000);
-    var minutes = Math.floor((remainingTime % 3600000) / 60000);
-    var seconds = Math.floor((remainingTime % 60000) / 1000);
-
-    var formattedTime = [
-        hours.toString().padStart(2, '0'),
-        minutes.toString().padStart(2, '0'),
-        seconds.toString().padStart(2, '0')
-    ].join(':');
-
+    var date = new Date(remainingTime);
+    var formattedTime = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
 }
+
 
 
 // function estimateDuration() {
