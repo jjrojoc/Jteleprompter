@@ -519,7 +519,7 @@ function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value) * 10; // Ajusta este valor según la realidad del desplazamiento
+    var speedPerPixel = (100 - speedControl.value) * 6; // Ajusta este valor según la realidad del desplazamiento
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
     var date = new Date(remainingTime);
