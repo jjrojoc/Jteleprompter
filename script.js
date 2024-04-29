@@ -371,9 +371,9 @@ function toggleAutoScroll() {
             teleprompter.scrollTop = 0; // Restablece el scroll a 0
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
-        startAutoScroll();
         estimateDuration();
-    }
+        startAutoScroll();
+        }
 }
 /////    Original    /////
 // function toggleAutoScroll() {
@@ -515,6 +515,32 @@ function stopAutoScroll() {
 }
 
 
+function estimateDuration() {
+    var teleprompter = document.getElementById('teleprompter');
+    var totalHeight = teleprompter.scrollHeight;
+    var visibleHeight = teleprompter.clientHeight;
+    var scrollableHeight = totalHeight - visibleHeight;
+    var remainingHeight = scrollableHeight - teleprompter.scrollTop;
+    var speedControl = document.getElementById('speedControl');
+    var speedPerPixel = (100 - speedControl.value * 0.30) / 1000; // ajusta la escala de velocidad a ms por pixel
+    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+
+    var hours = Math.floor(remainingTime / 3600000);
+    var minutes = Math.floor((remainingTime % 3600000) / 60000);
+    var seconds = Math.floor((remainingTime % 60000) / 1000);
+
+    var formattedTime = [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        seconds.toString().padStart(2, '0')
+    ].join(':');
+
+    document.getElementById("durationContainer").innerHTML = formattedTime;
+    console.log('Estimated duration is:', formattedTime);
+    console.log('Remaining height is:', remainingHeight);
+}
+
+
 // function estimateDuration() {
 //     var teleprompter = document.getElementById('teleprompter');
 //     var totalHeight = teleprompter.scrollHeight;
@@ -537,32 +563,7 @@ function stopAutoScroll() {
 //     // console.log('remainingtime is: ', remainingTime);
 // }
 
-function estimateDuration() {
-    const teleprompter = document.getElementById('teleprompter');
-    totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
-    const initialSpeed = 100 - speedControl.value;
-    let scrolledHeight = teleprompter.scrollTop;
-    let remainingHeight = totalHeight - scrolledHeight;
-    let estimatedTime = (remainingHeight / initialSpeed) * 1000; // Asume que 1 unidad de velocidad equivale a 1px por segundo
 
-    return estimatedTime;
-}
-
-function updateEstimatedTime() {
-    let durationEstimate = estimateDuration();
-    document.getElementById('durationContainer').textContent = formatTime(durationEstimate);
-
-    if (isAutoScrolling) {
-        setTimeout(updateEstimatedTime, 1000);  // Actualiza cada segundo
-    }
-}
-
-function formatTime(milliseconds) {
-    let seconds = Math.floor(milliseconds / 1000);
-    let minutes = Math.floor(seconds / 60);
-    seconds = seconds % 60;
-    return minutes + " min " + seconds + " sec";
-}
 
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
@@ -1397,54 +1398,3 @@ document.addEventListener('DOMContentLoaded', setPlaceholder);
 function getSpeedControl() {
     return document.getElementById('speedControl');
 }
-
-
-
-// //var timer = null;
-// var height = 0;
-// var speed = 0;
-// var interval = 0;
-// var duration = 0;
-// var date = null;
-// var value = 0;
-// var freq = 250;
-// var gap = 1;
-// var result = "";
-// function estimateDuration() {
-//     var teleprompter = getTeleprompter();
-//     var speedControl = getSpeedControl();
-//     var speed = parseInt(speedControl.value, 10); // Obtener la velocidad desde el control de velocidad
-
-//     if (!speed || speed <= 0) {
-//         console.error("Velocidad no definida o inválida.");
-//         return;
-//     }
-
-//     var totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight; // Altura total que necesita ser recorrida
-//     var pixelsPerSecond = speed; // Asumiendo que 'speed' define los píxeles por segundo
-//     var duration = totalHeight / pixelsPerSecond; // Duración en segundos
-
-//     var date = new Date(null);
-//     date.setSeconds(Math.round(duration)); // Redondeo para obtener una estimación más clara
-//     var result = date.toISOString().substr(11, 8); // Convertir a formato HH:MM:SS
-
-//     document.getElementById("durationContainer").innerHTML = "Est. Duration: " + result;
-
-//     console.log('duration: ', duration);
-//     console.log('result: ', result);
-//     console.log('height: ', height);
-//     return duration;
-    
-// }
-
-// function estimateDuration() {
-//     height = prompterContentElement.offsetHeight;
-//     speed = speedElement.value;
-//     interval = Math.round(freq / speed);
-//     duration = height / (gap / interval) / 1000;
-//     date = new Date(null);
-//     date.setSeconds(Math.round(duration));
-//     result = date.toISOString().substr(11, 8);
-//     document.getElementById("durationContainer").innerHTML = result;
-//     return duration;
-//   }
