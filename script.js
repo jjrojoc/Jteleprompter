@@ -518,7 +518,7 @@ function estimateDuration() {
     const teleprompter = document.getElementById('teleprompter');
     const totalHeight = teleprompter.scrollHeight;
     const scrolledHeight = teleprompter.scrollTop;
-    const remainingHeight = totalHeight - scrolledHeight - teleprompter.clientHeight;
+    const remainingHeight = totalHeight - scrolledHeight;
 
     const speedControl = document.getElementById('speedControl');
     const speed = Math.max(1, 100 - speedControl.value * 0.28); // Usando el factor de ajuste que mencionaste
