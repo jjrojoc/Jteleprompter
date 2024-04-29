@@ -521,7 +521,7 @@ function estimateDuration() {
     var scrollableHeight = totalHeight - visibleHeight; // ajusta en función de la posición actual
     var remainingHeight = scrollableHeight - teleprompter.scrollTop; // altura que queda por scrollear
     var speedControl = document.getElementById('speedControl');
-    var speed = 100 - speedControl.value * 0.35;
+    var speed = 100 - speedControl.value * 0.3;
     var remainingTime = remainingHeight * speed; // tiempo restante en milisegundos
 
     var date = new Date(null);
