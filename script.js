@@ -530,7 +530,7 @@ function calculateSpeed() {
     const ppi = getPPI();
     const speedControl = document.getElementById('speedControl');
     const baseSpeed = 100 - speedControl.value;
-    const adjustedSpeed = baseSpeed * (ppi / 160); // 160 es un PPI de referencia
+    const adjustedSpeed = baseSpeed * (ppi / 360); // 160 es un PPI de referencia
 
     return adjustedSpeed;
 }
