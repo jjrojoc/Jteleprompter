@@ -550,7 +550,7 @@ var result = "";
 function estimateDuration() {
     var speedElement = document.getElementById("speedControl");
     var prompterContentElement = document.getElementById("teleprompter");
-  height = prompterContentElement.offsetHeight;
+  height = prompterContentElement.scrollHeight;
   speed = speedElement.value;
   interval = Math.round(freq / speed);
   duration = height / (gap / interval) / 1000;
