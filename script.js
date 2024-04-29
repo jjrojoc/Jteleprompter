@@ -514,15 +514,36 @@ function stopAutoScroll() {
 }
 
 
+function getPPI() {
+    // Una forma simple de obtener una estimación del PPI
+    return (function() {
+        var div = document.createElement('div');
+        div.style.width = "1in";
+        document.body.appendChild(div);
+        var ppi = div.offsetWidth;
+        document.body.removeChild(div);
+        return ppi;
+    })();
+}
+
+function calculateSpeed() {
+    const ppi = getPPI();
+    const speedControl = document.getElementById('speedControl');
+    const baseSpeed = 100 - speedControl.value;
+    const adjustedSpeed = baseSpeed * (ppi / 160); // 160 es un PPI de referencia
+
+    return adjustedSpeed;
+}
+
+
 function estimateDuration() {
     const teleprompter = document.getElementById('teleprompter');
     const totalHeight = teleprompter.scrollHeight;
     const scrolledHeight = teleprompter.scrollTop;
     const remainingHeight = totalHeight - scrolledHeight;
 
-    const speedControl = document.getElementById('speedControl');
-    const speed = Math.max(1, 100 - speedControl.value * 0.28); // Usando el factor de ajuste que mencionaste
-    const pixelsPerSecond = speed; // Ajusta si es necesario
+    
+    const pixelsPerSecond = calculateSpeed(); // Ajusta si es necesario
 
     const secondsToFinish = remainingHeight / pixelsPerSecond;
 
