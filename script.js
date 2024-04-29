@@ -518,23 +518,30 @@ function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
     var totalHeight = teleprompter.scrollHeight;
     var visibleHeight = teleprompter.clientHeight;
-    var scrollableHeight = totalHeight - visibleHeight; // ajusta en función de la posición actual
-    var remainingHeight = scrollableHeight - teleprompter.scrollTop; // altura que queda por scrollear
+    var scrollableHeight = totalHeight - visibleHeight;
+    var remainingHeight = scrollableHeight - teleprompter.scrollTop;
     var speedControl = document.getElementById('speedControl');
-    var speed = 100 - speedControl.value * 0.30;
-    var remainingTime = remainingHeight * speed; // tiempo restante en milisegundos
+    var speed = 100 - speedControl.value;
+    var pixelsPerInterval = 1;
+    var intervalsPerSecond = 1000 / speed;
+    var secondsToFinish = remainingHeight / pixelsPerInterval / intervalsPerSecond;
 
-    var date = new Date(null);
-    date.setMilliseconds(remainingTime);
-    var result = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = result;
-    console.log('estimated duration is: ', result);
-    // console.log('totalHeight is: ', totalHeight);
-    // console.log('visibleheight: ', visibleHeight);
-    // console.log('scrollableheight is: ', scrollableHeight);
-    console.log('remainingHeight is:', remainingHeight);
-    // console.log('remainingtime is: ', remainingTime);
+    var hours = Math.floor(secondsToFinish / 3600);
+    var minutes = Math.floor((secondsToFinish % 3600) / 60);
+    var seconds = Math.floor(secondsToFinish % 60);
+
+    var timeString = [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        seconds.toString().padStart(2, '0')
+    ].join(':');
+
+    var currentDisplay = document.getElementById("durationContainer").innerHTML;
+    if (currentDisplay !== timeString) {
+        document.getElementById("durationContainer").innerHTML = timeString;
+    }
 }
+
 
 
 
