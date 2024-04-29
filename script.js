@@ -403,12 +403,12 @@ function toggleAutoScroll() {
 // }
 
 //// ORIGINAL STOPAUTOSCROLL ////
-function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-}
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+// }
 
 // function stopAutoScroll() {
 //     clearInterval(scrollInterval);
@@ -444,37 +444,93 @@ function updateToggleButton(isActive) {
 
 //// ORIGINAL START AUTOSCROLL ////
 
+// function startAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     // const myBtn = document.getElementById("myBtn");
+//     const speedControl = document.getElementById('speedControl');
+//     const speed = 100 - speedControl.value;
+
+//     isAutoScrolling = true;
+//     updateToggleButton(true);
+//     toggleControlsDisplay(false);
+//     // prepareTeleprompter();
+
+//     if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
+//         cronometro.reset();
+//         console.log("reset en el inicio");
+//         cronometro.start();
+//         console.log("start en inicio");
+//     } else {
+//         cronometro.start();  // Continúa el temporizador sin resetear
+//         console.log("continue");
+//     }
+
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1);
+//         /*if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+//             console.log('Reached end, stopping autoscroll.');
+//             stopAutoScroll();
+//             // myBtn.style.display = "block";
+//             toggleControlsDisplay(true);
+//         } */
+//     }, speed);
+// }
+
+
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    // const myBtn = document.getElementById("myBtn");
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
-
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
-    // prepareTeleprompter();
 
-    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
+    if (teleprompter.scrollTop === 0) {
         cronometro.reset();
-        console.log("reset en el inicio");
         cronometro.start();
-        console.log("start en inicio");
     } else {
-        cronometro.start();  // Continúa el temporizador sin resetear
-        console.log("continue");
+        cronometro.start();
     }
 
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
-        /*if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            console.log('Reached end, stopping autoscroll.');
-            stopAutoScroll();
-            // myBtn.style.display = "block";
-            toggleControlsDisplay(true);
-        } */
     }, speed);
+
+    // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
 }
+
+function stopAutoScroll() {
+    clearInterval(scrollInterval);
+    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+    updateDurationInterval = null; // Restablece la variable
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
+}
+
+function estimateDuration() {
+    var teleprompter = document.getElementById('teleprompter');
+    var totalHeight = teleprompter.scrollHeight;
+    var visibleHeight = teleprompter.clientHeight;
+    var scrollableHeight = totalHeight - visibleHeight; // ajusta en función de la posición actual
+    var remainingHeight = scrollableHeight - teleprompter.scrollTop; // altura que queda por scrollear
+    var speedControl = document.getElementById('speedControl');
+    var speed = 100 - speedControl.value;
+    var remainingTime = remainingHeight * speed; // tiempo restante en milisegundos
+
+    var date = new Date(null);
+    date.setMilliseconds(remainingTime);
+    var result = date.toISOString().substr(11, 8);
+    document.getElementById("durationContainer").innerHTML = result;
+}
+
+
+
 
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
