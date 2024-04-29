@@ -483,7 +483,7 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
-    totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
+    
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
@@ -539,6 +539,7 @@ function stopAutoScroll() {
 
 function estimateDuration() {
     const teleprompter = document.getElementById('teleprompter');
+    totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
     let scrolledHeight = teleprompter.scrollTop;
     let remainingHeight = totalHeight - scrolledHeight;
     let estimatedTime = (remainingHeight / initialSpeed) * 1000; // Asume que 1 unidad de velocidad equivale a 1px por segundo
