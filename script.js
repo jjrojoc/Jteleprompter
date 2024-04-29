@@ -527,6 +527,12 @@ function estimateDuration() {
     date.setMilliseconds(remainingTime);
     var result = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = result;
+    console.log('estimated duration is: ', result);
+    console.log('totalHeight is: ', totalHeight);
+    console.log('visibleheight: ', visibleHeight);
+    console.log('scrollableheight is: ', scrollableHeight);
+    console.log('remainingHeight is:', remainingHeight);
+    console.log('remainingtime is: ', remainingTime);
 }
 
 
@@ -1368,42 +1374,42 @@ function getSpeedControl() {
 
 
 
-//var timer = null;
-var height = 0;
-var speed = 0;
-var interval = 0;
-var duration = 0;
-var date = null;
-var value = 0;
-var freq = 250;
-var gap = 1;
-var result = "";
-function estimateDuration() {
-    var teleprompter = getTeleprompter();
-    var speedControl = getSpeedControl();
-    var speed = parseInt(speedControl.value, 10); // Obtener la velocidad desde el control de velocidad
+// //var timer = null;
+// var height = 0;
+// var speed = 0;
+// var interval = 0;
+// var duration = 0;
+// var date = null;
+// var value = 0;
+// var freq = 250;
+// var gap = 1;
+// var result = "";
+// function estimateDuration() {
+//     var teleprompter = getTeleprompter();
+//     var speedControl = getSpeedControl();
+//     var speed = parseInt(speedControl.value, 10); // Obtener la velocidad desde el control de velocidad
 
-    if (!speed || speed <= 0) {
-        console.error("Velocidad no definida o inválida.");
-        return;
-    }
+//     if (!speed || speed <= 0) {
+//         console.error("Velocidad no definida o inválida.");
+//         return;
+//     }
 
-    var totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight; // Altura total que necesita ser recorrida
-    var pixelsPerSecond = speed; // Asumiendo que 'speed' define los píxeles por segundo
-    var duration = totalHeight / pixelsPerSecond; // Duración en segundos
+//     var totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight; // Altura total que necesita ser recorrida
+//     var pixelsPerSecond = speed; // Asumiendo que 'speed' define los píxeles por segundo
+//     var duration = totalHeight / pixelsPerSecond; // Duración en segundos
 
-    var date = new Date(null);
-    date.setSeconds(Math.round(duration)); // Redondeo para obtener una estimación más clara
-    var result = date.toISOString().substr(11, 8); // Convertir a formato HH:MM:SS
+//     var date = new Date(null);
+//     date.setSeconds(Math.round(duration)); // Redondeo para obtener una estimación más clara
+//     var result = date.toISOString().substr(11, 8); // Convertir a formato HH:MM:SS
 
-    document.getElementById("durationContainer").innerHTML = "Est. Duration: " + result;
+//     document.getElementById("durationContainer").innerHTML = "Est. Duration: " + result;
 
-    console.log('duration: ', duration);
-    console.log('result: ', result);
-    console.log('height: ', height);
-    return duration;
+//     console.log('duration: ', duration);
+//     console.log('result: ', result);
+//     console.log('height: ', height);
+//     return duration;
     
-}
+// }
 
 // function estimateDuration() {
 //     height = prompterContentElement.offsetHeight;
