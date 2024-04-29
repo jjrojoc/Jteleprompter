@@ -483,6 +483,7 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     const speed = 100 - speedControl.value;
+    totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
@@ -516,7 +517,6 @@ function stopAutoScroll() {
 
 // function estimateDuration() {
 //     var teleprompter = document.getElementById('teleprompter');
-//     var totalheight = teleprompter.offsetHeight
 //     var totalHeight = teleprompter.scrollHeight;
 //     var visibleHeight = teleprompter.clientHeight;
 //     var scrollableHeight = totalHeight - visibleHeight; // ajusta en función de la posición actual
@@ -537,30 +537,30 @@ function stopAutoScroll() {
 //     // console.log('remainingtime is: ', remainingTime);
 // }
 
-var height = 0;
-var speed = 0;
-var interval = 0;
-var duration = 0;
-var date = null;
-var value = 0;
-var freq = 250;
-var gap = 1;
-var result = "";
-
 function estimateDuration() {
-    var speedElement = document.getElementById("speedControl");
-    var prompterContentElement = document.getElementById("teleprompter");
-  height = prompterContentElement.scrollHeight;
-  speed = speedElement.value;
-  interval = Math.round(freq / speed);
-  duration = height / (gap / interval) / 1000;
-  date = new Date(null);
-  date.setSeconds(Math.round(duration));
-  result = date.toISOString().substr(11, 8);
-  document.getElementById("durationContainer").innerHTML = result;
-  return duration;
+    const teleprompter = document.getElementById('teleprompter');
+    let scrolledHeight = teleprompter.scrollTop;
+    let remainingHeight = totalHeight - scrolledHeight;
+    let estimatedTime = (remainingHeight / initialSpeed) * 1000; // Asume que 1 unidad de velocidad equivale a 1px por segundo
+
+    return estimatedTime;
 }
 
+function updateEstimatedTime() {
+    let durationEstimate = estimateDuration();
+    document.getElementById('durationContainer').textContent = formatTime(durationEstimate);
+
+    if (isAutoScrolling) {
+        setTimeout(updateEstimatedTime, 1000);  // Actualiza cada segundo
+    }
+}
+
+function formatTime(milliseconds) {
+    let seconds = Math.floor(milliseconds / 1000);
+    let minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    return minutes + " min " + seconds + " sec";
+}
 
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
