@@ -515,31 +515,30 @@ function stopAutoScroll() {
 
 
 function estimateDuration() {
-    var teleprompter = document.getElementById('teleprompter');
-    var totalHeight = teleprompter.scrollHeight;
-    var visibleHeight = teleprompter.clientHeight;
-    var scrollableHeight = totalHeight - visibleHeight;
-    var remainingHeight = scrollableHeight - teleprompter.scrollTop;
-    var speedControl = document.getElementById('speedControl');
-    var speed = 100 - speedControl.value;
-    var pixelsPerInterval = 1;
-    var intervalsPerSecond = 1000 / speed;
-    var secondsToFinish = remainingHeight / pixelsPerInterval / intervalsPerSecond;
+    const teleprompter = document.getElementById('teleprompter');
+    const totalHeight = teleprompter.scrollHeight;
+    const scrolledHeight = teleprompter.scrollTop;
+    const remainingHeight = totalHeight - scrolledHeight - teleprompter.clientHeight;
 
-    var hours = Math.floor(secondsToFinish / 3600);
-    var minutes = Math.floor((secondsToFinish % 3600) / 60);
-    var seconds = Math.floor(secondsToFinish % 60);
+    const speedControl = document.getElementById('speedControl');
+    // Aseguramos que la velocidad no sea cero para evitar divisiones por cero
+    const speed = Math.max(1, 100 - speedControl.value);
+    // Ajuste de la velocidad basado en una relación más realista entre el valor del controlador y los píxeles por segundo
+    const pixelsPerSecond = speed * 0.5; // Ajustar este factor basado en la calibración
 
-    var timeString = [
+    const secondsToFinish = remainingHeight / pixelsPerSecond;
+
+    const hours = Math.floor(secondsToFinish / 3600);
+    const minutes = Math.floor((secondsToFinish % 3600) / 60);
+    const seconds = Math.floor(secondsToFinish % 60);
+
+    const timeString = [
         hours.toString().padStart(2, '0'),
         minutes.toString().padStart(2, '0'),
         seconds.toString().padStart(2, '0')
     ].join(':');
 
-    var currentDisplay = document.getElementById("durationContainer").innerHTML;
-    if (currentDisplay !== timeString) {
-        document.getElementById("durationContainer").innerHTML = timeString;
-    }
+    document.getElementById("durationContainer").textContent = timeString;
 }
 
 
