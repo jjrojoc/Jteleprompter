@@ -479,6 +479,20 @@ function updateToggleButton(isActive) {
 
 let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
+function startDurationUpdate() {
+    if (durationUpdateInterval) {
+        clearInterval(durationUpdateInterval);
+    }
+    // Ajusta la frecuencia de actualización si es necesario para mayor precisión
+    durationUpdateInterval = setInterval(estimateDuration, 2000);
+}
+
+function stopDurationUpdate() {
+    if (durationUpdateInterval) {
+        clearInterval(durationUpdateInterval);
+    }
+}
+
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
@@ -500,7 +514,7 @@ function startAutoScroll() {
 
     // Inicia la actualización de la duración estimada cada segundo
     if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 2000);
+        updateDurationInterval = setInterval(estimateDuration, 1000);
     }
 }
 
@@ -514,26 +528,55 @@ function stopAutoScroll() {
 }
 
 function estimateDuration() {
-    var teleprompter = document.getElementById('teleprompter');
-    var totalHeight = teleprompter.scrollHeight;
-    var visibleHeight = teleprompter.clientHeight;
-    var scrollableHeight = totalHeight - visibleHeight; // ajusta en función de la posición actual
-    var remainingHeight = scrollableHeight - teleprompter.scrollTop; // altura que queda por scrollear
-    var speedControl = document.getElementById('speedControl');
-    var speed = 100 - speedControl.value;
-    var remainingTime = remainingHeight * speed; // tiempo restante en milisegundos
+    const teleprompter = document.getElementById('teleprompter');
+    const totalHeight = teleprompter.scrollHeight;
+    const scrolledHeight = teleprompter.scrollTop;
+    const remainingHeight = totalHeight - scrolledHeight - teleprompter.clientHeight;
 
-    var date = new Date(null);
-    date.setMilliseconds(remainingTime);
-    var result = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = result;
-    console.log('estimated duration is: ', result);
-    // console.log('totalHeight is: ', totalHeight);
-    // console.log('visibleheight: ', visibleHeight);
-    // console.log('scrollableheight is: ', scrollableHeight);
-    console.log('remainingHeight is:', remainingHeight);
-    // console.log('remainingtime is: ', remainingTime);
+    const speedControl = document.getElementById('speedControl');
+    // Aseguramos que la velocidad no sea cero para evitar divisiones por cero
+    const speed = Math.max(1, 100 - speedControl.value);
+    // Ajuste de la velocidad basado en una relación más realista entre el valor del controlador y los píxeles por segundo
+    const pixelsPerSecond = speed * 0.5; // Ajustar este factor basado en la calibración
+
+    const secondsToFinish = remainingHeight / pixelsPerSecond;
+
+    const hours = Math.floor(secondsToFinish / 3600);
+    const minutes = Math.floor((secondsToFinish % 3600) / 60);
+    const seconds = Math.floor(secondsToFinish % 60);
+
+    const timeString = [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        seconds.toString().padStart(2, '0')
+    ].join(':');
+
+    document.getElementById("durationContainer").textContent = timeString;
 }
+
+
+
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var totalHeight = teleprompter.scrollHeight;
+//     var visibleHeight = teleprompter.clientHeight;
+//     var scrollableHeight = totalHeight - visibleHeight; // ajusta en función de la posición actual
+//     var remainingHeight = scrollableHeight - teleprompter.scrollTop; // altura que queda por scrollear
+//     var speedControl = document.getElementById('speedControl');
+//     var speed = 100 - speedControl.value;
+//     var remainingTime = remainingHeight * speed; // tiempo restante en milisegundos
+
+//     var date = new Date(null);
+//     date.setMilliseconds(remainingTime);
+//     var result = date.toISOString().substr(11, 8);
+//     document.getElementById("durationContainer").innerHTML = result;
+//     console.log('estimated duration is: ', result);
+//     // console.log('totalHeight is: ', totalHeight);
+//     // console.log('visibleheight: ', visibleHeight);
+//     // console.log('scrollableheight is: ', scrollableHeight);
+//     console.log('remainingHeight is:', remainingHeight);
+//     // console.log('remainingtime is: ', remainingTime);
+// }
 
 
 
