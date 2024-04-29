@@ -524,7 +524,7 @@ function estimateDuration() {
     // Aseguramos que la velocidad no sea cero para evitar divisiones por cero
     const speed = Math.max(1, 100 - speedControl.value);
     // Ajuste de la velocidad basado en una relación más realista entre el valor del controlador y los píxeles por segundo
-    const pixelsPerSecond = speed * 0.5; // Ajustar este factor basado en la calibración
+    const pixelsPerSecond = speed * 0.3; // Ajustar este factor basado en la calibración
 
     const secondsToFinish = remainingHeight / pixelsPerSecond;
 
