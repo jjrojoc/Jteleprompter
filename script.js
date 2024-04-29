@@ -528,11 +528,11 @@ function estimateDuration() {
     var result = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = result;
     console.log('estimated duration is: ', result);
-    console.log('totalHeight is: ', totalHeight);
-    console.log('visibleheight: ', visibleHeight);
-    console.log('scrollableheight is: ', scrollableHeight);
+    // console.log('totalHeight is: ', totalHeight);
+    // console.log('visibleheight: ', visibleHeight);
+    // console.log('scrollableheight is: ', scrollableHeight);
     console.log('remainingHeight is:', remainingHeight);
-    console.log('remainingtime is: ', remainingTime);
+    // console.log('remainingtime is: ', remainingTime);
 }
 
 
