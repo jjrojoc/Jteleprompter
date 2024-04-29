@@ -520,7 +520,7 @@ function getPPI() {
         var div = document.createElement('div');
         div.style.width = "1in";
         document.body.appendChild(div);
-        var ppi = div.offsetWidth;
+        var ppi = div.offsetHeight;
         document.body.removeChild(div);
         return ppi;
     })();
@@ -530,7 +530,7 @@ function calculateSpeed() {
     const ppi = getPPI();
     const speedControl = document.getElementById('speedControl');
     const baseSpeed = 100 - speedControl.value;
-    const adjustedSpeed = baseSpeed * (ppi / 360); // 160 es un PPI de referencia
+    const adjustedSpeed = baseSpeed * (ppi / 160); // 160 es un PPI de referencia
 
     return adjustedSpeed;
 }
