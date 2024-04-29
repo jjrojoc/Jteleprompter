@@ -540,6 +540,7 @@ function stopAutoScroll() {
 function estimateDuration() {
     const teleprompter = document.getElementById('teleprompter');
     totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
+    const initialSpeed = 100 - speedControl.value;
     let scrolledHeight = teleprompter.scrollTop;
     let remainingHeight = totalHeight - scrolledHeight;
     let estimatedTime = (remainingHeight / initialSpeed) * 1000; // Asume que 1 unidad de velocidad equivale a 1px por segundo
