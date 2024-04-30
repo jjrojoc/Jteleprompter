@@ -372,7 +372,7 @@ function toggleAutoScroll() {
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
         startAutoScroll();
-        estimateDuration();    
+        //estimateDuration();    
     }
 }
 /////    Original    /////
@@ -508,7 +508,6 @@ function updateToggleButton(isActive) {
 //     }
 // }
 
-let scrollInterval;
 let durationInterval;
 
 function startAutoScroll() {
