@@ -479,7 +479,7 @@ function updateToggleButton(isActive) {
 
 
 
-let scrollInterval = null;
+
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
