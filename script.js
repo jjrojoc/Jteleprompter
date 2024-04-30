@@ -550,14 +550,11 @@ function estimateDuration() {
     var speedControl = document.getElementById('speedControl');
     var speed = parseInt(speedControl.value, 10);
 
-    // Esta es una aproximación que puedes necesitar ajustar
-    // Calcula cuántos píxeles se desplazan por segundo a una velocidad dada en el control
-    // Este factor dependerá de cómo tu aplicación traduce la velocidad del control a la velocidad de scroll real
-    var pixelsPerSecond = 100 + speed * 2; // Ejemplo: asumiendo que speedControl.value es una escala de 0-100
+    // Ajuste del factor de cálculo basado en pruebas manuales
+    var pixelsPerSecond = speed * 2; // Asume que un mayor valor de speedControl corresponde a mayor velocidad
 
     var remainingTimeInSeconds = remainingHeight / pixelsPerSecond;
 
-    // Convertimos los segundos a formato HH:mm:ss solo si es necesario mostrar horas
     var hours = Math.floor(remainingTimeInSeconds / 3600);
     var minutes = Math.floor((remainingTimeInSeconds % 3600) / 60);
     var seconds = Math.floor(remainingTimeInSeconds % 60);
@@ -568,7 +565,6 @@ function estimateDuration() {
         seconds.toString().padStart(2, '0')
     ].join(':');
 
-    // Solo mostramos las horas si las hay
     formattedTime = hours > 0 ? formattedTime : formattedTime.substr(3);
 
     document.getElementById("durationContainer").innerHTML = formattedTime;
@@ -576,6 +572,7 @@ function estimateDuration() {
     console.log('Remaining height is:', remainingHeight);
     console.log('Speed:', pixelsPerSecond, 'pixels per second');
 }
+
 
 
 
