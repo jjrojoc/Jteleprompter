@@ -533,6 +533,10 @@ function startAutoScroll() {
     }
 
     requestAnimationFrame(scrollStep);
+    // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
 }
 
 
