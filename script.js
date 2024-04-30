@@ -481,40 +481,42 @@ function updateToggleButton(isActive) {
 
 
 
+let scrollInterval = null;
+
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    updateScrollSpeed();  // Esto ajustará la velocidad del scroll según las configuraciones actuales
+    const wordsPerMinute = parseFloat(document.getElementById('speedControl').value);
+    const pixelsPerMinute = calculatePixelsPerMinute(wordsPerMinute);
+    const pixelsPerSecond = pixelsPerMinute / 60;
 
     if (teleprompter.scrollTop === 0) {
         cronometro.reset();
-        console.log("reset en el inicio");
+        console.log("Reset cronómetro en el inicio");
     }
     cronometro.start();
-    console.log("start cronómetro");
+    console.log("Inicio del cronómetro");
 
-    updateDurationEverySecond();  // Inicia la actualización del tiempo estimado
+    updateDurationEverySecond();  // Actualizar la duración cada segundo
 
     scrollInterval = setInterval(() => {
-        const speedPerPixel = calculatePixelsPerMinute(parseFloat(document.getElementById('speedControl').value)) / 3600;
-        teleprompter.scrollBy(0, speedPerPixel);
-
+        teleprompter.scrollBy(0, pixelsPerSecond);
         if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            console.log('Reached end, stopping autoscroll.');
+            console.log('Se alcanzó el final, deteniendo el autoscroll.');
             stopAutoScroll();
         }
-    }, 1000);
+    }, 1000);  // Hace scroll cada segundo
 }
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
     cronometro.stop();
-    console.log("stop cronómetro y scroll");
+    console.log("Detención del cronómetro y del autoscroll");
 }
 
 function updateDurationEverySecond() {
     estimateDuration();
     const durationInterval = setInterval(() => {
-        if (!isAutoScrolling) {  // Asegúrate de tener una variable o manera de comprobar si el autoscroll está activo
+        if (!isAutoScrolling) {
             clearInterval(durationInterval);
         } else {
             estimateDuration();
@@ -523,11 +525,13 @@ function updateDurationEverySecond() {
 }
 
 function calculatePixelsPerMinute(wordsPerMinute) {
+    const averageWordLength = 6; // Longitud media de una palabra en caracteres
     const fontSize = parseFloat(document.getElementById('textSizeControl').value);
-    const averageWordLength = 6; // Estimación: longitud media de palabra en caracteres
-    const pixelsPerCharacter = fontSize * 0.6; // Aproximación de pixels por carácter, ajustable según la fuente
+    const pixelsPerCharacter = fontSize * 0.5; // Pixels por carácter, ajustable según la fuente
     return wordsPerMinute * averageWordLength * pixelsPerCharacter;
 }
+
+// Implementación de estimateDuration y otros métodos sigue siendo la misma
 
 // Implementación de estimateDuration y otros métodos sigue siendo la misma
 
