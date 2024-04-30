@@ -480,140 +480,46 @@ function updateToggleButton(isActive) {
 
 
 
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    const wordsPerMinute = parseFloat(document.getElementById('speedControl').value);
-    const pixelsPerMinute = calculatePixelsPerMinute(wordsPerMinute);
-    const pixelsPerSecond = pixelsPerMinute / 60;
+    const speedControl = document.getElementById('speedControl');
+    const speed = 100 - speedControl.value;
+    
+    isAutoScrolling = true;
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
 
     if (teleprompter.scrollTop === 0) {
         cronometro.reset();
-        console.log("Reset cronómetro en el inicio");
+        cronometro.start();
+    } else {
+        cronometro.start();
     }
-    cronometro.start();
-    console.log("Inicio del cronómetro");
-
-    updateDurationEverySecond();  // Actualizar la duración cada segundo
 
     scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, pixelsPerSecond);
-        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            console.log('Se alcanzó el final, deteniendo el autoscroll.');
-            stopAutoScroll();
-        }
-    }, 25);  // Hace scroll cada segundo
+        teleprompter.scrollBy(0, 1);
+    }, speed);
+
+    // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
 }
+
+
+
+
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
-    cronometro.stop();
-    console.log("Detención del cronómetro y del autoscroll");
+    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+    updateDurationInterval = null; // Restablece la variable
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
 }
-
-function updateDurationEverySecond() {
-    estimateDuration();
-    const durationInterval = setInterval(() => {
-        if (!isAutoScrolling) {
-            clearInterval(durationInterval);
-        } else {
-            estimateDuration();
-        }
-    }, 1000);
-}
-
-function calculatePixelsPerMinute(wordsPerMinute) {
-    const averageWordLength = 6; // Longitud media de una palabra en caracteres
-    const fontSize = parseFloat(document.getElementById('textSizeControl').value);
-    const pixelsPerCharacter = fontSize * 0.5; // Pixels por carácter, ajustable según la fuente
-    return wordsPerMinute * averageWordLength * pixelsPerCharacter;
-}
-
-// Implementación de estimateDuration y otros métodos sigue siendo la misma
-
-// Implementación de estimateDuration y otros métodos sigue siendo la misma
-
-
-function estimatePixelsPerWord() {
-    // Puedes implementar esta función para estimar el número de píxeles por palabra
-    // Esto puede ser basado en mediciones o cálculos específicos para tu texto y diseño
-    const sampleText = "Average word length in pixels"; // Ejemplo de texto para medición
-    const measureDiv = document.createElement('div');
-    measureDiv.style.display = "inline-block";
-    measureDiv.textContent = sampleText;
-    document.body.appendChild(measureDiv);
-    const pixels = measureDiv.clientWidth / sampleText.split(/\s+/).length;
-    document.body.removeChild(measureDiv);
-    return pixels;
-}
-
-function estimateDuration() {
-    const teleprompter = document.getElementById('teleprompter');
-    const remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-
-    const speedControl = document.getElementById('speedControl');
-    const wordsPerMinute = parseFloat(speedControl.value);
-    const pixelsPerWord = estimatePixelsPerWord(); // Reutiliza esta función del desplazamiento automático
-    const wordsPerSecond = wordsPerMinute / 60;
-    const pixelsPerSecond = wordsPerSecond * pixelsPerWord;
-
-    // Calcula el tiempo restante en segundos y luego convierte a un formato legible
-    const remainingSeconds = remainingHeight / pixelsPerSecond;
-    const formattedTime = formatTime(remainingSeconds);
-
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
-    console.log('Remaining height is:', remainingHeight);
-}
-
-function formatTime(seconds) {
-    const date = new Date(seconds * 1000).toISOString().substr(11, 8);
-    // Omitir las horas si son cero
-    return date.startsWith("00:") ? date.substr(3) : date;
-}
-
-
-
- // let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     const speed = 100 - speedControl.value;
-    
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     scrollInterval = setInterval(() => {
-//         teleprompter.scrollBy(0, 1);
-//     }, speed);
-
-//     // Inicia la actualización de la duración estimada cada segundo
-//     if (!updateDurationInterval) {
-//         updateDurationInterval = setInterval(estimateDuration, 1000);
-//     }
-// }
-
-
-
-
-
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-//     updateDurationInterval = null; // Restablece la variable
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-// }
 
 
 // function estimateDuration() {
@@ -650,7 +556,19 @@ function formatTime(seconds) {
 
 
 
+function estimateDuration() {
+    var teleprompter = document.getElementById('teleprompter');
+    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+    var speedControl = document.getElementById('speedControl');
+    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
+    var date = new Date(remainingTime);
+    var formattedTime = date.toISOString().substr(11, 8);
+    document.getElementById("durationContainer").innerHTML = formattedTime;
+    console.log('Estimated duration is:', formattedTime);
+    console.log('Remaining height is:', remainingHeight);
+}
 
 
 
@@ -1510,44 +1428,4 @@ document.addEventListener('DOMContentLoaded', setPlaceholder);
 //var teleprompter = document.getElementById("teleprompter");  // Elemento del teleprompter
 function getSpeedControl() {
     return document.getElementById('speedControl');
-}
-
-function updateScrollSpeed() {
-    const wordsPerMinute = parseFloat(document.getElementById('speedControl').value);
-    const pixelsPerMinute = calculatePixelsPerMinute(wordsPerMinute);
-    const pixelsPerSecond = pixelsPerMinute / 60;
-
-    if (scrollInterval) {
-        clearInterval(scrollInterval);
-    }
-    scrollInterval = setInterval(() => {
-        document.getElementById('teleprompter').scrollBy(0, pixelsPerSecond / 20); // Ajusta este divisor según la fluidez deseada del scroll
-    }, 50); // 20 actualizaciones por segundo
-}
-
-function calculatePixelsPerMinute(wordsPerMinute) {
-    const fontSize = parseFloat(document.getElementById('textSizeControl').value);
-    const averageWordLength = 6; // Estimación: longitud media de palabra en caracteres
-    const pixelsPerCharacter = fontSize * 0.6; // Aproximación de pixels por carácter, ajustable según la fuente
-    return wordsPerMinute * averageWordLength * pixelsPerCharacter;
-}
-
-function estimateDuration() {
-    const teleprompter = document.getElementById('teleprompter');
-    const remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-    const wordsPerMinute = parseFloat(document.getElementById('speedControl').value);
-    const pixelsPerMinute = calculatePixelsPerMinute(wordsPerMinute);
-    const remainingTimeInSeconds = (remainingHeight / (pixelsPerMinute / 60));
-    const formattedTime = formatTime(remainingTimeInSeconds);
-
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
-}
-
-function formatTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    seconds %= 3600;
-    const minutes = Math.floor(seconds / 60);
-    const secondsFinal = Math.floor(seconds % 60);
-    return `${hours > 0 ? `${hours}:` : ""}${minutes}:${secondsFinal.toString().padStart(2, '0')}`;
 }
