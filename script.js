@@ -480,33 +480,58 @@ function updateToggleButton(isActive) {
 
 
 
-let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+
+// function startAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const speedControl = document.getElementById('speedControl');
+//     const speed = 100 - speedControl.value;
+    
+//     isAutoScrolling = true;
+//     updateToggleButton(true);
+//     toggleControlsDisplay(false);
+
+//     if (teleprompter.scrollTop === 0) {
+//         cronometro.reset();
+//         cronometro.start();
+//     } else {
+//         cronometro.start();
+//     }
+
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1);
+//     }, speed);
+
+//     // Inicia la actualización de la duración estimada cada segundo
+//     if (!updateDurationInterval) {
+//         updateDurationInterval = setInterval(estimateDuration, 1000);
+//     }
+// }
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
-    
+    const pixelsPerSecond = parseInt(speedControl.value, 10);
+
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    if (teleprompter.scrollTop === 0) {
+    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
         cronometro.reset();
+        console.log("Reset al inicio");
         cronometro.start();
+        console.log("Inicio del cronómetro");
     } else {
-        cronometro.start();
+        cronometro.start();  // Continúa el temporizador sin resetear
+        console.log("Continuación del cronómetro");
     }
 
     scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
-    }, speed);
-
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
+        teleprompter.scrollBy(0, pixelsPerSecond * 0.0167);  // Ajusta esto basado en la velocidad
+    }, 16.7); // Ejecuta el scroll cada ~16.7 ms (aproximadamente 60Hz)
 }
+
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
@@ -548,10 +573,7 @@ function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
-    var speed = parseInt(speedControl.value, 10);
-
-    // Ajuste del factor de cálculo basado en pruebas manuales
-    var pixelsPerSecond = speed * 2; // Asume que un mayor valor de speedControl corresponde a mayor velocidad
+    var pixelsPerSecond = parseInt(speedControl.value, 10);
 
     var remainingTimeInSeconds = remainingHeight / pixelsPerSecond;
 
@@ -560,18 +582,17 @@ function estimateDuration() {
     var seconds = Math.floor(remainingTimeInSeconds % 60);
 
     var formattedTime = [
-        hours.toString().padStart(2, '0'),
+        hours > 0 ? hours.toString().padStart(2, '0') : '',
         minutes.toString().padStart(2, '0'),
         seconds.toString().padStart(2, '0')
-    ].join(':');
-
-    formattedTime = hours > 0 ? formattedTime : formattedTime.substr(3);
+    ].filter(Boolean).join(':');
 
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
     console.log('Speed:', pixelsPerSecond, 'pixels per second');
 }
+
 
 
 
