@@ -502,7 +502,7 @@ function startAutoScroll() {
             console.log('Se alcanzó el final, deteniendo el autoscroll.');
             stopAutoScroll();
         }
-    }, 1000);  // Hace scroll cada segundo
+    }, 25);  // Hace scroll cada segundo
 }
 
 function stopAutoScroll() {
