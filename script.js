@@ -545,7 +545,7 @@ function formatTime(seconds) {
 
 
 
-// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+ let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 // function startAutoScroll() {
 //     const teleprompter = document.getElementById('teleprompter');
