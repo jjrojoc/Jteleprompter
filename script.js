@@ -479,23 +479,27 @@ function updateToggleButton(isActive) {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
-    const duration = totalHeight / desiredPixelPerSecond * 1000; // desiredPixelPerSecond es la velocidad a la que quieres que se mueva el contenido
 
-    teleprompter.style.transitionDuration = `${duration}ms`;
+    // Calcula la duración de la animación basada en la velocidad deseada
+    const pixelsPerSecond = 50; // Define cuántos píxeles por segundo quieres que se mueva
+    const duration = totalHeight / pixelsPerSecond; // Duración en segundos
+
+    teleprompter.style.transition = `transform ${duration}s linear`;
     teleprompter.style.transform = `translateY(-${totalHeight}px)`;
 
-    // Iniciar cronómetro o cualquier otra lógica
-    isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
-
-    if (teleprompter.scrollTop === 0) {
-        cronometro.reset();
-        cronometro.start();
-    } else {
-        cronometro.start();
-    }
+    // Opcional: manejar cuando la animación termine
+    teleprompter.addEventListener('transitionend', () => {
+        console.log('Animation completed');
+        // Aquí puedes detener el temporizador, reiniciar la posición, etc.
+    });
 }
+
+function stopAutoScroll() {
+    const teleprompter = document.getElementById('teleprompter');
+    teleprompter.style.transition = 'none'; // Elimina la transición para detener la animación
+    teleprompter.style.transform = 'translateY(0)'; // Opcional: Restablece la posición
+}
+
 
 
 
@@ -528,14 +532,14 @@ function startAutoScroll() {
 //     }
 // }
 
-function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-    updateDurationInterval = null; // Restablece la variable
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-}
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+//     updateDurationInterval = null; // Restablece la variable
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+// }
 
 
 function estimateDuration() {
