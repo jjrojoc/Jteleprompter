@@ -516,6 +516,17 @@ function startAutoScroll() {
     let lastTime = 0;
     const pixelsPerSecond = parseInt(speedControl.value, 10);
 
+    isAutoScrolling = true;
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
+
+    if (teleprompter.scrollTop === 0) {
+        cronometro.reset();
+        cronometro.start();
+    } else {
+        cronometro.start();
+    }
+
     function scrollStep(timestamp) {
         if (!lastTime) lastTime = timestamp;
         const deltaTime = timestamp - lastTime;
