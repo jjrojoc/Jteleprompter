@@ -513,31 +513,28 @@ let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo m
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
+    let lastTime = 0;
     const pixelsPerSecond = parseInt(speedControl.value, 10);
 
-    isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
+    function scrollStep(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        const deltaTime = timestamp - lastTime;
+        const scrollDistance = (deltaTime / 1000) * pixelsPerSecond;
 
-    if (teleprompter.scrollTop === 0) {  // Si el teleprompter está al inicio, reinicia el timer
-        cronometro.reset();
-        console.log("Reset al inicio");
-        cronometro.start();
-        console.log("Inicio del cronómetro");
-    } else {
-        cronometro.start();  // Continúa el temporizador sin resetear
-        console.log("Continuación del cronómetro");
+        teleprompter.scrollTop += scrollDistance;
+        lastTime = timestamp;
+
+        if (teleprompter.scrollTop + teleprompter.clientHeight < teleprompter.scrollHeight) {
+            requestAnimationFrame(scrollStep);
+        } else {
+            console.log("Reached end of teleprompter");
+            stopAutoScroll();
+        }
     }
 
-    scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, pixelsPerSecond * 0.0167);  // Ajusta esto basado en la velocidad
-    }, 16.7); // Ejecuta el scroll cada ~16.7 ms (aproximadamente 60Hz)
-
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
+    requestAnimationFrame(scrollStep);
 }
+
 
 
 function stopAutoScroll() {
@@ -581,7 +578,6 @@ function estimateDuration() {
     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
     var pixelsPerSecond = parseInt(speedControl.value, 10);
-
     var remainingTimeInSeconds = remainingHeight / pixelsPerSecond;
 
     var hours = Math.floor(remainingTimeInSeconds / 3600);
@@ -589,16 +585,17 @@ function estimateDuration() {
     var seconds = Math.floor(remainingTimeInSeconds % 60);
 
     var formattedTime = [
-        hours > 0 ? hours.toString().padStart(2, '0') : '',
+        hours > 0 ? `${hours}:` : '',
         minutes.toString().padStart(2, '0'),
         seconds.toString().padStart(2, '0')
-    ].filter(Boolean).join(':');
+    ].join(':');
 
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
     console.log('Speed:', pixelsPerSecond, 'pixels per second');
 }
+
 
 
 
