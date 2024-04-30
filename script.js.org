@@ -479,10 +479,14 @@ function updateToggleButton(isActive) {
 
 
 
-function startAutoScroll(wordsPerMinute) {
-    const speedPerPixel = calculateScrollSpeed(wordsPerMinute);
-    const teleprompter = document.getElementById('teleprompter');
 
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+
+function startAutoScroll() {
+    const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    const speed = 100 - speedControl.value;
+    
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
@@ -494,43 +498,15 @@ function startAutoScroll(wordsPerMinute) {
         cronometro.start();
     }
 
-    const scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1); // Desplaza 1 pixel
-        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            clearInterval(scrollInterval); // Detiene el scroll cuando se llega al final
-        }
-    }, speedPerPixel);
+    scrollInterval = setInterval(() => {
+        teleprompter.scrollBy(0, 1);
+    }, speed);
+
+    // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
 }
-
-
-
-// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     const speed = 100 - speedControl.value;
-    
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     scrollInterval = setInterval(() => {
-//         teleprompter.scrollBy(0, 1);
-//     }, speed);
-
-//     // Inicia la actualización de la duración estimada cada segundo
-//     if (!updateDurationInterval) {
-//         updateDurationInterval = setInterval(estimateDuration, 1000);
-//     }
-// }
 
 
 
@@ -1452,21 +1428,4 @@ document.addEventListener('DOMContentLoaded', setPlaceholder);
 //var teleprompter = document.getElementById("teleprompter");  // Elemento del teleprompter
 function getSpeedControl() {
     return document.getElementById('speedControl');
-}
-
-
-function countWords() {
-    const text = document.getElementById('teleprompter').innerText;
-    return text.split(/\s+/).filter(Boolean).length;  // Filtra espacios en blanco y retorna la cuenta de palabras
-}
-
-
-function calculateScrollSpeed(wordsPerMinute) {
-    const totalWords = countWords();
-    const totalMinutes = totalWords / wordsPerMinute;
-    const totalMilliseconds = totalMinutes * 60 * 1000; // Convierte minutos a milisegundos
-
-    const teleprompter = document.getElementById('teleprompter');
-    const totalScrollLength = teleprompter.scrollHeight - teleprompter.clientHeight;
-    return totalMilliseconds / totalScrollLength;  // milisegundos por pixel
 }
