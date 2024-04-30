@@ -1457,8 +1457,39 @@ function getSpeedControl() {
 
 function countWords() {
     const text = document.getElementById('teleprompter').innerText;
-    return text.split(/\s+/).filter(Boolean).length;  // Filtra espacios en blanco y retorna la cuenta de palabras
+    return text.split(/\s+/).filter(Boolean).length;
+    console.log(text.split(/\s+/).filter(Boolean).length)
 }
+
+function estimateReadingTime() {
+    const totalWords = countWords();
+    const wordsPerMinute = document.getElementById('wordsPerMinute').value;
+    const totalMinutes = totalWords / wordsPerMinute;
+
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+    const seconds = Math.round((totalMinutes - Math.floor(totalMinutes)) * 60);
+
+    return formatTime(hours, minutes, seconds);
+}
+
+function formatTime(hours, minutes, seconds) {
+    let timeString = "";
+    if (hours > 0) {
+        timeString += `${hours}h `;
+    }
+    if (minutes > 0 || hours > 0) { // Ensure minutes are included if hours are present
+        timeString += `${minutes}m `;
+    }
+    timeString += `${seconds}s`;
+    return timeString;
+}
+
+function updateEstimatedTime() {
+    const estimatedTime = estimateReadingTime();
+    document.getElementById('estimatedTimeDisplay').innerHTML = estimatedTime;
+}
+
 
 
 function calculateScrollSpeed(wordsPerMinute) {
