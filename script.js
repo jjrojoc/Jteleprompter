@@ -479,9 +479,15 @@ function updateToggleButton(isActive) {
 
 
 
-function startAutoScroll(wordsPerMinute) {
-    const speedPerPixel = calculateScrollSpeed(wordsPerMinute);
+function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    const wordsPerMinute = parseFloat(speedControl.value);
+    const wordsPerSecond = wordsPerMinute / 60;
+    const pixelsPerWord = estimatePixelsPerWord(); // Esta función necesita ser definida según tu layout y tamaño de texto
+
+    // Calcula cuántos píxeles se deben desplazar por segundo
+    const pixelsPerSecond = wordsPerSecond * pixelsPerWord;
 
     isAutoScrolling = true;
     updateToggleButton(true);
@@ -494,12 +500,47 @@ function startAutoScroll(wordsPerMinute) {
         cronometro.start();
     }
 
-    const scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1); // Desplaza 1 pixel
-        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
-            clearInterval(scrollInterval); // Detiene el scroll cuando se llega al final
-        }
-    }, speedPerPixel);
+    scrollInterval = setInterval(() => {
+        teleprompter.scrollBy(0, pixelsPerSecond / 100); // Ajusta esto para actualizar cada 10ms
+    }, 10); // Intervalo de actualización de 10ms para un movimiento más suave
+}
+
+function estimatePixelsPerWord() {
+    // Puedes implementar esta función para estimar el número de píxeles por palabra
+    // Esto puede ser basado en mediciones o cálculos específicos para tu texto y diseño
+    const sampleText = "Average word length in pixels"; // Ejemplo de texto para medición
+    const measureDiv = document.createElement('div');
+    measureDiv.style.display = "inline-block";
+    measureDiv.textContent = sampleText;
+    document.body.appendChild(measureDiv);
+    const pixels = measureDiv.clientWidth / sampleText.split(/\s+/).length;
+    document.body.removeChild(measureDiv);
+    return pixels;
+}
+
+function estimateDuration() {
+    const teleprompter = document.getElementById('teleprompter');
+    const remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+
+    const speedControl = document.getElementById('speedControl');
+    const wordsPerMinute = parseFloat(speedControl.value);
+    const pixelsPerWord = estimatePixelsPerWord(); // Reutiliza esta función del desplazamiento automático
+    const wordsPerSecond = wordsPerMinute / 60;
+    const pixelsPerSecond = wordsPerSecond * pixelsPerWord;
+
+    // Calcula el tiempo restante en segundos y luego convierte a un formato legible
+    const remainingSeconds = remainingHeight / pixelsPerSecond;
+    const formattedTime = formatTime(remainingSeconds);
+
+    document.getElementById("durationContainer").innerHTML = formattedTime;
+    console.log('Estimated duration is:', formattedTime);
+    console.log('Remaining height is:', remainingHeight);
+}
+
+function formatTime(seconds) {
+    const date = new Date(seconds * 1000).toISOString().substr(11, 8);
+    // Omitir las horas si son cero
+    return date.startsWith("00:") ? date.substr(3) : date;
 }
 
 
@@ -580,19 +621,7 @@ function stopAutoScroll() {
 
 
 
-function estimateDuration() {
-    var teleprompter = document.getElementById('teleprompter');
-    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-    var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
-    var date = new Date(remainingTime);
-    var formattedTime = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
-    console.log('Remaining height is:', remainingHeight);
-}
 
 
 
