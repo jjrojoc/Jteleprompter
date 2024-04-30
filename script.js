@@ -508,12 +508,12 @@ function updateToggleButton(isActive) {
 //     }
 // }
 
-let animationFrameId = null;
+let animationFrameId = null; // Almacena el ID del frame de animación globalmente.
 
 function stopAutoScroll() {
-    if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
+    if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId); // Cancela el frame de animación.
+        animationFrameId = null; // Reinicia la variable a null.
     }
     isAutoScrolling = false;
     updateToggleButton(false);
@@ -527,6 +527,13 @@ function startAutoScroll() {
     let lastTime = 0;
     const pixelsPerSecond = parseInt(speedControl.value, 10);
 
+    if (teleprompter.scrollTop === 0) {
+        cronometro.reset();
+        cronometro.start();
+    } else {
+        cronometro.start();
+    }
+
     function scrollStep(timestamp) {
         if (!lastTime) lastTime = timestamp;
         const deltaTime = timestamp - lastTime;
@@ -535,16 +542,26 @@ function startAutoScroll() {
         teleprompter.scrollTop += scrollDistance;
         lastTime = timestamp;
 
-        if (teleprompter.scrollTop + teleprompter.clientHeight < teleprompter.scrollHeight) {
+        if (teleprompter.scrollTop + teleprompter.clientHeight < teleprompter.scrollHeight && isAutoScrolling) {
             animationFrameId = requestAnimationFrame(scrollStep);
+
+                // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
         } else {
             stopAutoScroll();
             console.log("Reached end of teleprompter.");
         }
     }
 
+    if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId); // Asegúrate de cancelar cualquier animación previa.
+    }
     animationFrameId = requestAnimationFrame(scrollStep);
+
 }
+
 
 
 
