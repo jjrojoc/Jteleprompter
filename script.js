@@ -508,6 +508,8 @@ function updateToggleButton(isActive) {
 //     }
 // }
 
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
