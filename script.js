@@ -481,8 +481,6 @@ function updateToggleButton(isActive) {
 
 
 
-let scrollInterval = null;
-
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const wordsPerMinute = parseFloat(document.getElementById('speedControl').value);
