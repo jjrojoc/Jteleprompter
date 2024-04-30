@@ -480,46 +480,109 @@ function updateToggleButton(isActive) {
 
 
 
-let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+
+// function startAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const speedControl = document.getElementById('speedControl');
+//     const speed = 100 - speedControl.value;
+    
+//     isAutoScrolling = true;
+//     updateToggleButton(true);
+//     toggleControlsDisplay(false);
+
+//     if (teleprompter.scrollTop === 0) {
+//         cronometro.reset();
+//         cronometro.start();
+//     } else {
+//         cronometro.start();
+//     }
+
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1, behaviour: 'smooth');
+//     }, speed);
+
+//     // Inicia la actualización de la duración estimada cada segundo
+//     if (!updateDurationInterval) {
+//         updateDurationInterval = setInterval(estimateDuration, 1000);
+//     }
+// }
+
+let scrollInterval;
+let durationInterval;
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
-    
-    isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
+    const baseSpeed = 100 - parseInt(speedControl.value, 10);
+    const visibleHeight = teleprompter.clientHeight;
 
-    if (teleprompter.scrollTop === 0) {
-        cronometro.reset();
-        cronometro.start();
-    } else {
-        cronometro.start();
-    }
+    // Ajustar el factor de velocidad basado en la altura visible
+    const speedFactor = calculateSpeedFactor(visibleHeight);
+
+    if (scrollInterval) clearInterval(scrollInterval);
 
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, 1);
-    }, speed);
+        if (teleprompter.scrollTop + teleprompter.clientHeight >= teleprompter.scrollHeight) {
+            stopAutoScroll();
+        }
+    }, baseSpeed * speedFactor);
 
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
+    // Iniciar cronómetro y actualización de duración estimada
+    cronometro.reset();
+    cronometro.start();
+    startDurationEstimation();
 }
-
-
-
-
 
 function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-    updateDurationInterval = null; // Restablece la variable
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
+    if (scrollInterval) clearInterval(scrollInterval);
+    if (durationInterval) clearInterval(durationInterval);
+    cronometro.stop();
+    console.log("Auto-scroll stopped.");
 }
+
+function startDurationEstimation() {
+    if (durationInterval) clearInterval(durationInterval);
+    durationInterval = setInterval(() => {
+        estimateDuration();
+    }, 1000); // Actualiza cada segundo
+}
+
+function calculateSpeedFactor(visibleHeight) {
+    // Ajustar este cálculo según la observación y pruebas
+    return 1 + (500 / visibleHeight); // Ejemplo de ajuste
+}
+
+function estimateDuration() {
+    const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    const speedPerPixel = (100 - parseInt(speedControl.value, 10)) * (1 + (500 / teleprompter.clientHeight));
+    const remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+    const remainingTime = remainingHeight * speedPerPixel;
+
+    const hours = Math.floor(remainingTime / 3600000);
+    const minutes = Math.floor((remainingTime % 3600000) / 60000);
+    const seconds = Math.floor((remainingTime % 60000) / 1000);
+
+    let formattedTime = hours > 0 ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+                                  : `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    document.getElementById("durationContainer").innerHTML = formattedTime;
+    console.log('Estimated duration is:', formattedTime);
+}
+
+
+
+
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+//     updateDurationInterval = null; // Restablece la variable
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+// }
 
 
 // function estimateDuration() {
