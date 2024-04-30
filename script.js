@@ -480,52 +480,16 @@ function updateToggleButton(isActive) {
 
 
 
-// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     const speed = 100 - speedControl.value;
-    
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     scrollInterval = setInterval(() => {
-//         teleprompter.scrollBy(0, 1);
-//     }, speed);
-
-//     // Inicia la actualización de la duración estimada cada segundo
-//     if (!updateDurationInterval) {
-//         updateDurationInterval = setInterval(estimateDuration, 1000);
-//     }
-// }
-
-let animationFrameId = null; // Almacena el ID del frame de animación globalmente.
-
-function stopAutoScroll() {
-    if (animationFrameId !== null) {
-        cancelAnimationFrame(animationFrameId); // Cancela el frame de animación.
-        animationFrameId = null; // Reinicia la variable a null.
-    }
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-    console.log("Auto-scroll stopped.");
-}
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    let lastTime = 0;
-    const pixelsPerSecond = parseInt(speedControl.value, 10);
+    const speed = 100 - speedControl.value;
+    
+    isAutoScrolling = true;
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
 
     if (teleprompter.scrollTop === 0) {
         cronometro.reset();
@@ -534,46 +498,28 @@ function startAutoScroll() {
         cronometro.start();
     }
 
-    function scrollStep(timestamp) {
-        if (!lastTime) lastTime = timestamp;
-        const deltaTime = timestamp - lastTime;
-        const scrollDistance = (deltaTime / 1000) * pixelsPerSecond;
+    scrollInterval = setInterval(() => {
+        teleprompter.scrollBy(0, 1);
+    }, speed);
 
-        teleprompter.scrollTop += scrollDistance;
-        lastTime = timestamp;
-
-        if (teleprompter.scrollTop + teleprompter.clientHeight < teleprompter.scrollHeight && isAutoScrolling) {
-            animationFrameId = requestAnimationFrame(scrollStep);
-
-                // Inicia la actualización de la duración estimada cada segundo
+    // Inicia la actualización de la duración estimada cada segundo
     if (!updateDurationInterval) {
         updateDurationInterval = setInterval(estimateDuration, 1000);
     }
-        } else {
-            stopAutoScroll();
-            console.log("Reached end of teleprompter.");
-        }
-    }
-
-    if (animationFrameId !== null) {
-        cancelAnimationFrame(animationFrameId); // Asegúrate de cancelar cualquier animación previa.
-    }
-    animationFrameId = requestAnimationFrame(scrollStep);
-
 }
 
 
 
 
 
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-//     updateDurationInterval = null; // Restablece la variable
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-// }
+function stopAutoScroll() {
+    clearInterval(scrollInterval);
+    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+    updateDurationInterval = null; // Restablece la variable
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
+}
 
 
 // function estimateDuration() {
@@ -602,51 +548,27 @@ function startAutoScroll() {
 // }
 
 
+
+
+
+
+
+
+
+
 function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
-    var pixelsPerSecond = parseInt(speedControl.value, 10);
-    var remainingTimeInSeconds = remainingHeight / pixelsPerSecond;
+    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
-    var hours = Math.floor(remainingTimeInSeconds / 3600);
-    var minutes = Math.floor((remainingTimeInSeconds % 3600) / 60);
-    var seconds = Math.floor(remainingTimeInSeconds % 60);
-
-    var formattedTime = [
-        hours > 0 ? `${hours}:` : '',
-        minutes.toString().padStart(2, '0'),
-        seconds.toString().padStart(2, '0')
-    ].join(':');
-
+    var date = new Date(remainingTime);
+    var formattedTime = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
-    console.log('Speed:', pixelsPerSecond, 'pixels per second');
 }
-
-
-
-
-
-
-
-
-
-
-// function estimateDuration() {
-//     var teleprompter = document.getElementById('teleprompter');
-//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-//     var speedControl = document.getElementById('speedControl');
-//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
-
-//     var date = new Date(remainingTime);
-//     var formattedTime = date.toISOString().substr(11, 8);
-//     document.getElementById("durationContainer").innerHTML = formattedTime;
-//     console.log('Estimated duration is:', formattedTime);
-//     console.log('Remaining height is:', remainingHeight);
-// }
 
 
 
