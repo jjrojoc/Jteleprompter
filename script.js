@@ -530,6 +530,11 @@ function startAutoScroll() {
     scrollInterval = setInterval(() => {
         teleprompter.scrollBy(0, pixelsPerSecond * 0.0167);  // Ajusta esto basado en la velocidad
     }, 16.7); // Ejecuta el scroll cada ~16.7 ms (aproximadamente 60Hz)
+
+    // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
 }
 
 
