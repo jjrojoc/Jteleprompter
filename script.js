@@ -526,11 +526,39 @@ function estimateDuration() {
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
     var date = new Date(remainingTime);
-    var formattedTime = date.toISOString().substr(11, 8);
+    var hours = date.getUTCHours();
+    var minutes = date.getUTCMinutes();
+    var seconds = date.getUTCSeconds();
+    
+    // Construye la cadena de tiempo, incluyendo horas solo si son necesarias.
+    var formattedTime = "";
+    if (hours > 0) {
+        formattedTime += `${hours}:`;
+    }
+    // Asegura que los minutos se muestren como dos dígitos cuando hay horas.
+    formattedTime += hours > 0 ? `${minutes.toString().padStart(2, '0')}:` : `${minutes}:`;
+    formattedTime += seconds.toString().padStart(2, '0');
+
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
 }
+
+
+
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+//     var speedControl = document.getElementById('speedControl');
+//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+
+//     var date = new Date(remainingTime);
+//     var formattedTime = date.toISOString().substr(11, 8);
+//     document.getElementById("durationContainer").innerHTML = formattedTime;
+//     console.log('Estimated duration is:', formattedTime);
+//     console.log('Remaining height is:', remainingHeight);
+// }
 
 
 
