@@ -1461,16 +1461,32 @@ function countWords() {
     console.log(text.split(/\s+/).filter(Boolean).length)
 }
 
-function estimateReadingTime() {
+
+function updateEstimatedTime() {
+    const teleprompter = document.getElementById('teleprompter');
+    const totalHeight = teleprompter.scrollHeight;
+    const visibleHeight = teleprompter.clientHeight;
+    const scrollableHeight = totalHeight - visibleHeight;
+    const remainingHeight = scrollableHeight - teleprompter.scrollTop;
+
     const totalWords = countWords();
+    const wordsVisible = (visibleHeight / totalHeight) * totalWords;
     const wordsPerMinute = document.getElementById('wordsPerMinute').value;
-    const totalMinutes = totalWords / wordsPerMinute;
 
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = Math.floor(totalMinutes % 60);
-    const seconds = Math.round((totalMinutes - Math.floor(totalMinutes)) * 60);
+    // Tiempo estimado para las palabras restantes
+    const totalVisibleTime = (totalWords - (wordsVisible * (teleprompter.scrollTop / visibleHeight))) / wordsPerMinute;
+    const remainingTime = remainingHeight / scrollableHeight * totalVisibleTime;
 
-    return formatTime(hours, minutes, seconds);
+    const minutes = Math.floor(remainingTime);
+    const seconds = Math.round((remainingTime - minutes) * 60);
+
+    const formattedTime = formatTime(0, minutes, seconds); // Asumimos que no se alcanza la hora
+    document.getElementById('estimatedTimeDisplay').innerHTML = formattedTime;
+}
+
+function countWords() {
+    const text = document.getElementById('teleprompter').innerText;
+    return text.split(/\s+/).filter(Boolean).length;
 }
 
 function formatTime(hours, minutes, seconds) {
@@ -1478,17 +1494,13 @@ function formatTime(hours, minutes, seconds) {
     if (hours > 0) {
         timeString += `${hours}h `;
     }
-    if (minutes > 0 || hours > 0) { // Ensure minutes are included if hours are present
+    if (minutes > 0 || hours > 0) {
         timeString += `${minutes}m `;
     }
     timeString += `${seconds}s`;
     return timeString;
 }
 
-function updateEstimatedTime() {
-    const estimatedTime = estimateReadingTime();
-    document.getElementById('estimatedTimeDisplay').innerHTML = estimatedTime;
-}
 
 
 
