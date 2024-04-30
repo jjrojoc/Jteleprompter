@@ -480,33 +480,33 @@ function updateToggleButton(isActive) {
 
 
 
-let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
-function startAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
-    const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
+// function startAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const speedControl = document.getElementById('speedControl');
+//     const speed = 100 - speedControl.value;
     
-    isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
+//     isAutoScrolling = true;
+//     updateToggleButton(true);
+//     toggleControlsDisplay(false);
 
-    if (teleprompter.scrollTop === 0) {
-        cronometro.reset();
-        cronometro.start();
-    } else {
-        cronometro.start();
-    }
+//     if (teleprompter.scrollTop === 0) {
+//         cronometro.reset();
+//         cronometro.start();
+//     } else {
+//         cronometro.start();
+//     }
 
-    scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
-    }, speed);
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1);
+//     }, speed);
 
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
-}
+//     // Inicia la actualización de la duración estimada cada segundo
+//     if (!updateDurationInterval) {
+//         updateDurationInterval = setInterval(estimateDuration, 1000);
+//     }
+// }
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
@@ -518,29 +518,91 @@ function stopAutoScroll() {
 }
 
 
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+//     var speedControl = document.getElementById('speedControl');
+//     var adjustmentFactor = 1.45;  // Factor de ajuste basado en pruebas reales
+//     var speedPerPixel = ((100 - speedControl.value) * 1.5) * adjustmentFactor;
+//     var remainingTime = remainingHeight * speedPerPixel;
+
+//     var date = new Date(remainingTime);
+//     var hours = date.getUTCHours();
+//     var minutes = date.getUTCMinutes();
+//     var seconds = date.getUTCSeconds();
+
+//     var formattedTime = "";
+//     if (hours > 0) {
+//         formattedTime += `${hours}:`;
+//     }
+//     formattedTime += hours > 0 ? `${minutes.toString().padStart(2, '0')}:` : `${minutes}:`;
+//     formattedTime += seconds.toString().padStart(2, '0');
+
+//     document.getElementById("durationContainer").innerHTML = formattedTime;
+//     console.log('Estimated duration is:', formattedTime);
+//     console.log('Remaining height is:', remainingHeight);
+// }
+
+
+let speedFactor = 1.5; // Factor inicial de velocidad
+let sampleHeight = 100; // Altura en píxeles para la muestra
+let startTime, endTime;
+
+function startAutoScroll() {
+    const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    const speed = 100 - speedControl.value;
+
+    isAutoScrolling = true;
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
+
+    if (teleprompter.scrollTop === 0) {  
+        cronometro.reset();
+        console.log("Reset at start");
+        cronometro.start();
+        startMeasurement();  // Iniciar la medición para el ajuste dinámico
+    } else {
+        cronometro.start();  // Continúa el temporizador sin resetear
+    }
+
+    scrollInterval = setInterval(() => {
+        teleprompter.scrollBy(0, 1);
+        if (teleprompter.scrollTop >= sampleHeight && !endTime) {
+            endMeasurement();  // Finalizar medición al alcanzar la altura de muestra
+        }
+    }, speed);
+}
+
+function startMeasurement() {
+    startTime = performance.now();
+}
+
+function endMeasurement() {
+    endTime = performance.now();
+    let elapsed = endTime - startTime;
+    let pixelsPerMillisecond = sampleHeight / elapsed;
+    adjustSpeedFactor(pixelsPerMillisecond);
+}
+
+function adjustSpeedFactor(pixelsPerMillisecond) {
+    let initialSpeedPerPixel = 100; // Este valor debe ser ajustado según pruebas
+    let observedSpeedPerPixel = 1000 / pixelsPerMillisecond; // Convertir a velocidad en píxeles por segundo
+    speedFactor = initialSpeedPerPixel / observedSpeedPerPixel; // Ajustar el factor de velocidad
+    console.log('Adjusted Speed Factor:', speedFactor);
+}
+
 function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
-    var adjustmentFactor = 1.45;  // Factor de ajuste basado en pruebas reales
-    var speedPerPixel = ((100 - speedControl.value) * 1.5) * adjustmentFactor;
-    var remainingTime = remainingHeight * speedPerPixel;
+    var speedPerPixel = (100 - speedControl.value) * speedFactor; // Uso del factor ajustado
+    var remainingTime = remainingHeight / speedPerPixel; // tiempo restante en segundos
 
-    var date = new Date(remainingTime);
-    var hours = date.getUTCHours();
-    var minutes = date.getUTCMinutes();
-    var seconds = date.getUTCSeconds();
-
-    var formattedTime = "";
-    if (hours > 0) {
-        formattedTime += `${hours}:`;
-    }
-    formattedTime += hours > 0 ? `${minutes.toString().padStart(2, '0')}:` : `${minutes}:`;
-    formattedTime += seconds.toString().padStart(2, '0');
-
+    var date = new Date(remainingTime * 1000);
+    var formattedTime = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
-    console.log('Remaining height is:', remainingHeight);
 }
 
 
