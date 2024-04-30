@@ -549,8 +549,13 @@ function estimateDuration() {
     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
     var speed = parseInt(speedControl.value, 10);
-    var speedPerPixel = speed * 0.01; // Esto convierte la velocidad de la UI a una escala de tiempo por pixel
-    var remainingTimeInSeconds = remainingHeight / speedPerPixel;
+
+    // Esta es una aproximación que puedes necesitar ajustar
+    // Calcula cuántos píxeles se desplazan por segundo a una velocidad dada en el control
+    // Este factor dependerá de cómo tu aplicación traduce la velocidad del control a la velocidad de scroll real
+    var pixelsPerSecond = 100 + speed * 2; // Ejemplo: asumiendo que speedControl.value es una escala de 0-100
+
+    var remainingTimeInSeconds = remainingHeight / pixelsPerSecond;
 
     // Convertimos los segundos a formato HH:mm:ss solo si es necesario mostrar horas
     var hours = Math.floor(remainingTimeInSeconds / 3600);
@@ -558,7 +563,7 @@ function estimateDuration() {
     var seconds = Math.floor(remainingTimeInSeconds % 60);
 
     var formattedTime = [
-        hours,
+        hours.toString().padStart(2, '0'),
         minutes.toString().padStart(2, '0'),
         seconds.toString().padStart(2, '0')
     ].join(':');
@@ -569,7 +574,9 @@ function estimateDuration() {
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
+    console.log('Speed:', pixelsPerSecond, 'pixels per second');
 }
+
 
 
 
