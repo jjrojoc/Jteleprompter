@@ -476,14 +476,15 @@ function updateToggleButton(isActive) {
 //     }, speed);
 // }
 
-
-let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
-    
+    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
+    const duration = totalHeight / desiredPixelPerSecond * 1000; // desiredPixelPerSecond es la velocidad a la que quieres que se mueva el contenido
+
+    teleprompter.style.transitionDuration = `${duration}ms`;
+    teleprompter.style.transform = `translateY(-${totalHeight}px)`;
+
+    // Iniciar cronómetro o cualquier otra lógica
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
@@ -494,16 +495,38 @@ function startAutoScroll() {
     } else {
         cronometro.start();
     }
-
-    scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
-    }, speed);
-
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
 }
+
+
+
+
+// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+
+// function startAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const speedControl = document.getElementById('speedControl');
+//     const speed = 100 - speedControl.value;
+    
+//     isAutoScrolling = true;
+//     updateToggleButton(true);
+//     toggleControlsDisplay(false);
+
+//     if (teleprompter.scrollTop === 0) {
+//         cronometro.reset();
+//         cronometro.start();
+//     } else {
+//         cronometro.start();
+//     }
+
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1);
+//     }, speed);
+
+//     // Inicia la actualización de la duración estimada cada segundo
+//     if (!updateDurationInterval) {
+//         updateDurationInterval = setInterval(estimateDuration, 1000);
+//     }
+// }
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
