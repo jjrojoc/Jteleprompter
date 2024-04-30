@@ -476,70 +476,46 @@ function updateToggleButton(isActive) {
 //     }, speed);
 // }
 
+
+
+
+
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    const totalHeight = teleprompter.scrollHeight - teleprompter.clientHeight;
+    const speedControl = document.getElementById('speedControl');
+    const speed = 100 - speedControl.value;
+    
+    isAutoScrolling = true;
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
 
-    // Calcula la duración de la animación basada en la velocidad deseada
-    const pixelsPerSecond = 50; // Define cuántos píxeles por segundo quieres que se mueva
-    const duration = totalHeight / pixelsPerSecond; // Duración en segundos
+    if (teleprompter.scrollTop === 0) {
+        cronometro.reset();
+        cronometro.start();
+    } else {
+        cronometro.start();
+    }
 
-    teleprompter.style.transition = `transform ${duration}s linear`;
-    teleprompter.style.transform = `translateY(-${totalHeight}px)`;
+    scrollInterval = setInterval(() => {
+        teleprompter.scrollBy(0, 1);
+    }, speed);
 
-    // Opcional: manejar cuando la animación termine
-    teleprompter.addEventListener('transitionend', () => {
-        console.log('Animation completed');
-        // Aquí puedes detener el temporizador, reiniciar la posición, etc.
-    });
+    // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
 }
 
 function stopAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
-    teleprompter.style.transition = 'none'; // Elimina la transición para detener la animación
-    teleprompter.style.transform = 'translateY(0)'; // Opcional: Restablece la posición
+    clearInterval(scrollInterval);
+    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+    updateDurationInterval = null; // Restablece la variable
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
 }
-
-
-
-
-
-// let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     const speed = 100 - speedControl.value;
-    
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     scrollInterval = setInterval(() => {
-//         teleprompter.scrollBy(0, 1);
-//     }, speed);
-
-//     // Inicia la actualización de la duración estimada cada segundo
-//     if (!updateDurationInterval) {
-//         updateDurationInterval = setInterval(estimateDuration, 1000);
-//     }
-// }
-
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-//     updateDurationInterval = null; // Restablece la variable
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-// }
 
 
 function estimateDuration() {
