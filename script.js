@@ -567,7 +567,7 @@ function estimateDuration() {
 
     var date = new Date(remainingTime);
     var formattedTime = date.toISOString().substr(11, 8);
-    var timenohours = formattedTime.startsWith("00:") ? date.substr(3) : formattedTime;
+    var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
     document.getElementById("durationContainer").innerHTML = timenohours;
     console.log('Estimated duration is:', timenohours);
     console.log('Remaining height is:', remainingHeight);
