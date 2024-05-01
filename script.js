@@ -334,21 +334,44 @@ function stopAutoScroll() {
     toggleControlsDisplay(true);
 }
 
-
-
 function estimateDuration() {
-    var teleprompter = document.getElementById('teleprompter');
-    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-    var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+const teleprompter = document.getElementById('teleprompter');
+const speedControl = document.getElementById('speedControl');
 
-    var date = new Date(remainingTime);
-    var formattedTime = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
-    console.log('Remaining height is:', remainingHeight);
+// Convierte el valor del control de velocidad a píxeles por milisegundo
+const minSpeed = 10; // 1 pixel cada 10 milisegundos es el más rápido
+const maxSpeed = 100; // 1 pixel cada 100 milisegundos es el más lento
+const speed = 10 / (parseInt(speedControl.value) + 1); // Ajustar según la lógica real
+
+const totalHeight = teleprompter.scrollHeight;
+const visibleHeight = teleprompter.clientHeight;
+const currentScrollPosition = teleprompter.scrollTop;
+
+const remainingDistance = totalHeight - (visibleHeight + currentScrollPosition);
+const timeToScrollRemainingDistance = remainingDistance / speed;  // tiempo en milisegundos
+
+var date = new Date(timeToScrollRemainingDistance);
+var formattedTime = date.toISOString().substr(11, 8);
+document.getElementById("durationContainer").innerHTML = formattedTime;
+console.log('Estimated duration is:', formattedTime);
+console.log('Remaining height is:', remainingDistance);
+return timeToScrollRemainingDistance;
 }
+
+
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+//     var speedControl = document.getElementById('speedControl');
+//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+
+//     var date = new Date(remainingTime);
+//     var formattedTime = date.toISOString().substr(11, 8);
+//     document.getElementById("durationContainer").innerHTML = formattedTime;
+//     console.log('Estimated duration is:', formattedTime);
+//     console.log('Remaining height is:', remainingHeight);
+// }
 
 
 
