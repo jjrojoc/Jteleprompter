@@ -343,8 +343,8 @@ function estimateDuration() {
     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
-    var date = new Date(remainingTime);
-    var formattedTime = formatTime(date);
+    
+    var formattedTime = formatTime(remainingTime);
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
