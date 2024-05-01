@@ -557,17 +557,14 @@ function stopAutoScroll() {
 
 
 function estimateDuration() {
-    var teleprompter = document.getElementById('teleprompter');
-    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-    var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
-
-    var date = new Date(remainingTime);
-    var formattedTime = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
-    console.log('Remaining height is:', remainingHeight);
+    var height = teleprompter.offsetHeight;
+    var speed = parseInt(speedElement.value); // Asegúrate de que el valor de speed es adecuado para calcular la duración.
+    var duration = height / speed * 1000;
+    var date = new Date(null);
+    date.setSeconds(duration / 1000);
+    var result = date.toISOString().substr(11, 8);
+    durationContainer.innerHTML = result;
+    return duration;
 }
 
 
