@@ -298,8 +298,7 @@ let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo m
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    var speed = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-    // const speed = 100 - speedControl.value;
+    const speed = 100 - speedControl.value;
     
     isAutoScrolling = true;
     updateToggleButton(true);
@@ -341,7 +340,7 @@ function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+    var speedPerPixel = (100 - speedControl.value); //* 1.5; // Ajusta este valor según la realidad del desplazamiento
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
     var date = new Date(remainingTime);
