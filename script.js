@@ -566,13 +566,16 @@ function estimateDuration() {
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
     var date = new Date(remainingTime);
-    var formattedTime = date.toISOString().substr(11, 8);
+    var formattedTime = formatTime(remainingSeconds);
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
 }
 
-
+function formatTime(seconds) {
+    const date = new Date(seconds * 1000).toISOString().substr(11, 8);
+    return date.startsWith("00:") ? date.substr(3) : date;
+}
 
 // function estimateDuration() {
 //     var teleprompter = document.getElementById('teleprompter');

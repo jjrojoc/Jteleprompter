@@ -247,7 +247,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   gap: 10px; /* Añade espacio entre el timer y el durationContainer */
 }
 
-#timer, #durationContainer {
+#separator, #timer, #durationContainer {
   padding: 5px;
   border-radius: 10px;
 }
