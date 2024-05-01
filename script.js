@@ -352,7 +352,7 @@ var date = new Date(estimatedTime);
 var formattedTime = date.toISOString().substr(11, 8);
 document.getElementById("durationContainer").innerHTML = formattedTime;
 console.log('Estimated duration is:', formattedTime);
-console.log('Remaining height is:', remainingDistance);
+console.log('Remaining height is:', remainingPixels);
 
 }
 
