@@ -344,17 +344,14 @@ function estimateDuration() {
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
     
-    var formattedTime = formatTime(remainingTime);
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
+    var date = new Date(remainingTime);
+    var formattedTime = date.toISOString().substr(11, 8);
+    var timenohours = formattedTime.startsWith("00:") ? date.substr(3) : formattedTime;
+    document.getElementById("durationContainer").innerHTML = timenohours;
+    console.log('Estimated duration is:', timenohours);
     console.log('Remaining height is:', remainingHeight);
 }
 
-
-function formatTime(seconds) {
-    const date = new Date(seconds * 1000).toISOString().substr(11, 8);
-    return date.startsWith("00:") ? date.substr(3) : date;
-}
 
 
 function toggleControlsDisplay(show) {
