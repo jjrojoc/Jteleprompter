@@ -291,25 +291,22 @@ function updateToggleButton(isActive) {
 }
 
 
-let lastTime = 0;
+
 let userInteracted = false;
 let animationFrameId;
 let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 
 function startAutoScroll() {
-    const speedControl = document.getElementById('speedControl');
+    let speed = 100 - speedControl.value; // Ajusta según necesidad
+    let lastTime = 0;
+
     isAutoScrolling = true;
     userInteracted = false;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    if (teleprompter.scrollTop === 0) {
-        cronometro.reset();
-        cronometro.start();
-    } else {
-        cronometro.start();
-    }
+    console.log("AutoScroll iniciado");
 
     function scrollStep(timestamp) {
         if (lastTime === 0) {
@@ -317,7 +314,9 @@ function startAutoScroll() {
         }
 
         const elapsed = timestamp - lastTime;
-        const speed = parseInt(speedControl.value, 10); // Asegúrate de que speed nunca sea 0
+        const speed = Math.max(5, 100 - parseInt(speedControl.value, 10));
+
+        console.log("Timestamp: " + timestamp, "Elapsed: " + elapsed, "Speed: " + speed);
 
         if (elapsed > speed && isAutoScrolling && !userInteracted) {
             teleprompter.scrollBy(0, 1);
@@ -330,22 +329,19 @@ function startAutoScroll() {
     }
 
     animationFrameId = requestAnimationFrame(scrollStep);
-
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
 }
 
 function stopAutoScroll() {
-    //clearInterval(scrollInterval);
-    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-    updateDurationInterval = null; // Restablece la variable
+    clearInterval(updateDurationInterval);
+    updateDurationInterval = null;
     isAutoScrolling = false;
+    userInteracted = true; // Asegúrate de manejar esta variable correctamente
     updateToggleButton(false);
     toggleControlsDisplay(true);
     cancelAnimationFrame(animationFrameId);
+    console.log("AutoScroll detenido");
 }
+
 
 // Detección de interacción del usuario
 teleprompter.addEventListener('scroll', () => {
