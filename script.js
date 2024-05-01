@@ -298,9 +298,17 @@ let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo m
 
 
 function startAutoScroll() {
-    let speed = 100 - speedControl.value; // Ajusta según necesidad
+    const scrollHeight = teleprompter.scrollHeight;
+    const clientHeight = teleprompter.clientHeight;
+    const totalScrollDistance = scrollHeight - clientHeight;
+    const speedFactor = speedControl.value; // Valor entre 0 y 100
+
+    // Convertir speedFactor en una duración de desplazamiento total (ejemplo: 100 -> 30 segundos para todo el contenido)
+    const totalDuration = (100 - speedFactor + 1) * 300; // Ajustar base y multiplicador según necesidades
+
+    const pixelsPerMillisecond = totalScrollDistance / totalDuration;
+
     let lastTime = 0;
-    let pixelsToScroll = 5; // Incrementamos la cantidad de scroll por frame
 
     isAutoScrolling = true;
     userInteracted = false;
@@ -315,11 +323,9 @@ function startAutoScroll() {
         }
 
         const elapsed = timestamp - lastTime;
-        const dynamicSpeed = Math.max(16, 1000 / speed); // Ajustar para que el tiempo máximo entre desplazamientos sea de 1 segundo dividido por la velocidad
+        const pixelsToScroll = elapsed * pixelsPerMillisecond;
 
-        console.log(`Timestamp: ${timestamp} - LastTime: ${lastTime} - Elapsed: ${elapsed} - Speed: ${dynamicSpeed}`);
-
-        if (elapsed > dynamicSpeed && isAutoScrolling && !userInteracted) {
+        if (isAutoScrolling && !userInteracted && pixelsToScroll >= 1) {
             teleprompter.scrollBy(0, pixelsToScroll);
             lastTime = timestamp;
             console.log(`Scrolled by ${pixelsToScroll} pixels at ${timestamp}`);
@@ -343,6 +349,7 @@ function stopAutoScroll() {
     cancelAnimationFrame(animationFrameId);
     console.log("AutoScroll detenido");
 }
+
 
 
 
