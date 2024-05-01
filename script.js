@@ -566,7 +566,7 @@ function estimateDuration() {
     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
     var date = new Date(remainingTime);
-    var formattedTime = formatTime(remainingSeconds);
+    var formattedTime = formatTime(date);
     document.getElementById("durationContainer").innerHTML = formattedTime;
     console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
