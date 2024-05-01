@@ -338,32 +338,32 @@ function estimateDuration() {
 const teleprompter = document.getElementById('teleprompter');
 const speedControl = document.getElementById('speedControl');
 
-// Define los extremos del rango de velocidad (invierte lógica de control para que un valor más alto sea más rápido)
-const minSpeed = 10; // velocidad máxima: 1 pixel cada 10 milisegundos
-const maxSpeed = 100; // velocidad mínima: 1 pixel cada 100 milisegundos
+// Calcula el intervalo entre cada pixel de scroll basado en el valor del control deslizante
+    // Asumimos que el valor máximo del control es 100, que representa el scroll más lento posible
+    const speedValue = 100 - parseInt(speedControl.value); // Invierte la lógica para que un valor más alto sea más rápido
 
-// Normaliza el valor del control de velocidad para el rango de velocidad
-const speedValue = parseInt(speedControl.value);
-const normalizedSpeed = (100 - speedControl.value) * 1.5;
+    // Supongamos que el máximo valor (100) del control deslizante significa 100 ms por pixel
+    // y el mínimo valor (0) significa 10 ms por pixel
+    const minSpeed = 10; // 10 ms por pixel, muy rápido
+    const maxSpeed = 100; // 100 ms por pixel, muy lento
+    const speed = minSpeed + (maxSpeed - minSpeed) * (speedValue / 100); // Calcula la velocidad actual
 
-// Calcula la velocidad en píxeles por milisegundo
-const speed = 1 / normalizedSpeed;
+    const totalHeight = teleprompter.scrollHeight; // Altura total del contenido
+    const visibleHeight = teleprompter.clientHeight; // Altura visible del contenedor
+    const remainingDistance = totalHeight - visibleHeight; // Distancia que debe recorrerse
 
-const totalHeight = teleprompter.scrollHeight;
-const visibleHeight = teleprompter.clientHeight;
-const currentScrollPosition = teleprompter.scrollTop;
-
-const remainingDistance = totalHeight - (visibleHeight + currentScrollPosition);
-const timeToScrollRemainingDistance = remainingDistance / speed;  // tiempo en milisegundos
-
+    // Calcula el tiempo total para recorrer el scroll (en milisegundos)
+    const totalTime = remainingDistance * speed;
 
 
-var date = new Date(timeToScrollRemainingDistance);
+
+
+var date = new Date(totalTime);
 var formattedTime = date.toISOString().substr(11, 8);
 document.getElementById("durationContainer").innerHTML = formattedTime;
 console.log('Estimated duration is:', formattedTime);
 console.log('Remaining height is:', remainingDistance);
-return timeToScrollRemainingDistance;
+return totalTime;
 }
 
 
