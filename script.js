@@ -341,12 +341,10 @@ function estimateDuration() {
     const minSpeed = 100; // 100 ms por pixel, muy lento
 
     // Ajusta la escala de velocidad basada en el valor del control deslizante
-    const speed = minSpeed + (maxSpeed - minSpeed) * (speedControl.value / 100);
+    const speed = minSpeed - (minSpeed - maxSpeed) * (speedControl.value / 100);
     
     const remainingPixels = teleprompter.scrollHeight - teleprompter.clientHeight;
     const estimatedTime = remainingPixels * speed; // tiempo en milisegundos
-
-    return estimatedTime;
 
 
 
