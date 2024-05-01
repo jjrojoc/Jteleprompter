@@ -315,7 +315,7 @@ function startAutoScroll() {
         }
 
         const elapsed = timestamp - lastTime;
-        const dynamicSpeed = Math.max(5, 100 - parseInt(speedControl.value, 10));
+        const dynamicSpeed = Math.max(16, 1000 / speed); // Ajustar para que el tiempo máximo entre desplazamientos sea de 1 segundo dividido por la velocidad
 
         console.log(`Timestamp: ${timestamp} - LastTime: ${lastTime} - Elapsed: ${elapsed} - Speed: ${dynamicSpeed}`);
 
