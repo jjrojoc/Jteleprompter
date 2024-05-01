@@ -498,13 +498,19 @@ function startAutoScroll() {
         cronometro.start();
     }
 
-    scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
-    }, speed);
+    const prompterContentElement = document.getElementById("teleprompter");
+    const duration = estimateDuration();  // Asegúrate de que esta función retorne el tiempo en segundos
+    prompterContentElement.style.transition = `transform ${duration}s linear`;
+    prompterContentElement.style.transform = "translateY(-100%)";  // Ajusta según la altura necesaria
+
+    
+    // scrollInterval = setInterval(() => {
+    //     teleprompter.scrollBy(0, 1);
+    // }, speed);
 
     // Inicia la actualización de la duración estimada cada segundo
     if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
+        updateDurationInterval = setInterval(duration, 1000);
     }
 }
 
@@ -513,7 +519,13 @@ function startAutoScroll() {
 
 
 function stopAutoScroll() {
-    clearInterval(scrollInterval);
+    const prompterContentElement = document.getElementById("teleprompter");
+    // Obtener la posición actual y pausar la transición
+    const computedStyle = window.getComputedStyle(prompterContentElement);
+    const matrix = new WebKitCSSMatrix(computedStyle.transform);
+    prompterContentElement.style.transform = `translateY(${matrix.m42}px)`;
+    prompterContentElement.style.transition = 'none';
+    //clearInterval(scrollInterval);
     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
     updateDurationInterval = null; // Restablece la variable
     isAutoScrolling = false;
@@ -557,16 +569,15 @@ function stopAutoScroll() {
 
 
 function estimateDuration() {
-    const speedElement = getSpeedControl();
-    const teleprompter = getTeleprompter();
-
+    var teleprompter = document.getElementById('teleprompter');
     var height = teleprompter.offsetHeight;
-    var speed = parseInt(speedElement.value); // Asegúrate de que el valor de speed es adecuado para calcular la duración.
-    var duration = height / speed * 1000;
-    var date = new Date(null);
-    date.setSeconds(duration / 1000);
-    var result = date.toISOString().substr(11, 8);
-    durationContainer.innerHTML = result;
+    var speedControl = document.getElementById('speedControl');
+    var speed = parseInt(speedControl.value);
+    var duration = height / speed * 1000; // Asumiendo que 'speed' es altura por segundo
+
+    var date = new Date(duration);
+    var formattedTime = date.toISOString().substr(11, 8);
+    document.getElementById("durationContainer").innerHTML = formattedTime;
     return duration;
 }
 
