@@ -341,7 +341,7 @@ const speedControl = document.getElementById('speedControl');
 // Convierte el valor del control de velocidad a píxeles por milisegundo
 const minSpeed = 10; // 1 pixel cada 10 milisegundos es el más rápido
 const maxSpeed = 100; // 1 pixel cada 100 milisegundos es el más lento
-const speed = 10 / (parseInt(speedControl.value) + 1); // Ajustar según la lógica real
+const speed = 100 / (parseInt(speedControl.value) + 1); // Ajustar según la lógica real
 
 const totalHeight = teleprompter.scrollHeight;
 const visibleHeight = teleprompter.clientHeight;
