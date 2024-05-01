@@ -482,7 +482,7 @@ function updateToggleButton(isActive) {
 
 
 
-let scrollInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+//let scrollInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 let updateDurationInterval; // Guarda el ID del intervalo para la duración.
 
 function startAutoScroll() {
