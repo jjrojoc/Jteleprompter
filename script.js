@@ -298,14 +298,12 @@ let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo m
 
 
 function startAutoScroll() {
-    let speed = 100 - speedControl.value; // Ajusta según necesidad
-    let lastTime = 0;
-
+    const speedControl = document.getElementById('speedControl');
     isAutoScrolling = true;
     userInteracted = false;
     updateToggleButton(true);
     toggleControlsDisplay(false);
-    
+
     if (teleprompter.scrollTop === 0) {
         cronometro.reset();
         cronometro.start();
