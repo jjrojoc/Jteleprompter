@@ -372,7 +372,7 @@ function toggleAutoScroll() {
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
         startAutoScroll();
-        //estimateDuration();    
+        estimateDuration();    
     }
 }
 /////    Original    /////
@@ -1246,7 +1246,7 @@ function prepareTeleprompter() {
     const endMarker = document.getElementById("endMarker");
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
-    estimateDuration();
+    //estimateDuration();
 }
 
 
