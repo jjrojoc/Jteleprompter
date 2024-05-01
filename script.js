@@ -557,9 +557,9 @@ function stopAutoScroll() {
 
 
 function estimateDuration() {
-    speed = getSpeedControl();
-    teleprompter = getTeleprompter();
-    
+    const speed = getSpeedControl();
+    const teleprompter = getTeleprompter();
+
     var height = teleprompter.offsetHeight;
     var speed = parseInt(speedElement.value); // Asegúrate de que el valor de speed es adecuado para calcular la duración.
     var duration = height / speed * 1000;
