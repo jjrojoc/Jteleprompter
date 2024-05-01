@@ -298,7 +298,8 @@ let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo m
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
+    const speed = Math.max(100 - speedControl.value, 1);
+    // const speed = 100 - speedControl.value;
     
     isAutoScrolling = true;
     updateToggleButton(true);
