@@ -557,7 +557,7 @@ function stopAutoScroll() {
 
 
 function estimateDuration() {
-    const speed = getSpeedControl();
+    const speedElement = getSpeedControl();
     const teleprompter = getTeleprompter();
 
     var height = teleprompter.offsetHeight;
