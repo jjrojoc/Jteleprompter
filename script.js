@@ -315,12 +315,13 @@ function startAutoScroll() {
 
         const elapsed = timestamp - lastTime;
         const dynamicSpeed = Math.max(5, 100 - parseInt(speedControl.value, 10));
+        const pixelsToScroll = 5; // Aumentamos los píxeles que se desplazan en cada paso
 
         console.log("Timestamp: " + timestamp, "Elapsed: " + elapsed, "Speed: " + dynamicSpeed);
 
         if (elapsed > dynamicSpeed && isAutoScrolling && !userInteracted) {
-            teleprompter.scrollBy(0, 1);
-            lastTime = timestamp; // Mover esta línea aquí asegura que solo se actualiza cuando el scroll ocurre.
+            teleprompter.scrollBy(0, pixelsToScroll);
+            lastTime = timestamp;
         }
 
         if (isAutoScrolling && !userInteracted) {
@@ -335,12 +336,13 @@ function stopAutoScroll() {
     clearInterval(updateDurationInterval);
     updateDurationInterval = null;
     isAutoScrolling = false;
-    userInteracted = true; // Asegúrate de manejar esta variable correctamente
+    userInteracted = true;
     updateToggleButton(false);
     toggleControlsDisplay(true);
     cancelAnimationFrame(animationFrameId);
     console.log("AutoScroll detenido");
 }
+
 
 
 
