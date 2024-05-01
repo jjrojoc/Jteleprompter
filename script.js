@@ -298,8 +298,7 @@ let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo m
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const speed = Math.max(100 - speedControl.value, 1);
-    // const speed = 100 - speedControl.value;
+    const speed = 100 - speedControl.value;
     
     isAutoScrolling = true;
     updateToggleButton(true);
@@ -337,40 +336,20 @@ function stopAutoScroll() {
 
 
 
-// function estimateDuration() {
-//     var teleprompter = document.getElementById('teleprompter');
-//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-//     var speedControl = document.getElementById('speedControl');
-//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
-
-//     var date = new Date(remainingTime);
-//     var formattedTime = date.toISOString().substr(11, 8);
-//     document.getElementById("durationContainer").innerHTML = formattedTime;
-//     console.log('Estimated duration is:', formattedTime);
-//     console.log('Remaining height is:', remainingHeight);
-// }
-
 function estimateDuration() {
-    const teleprompter = document.getElementById('teleprompter');
-    const totalHeight = teleprompter.scrollHeight;
-    const visibleHeight = teleprompter.clientHeight;
-    const scrollableHeight = totalHeight - visibleHeight;
-    const speedControl = document.getElementById('speedControl');
-    const speed = Math.max(100 - speedControl.value, 1);  // Asegura un mínimo de 1 ms
-    const msPerPixel = speed;
+    var teleprompter = document.getElementById('teleprompter');
+    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+    var speedControl = document.getElementById('speedControl');
+    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
-    const totalDurationMs = scrollableHeight * msPerPixel;
-    const durationInSeconds = totalDurationMs / 1000;
-
-    const hours = Math.floor(durationInSeconds / 3600);
-    const minutes = Math.floor((durationInSeconds % 3600) / 60);
-    const seconds = Math.floor(durationInSeconds % 60);
-
-    const formattedDuration = [hours, minutes, seconds].map(unit => unit < 10 ? `0${unit}` : unit).join(':');
-    
-    document.getElementById('durationContainer').innerText = formattedDuration;
+    var date = new Date(remainingTime);
+    var formattedTime = date.toISOString().substr(11, 8);
+    document.getElementById("durationContainer").innerHTML = formattedTime;
+    console.log('Estimated duration is:', formattedTime);
+    console.log('Remaining height is:', remainingHeight);
 }
+
 
 
 
