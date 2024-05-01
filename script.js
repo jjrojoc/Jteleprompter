@@ -291,7 +291,7 @@ function updateToggleButton(isActive) {
 }
 
 
-
+let lastTime = 0;
 let userInteracted = false;
 let animationFrameId;
 let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
@@ -319,6 +319,7 @@ function startAutoScroll() {
         }
 
         const elapsed = timestamp - lastTime;
+        const speed = Math.max(5, 100 - parseInt(speedControl.value, 10)); // Asegúrate de que speed nunca sea 0
 
         if (elapsed > speed && isAutoScrolling && !userInteracted) {
             teleprompter.scrollBy(0, 1);
