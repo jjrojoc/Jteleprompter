@@ -335,35 +335,27 @@ function stopAutoScroll() {
 }
 
 function estimateDuration() {
-const teleprompter = document.getElementById('teleprompter');
-const speedControl = document.getElementById('speedControl');
+    const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    const maxSpeed = 1; // 1 ms por pixel, muy rápido
+    const minSpeed = 100; // 100 ms por pixel, muy lento
 
-// Calcula el intervalo entre cada pixel de scroll basado en el valor del control deslizante
-    // Asumimos que el valor máximo del control es 100, que representa el scroll más lento posible
-    const speedValue = 100 - parseInt(speedControl.value); // Invierte la lógica para que un valor más alto sea más rápido
+    // Ajusta la escala de velocidad basada en el valor del control deslizante
+    const speed = minSpeed + (maxSpeed - minSpeed) * (speedControl.value / 100);
+    
+    const remainingPixels = teleprompter.scrollHeight - teleprompter.clientHeight;
+    const estimatedTime = remainingPixels * speed; // tiempo en milisegundos
 
-    // Supongamos que el máximo valor (100) del control deslizante significa 100 ms por pixel
-    // y el mínimo valor (0) significa 10 ms por pixel
-    const minSpeed = 10; // 10 ms por pixel, muy rápido
-    const maxSpeed = 100; // 100 ms por pixel, muy lento
-    const speed = minSpeed + (maxSpeed - minSpeed) * (speedValue / 100); // Calcula la velocidad actual
-
-    const totalHeight = teleprompter.scrollHeight; // Altura total del contenido
-    const visibleHeight = teleprompter.clientHeight; // Altura visible del contenedor
-    const remainingDistance = totalHeight - visibleHeight; // Distancia que debe recorrerse
-
-    // Calcula el tiempo total para recorrer el scroll (en milisegundos)
-    const totalTime = remainingDistance * speed;
+    return estimatedTime;
 
 
 
-
-var date = new Date(totalTime);
+var date = new Date(estimatedTime);
 var formattedTime = date.toISOString().substr(11, 8);
 document.getElementById("durationContainer").innerHTML = formattedTime;
 console.log('Estimated duration is:', formattedTime);
 console.log('Remaining height is:', remainingDistance);
-return totalTime;
+
 }
 
 
