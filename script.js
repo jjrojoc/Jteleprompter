@@ -312,7 +312,7 @@ function startAutoScroll() {
     }
 
     scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
+        teleprompter.scrollBy(0, 10);
     }, speed);
 
     // Inicia la actualización de la duración estimada cada segundo
