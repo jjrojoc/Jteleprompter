@@ -493,6 +493,8 @@ function startAutoScroll() {
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
+    estimateDuration(); // Calcula el tiempo estimado
+
     if (teleprompter.scrollTop === 0) {
         cronometro.reset();
         cronometro.start();
@@ -1248,7 +1250,7 @@ function prepareTeleprompter() {
     const endMarker = document.getElementById("endMarker");
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
-    estimateDuration();
+    // estimateDuration();
 }
 
 
