@@ -338,10 +338,16 @@ function estimateDuration() {
 const teleprompter = document.getElementById('teleprompter');
 const speedControl = document.getElementById('speedControl');
 
-// Convierte el valor del control de velocidad a píxeles por milisegundo
-const minSpeed = 10; // 1 pixel cada 10 milisegundos es el más rápido
-const maxSpeed = 100; // 1 pixel cada 100 milisegundos es el más lento
-const speed = 100 / (parseInt(speedControl.value) + 1); // Ajustar según la lógica real
+// Define los extremos del rango de velocidad (invierte lógica de control para que un valor más alto sea más rápido)
+const minSpeed = 10; // velocidad máxima: 1 pixel cada 10 milisegundos
+const maxSpeed = 100; // velocidad mínima: 1 pixel cada 100 milisegundos
+
+// Normaliza el valor del control de velocidad para el rango de velocidad
+const speedValue = parseInt(speedControl.value);
+const normalizedSpeed = minSpeed + (maxSpeed - minSpeed) * ((100 - speedValue) / 100);
+
+// Calcula la velocidad en píxeles por milisegundo
+const speed = 1 / normalizedSpeed;
 
 const totalHeight = teleprompter.scrollHeight;
 const visibleHeight = teleprompter.clientHeight;
@@ -349,6 +355,8 @@ const currentScrollPosition = teleprompter.scrollTop;
 
 const remainingDistance = totalHeight - (visibleHeight + currentScrollPosition);
 const timeToScrollRemainingDistance = remainingDistance / speed;  // tiempo en milisegundos
+
+
 
 var date = new Date(timeToScrollRemainingDistance);
 var formattedTime = date.toISOString().substr(11, 8);
