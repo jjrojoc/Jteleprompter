@@ -314,13 +314,13 @@ function startAutoScroll() {
         }
 
         const elapsed = timestamp - lastTime;
-        const speed = Math.max(5, 100 - parseInt(speedControl.value, 10));
+        const dynamicSpeed = Math.max(5, 100 - parseInt(speedControl.value, 10));
 
-        console.log("Timestamp: " + timestamp, "Elapsed: " + elapsed, "Speed: " + speed);
+        console.log("Timestamp: " + timestamp, "Elapsed: " + elapsed, "Speed: " + dynamicSpeed);
 
-        if (elapsed > speed && isAutoScrolling && !userInteracted) {
+        if (elapsed > dynamicSpeed && isAutoScrolling && !userInteracted) {
             teleprompter.scrollBy(0, 1);
-            lastTime = timestamp;
+            lastTime = timestamp; // Mover esta línea aquí asegura que solo se actualiza cuando el scroll ocurre.
         }
 
         if (isAutoScrolling && !userInteracted) {
@@ -341,6 +341,7 @@ function stopAutoScroll() {
     cancelAnimationFrame(animationFrameId);
     console.log("AutoScroll detenido");
 }
+
 
 
 // Detección de interacción del usuario
