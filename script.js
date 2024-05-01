@@ -352,18 +352,15 @@ function stopAutoScroll() {
 
 function estimateDuration() {
     const teleprompter = document.getElementById('teleprompter');
-    const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value; // Intervalo del setInterval en milisegundos
-
     const totalHeight = teleprompter.scrollHeight;
     const visibleHeight = teleprompter.clientHeight;
     const scrollableHeight = totalHeight - visibleHeight;
+    const speedControl = document.getElementById('speedControl');
+    const speed = Math.max(100 - speedControl.value, 1);  // Asegura un mínimo de 1 ms
+    const msPerPixel = speed;
 
-    // Calcula cuántos milisegundos se necesitan para recorrer 1 pixel
-    const msPerPixel = speed; // Cada pixel se mueve cada 'speed' milisegundos
-    const totalDurationMs = scrollableHeight * msPerPixel; // Duración total en milisegundos
-
-    const durationInSeconds = totalDurationMs / 1000; // Convertir milisegundos a segundos
+    const totalDurationMs = scrollableHeight * msPerPixel;
+    const durationInSeconds = totalDurationMs / 1000;
 
     const hours = Math.floor(durationInSeconds / 3600);
     const minutes = Math.floor((durationInSeconds % 3600) / 60);
