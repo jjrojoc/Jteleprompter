@@ -342,6 +342,8 @@ function activateSpecialFunction() {
     } else {
         console.log("No original content found to restore.");
     }
+    // Restablecer la duración estimada mostrada en el 'durationContainer'
+    document.getElementById('durationContainer').textContent = "00:00";
 }
 
 
