@@ -498,19 +498,13 @@ function startAutoScroll() {
         cronometro.start();
     }
 
-    const prompterContentElement = document.getElementById("teleprompter");
-    const duration = estimateDuration();  // Asegúrate de que esta función retorne el tiempo en segundos
-    prompterContentElement.style.transition = `transform ${duration}s linear`;
-    prompterContentElement.style.transform = "translateY(-100%)";  // Ajusta según la altura necesaria
-
-    
-    // scrollInterval = setInterval(() => {
-    //     teleprompter.scrollBy(0, 1);
-    // }, speed);
+    scrollInterval = setInterval(() => {
+        teleprompter.scrollBy(0, 1);
+    }, speed);
 
     // Inicia la actualización de la duración estimada cada segundo
     if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(duration, 1000);
+        updateDurationInterval = setInterval(estimateDuration, 1000);
     }
 }
 
@@ -519,13 +513,7 @@ function startAutoScroll() {
 
 
 function stopAutoScroll() {
-    const prompterContentElement = document.getElementById("teleprompter");
-    // Obtener la posición actual y pausar la transición
-    const computedStyle = window.getComputedStyle(prompterContentElement);
-    const matrix = new WebKitCSSMatrix(computedStyle.transform);
-    prompterContentElement.style.transform = `translateY(${matrix.m42}px)`;
-    prompterContentElement.style.transition = 'none';
-    //clearInterval(scrollInterval);
+    clearInterval(scrollInterval);
     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
     updateDurationInterval = null; // Restablece la variable
     isAutoScrolling = false;
@@ -570,15 +558,16 @@ function stopAutoScroll() {
 
 function estimateDuration() {
     var teleprompter = document.getElementById('teleprompter');
-    var height = teleprompter.offsetHeight;
+    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
     var speedControl = document.getElementById('speedControl');
-    var speed = parseInt(speedControl.value);
-    var duration = height / speed * 1000; // Asumiendo que 'speed' es altura por segundo
+    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
-    var date = new Date(duration);
+    var date = new Date(remainingTime);
     var formattedTime = date.toISOString().substr(11, 8);
     document.getElementById("durationContainer").innerHTML = formattedTime;
-    return duration;
+    console.log('Estimated duration is:', formattedTime);
+    console.log('Remaining height is:', remainingHeight);
 }
 
 
