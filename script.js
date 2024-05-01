@@ -292,18 +292,19 @@ function updateToggleButton(isActive) {
 
 
 
+let userInteracted = false;
+let animationFrameId;
 
-let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 function startAutoScroll() {
-    const teleprompter = document.getElementById('teleprompter');
-    const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
-    
+    let speed = 100 - speedControl.value; // Ajusta según necesidad
+    let lastTime = 0;
+
     isAutoScrolling = true;
+    userInteracted = false;
     updateToggleButton(true);
     toggleControlsDisplay(false);
-
+    
     if (teleprompter.scrollTop === 0) {
         cronometro.reset();
         cronometro.start();
@@ -311,9 +312,24 @@ function startAutoScroll() {
         cronometro.start();
     }
 
-    scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
-    }, speed);
+    function scrollStep(timestamp) {
+        if (lastTime === 0) {
+            lastTime = timestamp;
+        }
+
+        const elapsed = timestamp - lastTime;
+
+        if (elapsed > speed && isAutoScrolling && !userInteracted) {
+            teleprompter.scrollBy(0, 1);
+            lastTime = timestamp;
+        }
+
+        if (isAutoScrolling && !userInteracted) {
+            animationFrameId = requestAnimationFrame(scrollStep);
+        }
+    }
+
+    animationFrameId = requestAnimationFrame(scrollStep);
 
     // Inicia la actualización de la duración estimada cada segundo
     if (!updateDurationInterval) {
@@ -321,19 +337,21 @@ function startAutoScroll() {
     }
 }
 
-
-
-
-
 function stopAutoScroll() {
-    clearInterval(scrollInterval);
+    //clearInterval(scrollInterval);
     clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
     updateDurationInterval = null; // Restablece la variable
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
+    cancelAnimationFrame(animationFrameId);
 }
 
+// Detección de interacción del usuario
+teleprompter.addEventListener('scroll', () => {
+    userInteracted = true;
+    setTimeout(() => { userInteracted = false; }, 1000); // reinicia el estado después de 1 segundo sin interacción
+});
 
 
 function estimateDuration() {
