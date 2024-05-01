@@ -336,19 +336,45 @@ function stopAutoScroll() {
 
 
 
-function estimateDuration() {
-    var teleprompter = document.getElementById('teleprompter');
-    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-    var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+//     var speedControl = document.getElementById('speedControl');
+//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
-    var date = new Date(remainingTime);
-    var formattedTime = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
-    console.log('Remaining height is:', remainingHeight);
+//     var date = new Date(remainingTime);
+//     var formattedTime = date.toISOString().substr(11, 8);
+//     document.getElementById("durationContainer").innerHTML = formattedTime;
+//     console.log('Estimated duration is:', formattedTime);
+//     console.log('Remaining height is:', remainingHeight);
+// }
+
+
+function estimateDuration() {
+    const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    const speed = parseInt(speedControl.value); // La velocidad con que el contenido se desplaza
+    const fontSize = parseInt(window.getComputedStyle(teleprompter).fontSize);
+    const lineHeight = 1.5 * fontSize; // Asumiendo que la línea es 1.5em
+    const totalHeight = teleprompter.scrollHeight;
+    const visibleHeight = teleprompter.clientHeight;
+    const scrollableHeight = totalHeight - visibleHeight;
+
+    // Asumiendo que 'speed' es el número de pixeles que se desplaza por intervalo
+    // Y el intervalo es cada 100ms (ajusta según tu implementación real)
+    const durationInSeconds = (scrollableHeight / speed) * 1; // Convertir milisegundos a segundos
+
+    const hours = Math.floor(durationInSeconds / 3600);
+    const minutes = Math.floor((durationInSeconds % 3600) / 60);
+    const seconds = Math.floor(durationInSeconds % 60);
+
+    const formattedDuration = [hours, minutes, seconds].map(unit => unit < 10 ? `0${unit}` : unit).join(':');
+    
+    document.getElementById('durationContainer').innerText = formattedDuration;
 }
+
+// Llamar a estimateDuration() en el momento adecuado en tu flujo de trabajo
 
 
 
