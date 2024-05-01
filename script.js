@@ -363,7 +363,7 @@ function estimateDuration() {
 
     // Asumiendo que 'speed' es el número de pixeles que se desplaza por intervalo
     // Y el intervalo es cada 100ms (ajusta según tu implementación real)
-    const durationInSeconds = (scrollableHeight / speed) * 1; // Convertir milisegundos a segundos
+    const durationInSeconds = (scrollableHeight / speed) * 0.1; // Convertir milisegundos a segundos
 
     const hours = Math.floor(durationInSeconds / 3600);
     const minutes = Math.floor((durationInSeconds % 3600) / 60);
