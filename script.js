@@ -344,7 +344,7 @@ const maxSpeed = 100; // velocidad mínima: 1 pixel cada 100 milisegundos
 
 // Normaliza el valor del control de velocidad para el rango de velocidad
 const speedValue = parseInt(speedControl.value);
-const normalizedSpeed = minSpeed + (maxSpeed - minSpeed) * ((100 - speedValue) / 100);
+const normalizedSpeed = (100 - speedControl.value) * 1.5;
 
 // Calcula la velocidad en píxeles por milisegundo
 const speed = 1 / normalizedSpeed;
