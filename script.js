@@ -342,8 +342,6 @@ function activateSpecialFunction() {
     } else {
         console.log("No original content found to restore.");
     }
-    // Restablecer la duración estimada mostrada en el 'durationContainer'
-    document.getElementById('durationContainer').textContent = "00:00";
 }
 
 
@@ -374,7 +372,7 @@ function toggleAutoScroll() {
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
         startAutoScroll();
-        estimateDuration();    
+        //estimateDuration();    
     }
 }
 /////    Original    /////
@@ -567,11 +565,11 @@ function estimateDuration() {
 
     var date = new Date(remainingTime);
     var formattedTime = date.toISOString().substr(11, 8);
-    var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
-    document.getElementById("durationContainer").innerHTML = timenohours;
-    console.log('Estimated duration is:', timenohours);
+    document.getElementById("durationContainer").innerHTML = formattedTime;
+    console.log('Estimated duration is:', formattedTime);
     console.log('Remaining height is:', remainingHeight);
 }
+
 
 
 // function estimateDuration() {
@@ -1248,7 +1246,7 @@ function prepareTeleprompter() {
     const endMarker = document.getElementById("endMarker");
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
-    //estimateDuration();
+    estimateDuration();
 }
 
 
