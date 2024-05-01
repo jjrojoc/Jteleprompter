@@ -317,7 +317,7 @@ function startAutoScroll() {
         }
 
         const elapsed = timestamp - lastTime;
-        const speed = Math.max(5, 100 - parseInt(speedControl.value, 10)); // Asegúrate de que speed nunca sea 0
+        const speed = parseInt(speedControl.value, 10); // Asegúrate de que speed nunca sea 0
 
         if (elapsed > speed && isAutoScrolling && !userInteracted) {
             teleprompter.scrollBy(0, 1);
