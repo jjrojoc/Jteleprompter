@@ -482,31 +482,26 @@ function updateToggleButton(isActive) {
 
 
 
-//let scrollInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-let updateDurationInterval; // Guarda el ID del intervalo para la duración.
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    const viewport = document.getElementById('viewport');
     const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value; // Ajusta la velocidad de scroll basado en el control de velocidad.
+    const speed = 100 - speedControl.value;
     
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    cronometro.reset();
-    cronometro.start();
-
-    let startY = -teleprompter.clientHeight;
-    teleprompter.style.transform = `translateY(${startY}px)`;
+    if (teleprompter.scrollTop === 0) {
+        cronometro.reset();
+        cronometro.start();
+    } else {
+        cronometro.start();
+    }
 
     scrollInterval = setInterval(() => {
-        const currentY = parseInt(getComputedStyle(teleprompter).transform.split(',')[5].trim());
-        teleprompter.style.transform = `translateY(${currentY + 1}px)`;
-        if (currentY >= viewport.clientHeight) {
-            stopAutoScroll();
-        }
+        teleprompter.scrollBy(0, 1);
     }, speed);
 
     // Inicia la actualización de la duración estimada cada segundo
@@ -515,34 +510,93 @@ function startAutoScroll() {
     }
 }
 
+
+
+
+
 function stopAutoScroll() {
     clearInterval(scrollInterval);
-    clearInterval(updateDurationInterval);
-    updateDurationInterval = null;
+    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+    updateDurationInterval = null; // Restablece la variable
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
-    cronometro.stop();
-    document.getElementById('teleprompter').style.transform = '';
 }
+
+
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+//     var speedControl = document.getElementById('speedControl');
+//     var adjustmentFactor = 1.45;  // Factor de ajuste basado en pruebas reales
+//     var speedPerPixel = ((100 - speedControl.value) * 1.5) * adjustmentFactor;
+//     var remainingTime = remainingHeight * speedPerPixel;
+
+//     var date = new Date(remainingTime);
+//     var hours = date.getUTCHours();
+//     var minutes = date.getUTCMinutes();
+//     var seconds = date.getUTCSeconds();
+
+//     var formattedTime = "";
+//     if (hours > 0) {
+//         formattedTime += `${hours}:`;
+//     }
+//     formattedTime += hours > 0 ? `${minutes.toString().padStart(2, '0')}:` : `${minutes}:`;
+//     formattedTime += seconds.toString().padStart(2, '0');
+
+//     document.getElementById("durationContainer").innerHTML = formattedTime;
+//     console.log('Estimated duration is:', formattedTime);
+//     console.log('Remaining height is:', remainingHeight);
+// }
+
+
+
+
+
+
+
+
+
 
 function estimateDuration() {
-    const teleprompter = document.getElementById('teleprompter');
-    const viewport = document.getElementById('viewport');
-    const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
-    const remainingHeight = viewport.clientHeight - parseInt(getComputedStyle(teleprompter).transform.split(',')[5].trim());
-    const estimatedTime = remainingHeight / speed;
-    const durationElement = document.getElementById('durationContainer');
-    durationElement.textContent = formatTime(estimatedTime * 1000);
+    var teleprompter = document.getElementById('teleprompter');
+    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+    var speedControl = document.getElementById('speedControl');
+    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+
+    var date = new Date(remainingTime);
+    var formattedTime = date.toISOString().substr(11, 8);
+    var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
+    document.getElementById("durationContainer").innerHTML = timenohours;
+    console.log('Estimated duration is:', timenohours);
+    console.log('Remaining height is:', remainingHeight);
 }
 
-function formatTime(ms) {
-    const seconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    return `${hours.toString().padStart(2, '0')}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
-}
+
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var totalHeight = teleprompter.scrollHeight;
+//     var visibleHeight = teleprompter.clientHeight;
+//     var scrollableHeight = totalHeight - visibleHeight; // ajusta en función de la posición actual
+//     var remainingHeight = scrollableHeight - teleprompter.scrollTop; // altura que queda por scrollear
+//     var speedControl = document.getElementById('speedControl');
+//     var speed = 100 - speedControl.value * 0.30;
+//     var remainingTime = remainingHeight * speed; // tiempo restante en milisegundos
+
+//     var date = new Date(null);
+//     date.setMilliseconds(remainingTime);
+//     var result = date.toISOString().substr(11, 8);
+//     document.getElementById("durationContainer").innerHTML = result;
+//     console.log('estimated duration is: ', result);
+//     // console.log('totalHeight is: ', totalHeight);
+//     // console.log('visibleheight: ', visibleHeight);
+//     // console.log('scrollableheight is: ', scrollableHeight);
+//     console.log('remainingHeight is:', remainingHeight);
+//     // console.log('remainingtime is: ', remainingTime);
+// }
+
+
 
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
