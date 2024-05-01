@@ -294,6 +294,7 @@ function updateToggleButton(isActive) {
 
 let userInteracted = false;
 let animationFrameId;
+let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 
 function startAutoScroll() {
