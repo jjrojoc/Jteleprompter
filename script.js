@@ -340,8 +340,8 @@ let scrollAnimation;
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    // Convertir el valor del control de velocidad en un factor de desplazamiento por cuadro de animación
-    const speedFactor = 100 - speedControl.value;
+    // Asegurarse de que el valor de speedControl esté correctamente interpretado
+    let speed = parseInt(speedControl.value);
 
     isAutoScrolling = true;
     updateToggleButton(true);
@@ -354,8 +354,11 @@ function startAutoScroll() {
         cronometro.start();
     }
 
-    function animateScroll() {
-        teleprompter.scrollBy(0, speedFactor);
+    function animateScroll(timestamp) {
+        // Utilizamos el tiempo para controlar el desplazamiento basado en la velocidad
+        const pixelsToScroll = 0.1 * speed; // Ajustar este factor según sea necesario para calibrar la velocidad
+        teleprompter.scrollTop += pixelsToScroll;
+
         scrollAnimation = requestAnimationFrame(animateScroll);
     }
 
@@ -369,6 +372,7 @@ function stopAutoScroll() {
     updateToggleButton(false);
     toggleControlsDisplay(true);
 }
+
 
 
 
