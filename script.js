@@ -336,11 +336,11 @@ function updateToggleButton(isActive) {
 
 
 let scrollAnimation;
+let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    // Invertir el valor para que un valor más alto en el control signifique una velocidad más rápida
     let speed = parseInt(speedControl.value);
 
     isAutoScrolling = true;
@@ -363,16 +363,18 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        // Ajusta estos valores según sea necesario para calibrar la velocidad
-        const minSpeed = 1; // Mínimo píxeles por segundo
+        const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
         const maxSpeed = 100; // Máximo píxeles por segundo
         const speedRange = maxSpeed - minSpeed;
         const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
-        console.log('pixelPerSecond: ', pixelsPerSecond);
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-        console.log('pixelToScroll: ', pixelsToScroll);
 
-        teleprompter.scrollTop += pixelsToScroll;
+        pixelAccumulator += pixelsToScroll;
+        if (pixelAccumulator >= 1) {
+            teleprompter.scrollTop += Math.floor(pixelAccumulator);
+            pixelAccumulator -= Math.floor(pixelAccumulator);
+        }
+
         scrollAnimation = requestAnimationFrame(animateScroll);
     }
 
@@ -385,7 +387,9 @@ function stopAutoScroll() {
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
+    pixelAccumulator = 0; // Restablecer el acumulador al detener
 }
+
 
 
 
