@@ -293,7 +293,7 @@ function updateToggleButton(isActive) {
 
 
 
-let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
+//let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
@@ -315,10 +315,10 @@ function startAutoScroll() {
         teleprompter.scrollBy(0, 1);
     }, speed);
 
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
+    // // Inicia la actualización de la duración estimada cada segundo
+    // if (!updateDurationInterval) {
+    //     updateDurationInterval = setInterval(estimateDuration, 1000);
+    // }
 }
 
 
@@ -327,8 +327,8 @@ function startAutoScroll() {
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
-    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-    updateDurationInterval = null; // Restablece la variable
+    // clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+    // updateDurationInterval = null; // Restablece la variable
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
@@ -336,21 +336,21 @@ function stopAutoScroll() {
 
 
 
-function estimateDuration() {
-    var teleprompter = document.getElementById('teleprompter');
-    var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-    var speedControl = document.getElementById('speedControl');
-    var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-    var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+// function estimateDuration() {
+//     var teleprompter = document.getElementById('teleprompter');
+//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+//     var speedControl = document.getElementById('speedControl');
+//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
 
     
-    var date = new Date(remainingTime);
-    var formattedTime = date.toISOString().substr(11, 8);
-    var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
-    document.getElementById("durationContainer").innerHTML = timenohours;
-    console.log('Estimated duration is:', timenohours);
-    console.log('Remaining height is:', remainingHeight);
-}
+//     var date = new Date(remainingTime);
+//     var formattedTime = date.toISOString().substr(11, 8);
+//     var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
+//     document.getElementById("durationContainer").innerHTML = timenohours;
+//     console.log('Estimated duration is:', timenohours);
+//     console.log('Remaining height is:', remainingHeight);
+// }
 
 
 
@@ -658,7 +658,7 @@ function prepareTeleprompter() {
     const endMarker = document.getElementById("endMarker");
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
-    estimateDuration();
+    // estimateDuration();
 }
 
 

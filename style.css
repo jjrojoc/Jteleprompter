@@ -181,7 +181,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   background-color: #555;
 }
 
-/* #timer {
+#timer {
   position: fixed; 
   top: 10px; 
   right: 10px; 
@@ -189,9 +189,9 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   background-color: black; 
   color: white; 
   padding: 5px;
-  border-radius: 15px; /* Esto añade esquinas redondeadas
-  transition: transform 0.2s, background-color 0.2s; /* Suaviza las transiciones de transformación y color
-} */
+  border-radius: 15px; /* Esto añade esquinas redondeadas */
+  transition: transform 0.2s, background-color 0.2s; /* Suaviza las transiciones de transformación y color */
+}
 
 #timer.active {
   transform: scale(1.3); /* Aumenta el tamaño */
@@ -233,7 +233,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 }
 
 /*Para el nuevo timer */
-#timeControls {
+/* #timeControls {
   position: fixed; 
   top: 10px; 
   right: 10px; 
@@ -243,11 +243,11 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   padding: 5px;
   border-radius: 15px;
   transition: transform 0.2s, background-color 0.2s;
-  display: flex; /* Organiza los elementos horizontalmente */
-  gap: 10px; /* Añade espacio entre el timer y el durationContainer */
-}
+  display: flex; /* Organiza los elementos horizontalmente
+  gap: 10px;  Añade espacio entre el timer y el durationContainer
+} */
 
-#separator, #timer, #durationContainer {
+/* #separator, #timer, #durationContainer {
   padding: 5px;
   border-radius: 10px;
-}
+} */
