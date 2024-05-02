@@ -575,7 +575,8 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         processHTML(tempDiv);
         console.log("HTML Procesado:", tempDiv.innerHTML);
         while (tempDiv.firstChild) {
-            range.insertNode(tempDiv.firstChild); // inserta directamente sin clonar
+            range.insertNode(tempDiv.firstChild);
+            range.insertNode(document.createTextNode(" ")); // Asegura que hay espacio entre nodos si se necesita
         }
     } else if (plainText) {
         // Insertar texto plano respetando los saltos de línea
