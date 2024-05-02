@@ -601,6 +601,14 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
     function processHTML(element) {
 
+        Array.from(element.querySelectorAll('a')).forEach(node => {
+            const parent = node.parentNode;
+            while (node.firstChild) {
+                parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
+            }
+            parent.removeChild(node); // Elimina el nodo del enlace
+        });
+        
         // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
         let htmlString = element.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
         
