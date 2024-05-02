@@ -336,7 +336,7 @@ function updateToggleButton(isActive) {
 
 
 let scrollAnimation;
-let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
+let pixelAccumulator = 0;
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
@@ -355,6 +355,18 @@ function startAutoScroll() {
     }
 
     let lastTime;
+    const scrollHeight = teleprompter.scrollHeight;
+    const clientHeight = teleprompter.clientHeight;
+    const totalHeightToScroll = scrollHeight - clientHeight;
+    const minSpeed = 0.5; // Mínimo píxeles por segundo, ajustable
+    const maxSpeed = 100; // Máximo píxeles por segundo, ajustable
+    const speedRange = maxSpeed - minSpeed;
+    const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
+
+    // Calcular la duración estimada
+    const estimatedDuration = totalHeightToScroll / pixelsPerSecond;
+    console.log(`Estimated Duration: ${estimatedDuration} seconds`);
+
     function animateScroll(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
@@ -363,10 +375,6 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
-        const maxSpeed = 100; // Máximo píxeles por segundo
-        const speedRange = maxSpeed - minSpeed;
-        const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
         pixelAccumulator += pixelsToScroll;
@@ -387,8 +395,9 @@ function stopAutoScroll() {
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
-    pixelAccumulator = 0; // Restablecer el acumulador al detener
+    pixelAccumulator = 0;
 }
+
 
 
 
