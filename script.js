@@ -624,6 +624,18 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
             node.removeAttribute('class');
             node.removeAttribute('id');
+
+            // Remover etiquetas <a> si su contenido no es un número
+            if (node.tagName === 'A') {
+                if (isNaN(node.textContent.trim())) {
+                    const parent = node.parentNode;
+                    while (node.firstChild) {
+                        parent.insertBefore(node.firstChild, node);
+                    }
+                    parent.removeChild(node);
+                }
+            }
+
             if (node.style) {
                 // Si el color es blanco, eliminar el estilo completamente
                 if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
