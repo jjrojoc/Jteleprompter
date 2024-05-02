@@ -357,6 +357,7 @@ function startAutoScroll() {
     function animateScroll(timestamp) {
         // Utilizamos el tiempo para controlar el desplazamiento basado en la velocidad
         const pixelsToScroll = 0.1 * speed; // Ajustar este factor según sea necesario para calibrar la velocidad
+        console.log('pixelstoscroll: ', pixelsToScroll)
         teleprompter.scrollTop += pixelsToScroll;
 
         scrollAnimation = requestAnimationFrame(animateScroll);
