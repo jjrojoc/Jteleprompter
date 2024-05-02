@@ -336,7 +336,7 @@ function updateToggleButton(isActive) {
 
 
 let scrollAnimation;
-let pixelAccumulator = 0;
+let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
@@ -355,18 +355,6 @@ function startAutoScroll() {
     }
 
     let lastTime;
-    const scrollHeight = teleprompter.scrollHeight;
-    const clientHeight = teleprompter.clientHeight;
-    const totalHeightToScroll = scrollHeight - clientHeight;
-
-    const pixelsPerSecond = calculatePixelsPerSecond(speed);
-
-    // Calcular la duración estimada y aplicar un factor de corrección
-    const estimatedDuration = totalHeightToScroll / pixelsPerSecond;
-    const correctionFactor = 1.6; // Ajustado empíricamente
-    const correctedEstimatedDuration = estimatedDuration * correctionFactor;
-    console.log(`Estimated Duration: ${correctedEstimatedDuration} seconds`);
-
     function animateScroll(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
@@ -375,6 +363,10 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
+        const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
+        const maxSpeed = 100; // Máximo píxeles por segundo
+        const speedRange = maxSpeed - minSpeed;
+        const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
         pixelAccumulator += pixelsToScroll;
@@ -389,21 +381,15 @@ function startAutoScroll() {
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
 
-function calculatePixelsPerSecond(speed) {
-    const minSpeed = 0.5;
-    const maxSpeed = 100;
-    const speedRange = maxSpeed - minSpeed;
-    return minSpeed + (speedRange * speed / 100);
-}
-
 function stopAutoScroll() {
     cancelAnimationFrame(scrollAnimation);
     scrollAnimation = null;
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
-    pixelAccumulator = 0;
+    pixelAccumulator = 0; // Restablecer el acumulador al detener
 }
+
 
 
 
