@@ -347,25 +347,18 @@ function startAutoScroll() {
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    if (teleprompter.scrollTop === 0) {
-        cronometro.reset();
-        cronometro.start();
-    } else {
-        cronometro.start();
-    }
-
     let lastTime;
     const scrollHeight = teleprompter.scrollHeight;
     const clientHeight = teleprompter.clientHeight;
     const totalHeightToScroll = scrollHeight - clientHeight;
-    const minSpeed = 0.5; // Mínimo píxeles por segundo, ajustable
-    const maxSpeed = 100; // Máximo píxeles por segundo, ajustable
-    const speedRange = maxSpeed - minSpeed;
-    const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
 
-    // Calcular la duración estimada
+    const pixelsPerSecond = calculatePixelsPerSecond(speed);
+
+    // Calcular la duración estimada y aplicar un factor de corrección
     const estimatedDuration = totalHeightToScroll / pixelsPerSecond;
-    console.log(`Estimated Duration: ${estimatedDuration} seconds`);
+    const correctionFactor = 1.6; // Ajustado empíricamente
+    const correctedEstimatedDuration = estimatedDuration * correctionFactor;
+    console.log(`Estimated Duration: ${correctedEstimatedDuration} seconds`);
 
     function animateScroll(timestamp) {
         if (!lastTime) {
@@ -389,6 +382,13 @@ function startAutoScroll() {
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
 
+function calculatePixelsPerSecond(speed) {
+    const minSpeed = 0.5;
+    const maxSpeed = 100;
+    const speedRange = maxSpeed - minSpeed;
+    return minSpeed + (speedRange * speed / 100);
+}
+
 function stopAutoScroll() {
     cancelAnimationFrame(scrollAnimation);
     scrollAnimation = null;
@@ -397,6 +397,7 @@ function stopAutoScroll() {
     toggleControlsDisplay(true);
     pixelAccumulator = 0;
 }
+
 
 
 
