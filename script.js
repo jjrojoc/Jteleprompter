@@ -347,6 +347,13 @@ function startAutoScroll() {
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
+    if (teleprompter.scrollTop === 0) {
+        cronometro.reset();
+        cronometro.start();
+    } else {
+        cronometro.start();
+    }
+
     let lastTime;
     const scrollHeight = teleprompter.scrollHeight;
     const clientHeight = teleprompter.clientHeight;
