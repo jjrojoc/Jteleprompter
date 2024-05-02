@@ -573,11 +573,14 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
         processHTML(tempDiv);
-        console.log("HTML Procesado:", tempDiv.innerHTML);
-        while (tempDiv.firstChild) {
-            range.insertNode(tempDiv.firstChild);
-            range.insertNode(document.createTextNode(" ")); // Asegura que hay espacio entre nodos si se necesita
-        }
+    
+        // Inserta cada nodo en el orden en que aparece.
+        Array.from(tempDiv.childNodes).forEach(node => {
+            range.insertNode(node.cloneNode(true));
+            range.collapse(false); // Mueve el rango al final del nodo insertado
+        });
+        
+        
     } else if (plainText) {
         // Insertar texto plano respetando los saltos de línea
         const lines = plainText.split(/[\r\n]+/);
