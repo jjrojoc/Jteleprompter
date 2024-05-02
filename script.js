@@ -614,11 +614,11 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 }
             }
             
-            const parent = node.parentNode;
-            while (node.firstChild) {
-                parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
-            }
-            parent.removeChild(node); // Elimina el nodo del enlace
+            // const parent = node.parentNode;
+            // while (node.firstChild) {
+            //     parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
+            // }
+            // parent.removeChild(node); // Elimina el nodo del enlace
             
         });
 
