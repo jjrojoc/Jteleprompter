@@ -561,7 +561,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
     var htmlContent = e.clipboardData.getData('text/html');
     var plainText = e.clipboardData.getData('text/plain');
-    console.log("HTML Original:", htmlContent);
+    // console.log("HTML Original:", htmlContent);
 
 
     const selection = window.getSelection();
