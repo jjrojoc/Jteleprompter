@@ -608,6 +608,14 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         });
 
         Array.from(element.querySelectorAll('a')).forEach(node => {
+            if (!/\d/.test(a.textContent.trim())) {
+                const parent = a.parentNode;
+                // Mover todos los nodos hijos del enlace al padre del enlace antes de eliminar el enlace
+                while (a.firstChild) {
+                    parent.insertBefore(a.firstChild, a);
+                }
+                parent.removeChild(a);
+            }
             const parent = node.parentNode;
             while (node.firstChild) {
                 parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
@@ -624,19 +632,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
             node.removeAttribute('class');
             node.removeAttribute('id');
-
-            // Remover etiquetas <a> si su contenido no es un número
-            // Remover etiquetas <a> si su contenido no contiene números
-            if (node.tagName === 'A') {
-                // Usar una expresión regular para verificar si no contiene dígitos en el texto visible
-                if (!/\d/.test(node.textContent)) {
-                    const parent = node.parentNode;
-                    while (node.firstChild) {
-                        parent.insertBefore(node.firstChild, node);
-                    }
-                    parent.removeChild(node);
-                }
-            }
 
             if (node.style) {
                 // Si el color es blanco, eliminar el estilo completamente
