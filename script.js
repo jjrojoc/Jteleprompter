@@ -568,13 +568,12 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     range.deleteContents();
 
     if (htmlContent) {
-        // Crear un contenedor para el HTML y ajustar el contenido
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
         processHTML(tempDiv);
-        Array.from(tempDiv.childNodes).forEach(node => {
-            range.insertNode(node.cloneNode(true));
-        });
+        while (tempDiv.firstChild) {
+            range.insertNode(tempDiv.firstChild); // inserta directamente sin clonar
+        }
     } else if (plainText) {
         // Insertar texto plano respetando los saltos de línea
         const lines = plainText.split(/[\r\n]+/);
