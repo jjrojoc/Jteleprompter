@@ -367,12 +367,9 @@ function startAutoScroll() {
         const maxSpeed = 100; // Máximo píxeles por segundo
         const speedRange = maxSpeed - minSpeed;
         const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
-        console.log('pixelPerSecond: ', pixelsPerSecond);
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-        console.log('pixelToScroll: ', pixelsToScroll);
 
         pixelAccumulator += pixelsToScroll;
-        console.log('pixelAcumulator: ', pixelAccumulator);
         if (pixelAccumulator >= 1) {
             teleprompter.scrollTop += Math.floor(pixelAccumulator);
             pixelAccumulator -= Math.floor(pixelAccumulator);
