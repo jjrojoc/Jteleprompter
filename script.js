@@ -295,11 +295,54 @@ function updateToggleButton(isActive) {
 
 //let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
 
+// function startAutoScroll() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     const speedControl = document.getElementById('speedControl');
+//     const speed = 100 - speedControl.value;
+    
+//     isAutoScrolling = true;
+//     updateToggleButton(true);
+//     toggleControlsDisplay(false);
+
+//     if (teleprompter.scrollTop === 0) {
+//         cronometro.reset();
+//         cronometro.start();
+//     } else {
+//         cronometro.start();
+//     }
+
+//     scrollInterval = setInterval(() => {
+//         teleprompter.scrollBy(0, 1);
+//     }, speed);
+
+//     // // Inicia la actualización de la duración estimada cada segundo
+//     // if (!updateDurationInterval) {
+//     //     updateDurationInterval = setInterval(estimateDuration, 1000);
+//     // }
+// }
+
+
+
+
+
+// function stopAutoScroll() {
+//     clearInterval(scrollInterval);
+//     // clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+//     // updateDurationInterval = null; // Restablece la variable
+//     isAutoScrolling = false;
+//     updateToggleButton(false);
+//     toggleControlsDisplay(true);
+// }
+
+
+let scrollAnimation;
+
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const speed = 100 - speedControl.value;
-    
+    // Convertir el valor del control de velocidad en un factor de desplazamiento por cuadro de animación
+    const speedFactor = 100 - speedControl.value;
+
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
@@ -311,28 +354,22 @@ function startAutoScroll() {
         cronometro.start();
     }
 
-    scrollInterval = setInterval(() => {
-        teleprompter.scrollBy(0, 1);
-    }, speed);
+    function animateScroll() {
+        teleprompter.scrollBy(0, speedFactor);
+        scrollAnimation = requestAnimationFrame(animateScroll);
+    }
 
-    // // Inicia la actualización de la duración estimada cada segundo
-    // if (!updateDurationInterval) {
-    //     updateDurationInterval = setInterval(estimateDuration, 1000);
-    // }
+    scrollAnimation = requestAnimationFrame(animateScroll);
 }
 
-
-
-
-
 function stopAutoScroll() {
-    clearInterval(scrollInterval);
-    // clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-    // updateDurationInterval = null; // Restablece la variable
+    cancelAnimationFrame(scrollAnimation);
+    scrollAnimation = null;
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
 }
+
 
 
 
