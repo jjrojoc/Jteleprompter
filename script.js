@@ -608,13 +608,13 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         });
 
         Array.from(element.querySelectorAll('a')).forEach(node => {
-            if (!/\d/.test(a.textContent.trim())) {
-                const parent = a.parentNode;
+            if (!/\d/.test(node.textContent.trim())) {
+                const parent = node.parentNode;
                 // Mover todos los nodos hijos del enlace al padre del enlace antes de eliminar el enlace
-                while (a.firstChild) {
-                    parent.insertBefore(a.firstChild, a);
+                while (node.firstChild) {
+                    parent.insertBefore(node.firstChild, node);
                 }
-                parent.removeChild(a);
+                parent.removeChild(node);
             }
             const parent = node.parentNode;
             while (node.firstChild) {
