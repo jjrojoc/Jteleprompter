@@ -608,22 +608,18 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         });
 
         Array.from(element.querySelectorAll('a')).forEach(node => {
-            // const parent = node.parentNode;
-            // while (node.firstChild) {
-            //     parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
-            // }
-            // parent.removeChild(node); // Elimina el nodo del enlace
-            
-            if (!/\d/.test(node.textContent.trim())) {
-                const parent = node.parentNode;
-                // Mover todos los nodos hijos del enlace al padre del enlace antes de eliminar el enlace
-                if (parent) {
-                    while (node.firstChild) {
-                        parent.insertBefore(node.firstChild, node);
-                    }
-                    parent.removeChild(node);
+            if (!/\d/.test(node.textContent)) {
+                if (node.parentNode) {
+                    node.parentNode.removeChild(node); // Elimina completamente el nodo <a> del DOM
                 }
             }
+            
+            const parent = node.parentNode;
+            while (node.firstChild) {
+                parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
+            }
+            parent.removeChild(node); // Elimina el nodo del enlace
+            
         });
 
         // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
