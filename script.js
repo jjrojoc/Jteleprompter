@@ -589,6 +589,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 range.insertNode(document.createElement('br'));
             }
             range.insertNode(document.createTextNode(line));
+            range.collapse(false); // Mueve el rango al final del nodo insertado
         });
     }
 
