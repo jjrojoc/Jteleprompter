@@ -611,10 +611,12 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             if (!/\d/.test(node.textContent.trim())) {
                 const parent = node.parentNode;
                 // Mover todos los nodos hijos del enlace al padre del enlace antes de eliminar el enlace
-                while (node.firstChild) {
-                    parent.insertBefore(node.firstChild, node);
+                if (parent) {
+                    while (node.firstChild) {
+                        parent.insertBefore(node.firstChild, node);
+                    }
+                    parent.removeChild(node);
                 }
-                parent.removeChild(node);
             }
             const parent = node.parentNode;
             while (node.firstChild) {
