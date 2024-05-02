@@ -561,6 +561,8 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
     var htmlContent = e.clipboardData.getData('text/html');
     var plainText = e.clipboardData.getData('text/plain');
+    console.log("HTML Original:", htmlContent);
+
 
     const selection = window.getSelection();
     if (!selection.rangeCount) return false;
@@ -571,6 +573,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlContent;
         processHTML(tempDiv);
+        console.log("HTML Procesado:", tempDiv.innerHTML);
         while (tempDiv.firstChild) {
             range.insertNode(tempDiv.firstChild); // inserta directamente sin clonar
         }
