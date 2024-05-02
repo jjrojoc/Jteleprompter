@@ -626,8 +626,10 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             node.removeAttribute('id');
 
             // Remover etiquetas <a> si su contenido no es un número
+            // Remover etiquetas <a> si su contenido no contiene números
             if (node.tagName === 'A') {
-                if (isNaN(node.textContent.trim())) {
+                // Usar una expresión regular para verificar si no contiene dígitos
+                if (!/\d/.test(node.textContent)) {
                     const parent = node.parentNode;
                     while (node.firstChild) {
                         parent.insertBefore(node.firstChild, node);
