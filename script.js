@@ -600,6 +600,13 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
     // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
     function processHTML(element) {
+
+        // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
+        let htmlString = element.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
+        
+        // Asignar de nuevo el HTML procesado
+        element.innerHTML = htmlString;
+        
         Array.from(element.querySelectorAll('*')).forEach(node => {
             if (node.style) {
                 // Si el color es blanco, eliminar el estilo completamente
