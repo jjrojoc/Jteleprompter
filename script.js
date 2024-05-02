@@ -626,14 +626,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
                 node.parentNode.removeChild(node);
             }
-            // Simplificar el HTML eliminando etiquetas innecesarias, manteniendo solo p, div, br, y text nodes
-            if (!['P', 'DIV', 'BR', 'SPAN', 'STRONG', 'EM', 'B', 'I', 'U'].includes(node.tagName)) {
-                let parent = node.parentNode;
-                while (node.firstChild) {
-                    parent.insertBefore(node.firstChild, node);
-                }
-                parent.removeChild(node);
-            }
         });
     }
     autoguardado();
