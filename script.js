@@ -633,14 +633,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             node.removeAttribute('id');
             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
-            // Revisar y eliminar los estilos específicos
-            if (node.style.textIndent === '-1em') {
-                node.style.textIndent = '';
-            }
-            if (node.style.paddingLeft === '2.5em') {
-                node.style.paddingLeft = '';
-            }
-
             if (node.style) {
 
                 // Si el color es blanco, eliminar el estilo completamente
@@ -655,6 +647,10 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 node.style.fontSize = '';
                 node.style.fontFamily = '';
                 node.style.backgroundColor = '';
+
+                // Revisar y eliminar los estilos específicos
+                node.style.textIndent = '';
+                node.style.paddingLeft = '';
             }
             // Eliminar elementos que no contribuyen al texto visible
             if (node.tagName === 'SCRIPT' || node.tagName === 'META' || node.tagName === 'STYLE') {
