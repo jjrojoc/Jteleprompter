@@ -629,24 +629,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         element.innerHTML = htmlString;
 
         Array.from(element.querySelectorAll('*')).forEach(node => {
-            console.log(node.tagName + ' tiene class: ' + node.className); // Verificar si hay clase
-        console.log(node.tagName + ' tiene id: ' + node.id); // Verificar si hay ID
 
-        if (node.hasAttribute('class')) {
-            node.removeAttribute('class');
-        }
-        if (node.hasAttribute('id')) {
-            node.removeAttribute('id');
-        }
-
-        // Ajustes de estilos específicos como en el ejemplo anterior
-        if (node.style.textIndent === '-1em') {
-            node.style.textIndent = '';
-        }
-        if (node.style.paddingLeft === '2.5em') {
-            node.style.paddingLeft = '';
-        }
-            node.outerHTML = node.outerHTML; // Forza al navegador a re-renderizar el elemento
             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
             if (node.style) {
@@ -743,18 +726,26 @@ document.addEventListener('contextmenu', function(event) {
 });
 
 function adjustSpeed(speed) {
-    // Aquí puedes ajustar la velocidad del scroll en tu aplicación
-    console.log('Adjusting speed to:', speed);
-    // Asigna una lógica adecuada para ajustar la velocidad de scroll aquí.
-    // Esto podría implicar ajustar intervalos de tiempo, modificar CSS, etc.
-    if (isAutoScrolling) {
-        clearInterval(scrollInterval);
-        const speedscroll = 100 - speed;
-        scrollInterval = setInterval(() => {
-            teleprompter.scrollBy(0, 1);
-        }, speedscroll);
-    }
+    const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
+    const maxSpeed = 100; // Máximo píxeles por segundo
+    const speedRange = maxSpeed - minSpeed;
+    pixelsPerSecond = minSpeed + (speedRange * speed / 100); // Actualiza la velocidad de desplazamiento
+    console.log('Speed adjusted to:', pixelsPerSecond, 'pixels per second');
 }
+
+// function adjustSpeed(speed) {
+//     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
+//     console.log('Adjusting speed to:', speed);
+//     // Asigna una lógica adecuada para ajustar la velocidad de scroll aquí.
+//     // Esto podría implicar ajustar intervalos de tiempo, modificar CSS, etc.
+//     if (isAutoScrolling) {
+//         clearInterval(scrollInterval);
+//         const speedscroll = 100 - speed;
+//         scrollInterval = setInterval(() => {
+//             teleprompter.scrollBy(0, 1);
+//         }, speedscroll);
+//     }
+// }
 
 
 
