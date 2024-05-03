@@ -645,7 +645,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 node.style.backgroundColor = '';
             }
             // Eliminar elementos que no contribuyen al texto visible
-            if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
+            if (node.tagName === 'SCRIPT' || node.tagName === 'META' || node.tagName === 'STYLE') {
                 node.parentNode.removeChild(node);
             }
         });
