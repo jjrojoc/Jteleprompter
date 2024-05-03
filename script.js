@@ -631,6 +631,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         Array.from(element.querySelectorAll('*')).forEach(node => {
             node.removeAttribute('class');
             node.removeAttribute('id');
+            node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
             if (node.style) {
                 // Si el color es blanco, eliminar el estilo completamente
