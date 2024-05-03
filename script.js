@@ -655,6 +655,9 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             if (node.style.textIndent === '-1em') {
                 node.style.textIndent = '';
             }
+            if (node.style.padding.left === '2.5em') {
+                node.style.padding.left = '';
+            }
         });
     }
     autoguardado();
