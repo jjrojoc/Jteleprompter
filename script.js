@@ -643,7 +643,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 node.style.fontSize = '';
                 node.style.fontFamily = '';
                 node.style.backgroundColor = '';
-                node.removeAttribute('style'); // Elimina todos los estilos in-line
             }
             // Eliminar elementos que no contribuyen al texto visible
             if (node.tagName === 'SCRIPT' || node.tagName === 'META' || node.tagName === 'STYLE') {
