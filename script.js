@@ -646,6 +646,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         if (node.style.paddingLeft === '2.5em') {
             node.style.paddingLeft = '';
         }
+            node.outerHTML = node.outerHTML; // Forza al navegador a re-renderizar el elemento
             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
             if (node.style) {
