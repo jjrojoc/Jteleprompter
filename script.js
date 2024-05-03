@@ -651,6 +651,10 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             if (node.tagName === 'SCRIPT' || node.tagName === 'META' || node.tagName === 'STYLE') {
                 node.parentNode.removeChild(node);
             }
+            // Eliminar específicamente el text-indent si es -1em
+            if (node.style.textIndent === '-1em') {
+                node.style.textIndent = '';
+            }
         });
     }
     autoguardado();
