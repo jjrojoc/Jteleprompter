@@ -629,8 +629,23 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         element.innerHTML = htmlString;
 
         Array.from(element.querySelectorAll('*')).forEach(node => {
+            console.log(node.tagName + ' tiene class: ' + node.className); // Verificar si hay clase
+        console.log(node.tagName + ' tiene id: ' + node.id); // Verificar si hay ID
+
+        if (node.hasAttribute('class')) {
             node.removeAttribute('class');
+        }
+        if (node.hasAttribute('id')) {
             node.removeAttribute('id');
+        }
+
+        // Ajustes de estilos específicos como en el ejemplo anterior
+        if (node.style.textIndent === '-1em') {
+            node.style.textIndent = '';
+        }
+        if (node.style.paddingLeft === '2.5em') {
+            node.style.paddingLeft = '';
+        }
             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
             if (node.style) {
@@ -647,10 +662,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 node.style.fontSize = '';
                 node.style.fontFamily = '';
                 node.style.backgroundColor = '';
-
-                // Revisar y eliminar los estilos específicos
-                node.style.textIndent = '';
-                node.style.paddingLeft = '';
             }
             // Eliminar elementos que no contribuyen al texto visible
             if (node.tagName === 'SCRIPT' || node.tagName === 'META' || node.tagName === 'STYLE') {
