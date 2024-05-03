@@ -372,7 +372,7 @@ function startAutoScroll() {
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
         pixelAccumulator += pixelsToScroll;
-        if (pixelAccumulator > 0.1) {
+        if (pixelAccumulator > 0.5) {
             teleprompter.scrollTop += (1, Math.floor(pixelAccumulator));
             pixelAccumulator -= Math.floor(pixelAccumulator);
         }
