@@ -342,6 +342,7 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     let speed = parseInt(speedControl.value);
+    adjustSpeed(speed);
 
     isAutoScrolling = true;
     updateToggleButton(true);
@@ -363,10 +364,11 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
-        const maxSpeed = 100; // Máximo píxeles por segundo
-        const speedRange = maxSpeed - minSpeed;
-        const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
+        // const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
+        // const maxSpeed = 100; // Máximo píxeles por segundo
+        // const speedRange = maxSpeed - minSpeed;
+        // const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
+        
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
         pixelAccumulator += pixelsToScroll;
