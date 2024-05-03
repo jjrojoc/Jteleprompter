@@ -652,11 +652,11 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 node.parentNode.removeChild(node);
             }
             // Eliminar específicamente el text-indent si es -1em
-            if (node.style.textIndent === '-1em') {
+            if (node.style.text-indent === '-1em') {
                 node.style.textIndent = '';
             }
-            if (node.style.padding.left === '2.5em') {
-                node.style.padding.left = '';
+            if (node.style.padding-left === '2.5em') {
+                node.style.paddingleft = '';
             }
         });
     }
