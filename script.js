@@ -638,6 +638,8 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                     node.removeAttribute('style');
                 } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
                     node.removeAttribute('style'); // Cambia el negro a blanco
+                } else if (node.style.color === 'rgb(41, 41, 41)') {
+                    node.removeAttribute('style'); // Cambia el gris a por defecto, fix jw Biblia
                 }
                 // Eliminar estilos no necesarios
                 node.style.fontSize = '';
