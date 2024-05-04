@@ -959,7 +959,7 @@ function onEndMarkerVisible(entries, observer) {
 // Crear el Intersection Observer
 const observer = new IntersectionObserver(onEndMarkerVisible, {
     root: null,  // null significa que el viewport es el contenedor
-    threshold: 0.1  // 10% del endMarker debe ser visible
+    threshold: 1.0  // 10% del endMarker debe ser visible
 });
 
 // Observar el endMarker
