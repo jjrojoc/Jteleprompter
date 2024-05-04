@@ -1064,7 +1064,8 @@ function estimateDuration() {
     const translateYValue = Math.abs(parseFloat(teleprompter.style.transform.replace(/translateY\((-?\d+(.\d+)?)px\)/, '$1')) || 0);
     
     const remainingDistance = scrollHeight - (translateYValue + clientHeight);
-    const pixelsPerSecond = adjustSpeed(); // Asegúrate de que esta función devuelve un número válido y mayor que cero
+    let speed = parseInt(speedControl.value);
+    const pixelsPerSecond = adjustSpeed(speed); // Asegúrate de que esta función devuelve un número válido y mayor que cero
 
     if (pixelsPerSecond <= 0) {
         console.error("Velocidad de pixels por segundo es cero o negativa");
