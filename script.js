@@ -243,6 +243,7 @@ function activateSpecialFunction() {
 
         // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
+        console.log('Content restored:', originalContent);
     } else {
         console.error("No original content found to restore.");
     }
@@ -441,6 +442,13 @@ function startAutoScroll() {
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
+
+    if (translateYValue === 0) {
+        cronometro.reset();
+        cronometro.start();
+    } else {
+        cronometro.start();
+    }
 
     const totalHeight = teleprompter.scrollHeight;
     teleprompter.style.height = `${totalHeight}px`;
