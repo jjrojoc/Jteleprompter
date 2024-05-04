@@ -29,8 +29,9 @@ body, html {
   -webkit-tap-highlight-color: transparent; /* <-- this is new */
   line-height: 1.5em; /* Asegúrate de que el teleprompter tiene un line-height definido */
   transform: translateY(0);
-    will-change: transform;  
-    contain: none;
+  will-change: transform;  
+  contain: none;
+  position: relative; /* Asegura que el teleprompter pueda contener absolutamente posicionados dentro de él */
   }
 
 
@@ -256,6 +257,9 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 } */
 
 #endMarker {
-  position: relative;  /* O puedes usar 'absolute' si se ajusta mejor a tu layout */
-  z-index: 1010;  /* Asegura que sea mayor que el de controlBar */
+  position: absolute; /* Esto lo posicionará en relación al teleprompter */
+  bottom: 0; /* Colócalo en la parte inferior del contenedor teleprompter */
+  left: 0; /* Alinea a la izquierda */
+  width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
+  z-index: 1010; /* Esto debería ser suficiente para asegurarse de que esté por encima de otros contenidos, pero revisa el z-index de controlBar */
 }

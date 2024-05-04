@@ -824,13 +824,12 @@ document.addEventListener('contextmenu', function(event) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    const content = teleprompter.innerHTML.trim();
 
+    // Solo procede si el contenido original no ha sido alterado con padding y endMarker
     if (!teleprompter.getAttribute('data-original-content')) {
+        const content = teleprompter.innerHTML.trim();
         teleprompter.setAttribute('data-original-content', content);
-    }
 
-    if (!content.includes("TOCA AQUÍ PARA FINALIZAR")) {
         const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
         const clientHeight = teleprompter.clientHeight;
         const linesNeeded = Math.ceil(clientHeight / lineHeight);
@@ -840,12 +839,14 @@ function prepareTeleprompter() {
         teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
     }
 
+    // Reinicia los manejadores para asegurar que no estén duplicados
     const endMarker = document.getElementById("endMarker");
     endMarker.removeEventListener('touchstart', handleEndMarkerTouch);
     endMarker.removeEventListener('click', handleEndMarkerTouch);
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
 
 
 
