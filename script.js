@@ -288,7 +288,6 @@ function toggleAutoScroll() {
         }
         startAutoScroll();
         button.classList.add('active');
-        startEstimatedTimeCountdown();
     }
 }
 
@@ -456,7 +455,7 @@ function startAutoScroll() {
             // Coloca inicialmente el contenido justo por debajo de la pantalla
             translateYValue = window.innerHeight;
             teleprompter.style.transform = `translateY(${translateYValue}px)`;
-
+            startEstimatedTimeCountdown();
             cronometro.reset();
             cronometro.start();
         }   else {
