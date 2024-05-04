@@ -356,29 +356,48 @@ function startAutoScroll() {
     }
 
     let lastTime;
+    let totalTranslation = 0; // Acumulador total de desplazamiento
+
     function animateScroll(timestamp) {
-        if (!lastTime) {
-            lastTime = timestamp;
-            scrollAnimation = requestAnimationFrame(animateScroll);
-            return;
-        }
+        if (!lastTime) lastTime = timestamp;
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        // const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
-        // const maxSpeed = 100; // Máximo píxeles por segundo
-        // const speedRange = maxSpeed - minSpeed;
-        // const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
-        
+
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
+        totalTranslation += pixelsToScroll;
 
-        pixelAccumulator += pixelsToScroll;
-        if (pixelAccumulator > 1) {
-            teleprompter.scrollTop += (1, Math.floor(pixelAccumulator));
-            pixelAccumulator -= Math.floor(pixelAccumulator);
+        teleprompter.style.transform = `translateY(-${totalTranslation}px)`;
+
+        if (teleprompter.offsetHeight + totalTranslation < teleprompter.parentNode.offsetHeight) {
+            requestAnimationFrame(animateScroll);
         }
-
-        scrollAnimation = requestAnimationFrame(animateScroll);
     }
+
+
+    // let lastTime;
+    // function animateScroll(timestamp) {
+    //     if (!lastTime) {
+    //         lastTime = timestamp;
+    //         scrollAnimation = requestAnimationFrame(animateScroll);
+    //         return;
+    //     }
+    //     const deltaTime = timestamp - lastTime;
+    //     lastTime = timestamp;
+    //     // const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
+    //     // const maxSpeed = 100; // Máximo píxeles por segundo
+    //     // const speedRange = maxSpeed - minSpeed;
+    //     // const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
+        
+    //     const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
+
+    //     pixelAccumulator += pixelsToScroll;
+    //     if (pixelAccumulator > 1) {
+    //         teleprompter.scrollTop += (1, Math.floor(pixelAccumulator));
+    //         pixelAccumulator -= Math.floor(pixelAccumulator);
+    //     }
+
+    //     scrollAnimation = requestAnimationFrame(animateScroll);
+    // }
 
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
