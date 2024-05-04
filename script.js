@@ -411,7 +411,8 @@ function updateToggleButton(isActive) {
 //     pixelAccumulator = 0; // Restablecer el acumulador al detener
 // }
 
-let translateYValue = 0; // Inicializa la variable para el desplazamiento vertical
+let scrollAnimation;  // Esta variable almacenará el ID de la animación
+let translateYValue = 0;
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
@@ -422,14 +423,14 @@ function startAutoScroll() {
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    const totalHeight = teleprompter.scrollHeight; // Obtén la altura total del contenido
-    teleprompter.style.height = `${totalHeight}px`; // Ajusta la altura del contenedor si es necesario
+    const totalHeight = teleprompter.scrollHeight; // Altura total del contenido
+    teleprompter.style.height = `${totalHeight}px`; // Establece la altura si es necesario
 
     let lastTime;
     function animateScroll(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
-            requestAnimationFrame(animateScroll);
+            scrollAnimation = requestAnimationFrame(animateScroll);
             return;
         }
         const deltaTime = timestamp - lastTime;
@@ -443,23 +444,24 @@ function startAutoScroll() {
         translateYValue += pixelsToScroll;
         if (translateYValue < totalHeight) {
             teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+            scrollAnimation = requestAnimationFrame(animateScroll);
         } else {
-            // Detiene la animación una vez que todo el contenido ha sido desplazado
-            stopAutoScroll();
+            stopAutoScroll();  // Detener automáticamente cuando se alcance la altura total
         }
-
-        requestAnimationFrame(animateScroll);
     }
 
-    requestAnimationFrame(animateScroll);
+    scrollAnimation = requestAnimationFrame(animateScroll);
 }
 
 function stopAutoScroll() {
-    cancelAnimationFrame(scrollAnimation);
+    cancelAnimationFrame(scrollAnimation);  // Usa la referencia correcta para detener la animación
     isAutoScrolling = false;
     updateToggleButton(false);
     toggleControlsDisplay(true);
+    translateYValue = 0;  // Resetea la posición de translateY
+    document.getElementById('teleprompter').style.transform = 'translateY(0)';  // Restablece la posición del contenido
 }
+
 
 
 
