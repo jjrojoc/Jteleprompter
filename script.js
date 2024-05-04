@@ -446,7 +446,7 @@ function startAutoScroll() {
     toggleControlsDisplay(false);
 
     if (translateYValue === 0) {
-        teleprompter.style.transform = 'translateY(100vh)';
+        teleprompter.style.transform = 'translateY(10vh)';
         console.log(teleprompter.style.transform = 'translateY(100vh)')
         cronometro.reset();
         cronometro.start();
