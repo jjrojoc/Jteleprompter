@@ -253,7 +253,7 @@ function getTeleprompter() {
 }
 
 function toggleAutoScroll() {
-    const teleprompter = getTeleprompter();
+    const teleprompter = document.getElementById('teleprompter');
 
     if (!teleprompter) {
         console.error('El elemento teleprompter no se encuentra en el DOM.');
@@ -269,15 +269,23 @@ function toggleAutoScroll() {
 
     if (button.classList.contains('active')) {
         stopAutoScroll();
+        button.classList.remove('active');
     } else {
+        // Asegurarse de que el teleprompter esté en la posición inicial cada vez que se inicia el auto-scroll
+        teleprompter.style.transform = 'translateY(0)';
+        teleprompter.scrollTop = 0; // Aunque estamos usando transform, asegurémonos de que el scrollTop también está a cero
+
+        // Preparar el teleprompter, si es necesario
         if (!teleprompter.hasAttribute('data-original-content')) {
-            teleprompter.scrollTop = 0; // Restablece el scroll a 0
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
+
         startAutoScroll();
-        //estimateDuration();    
+        button.classList.add('active');
+        //estimateDuration(); // Calcular la duración estimada, si es necesario
     }
 }
+
 
 
 
