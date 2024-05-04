@@ -225,20 +225,38 @@ function stopCountdownRestart() {
 
 
 function activateSpecialFunction() {
-    console.log('Acción especial activada');
-    document.documentElement.scrollTop = 0;  // Esto es para el cuerpo del documento
-    cronometro.stop();
-    cronometro.reset();
+    // Detener la animación de auto-scroll si está activa
     stopAutoScroll();
 
+    // Obtener el elemento teleprompter
     const teleprompter = document.getElementById('teleprompter');
+
+    // Restaurar el contenido original desde un atributo de datos
     const originalContent = teleprompter.getAttribute('data-original-content');
     if (originalContent) {
-        teleprompter.innerHTML = originalContent;  // Restaura directamente sin modificar
+        // Restaurar el contenido original
+        teleprompter.innerHTML = originalContent;
+
+        // Resetear las transformaciones aplicadas para el desplazamiento automático
+        teleprompter.style.transform = 'translateY(0px)';
+        translateYValue = 0; // Restablece también la variable global usada para la transformación
+
+        // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
+    } else {
+        console.error("No original content found to restore.");
     }
-    teleprompter.style.transform = 'translateY(0px)';
-    console.log("No original content found to restore.");
+
+    // Aquí puedes añadir cualquier otra lógica necesaria para resetear tu aplicación
+    // Por ejemplo, detener y resetear un cronómetro si lo estás usando
+    if (cronometro) {
+        cronometro.stop();
+        cronometro.reset();
+    }
+
+    // Opcionalmente, restablecer cualquier otro UI o estado de la aplicación
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
 }
 
 
