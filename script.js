@@ -447,7 +447,6 @@ function startAutoScroll() {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
-        startEstimatedTimeCountdown();
 
         if (translateYValue === 0) {
             // Ajuste inicial para asegurar que todo el contenido sea visible
