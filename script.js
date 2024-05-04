@@ -439,6 +439,7 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     adjustSpeed(parseInt(speedControl.value));
+    startEstimatedTimeCountdown();
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
@@ -1051,23 +1052,32 @@ teleprompter.addEventListener('touchend', function(event) {
 
 
 
-let countdownEstimateDuration;
+let estimatedTimeInterval;
 
 function startEstimatedTimeCountdown() {
+    if (estimatedTimeInterval) {
+        clearInterval(estimatedTimeInterval); // Limpiar cualquier intervalo existente
+    }
+
     const scrollHeight = teleprompter.scrollHeight;
     const clientHeight = teleprompter.clientHeight;
     const remainingDistance = scrollHeight - clientHeight - translateYValue;
     let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
 
-    countdownEstimateDuration = setInterval(() => {
+    estimatedTimeInterval = setInterval(() => {
         if (estimatedTimeSeconds <= 0) {
-            clearInterval(countdownEstimateDuration);
+            clearInterval(estimatedTimeInterval);
             displayTime(0); // Mostrar 00:00 o similar cuando el conteo termine
         } else {
             displayTime(estimatedTimeSeconds);
             estimatedTimeSeconds -= 1; // Decrementa el contador cada segundo
         }
     }, 1000);
+}
+
+function stopEstimatedTimeCountdown() {
+    clearInterval(estimatedTimeInterval); // Detener el intervalo cuando se detenga el autoscroll
+    displayTime(0); // Opcional: resetear el tiempo mostrado a 00:00
 }
 
 function displayTime(seconds) {
@@ -1084,8 +1094,4 @@ function displayTime(seconds) {
     }
 
     durationContainer.textContent = timeString;
-}
-
-function stopEstimatedTimeCountdown() {
-    clearInterval(countdownEstimateDuration);
 }
