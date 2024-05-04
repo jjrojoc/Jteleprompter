@@ -437,59 +437,53 @@ function adjustSpeed(speed) {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    const endMarker = document.getElementById("endMarker");  // Asegúrate de que tienes este elemento en tu HTML
-
     adjustSpeed(parseInt(speedControl.value));  // Ajusta la velocidad basada en el control
 
     if (!isAutoScrolling) {
+        // Tu código para iniciar el scrolling aquí
         isAutoScrolling = true;
-        updateToggleButton(true);
-        toggleControlsDisplay(false);
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
 
-        if (translateYValue === 0) {
-            translateYValue = window.innerHeight;
-            // Configura el contenido para comenzar desde abajo de la pantalla
-            teleprompter.style.transform = `translateY(${translateYValue}px)`;
-            cronometro.reset();
-            cronometro.start();
-        }   else {
-            cronometro.start();
-        }
-
-        
-
-        let lastTime;
-        function animateScroll(timestamp) {
-            if (!lastTime) {
-                lastTime = timestamp;
-            }
-
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
-
-            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
-            
-            // Consigue la posición actual del marcador final en relación a la ventana
-            const endMarkerRect = endMarker.getBoundingClientRect();
-            
-            // Si el marcador final está por encima de la parte inferior de la ventana, detener el scroll
-            if (endMarkerRect.bottom <= 0) {
-                stopAutoScroll();
-                console.log('End marker has passed the bottom of the screen');
-            } else {
-                teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                scrollAnimation = requestAnimationFrame(animateScroll);
-            }
-        }
-
-        scrollAnimation = requestAnimationFrame(animateScroll);
+    if (translateYValue === 0) {
+        cronometro.reset();
+        cronometro.start();
+        translateYValue = window.innerHeight;
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
     } else {
-        console.log('Attempt to start auto-scroll but it is already running.');
+        cronometro.start();
+    }
+
+    const totalHeight = teleprompter.scrollHeight;
+    teleprompter.style.height = `${totalHeight}px`;
+
+    let lastTime;
+    function animateScroll(timestamp) {
+        if (!lastTime) {
+            lastTime = timestamp;
+        }
+    
+        const deltaTime = timestamp - lastTime;
+        lastTime = timestamp;
+    
+        translateYValue += (pixelsPerSecond * deltaTime) / 1000;
+    
+        const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+        if (endMarkerRect.bottom <= window.innerHeight - 100) {
+            stopAutoScroll();
+            teleprompter.style.transform = `translateY(-${translateYValue - endMarkerRect.bottom + window.innerHeight - 100}px)`;
+        } else {
+            teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+            scrollAnimation = requestAnimationFrame(animateScroll);
+        }
+    }
+    
+
+    scrollAnimation = requestAnimationFrame(animateScroll);
+    } else {
+        console.log('Intento de iniciar auto-scroll, pero ya está en ejecución.');
     }
 }
-
-
-
     
 
 
