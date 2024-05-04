@@ -439,7 +439,9 @@ function startAutoScroll() {
     const speedControl = document.getElementById('speedControl');
     adjustSpeed(parseInt(speedControl.value));  // Ajusta la velocidad basada en el control
 
-    isAutoScrolling = true;
+    if (!isAutoScrolling) {
+        // Tu código para iniciar el scrolling aquí
+        isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
@@ -476,7 +478,13 @@ function startAutoScroll() {
     
 
     scrollAnimation = requestAnimationFrame(animateScroll);
+    } else {
+        console.log('Intento de iniciar auto-scroll, pero ya está en ejecución.');
+    }
 }
+    
+
+
 
 function stopAutoScroll() {
     cancelAnimationFrame(scrollAnimation);  // Detiene la animación en curso
@@ -848,6 +856,9 @@ document.addEventListener('contextmenu', function(event) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
+    if (!teleprompter.getAttribute('data-original-content')) {
+        teleprompter.setAttribute('data-original-content', teleprompter.innerHTML);
+    }
     // Restaurar contenido original si existe.
     const originalContent = teleprompter.getAttribute('data-original-content') || teleprompter.innerHTML; // Asegurar que siempre hay contenido.
     teleprompter.innerHTML = ''; // Limpiar contenido actual para recalcular padding correctamente.
