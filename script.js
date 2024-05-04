@@ -824,31 +824,28 @@ document.addEventListener('contextmenu', function(event) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    const controlBar = document.getElementById('controlBar');
-    const controlBarHeight = controlBar.offsetHeight;  // Obtiene la altura de controlBar
-
-    // Obtener el contenido original guardado o el actual
-    let content = teleprompter.getAttribute('data-original-content') || teleprompter.innerHTML.trim();
-    teleprompter.setAttribute('data-original-content', content);  // Guarda el contenido original
+    if (!teleprompter.getAttribute('data-original-content')) {
+        // Solo guardar el contenido original la primera vez
+        const content = teleprompter.innerHTML.trim();
+        teleprompter.setAttribute('data-original-content', content);
+    }
 
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
     const linesNeeded = Math.ceil(clientHeight / lineHeight);
-    const linesNeededForControlBar = Math.ceil(controlBarHeight / lineHeight);
 
-    // Calcula el padding necesario para el inicio y el fin del contenido
     const paddingHTML = '<br>'.repeat(linesNeeded - 3);
-    const paddingEndHTML = '<br>'.repeat(linesNeeded - 3 + linesNeededForControlBar);
-    teleprompter.innerHTML = paddingHTML + content + paddingEndHTML;
-
-    // Añade el 'endMarker' al final del contenido ajustado
+    // Usar el contenido original siempre para evitar duplicación de padding
+    const originalContent = teleprompter.getAttribute('data-original-content');
+    teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML;
     teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
 
-    // Añade los manejadores de eventos al 'endMarker'
+    // Agregar manejadores de eventos al endMarker
     const endMarker = document.getElementById("endMarker");
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
 
 
 
