@@ -1057,31 +1057,30 @@ teleprompter.addEventListener('touchend', function(event) {
 
 
 function estimateDuration() {
-    const teleprompter = document.getElementById('teleprompter');
-    const scrollHeight = teleprompter.scrollHeight; // Altura total del contenido
-    const clientHeight = teleprompter.clientHeight; // Altura visible del contenedor
+    const scrollHeight = teleprompter.scrollHeight;
+    const clientHeight = teleprompter.clientHeight;
+    const remainingDistance = scrollHeight - clientHeight - translateYValue;
+    const estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
 
-    const translateYValue = Math.abs(parseFloat(teleprompter.style.transform.replace(/translateY\((-?\d+(.\d+)?)px\)/, '$1')) || 0);
-    
-    const remainingDistance = scrollHeight - (translateYValue + clientHeight);
-    let speed = parseInt(speedControl.value);
-    const pixelsPerSecond = adjustSpeed(speed); // Asegúrate de que esta función devuelve un número válido y mayor que cero
+    displayTime(estimatedTimeSeconds);
+}
 
-    if (pixelsPerSecond <= 0) {
-        console.error("Velocidad de pixels por segundo es cero o negativa");
-        return; // Evita hacer más cálculos si la velocidad no es válida
+function displayTime(seconds) {
+    const durationContainer = document.getElementById('durationContainer');
+    if (seconds > 0) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        let timeString = '';
+
+        if (hours > 0) {
+            timeString += `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        } else {
+            timeString += `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        durationContainer.textContent = timeString;
+    } else {
+        durationContainer.textContent = "00:00";
     }
-
-    const estimatedTime = remainingDistance / pixelsPerSecond;
-
-    // Verificar si estimatedTime es un número válido
-    if (isNaN(estimatedTime) || estimatedTime <= 0) {
-        console.error("Tiempo estimado inválido", estimatedTime);
-        return; // Detiene la función si el tiempo estimado no es válido
-    }
-
-    // Convertir segundos a un formato legible o a una fecha
-    const futureTime = new Date(Date.now() + estimatedTime * 1000); // Convertir segundos a milisegundos
-    return futureTime.toISOString(); // Convertir la fecha calculada a formato ISO
-    console.log(futureTime.toISOString);
 }
