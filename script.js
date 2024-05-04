@@ -471,7 +471,7 @@ function startAutoScroll() {
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
             // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
-            if (endMarkerRect.bottom <= 0) {
+            if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
