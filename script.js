@@ -855,9 +855,10 @@ document.addEventListener('contextmenu', function(event) {
 
 
 function prepareTeleprompter() {
-    teleprompter.style.transform = 'translateY(100vh)';
 
     const teleprompter = document.getElementById('teleprompter');
+    teleprompter.style.transform = 'translateY(100vh)';
+    
     if (!teleprompter.getAttribute('data-original-content')) {
         teleprompter.setAttribute('data-original-content', teleprompter.innerHTML);
     }
