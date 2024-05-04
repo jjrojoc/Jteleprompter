@@ -234,15 +234,15 @@ function activateSpecialFunction() {
     const teleprompter = document.getElementById('teleprompter');
     const originalContent = teleprompter.getAttribute('data-original-content');
     if (originalContent) {
-        teleprompter.innerHTML = originalContent;
+        teleprompter.innerHTML = originalContent;  // Restaura solo el contenido original
         teleprompter.removeAttribute('data-original-content');
         teleprompter.style.transform = 'translateY(0px)';  // Resetear transformación
+        prepareTeleprompter();  // Preparar de nuevo el teleprompter para asegurar el espacio correcto
     } else {
         console.log("No original content found to restore.");
     }
-    // Restablecer la duración estimada mostrada en el 'durationContainer'
-    // document.getElementById('durationContainer').textContent = "00:00:00";
 }
+
 
 
 
@@ -849,6 +849,7 @@ function prepareTeleprompter() {
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
 
 
 
