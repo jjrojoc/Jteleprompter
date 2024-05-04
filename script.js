@@ -258,6 +258,9 @@ function activateSpecialFunction() {
     // Opcionalmente, restablecer cualquier otro UI o estado de la aplicación
     updateToggleButton(false);
     toggleControlsDisplay(true);
+    stopEstimatedTimeCountdown();
+    displayTime(0);
+
 }
 
 
@@ -497,7 +500,6 @@ function stopAutoScroll() {
     isAutoScrolling = false;  // Actualiza el estado de auto-scroll
     updateToggleButton(false);  // Actualiza el estado del botón de toggle
     toggleControlsDisplay(true);  // Vuelve a mostrar los controles si están ocultos
-    stopEstimatedTimeCountdown();
     // No restablezcas el transform aquí, solo detén la animación.
     // La línea a continuación ha sido comentada o eliminada
     // document.getElementById('teleprompter').style.transform = 'translateY(0)';
