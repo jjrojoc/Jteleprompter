@@ -486,7 +486,7 @@ function startAutoScroll() {
     }
     // Inicia la actualización de la duración estimada cada segundo
     if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(calculateEstimatedTime, 1000);
+        updateDurationInterval = setInterval(estimateDuration, 1000);
     }
 }
 
@@ -1084,18 +1084,18 @@ function calculateEstimatedTime() {
 }
 
 
-// function estimateDuration() {
-//         var teleprompter = document.getElementById('teleprompter');
-//         var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-//         var speedControl = document.getElementById('speedControl');
-//         var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-//         var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+function estimateDuration() {
+        var teleprompter = document.getElementById('teleprompter');
+        const translateYValue = Math.abs(parseFloat(teleprompter.style.transform.replace('translateY(', '').replace('px)', '')) || 0);
+        var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + translateYValue);
+        var speedPerPixel = adjustSpeed(); // Ajusta este valor según la realidad del desplazamiento
+        var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
     
         
-//         var date = new Date(remainingTime);
-//         var formattedTime = date.toISOString().substr(11, 8);
-//         var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
-//         document.getElementById("durationContainer").innerHTML = timenohours;
-//         console.log('Estimated duration is:', timenohours);
-//         console.log('Remaining height is:', remainingHeight);
-//     }
+        var date = new Date(remainingTime);
+        var formattedTime = date.toISOString().substr(11, 8);
+        var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
+        document.getElementById("durationContainer").innerHTML = timenohours;
+        console.log('Estimated duration is:', timenohours);
+        console.log('Remaining height is:', remainingHeight);
+    }
