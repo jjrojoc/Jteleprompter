@@ -407,9 +407,10 @@ function updateToggleButton(isActive) {
 // }
 
 let scrollAnimation;  // Esta variable almacenará el ID de la animación
-let translateYValue = 0;
+// let translateYValue = 0;
 
 let pixelsPerSecond; // Definido globalmente para ser accesible en cualquier lugar
+let pixelAccumulator = 0; // También definido globalmente para acumular los píxeles fraccionarios
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
