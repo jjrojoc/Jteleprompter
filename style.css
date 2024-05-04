@@ -18,7 +18,7 @@ body, html {
 #teleprompter {
   width: 100%;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   cursor: pointer;
   background-color: black;
   color: white;
