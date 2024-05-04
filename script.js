@@ -950,7 +950,7 @@ function getSpeedControl() {
 function setupEndMarkerObserver() {
     const observer = new IntersectionObserver(onEndMarkerVisible, {
         root: null,
-        threshold: 1.0,
+        threshold: 2.0,
         rootMargin: '50px'
     });
 
