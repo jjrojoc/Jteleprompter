@@ -1037,7 +1037,7 @@ teleprompter.addEventListener('touchmove', function(event) {
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
 
-    translateYValue -= deltaY; // Actualiza el valor de translateY
+    translateYValue += deltaY; // Actualiza el valor de translateY
     teleprompter.style.transform = `translateY(-${translateYValue}px)`;
     startY = touchY; // Actualiza startY para el próximo movimiento
     event.preventDefault();
