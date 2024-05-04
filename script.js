@@ -446,7 +446,7 @@ function startAutoScroll() {
 
         if (translateYValue === 0) {
             // Inicialmente establece el contenido para que empiece justo por debajo de la pantalla
-            translateYValue = window.innerHeight;
+            translateYValue = window.innerHeight;  // Se prepara para moverse hacia arriba
             teleprompter.style.transform = `translateY(${translateYValue}px)`;
             console.log('Initial translateY set to screen height:', translateYValue);
             cronometro.reset();
@@ -469,17 +469,15 @@ function startAutoScroll() {
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
 
-            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;  // Disminuye el valor para subir el contenido
+            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;  // Incrementa para mover el contenido hacia arriba
             console.log('Current translateYValue:', translateYValue);
 
-            // Comprobar si el marcador de fin está dentro de la ventana visible
-            const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
-            if (endMarkerRect.bottom <= window.innerHeight - 100) {
+            // Verificar si el contenido ha pasado completamente por la pantalla
+            if (translateYValue <= 0) {
                 stopAutoScroll();
-                teleprompter.style.transform = `translateY(-${translateYValue - endMarkerRect.bottom + window.innerHeight - 100}px)`;
-                console.log('AutoScroll stopped at:', translateYValue);
+                console.log('AutoScroll finished:', translateYValue);
             } else {
-                teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+                teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 scrollAnimation = requestAnimationFrame(animateScroll);
             }
         }
@@ -489,6 +487,7 @@ function startAutoScroll() {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
 }
+
 
     
 
