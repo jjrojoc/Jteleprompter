@@ -1056,46 +1056,31 @@ teleprompter.addEventListener('touchend', function(event) {
 
 
 
-function calculateEstimatedTime() {
+function estimateDuration() {
     const teleprompter = document.getElementById('teleprompter');
     const scrollHeight = teleprompter.scrollHeight; // Altura total del contenido
     const clientHeight = teleprompter.clientHeight; // Altura visible del contenedor
 
-    // Asumiendo que translateYValue es la posición actual y es positiva cuando el contenido se ha desplazado hacia arriba
-    const translateYValue = Math.abs(parseFloat(teleprompter.style.transform.replace('translateY(', '').replace('px)', '')) || 0);
+    const translateYValue = Math.abs(parseFloat(teleprompter.style.transform.replace(/translateY\((-?\d+(.\d+)?)px\)/, '$1')) || 0);
     
-    // Distancia que todavía falta por recorrer
     const remainingDistance = scrollHeight - (translateYValue + clientHeight);
+    const pixelsPerSecond = getCurrentSpeed(); // Asegúrate de que esta función devuelve un número válido y mayor que cero
 
-    // Velocidad en píxeles por segundo, ajusta según cómo calculas esta velocidad en tu script
-    const pixelsPerSecond = adjustSpeed(); // Asumiendo que tienes una función que obtiene la velocidad actual
+    if (pixelsPerSecond <= 0) {
+        console.error("Velocidad de pixels por segundo es cero o negativa");
+        return; // Evita hacer más cálculos si la velocidad no es válida
+    }
 
-    // Calculando el tiempo estimado en segundos
     const estimatedTime = remainingDistance / pixelsPerSecond;
 
-    const futureTime = new Date(estimatedTime * 1000); // Convertir segundos a milisegundos
-    var formattedTime = futureTime.toISOString().substr(11, 8);
-    var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
-    document.getElementById("durationContainer").innerHTML = timenohours;
-    console.log('Estimated duration is:', timenohours);
-    console.log('Remaining height is:', remainingDistance);
-
-    return estimatedTime; // Devuelve el tiempo en segundos
-}
-
-
-function estimateDuration() {
-        var teleprompter = document.getElementById('teleprompter');
-        const translateYValue = Math.abs(parseFloat(teleprompter.style.transform.replace('translateY(', '').replace('px)', '')) || 0);
-        var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + translateYValue);
-        var speedPerPixel = adjustSpeed(); // Ajusta este valor según la realidad del desplazamiento
-        var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
-    
-        
-        var date = new Date(remainingTime);
-        var formattedTime = date.toISOString().substr(11, 8);
-        var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
-        document.getElementById("durationContainer").innerHTML = timenohours;
-        console.log('Estimated duration is:', timenohours);
-        console.log('Remaining height is:', remainingHeight);
+    // Verificar si estimatedTime es un número válido
+    if (isNaN(estimatedTime) || estimatedTime <= 0) {
+        console.error("Tiempo estimado inválido", estimatedTime);
+        return; // Detiene la función si el tiempo estimado no es válido
     }
+
+    // Convertir segundos a un formato legible o a una fecha
+    const futureTime = new Date(Date.now() + estimatedTime * 1000); // Convertir segundos a milisegundos
+    return futureTime.toISOString(); // Convertir la fecha calculada a formato ISO
+    console.log(futureTime.toISOString);
+}
