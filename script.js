@@ -407,23 +407,19 @@ function updateToggleButton(isActive) {
 // }
 
 let scrollAnimation;  // Esta variable almacenará el ID de la animación
-// let translateYValue = 0;
-
-let pixelsPerSecond; // Definido globalmente para ser accesible en cualquier lugar
-let pixelAccumulator = 0; // También definido globalmente para acumular los píxeles fraccionarios
+let translateYValue = 0;
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
+    const speedControl = document.getElementById('speedControl');
+    let speed = parseInt(speedControl.value);
+
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    if (teleprompter.scrollTop === 0) {
-        cronometro.reset();
-        cronometro.start();
-    } else {
-        cronometro.start();
-    }
+    const totalHeight = teleprompter.scrollHeight; // Altura total del contenido
+    teleprompter.style.height = `${totalHeight}px`; // Establece la altura si es necesario
 
     let lastTime;
     function animateScroll(timestamp) {
@@ -434,20 +430,23 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-
+        const minSpeed = 0.5; // Mínimo píxeles por segundo
+        const maxSpeed = 100; // Máximo píxeles por segundo
+        const speedRange = maxSpeed - minSpeed;
+        const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-        pixelAccumulator += pixelsToScroll;
-        if (pixelAccumulator >= 1) {
-            teleprompter.style.transform = `translateY(${-Math.floor(pixelAccumulator)}px)`;
-            pixelAccumulator -= Math.floor(pixelAccumulator);
-        }
 
-        scrollAnimation = requestAnimationFrame(animateScroll);
+        translateYValue += pixelsToScroll;
+        if (translateYValue < totalHeight) {
+            teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+            scrollAnimation = requestAnimationFrame(animateScroll);
+        } else {
+            stopAutoScroll();  // Detener automáticamente cuando se alcance la altura total
+        }
     }
 
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
-
 
 function stopAutoScroll() {
     cancelAnimationFrame(scrollAnimation);  // Detiene la animación en curso
