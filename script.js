@@ -409,14 +409,21 @@ function updateToggleButton(isActive) {
 let scrollAnimation;  // Esta variable almacenará el ID de la animación
 // let translateYValue = 0;
 
-let pixelsPerSecond = 30; // Asegúrate de que esta variable se inicializa con un valor por defecto adecuado.
-let pixelAccumulator = 0;
+let pixelsPerSecond; // Definido globalmente para ser accesible en cualquier lugar
+let pixelAccumulator = 0; // También definido globalmente para acumular los píxeles fraccionarios
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
+
+    if (teleprompter.scrollTop === 0) {
+        cronometro.reset();
+        cronometro.start();
+    } else {
+        cronometro.start();
+    }
 
     let lastTime;
     function animateScroll(timestamp) {
@@ -429,14 +436,10 @@ function startAutoScroll() {
         lastTime = timestamp;
 
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-        console.log(`Delta time: ${deltaTime}, Pixels to scroll: ${pixelsToScroll}`);
-        
         pixelAccumulator += pixelsToScroll;
         if (pixelAccumulator >= 1) {
-            const scrollValue = Math.floor(pixelAccumulator);
-            teleprompter.style.transform = `translateY(${-scrollValue}px)`;
-            pixelAccumulator -= scrollValue;
-            console.log(`Actual scroll: ${scrollValue} pixels, Remaining in accumulator: ${pixelAccumulator}`);
+            teleprompter.style.transform = `translateY(${-Math.floor(pixelAccumulator)}px)`;
+            pixelAccumulator -= Math.floor(pixelAccumulator);
         }
 
         scrollAnimation = requestAnimationFrame(animateScroll);
@@ -444,22 +447,6 @@ function startAutoScroll() {
 
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
-
-function updateToggleButton(active) {
-    const button = document.getElementById('toggleScroll');
-    if (active) {
-        button.classList.add('active');
-    } else {
-        button.classList.remove('active');
-    }
-}
-
-function toggleControlsDisplay(show) {
-    // Aquí puedes controlar la visualización de controles si es necesario.
-}
-
-// Añadir estas funciones si aún no existen.
-
 
 
 function stopAutoScroll() {
