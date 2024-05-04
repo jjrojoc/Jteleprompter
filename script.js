@@ -225,27 +225,25 @@ function stopCountdownRestart() {
 
 
 function activateSpecialFunction() {
-    // Acción especial a ejecutar después de mantener presionado 3 segundos
     console.log('Acción especial activada');
-    // Puedes agregar cualquier código adicional aquí
-    document.documentElement.scrollTop = 0;
+    document.documentElement.scrollTop = 0;  // Esto es para el cuerpo del documento
     cronometro.stop();
     cronometro.reset();
-    stopAutoScroll();  // Asegúrate de detener el auto-scroll si el botón se presiona
+    stopAutoScroll();
 
-    // restaura contenido original
     const teleprompter = document.getElementById('teleprompter');
     const originalContent = teleprompter.getAttribute('data-original-content');
     if (originalContent) {
         teleprompter.innerHTML = originalContent;
-        teleprompter.removeAttribute('data-original-content'); // Limpia el atributo una vez restaurado
-        teleprompter.scrollTop = 0; // Opcional, resetear el scroll
+        teleprompter.removeAttribute('data-original-content');
+        teleprompter.style.transform = 'translateY(0px)';  // Resetear transformación
     } else {
         console.log("No original content found to restore.");
     }
     // Restablecer la duración estimada mostrada en el 'durationContainer'
     // document.getElementById('durationContainer').textContent = "00:00:00";
 }
+
 
 
 function getTeleprompter() {
@@ -262,29 +260,19 @@ function toggleAutoScroll() {
 
     const button = document.getElementById('toggleScroll');
 
-    // if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
-    //     alert('No hay suficiente contenido para hacer scroll.');
-    //     return;
-    // }
-
     if (button.classList.contains('active')) {
         stopAutoScroll();
         button.classList.remove('active');
     } else {
-        // Asegurarse de que el teleprompter esté en la posición inicial cada vez que se inicia el auto-scroll
-        teleprompter.style.transform = 'translateY(0)';
-        teleprompter.scrollTop = 0; // Aunque estamos usando transform, asegurémonos de que el scrollTop también está a cero
-
-        // Preparar el teleprompter, si es necesario
         if (!teleprompter.hasAttribute('data-original-content')) {
+            // No restablezcas teleprompter.style.transform aquí, solo cuando se reinicia completamente
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
-
         startAutoScroll();
         button.classList.add('active');
-        //estimateDuration(); // Calcular la duración estimada, si es necesario
     }
 }
+
 
 
 
