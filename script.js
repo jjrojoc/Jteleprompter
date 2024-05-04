@@ -288,6 +288,7 @@ function toggleAutoScroll() {
         }
         startAutoScroll();
         button.classList.add('active');
+        startEstimatedTimeCountdown();
     }
 }
 
@@ -442,7 +443,6 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     adjustSpeed(parseInt(speedControl.value));
-    startEstimatedTimeCountdown();
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
