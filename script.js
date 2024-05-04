@@ -266,6 +266,7 @@ function toggleAutoScroll() {
     } else {
         if (!teleprompter.hasAttribute('data-original-content')) {
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
+            setupEndMarkerObserver();
         }
         startAutoScroll();
         button.classList.add('active');
@@ -946,21 +947,23 @@ function getSpeedControl() {
 }
 
 
-function onEndMarkerVisible(entries, observer) {
-    entries.forEach(entry => {
-        console.log("Intersección detectada:", entry.isIntersecting); // Debug para ver cuándo se detecta la intersección
-        if (entry.isIntersecting) {
-            console.log("End marker es visible.");  // Más debug
-            stopAutoScroll();  // Solo detiene el scroll automático
-            observer.unobserve(entry.target);  // Detiene la observación del endMarker
-        }
+function setupEndMarkerObserver() {
+    const observer = new IntersectionObserver(onEndMarkerVisible, {
+        root: null,
+        threshold: 0.1,
+        rootMargin: '50px'
     });
+
+    const endMarker = document.getElementById('endMarker');
+    observer.observe(endMarker);
 }
 
-const observer = new IntersectionObserver(onEndMarkerVisible, {
-    root: null,  // El viewport es el contenedor
-    threshold: 1.0  // 100% del endMarker debe ser visible
-});
-
-const endMarker = document.getElementById("endMarker");
-observer.observe(endMarker);
+function onEndMarkerVisible(entries, observer) {
+    for (const entry of entries) {
+        if (entry.isIntersecting) {
+            console.log('EndMarker is visible');
+            stopAutoScroll();  // Llama a tu función para detener el scroll automático
+            observer.unobserve(entry.target); // Opcional: Detener la observación
+        }
+    }
+}
