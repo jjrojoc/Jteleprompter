@@ -500,6 +500,7 @@ function stopAutoScroll() {
     isAutoScrolling = false;  // Actualiza el estado de auto-scroll
     updateToggleButton(false);  // Actualiza el estado del botón de toggle
     toggleControlsDisplay(true);  // Vuelve a mostrar los controles si están ocultos
+    stopEstimatedTimeCountdown(); // Detiene y limpia el contador de tiempo estimado
     // No restablezcas el transform aquí, solo detén la animación.
     // La línea a continuación ha sido comentada o eliminada
     // document.getElementById('teleprompter').style.transform = 'translateY(0)';
@@ -1078,9 +1079,14 @@ function startEstimatedTimeCountdown() {
 }
 
 function stopEstimatedTimeCountdown() {
-    clearInterval(estimatedTimeInterval); // Detener el intervalo cuando se detenga el autoscroll
-    displayTime(0); // Opcional: resetear el tiempo mostrado a 00:00
+    if (estimatedTimeInterval) {
+        clearInterval(estimatedTimeInterval);
+        estimatedTimeInterval = null; // Asegúrate de limpiar la referencia al intervalo
+        console.log("Cuenta regresiva del tiempo estimado detenida.");
+    }
+    displayTime(0); // Resetea el tiempo mostrado a 00:00
 }
+
 
 function displayTime(seconds) {
     const durationContainer = document.getElementById('durationContainer');
