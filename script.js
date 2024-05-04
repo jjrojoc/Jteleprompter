@@ -851,6 +851,7 @@ function prepareTeleprompter() {
     if (!teleprompter.getAttribute('data-original-content')) {
         // Solo guardar el contenido original la primera vez
         const content = teleprompter.innerHTML.trim();
+        console.log('Contenido original: ', content);
         teleprompter.setAttribute('data-original-content', content);
     }
 
@@ -863,7 +864,7 @@ function prepareTeleprompter() {
     const originalContent = teleprompter.getAttribute('data-original-content');
     teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML;
     teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
-
+    console.log('Contenido modificado po prepareteleprompter: ', teleprompter.innerHTML);
     // Agregar manejadores de eventos al endMarker
     const endMarker = document.getElementById("endMarker");
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
