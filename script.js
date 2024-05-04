@@ -411,27 +411,25 @@ function updateToggleButton(isActive) {
 //     pixelAccumulator = 0; // Restablecer el acumulador al detener
 // }
 
-let translateYValue;
-let scrollAnimation;
-let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
+let translateYValue = 0; // Inicializa la variable para el desplazamiento vertical
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     let speed = parseInt(speedControl.value);
-    
+
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    // Establecer alto inicial del contenedor si es necesario
-    teleprompter.style.height = "auto";  // Asegúrate de que todo el contenido es considerado
+    const totalHeight = teleprompter.scrollHeight; // Obtén la altura total del contenido
+    teleprompter.style.height = `${totalHeight}px`; // Ajusta la altura del contenedor si es necesario
 
     let lastTime;
     function animateScroll(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
-            scrollAnimation = requestAnimationFrame(animateScroll);
+            requestAnimationFrame(animateScroll);
             return;
         }
         const deltaTime = timestamp - lastTime;
@@ -443,24 +441,26 @@ function startAutoScroll() {
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
         translateYValue += pixelsToScroll;
-        teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+        if (translateYValue < totalHeight) {
+            teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+        } else {
+            // Detiene la animación una vez que todo el contenido ha sido desplazado
+            stopAutoScroll();
+        }
 
-        scrollAnimation = requestAnimationFrame(animateScroll);
+        requestAnimationFrame(animateScroll);
     }
 
-    scrollAnimation = requestAnimationFrame(animateScroll);
+    requestAnimationFrame(animateScroll);
 }
-
 
 function stopAutoScroll() {
-    if (scrollAnimation) {
-        cancelAnimationFrame(scrollAnimation);
-        scrollAnimation = null;
-        isAutoScrolling = false;
-        updateToggleButton(false);
-        toggleControlsDisplay(true);
-    }
+    cancelAnimationFrame(scrollAnimation);
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
 }
+
 
 
 
