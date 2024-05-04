@@ -418,22 +418,15 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     let speed = parseInt(speedControl.value);
-
+    
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    if (teleprompter.style.transform === "") {
-        teleprompter.style.transform = "translateY(0px)";
-        cronometro.reset();
-        cronometro.start();
-    } else {
-        cronometro.start();
-    }
+    // Establecer alto inicial del contenedor si es necesario
+    teleprompter.style.height = "auto";  // Asegúrate de que todo el contenido es considerado
 
     let lastTime;
-    let totalTranslation = 0; // Acumulador total de desplazamiento
-
     function animateScroll(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
@@ -442,29 +435,21 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        const minSpeed = 1; // Mínimo píxeles por segundo, puede ajustarse
-        const maxSpeed = 50; // Máximo píxeles por segundo
+        const minSpeed = 0.5; // Mínimo píxeles por segundo
+        const maxSpeed = 100; // Máximo píxeles por segundo
         const speedRange = maxSpeed - minSpeed;
         const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
-        pixelAccumulator += pixelsToScroll;
-        if (pixelAccumulator >= 1) {
-            totalTranslation += Math.floor(pixelAccumulator);
-            teleprompter.style.transform = `translateY(-${totalTranslation}px)`;
-            pixelAccumulator -= Math.floor(pixelAccumulator);
-        }
+        translateYValue += pixelsToScroll;
+        teleprompter.style.transform = `translateY(-${translateYValue}px)`;
 
-        // Condición para detener la animación cuando todo el contenido se haya desplazado
-        if (teleprompter.offsetHeight - totalTranslation <= 0) {
-            stopAutoScroll();
-        } else {
-            scrollAnimation = requestAnimationFrame(animateScroll);
-        }
+        scrollAnimation = requestAnimationFrame(animateScroll);
     }
 
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
+
 
 function stopAutoScroll() {
     if (scrollAnimation) {
