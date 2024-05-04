@@ -446,6 +446,7 @@ function startAutoScroll() {
     toggleControlsDisplay(false);
 
     if (translateYValue === 0) {
+        teleprompter.style.transform = 'translateY(100vh)';
         cronometro.reset();
         cronometro.start();
     } else {
@@ -857,7 +858,6 @@ document.addEventListener('contextmenu', function(event) {
 function prepareTeleprompter() {
 
     const teleprompter = document.getElementById('teleprompter');
-    teleprompter.style.transform = 'translateY(100vh)';
     
     if (!teleprompter.getAttribute('data-original-content')) {
         teleprompter.setAttribute('data-original-content', teleprompter.innerHTML);
