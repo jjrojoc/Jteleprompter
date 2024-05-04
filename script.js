@@ -440,46 +440,53 @@ function startAutoScroll() {
     adjustSpeed(parseInt(speedControl.value));  // Ajusta la velocidad basada en el control
 
     if (!isAutoScrolling) {
+        // Tu código para iniciar el scrolling aquí
         isAutoScrolling = true;
-        updateToggleButton(true);
-        toggleControlsDisplay(false);
+    updateToggleButton(true);
+    toggleControlsDisplay(false);
 
-        if (translateYValue === 0) {
-            translateYValue = window.innerHeight; // Establecer al fondo de la pantalla
-            console.log('Initial translateYValue:', translateYValue);
-        }
-
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+    if (translateYValue === 0) {
+        translateYValue = window.innerHeight; // Establecer al fondo de la pantalla
+        console.log('Initial translateYValue:', translateYValue);
         cronometro.reset();
         cronometro.start();
-
-        let lastTime;
-        function animateScroll(timestamp) {
-            if (!lastTime) {
-                lastTime = timestamp;
-            }
-
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
-
-            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
-            console.log('Updated translateYValue:', translateYValue);
-
-            if (translateYValue <= 0) {
-                stopAutoScroll();
-                teleprompter.style.transform = 'translateY(0px)';
-            } else {
-                teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                scrollAnimation = requestAnimationFrame(animateScroll);
-            }
-        }
-
-        scrollAnimation = requestAnimationFrame(animateScroll);
     } else {
-        console.log('Auto-scroll already running.');
+        cronometro.start();
+    }
+
+    teleprompter.style.transform = `translateY(${translateYValue}px)`;
+    
+
+    const totalHeight = teleprompter.scrollHeight;
+    teleprompter.style.height = `${totalHeight}px`;
+
+    let lastTime;
+    function animateScroll(timestamp) {
+        if (!lastTime) {
+            lastTime = timestamp;
+        }
+    
+        const deltaTime = timestamp - lastTime;
+        lastTime = timestamp;
+    
+        translateYValue += (pixelsPerSecond * deltaTime) / 1000;
+    
+        const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+        if (endMarkerRect.bottom <= window.innerHeight - 100) {
+            stopAutoScroll();
+            teleprompter.style.transform = `translateY(-${translateYValue - endMarkerRect.bottom + window.innerHeight - 100}px)`;
+        } else {
+            teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+            scrollAnimation = requestAnimationFrame(animateScroll);
+        }
+    }
+    
+
+    scrollAnimation = requestAnimationFrame(animateScroll);
+    } else {
+        console.log('Intento de iniciar auto-scroll, pero ya está en ejecución.');
     }
 }
-
     
 
 
