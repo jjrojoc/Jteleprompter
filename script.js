@@ -874,19 +874,19 @@ function prepareTeleprompter() {
     const clientHeight = teleprompter.clientHeight;
     const contentHeight = teleprompter.scrollHeight; // Altura del contenido sin padding.
 
-    let paddingLines = 0;
-    if (clientHeight > contentHeight) {
-        paddingLines = Math.ceil((clientHeight - contentHeight) / 2 / lineHeight);
-    }
+    // let paddingLines = 0;
+    // if (clientHeight > contentHeight) {
+    //     paddingLines = Math.ceil((clientHeight - contentHeight) / 2 / lineHeight);
+    // }
 
-    console.log('Padding lines:', paddingLines);
-    console.log('Content height:', contentHeight, 'Client height:', clientHeight);
+    // console.log('Padding lines:', paddingLines);
+    // console.log('Content height:', contentHeight, 'Client height:', clientHeight);
 
-    const paddingHTML = '<br>'.repeat(paddingLines);
-    teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML; // Reañadir padding calculado correctamente.
+    // const paddingHTML = '<br>'.repeat(paddingLines);
+    // teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML; // Reañadir padding calculado correctamente.
 
     // Añadir endMarker al final.
-    teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
+    teleprompter.innerHTML += '<br><br><br><div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
 
     // Añade el manejador de eventos
     const endMarker = document.getElementById("endMarker");
