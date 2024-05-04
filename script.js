@@ -447,6 +447,7 @@ function startAutoScroll() {
 
     if (translateYValue === 0) {
         teleprompter.style.transform = 'translateY(100vh)';
+        console.log(teleprompter.style.transform = 'translateY(100vh)')
         cronometro.reset();
         cronometro.start();
     } else {
