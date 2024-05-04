@@ -254,3 +254,8 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   padding: 5px;
   border-radius: 10px;
 } */
+
+#endMarker {
+  position: relative;  /* O puedes usar 'absolute' si se ajusta mejor a tu layout */
+  z-index: 1010;  /* Asegura que sea mayor que el de controlBar */
+}

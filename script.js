@@ -823,32 +823,30 @@ document.addEventListener('contextmenu', function(event) {
 
 
 function prepareTeleprompter() {
-
     const teleprompter = document.getElementById('teleprompter');
-    // Almacenar el contenido original para restaurarlo después
-    const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
+    const content = teleprompter.innerHTML.trim();
 
-    // Guardar el contenido actual antes de modificarlo, si aún no se ha guardado
     if (!teleprompter.getAttribute('data-original-content')) {
         teleprompter.setAttribute('data-original-content', content);
     }
 
-    const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
-    const clientHeight = teleprompter.clientHeight;
-    const linesNeeded = Math.ceil(clientHeight / lineHeight);
+    if (!content.includes("TOCA AQUÍ PARA FINALIZAR")) {
+        const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
+        const clientHeight = teleprompter.clientHeight;
+        const linesNeeded = Math.ceil(clientHeight / lineHeight);
 
-    const paddingHTML = '<br>'.repeat(linesNeeded - 3);
-    teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
-    // Al final, añades el marcador del final
-    // Suponiendo que ya tienes contenido en 'content', añades el marcador al final.
-    teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
+        const paddingHTML = '<br>'.repeat(linesNeeded - 3);
+        teleprompter.innerHTML = paddingHTML + content + paddingHTML;
+        teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
+    }
 
-    // Añade el manejador de eventos
     const endMarker = document.getElementById("endMarker");
+    endMarker.removeEventListener('touchstart', handleEndMarkerTouch);
+    endMarker.removeEventListener('click', handleEndMarkerTouch);
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
-    endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
-    // estimateDuration();
+    endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
 
 
 
@@ -950,7 +948,7 @@ function getSpeedControl() {
 function setupEndMarkerObserver() {
     const observer = new IntersectionObserver(onEndMarkerVisible, {
         root: null,
-        threshold: 2.0,
+        threshold: 1.0,
         rootMargin: '50px'
     });
 
