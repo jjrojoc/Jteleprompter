@@ -827,9 +827,9 @@ function prepareTeleprompter() {
     const controlBar = document.getElementById('controlBar');
     const controlBarHeight = controlBar.offsetHeight;  // Obtiene la altura de controlBar
 
-    // Restaurar el contenido original si ya existe, para evitar duplicaciones
+    // Obtener el contenido original guardado o el actual
     let content = teleprompter.getAttribute('data-original-content') || teleprompter.innerHTML.trim();
-    teleprompter.setAttribute('data-original-content', content);  // Guarda el contenido original si aún no está guardado
+    teleprompter.setAttribute('data-original-content', content);  // Guarda el contenido original
 
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
@@ -849,6 +849,8 @@ function prepareTeleprompter() {
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
+
 
 
 
