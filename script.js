@@ -425,6 +425,7 @@ function updateToggleButton(isActive) {
 let scrollAnimation;  // ID de la animación
 let translateYValue = 0;
 let pixelsPerSecond = 0;  // Define la velocidad inicial
+let updateDurationInterval; // intervalo para estimada duracion
 
 function adjustSpeed(speed) {
     const minSpeed = 0.5;
@@ -483,6 +484,10 @@ function startAutoScroll() {
     } else {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
+    // Inicia la actualización de la duración estimada cada segundo
+    if (!updateDurationInterval) {
+        updateDurationInterval = setInterval(estimateDuration, 1000);
+    }
 }
 
     
@@ -494,6 +499,8 @@ function stopAutoScroll() {
     isAutoScrolling = false;  // Actualiza el estado de auto-scroll
     updateToggleButton(false);  // Actualiza el estado del botón de toggle
     toggleControlsDisplay(true);  // Vuelve a mostrar los controles si están ocultos
+    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
+    updateDurationInterval = null; // Restablece la variable
 
     // No restablezcas el transform aquí, solo detén la animación.
     // La línea a continuación ha sido comentada o eliminada
@@ -1046,3 +1053,31 @@ teleprompter.addEventListener('touchmove', function(event) {
 teleprompter.addEventListener('touchend', function(event) {
     isTouching = false;
 });
+
+
+
+function calculateEstimatedTime() {
+    const teleprompter = document.getElementById('teleprompter');
+    const scrollHeight = teleprompter.scrollHeight; // Altura total del contenido
+    const clientHeight = teleprompter.clientHeight; // Altura visible del contenedor
+
+    // Asumiendo que translateYValue es la posición actual y es positiva cuando el contenido se ha desplazado hacia arriba
+    const translateYValue = Math.abs(parseFloat(teleprompter.style.transform.replace('translateY(', '').replace('px)', '')) || 0);
+    
+    // Distancia que todavía falta por recorrer
+    const remainingDistance = scrollHeight - (translateYValue + clientHeight);
+
+    // Velocidad en píxeles por segundo, ajusta según cómo calculas esta velocidad en tu script
+    const pixelsPerSecond = adjustSpeed(); // Asumiendo que tienes una función que obtiene la velocidad actual
+
+    // Calculando el tiempo estimado en segundos
+    const estimatedTime = remainingDistance / pixelsPerSecond;
+
+    var date = new Date(estimatedTime);
+    var formattedTime = date.toISOString().substr(11, 8);
+    document.getElementById("durationContainer").innerHTML = formattedTime;
+    console.log('Estimated duration is:', formattedTime);
+    console.log('Remaining height is:', remainingHeight);
+
+    return estimatedTime; // Devuelve el tiempo en segundos
+}

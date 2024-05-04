@@ -237,7 +237,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 }
 
 /*Para el nuevo timer */
-/* #timeControls {
+#timeControls {
   position: fixed; 
   top: 10px; 
   right: 10px; 
@@ -247,14 +247,14 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   padding: 5px;
   border-radius: 15px;
   transition: transform 0.2s, background-color 0.2s;
-  display: flex; /* Organiza los elementos horizontalmente
-  gap: 10px;  Añade espacio entre el timer y el durationContainer
-} */
+  display: flex; /* Organiza los elementos horizontalmente */
+  gap: 10px;  /* Añade espacio entre el timer y el durationContainer */
+}
 
-/* #separator, #timer, #durationContainer {
+#separator, #timer, #durationContainer {
   padding: 5px;
   border-radius: 10px;
-} */
+}
 
 #endMarker {
   position: relative;  /* O puedes usar 'absolute' si se ajusta mejor a tu layout */
