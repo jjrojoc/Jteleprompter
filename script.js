@@ -1004,11 +1004,11 @@ function getSpeedControl() {
 
 
 teleprompter.addEventListener('touchstart', function(event) {
-    if (isAutoScrolling) {
-        console.log('Touch interaction attempted while auto-scroll is active.');
-        event.preventDefault(); // Ignorar el evento si el autoscroll está activo
-        return;
-    }
+    // if (isAutoScrolling) {
+    //     console.log('Touch interaction attempted while auto-scroll is active.');
+    //     event.preventDefault(); // Ignorar el evento si el autoscroll está activo
+    //     return;
+    // }
     isTouching = true;
     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
     event.preventDefault(); // Previene otros eventos como scroll del navegador
