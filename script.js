@@ -411,6 +411,7 @@ function updateToggleButton(isActive) {
 //     pixelAccumulator = 0; // Restablecer el acumulador al detener
 // }
 
+let translateYValue;
 let scrollAnimation;
 let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
 
