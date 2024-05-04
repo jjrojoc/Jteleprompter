@@ -449,13 +449,16 @@ function startAutoScroll() {
 }
 
 function stopAutoScroll() {
-    cancelAnimationFrame(scrollAnimation);  // Usa la referencia correcta para detener la animación
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-    translateYValue = 0;  // Resetea la posición de translateY
-    document.getElementById('teleprompter').style.transform = 'translateY(0)';  // Restablece la posición del contenido
+    cancelAnimationFrame(scrollAnimation);  // Detiene la animación en curso
+    isAutoScrolling = false;  // Actualiza el estado de auto-scroll
+    updateToggleButton(false);  // Actualiza el estado del botón de toggle
+    toggleControlsDisplay(true);  // Vuelve a mostrar los controles si están ocultos
+
+    // No restablezcas el transform aquí, solo detén la animación.
+    // La línea a continuación ha sido comentada o eliminada
+    // document.getElementById('teleprompter').style.transform = 'translateY(0)';
 }
+
 
 
 
