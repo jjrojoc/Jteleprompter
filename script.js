@@ -824,28 +824,33 @@ document.addEventListener('contextmenu', function(event) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
+    const controlBar = document.getElementById('controlBar');
+    const controlBarHeight = controlBar.offsetHeight;
 
-    // Solo procede si el contenido original no ha sido alterado con padding y endMarker
+    // Almacenar el contenido original para restaurarlo después
+    const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
+
+    // Guardar el contenido actual antes de modificarlo, si aún no se ha guardado
     if (!teleprompter.getAttribute('data-original-content')) {
-        const content = teleprompter.innerHTML.trim();
         teleprompter.setAttribute('data-original-content', content);
-
-        const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
-        const clientHeight = teleprompter.clientHeight;
-        const linesNeeded = Math.ceil(clientHeight / lineHeight);
-
-        const paddingHTML = '<br>'.repeat(linesNeeded - 3);
-        teleprompter.innerHTML = paddingHTML + content + paddingHTML;
-        teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
     }
 
-    // Reinicia los manejadores para asegurar que no estén duplicados
+    const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
+    const clientHeight = teleprompter.clientHeight;
+    const linesNeeded = Math.ceil(clientHeight / lineHeight);
+
+    const paddingHTML = '<br>'.repeat(linesNeeded - 3);
+    // Añadir padding al final para compensar la altura de controlBar
+    const paddingEndHTML = '<br>'.repeat(linesNeeded - 3 + Math.ceil(controlBarHeight / lineHeight));
+    teleprompter.innerHTML = paddingHTML + content + paddingEndHTML;
+
+    teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
+
     const endMarker = document.getElementById("endMarker");
-    endMarker.removeEventListener('touchstart', handleEndMarkerTouch);
-    endMarker.removeEventListener('click', handleEndMarkerTouch);
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
 
 
 
@@ -950,7 +955,7 @@ function setupEndMarkerObserver() {
     const observer = new IntersectionObserver(onEndMarkerVisible, {
         root: null,
         threshold: 1.0,
-        rootMargin: '50px'
+        //rootMargin: '50px'
     });
 
     const endMarker = document.getElementById('endMarker');
