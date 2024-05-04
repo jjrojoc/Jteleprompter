@@ -444,6 +444,7 @@ function startAutoScroll() {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
+        startEstimatedTimeCountdown();
 
         if (translateYValue === 0) {
             // Ajuste inicial para asegurar que todo el contenido sea visible
@@ -477,7 +478,6 @@ function startAutoScroll() {
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 scrollAnimation = requestAnimationFrame(animateScroll);
-                startEstimatedTimeCountdown();
             }
         }
 
