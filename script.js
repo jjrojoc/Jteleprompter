@@ -243,7 +243,7 @@ function activateSpecialFunction() {
 
         // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
-        console.log('Content restored:', originalContent);
+        //console.log('Content restored:', originalContent);
     } else {
         console.error("No original content found to restore.");
     }
