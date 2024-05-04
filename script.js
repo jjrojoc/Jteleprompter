@@ -442,10 +442,11 @@ function startAutoScroll() {
     if (!isAutoScrolling) {
         // Tu código para iniciar el scrolling aquí
         isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
+        updateToggleButton(true);
+        toggleControlsDisplay(false);
 
     if (translateYValue === 0) {
+        teleprompter.style.height = `${teleprompter.scrollHeight}px`;
         cronometro.reset();
         cronometro.start();
         translateYValue = window.innerHeight;
