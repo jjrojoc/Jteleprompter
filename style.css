@@ -28,13 +28,7 @@ body, html {
   font-family: Helvetica;
   -webkit-tap-highlight-color: transparent; /* <-- this is new */
   line-height: 1.5em; /* Asegúrate de que el teleprompter tiene un line-height definido */
-  overflow: hidden;
-  position: relative;
   }
-
-  .content {
-    position: absolute;
-}
 
 
 .control-bar {

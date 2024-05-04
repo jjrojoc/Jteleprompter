@@ -335,82 +335,6 @@ function updateToggleButton(isActive) {
 // }
 
 
-// let scrollAnimation;
-// let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     let speed = parseInt(speedControl.value);
-//     adjustSpeed(speed);
-
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     let lastTime;
-//     let totalTranslation = 0; // Acumulador total de desplazamiento
-
-//     function animateScroll(timestamp) {
-//         if (!lastTime) lastTime = timestamp;
-//         const deltaTime = timestamp - lastTime;
-//         lastTime = timestamp;
-
-//         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-//         totalTranslation += pixelsToScroll;
-
-//         teleprompter.style.transform = `translateY(-${totalTranslation}px)`;
-
-//         if (teleprompter.offsetHeight + totalTranslation < teleprompter.parentNode.offsetHeight) {
-//             requestAnimationFrame(animateScroll);
-//         }
-//     }
-
-
-//     // let lastTime;
-//     // function animateScroll(timestamp) {
-//     //     if (!lastTime) {
-//     //         lastTime = timestamp;
-//     //         scrollAnimation = requestAnimationFrame(animateScroll);
-//     //         return;
-//     //     }
-//     //     const deltaTime = timestamp - lastTime;
-//     //     lastTime = timestamp;
-//     //     // const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
-//     //     // const maxSpeed = 100; // Máximo píxeles por segundo
-//     //     // const speedRange = maxSpeed - minSpeed;
-//     //     // const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
-        
-//     //     const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-
-//     //     pixelAccumulator += pixelsToScroll;
-//     //     if (pixelAccumulator > 1) {
-//     //         teleprompter.scrollTop += (1, Math.floor(pixelAccumulator));
-//     //         pixelAccumulator -= Math.floor(pixelAccumulator);
-//     //     }
-
-//     //     scrollAnimation = requestAnimationFrame(animateScroll);
-//     // }
-
-//     scrollAnimation = requestAnimationFrame(animateScroll);
-// }
-
-// function stopAutoScroll() {
-//     cancelAnimationFrame(scrollAnimation);
-//     scrollAnimation = null;
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-//     pixelAccumulator = 0; // Restablecer el acumulador al detener
-// }
-
 let scrollAnimation;
 let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
 
@@ -418,22 +342,21 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
     let speed = parseInt(speedControl.value);
+    adjustSpeed(speed);
 
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    if (teleprompter.style.transform === "") {
-        teleprompter.style.transform = "translateY(0px)";
+    if (teleprompter.scrollTop === 0) {
         cronometro.reset();
         cronometro.start();
     } else {
         cronometro.start();
     }
 
-    let lastTime;
-    let totalTranslation = 0; // Acumulador total de desplazamiento
 
+    let lastTime;
     function animateScroll(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
@@ -442,38 +365,33 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        const minSpeed = 1; // Mínimo píxeles por segundo, puede ajustarse
-        const maxSpeed = 50; // Máximo píxeles por segundo
-        const speedRange = maxSpeed - minSpeed;
-        const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
+        // const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
+        // const maxSpeed = 100; // Máximo píxeles por segundo
+        // const speedRange = maxSpeed - minSpeed;
+        // const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
+        
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
         pixelAccumulator += pixelsToScroll;
-        if (pixelAccumulator >= 1) {
-            totalTranslation += Math.floor(pixelAccumulator);
-            teleprompter.style.transform = `translateY(-${totalTranslation}px)`;
+        if (pixelAccumulator > 1) {
+            //teleprompter.scrollTop += (1, Math.floor(pixelAccumulator));
+            teleprompter.scrollTop += Math.floor(pixelAccumulator);
             pixelAccumulator -= Math.floor(pixelAccumulator);
         }
 
-        // Condición para detener la animación cuando todo el contenido se haya desplazado
-        if (teleprompter.offsetHeight - totalTranslation <= 0) {
-            stopAutoScroll();
-        } else {
-            scrollAnimation = requestAnimationFrame(animateScroll);
-        }
+        scrollAnimation = requestAnimationFrame(animateScroll);
     }
 
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
 
 function stopAutoScroll() {
-    if (scrollAnimation) {
-        cancelAnimationFrame(scrollAnimation);
-        scrollAnimation = null;
-        isAutoScrolling = false;
-        updateToggleButton(false);
-        toggleControlsDisplay(true);
-    }
+    cancelAnimationFrame(scrollAnimation);
+    scrollAnimation = null;
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
+    pixelAccumulator = 0; // Restablecer el acumulador al detener
 }
 
 
