@@ -265,7 +265,6 @@ function toggleAutoScroll() {
         button.classList.remove('active');
     } else {
         if (!teleprompter.hasAttribute('data-original-content')) {
-            // No restablezcas teleprompter.style.transform aquí, solo cuando se reinicia completamente
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
         }
         startAutoScroll();
