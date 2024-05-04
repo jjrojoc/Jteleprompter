@@ -467,7 +467,7 @@ function startAutoScroll() {
         translateYValue += (pixelsPerSecond * deltaTime) / 1000;
     
         const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
-        if (endMarkerRect.bottom <= window.innerHeight + 20) {
+        if (endMarkerRect.bottom <= window.innerHeight - 100) {
             stopAutoScroll();
             teleprompter.style.transform = `translateY(-${translateYValue - endMarkerRect.bottom + window.innerHeight}px)`;
         } else {
