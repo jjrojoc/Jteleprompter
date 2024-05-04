@@ -406,20 +406,29 @@ function updateToggleButton(isActive) {
 //     pixelAccumulator = 0; // Restablecer el acumulador al detener
 // }
 
-let scrollAnimation;  // Esta variable almacenará el ID de la animación
+let scrollAnimation;  // ID de la animación
 let translateYValue = 0;
+let pixelsPerSecond = 0;  // Define la velocidad inicial
+
+function adjustSpeed(speed) {
+    const minSpeed = 0.5;
+    const maxSpeed = 100;
+    const speedRange = maxSpeed - minSpeed;
+    pixelsPerSecond = minSpeed + (speedRange * speed / 100);  // Calcula los píxeles por segundo
+    console.log('Speed adjusted to:', pixelsPerSecond, 'pixels per second');
+}
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    let speed = parseInt(speedControl.value);
+    adjustSpeed(parseInt(speedControl.value));  // Ajusta la velocidad basada en el control
 
     isAutoScrolling = true;
     updateToggleButton(true);
     toggleControlsDisplay(false);
 
-    const totalHeight = teleprompter.scrollHeight; // Altura total del contenido
-    teleprompter.style.height = `${totalHeight}px`; // Establece la altura si es necesario
+    const totalHeight = teleprompter.scrollHeight;
+    teleprompter.style.height = `${totalHeight}px`;
 
     let lastTime;
     function animateScroll(timestamp) {
@@ -430,10 +439,6 @@ function startAutoScroll() {
         }
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        const minSpeed = 0.5; // Mínimo píxeles por segundo
-        const maxSpeed = 100; // Máximo píxeles por segundo
-        const speedRange = maxSpeed - minSpeed;
-        const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
 
         translateYValue += pixelsToScroll;
@@ -441,7 +446,7 @@ function startAutoScroll() {
             teleprompter.style.transform = `translateY(-${translateYValue}px)`;
             scrollAnimation = requestAnimationFrame(animateScroll);
         } else {
-            stopAutoScroll();  // Detener automáticamente cuando se alcance la altura total
+            stopAutoScroll();
         }
     }
 
@@ -799,13 +804,6 @@ document.addEventListener('contextmenu', function(event) {
     }
 });
 
-function adjustSpeed(speed) {
-    const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
-    const maxSpeed = 100; // Máximo píxeles por segundo
-    const speedRange = maxSpeed - minSpeed;
-    pixelsPerSecond = minSpeed + (speedRange * speed / 100); // Actualiza la velocidad de desplazamiento
-    console.log('Speed adjusted to:', pixelsPerSecond, 'pixels per second');
-}
 
 // function adjustSpeed(speed) {
 //     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
