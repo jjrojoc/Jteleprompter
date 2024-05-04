@@ -1004,16 +1004,24 @@ function getSpeedControl() {
 
 
 teleprompter.addEventListener('touchstart', function(event) {
+    if (isAutoScrolling) {
+        console.log('Touch interaction attempted while auto-scroll is active.');
+        event.preventDefault(); // Ignorar el evento si el autoscroll está activo
+        return;
+    }
     isTouching = true;
     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
     event.preventDefault(); // Previene otros eventos como scroll del navegador
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    if (!isTouching) return;
+    if (!isTouching || isAutoScrolling) return;
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
-    translateYValue -= deltaY; // Actualiza el valor de translateY
+
+    // Aquí se invierte el signo para que sea consistente con la dirección del autoscroll
+    translateYValue += deltaY; // Actualiza el valor de translateY
+    
     teleprompter.style.transform = `translateY(-${translateYValue}px)`;
     startY = touchY; // Actualiza startY para el próximo movimiento
     event.preventDefault();
