@@ -437,7 +437,6 @@ function startAutoScroll() {
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
     
-        const pixelsPerSecond = calculateScrollSpeed(speed);
         translateYValue += (pixelsPerSecond * deltaTime) / 1000;
     
         const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
@@ -951,23 +950,23 @@ function getSpeedControl() {
 }
 
 
-function setupEndMarkerObserver() {
-    const observer = new IntersectionObserver(onEndMarkerVisible, {
-        root: null,
-        threshold: 1.0,
-        //rootMargin: '50px'
-    });
 
-    const endMarker = document.getElementById('endMarker');
-    observer.observe(endMarker);
-}
+teleprompter.addEventListener('touchstart', function(event) {
+    isTouching = true;
+    startY = event.touches[0].clientY; // Almacena la posición inicial de Y
+    event.preventDefault(); // Previene otros eventos como scroll del navegador
+}, { passive: false });
 
-function onEndMarkerVisible(entries, observer) {
-    for (const entry of entries) {
-        if (entry.isIntersecting) {
-            console.log('EndMarker is visible');
-            stopAutoScroll();  // Llama a tu función para detener el scroll automático
-            observer.unobserve(entry.target); // Opcional: Detener la observación
-        }
-    }
-}
+teleprompter.addEventListener('touchmove', function(event) {
+    if (!isTouching) return;
+    let touchY = event.touches[0].clientY;
+    let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
+    translateYValue -= deltaY; // Actualiza el valor de translateY
+    teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+    startY = touchY; // Actualiza startY para el próximo movimiento
+    event.preventDefault();
+}, { passive: false });
+
+teleprompter.addEventListener('touchend', function(event) {
+    isTouching = false;
+});
