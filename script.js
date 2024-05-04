@@ -406,47 +406,31 @@ function updateToggleButton(isActive) {
 //     pixelAccumulator = 0; // Restablecer el acumulador al detener
 // }
 
+let pixelsPerSecond = 10; // Valor inicial que puedes ajustar
 let scrollAnimation;  // Esta variable almacenará el ID de la animación
 let translateYValue = 0;
 
-function startAutoScroll() {
+function startAutoScroll(startPosition = 0) {
     const teleprompter = document.getElementById('teleprompter');
-    const speedControl = document.getElementById('speedControl');
-    let speed = parseInt(speedControl.value);
+    let lastTime = null;
 
-    isAutoScrolling = true;
-    updateToggleButton(true);
-    toggleControlsDisplay(false);
-
-    const totalHeight = teleprompter.scrollHeight; // Altura total del contenido
-    teleprompter.style.height = `${totalHeight}px`; // Establece la altura si es necesario
-
-    let lastTime;
-    function animateScroll(timestamp) {
-        if (!lastTime) {
-            lastTime = timestamp;
-            scrollAnimation = requestAnimationFrame(animateScroll);
-            return;
+    function animate(time) {
+        if (lastTime === null) {
+            lastTime = time;
         }
-        const deltaTime = timestamp - lastTime;
-        lastTime = timestamp;
-        const minSpeed = 0.5; // Mínimo píxeles por segundo
-        const maxSpeed = 100; // Máximo píxeles por segundo
-        const speedRange = maxSpeed - minSpeed;
-        const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
-        const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
+        const deltaTime = time - lastTime;
+        lastTime = time;
 
-        translateYValue += pixelsToScroll;
-        if (translateYValue < totalHeight) {
-            teleprompter.style.transform = `translateY(-${translateYValue}px)`;
-            scrollAnimation = requestAnimationFrame(animateScroll);
-        } else {
-            stopAutoScroll();  // Detener automáticamente cuando se alcance la altura total
-        }
+        translateYValue -= pixelsPerSecond * (deltaTime / 1000); // Usa la velocidad global actualizada
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+
+        scrollAnimation = requestAnimationFrame(animate);
     }
 
-    scrollAnimation = requestAnimationFrame(animateScroll);
+    translateYValue = startPosition; // Establece la posición inicial para `translateY`
+    scrollAnimation = requestAnimationFrame(animate);
 }
+
 
 function stopAutoScroll() {
     cancelAnimationFrame(scrollAnimation);  // Detiene la animación en curso
@@ -805,7 +789,19 @@ function adjustSpeed(speed) {
     const speedRange = maxSpeed - minSpeed;
     pixelsPerSecond = minSpeed + (speedRange * speed / 100); // Actualiza la velocidad de desplazamiento
     console.log('Speed adjusted to:', pixelsPerSecond, 'pixels per second');
+
+    if (isAutoScrolling) {
+        const teleprompter = document.getElementById('teleprompter');
+        const currentTransform = window.getComputedStyle(teleprompter).transform;
+        const currentY = currentTransform === 'none' ? 0 : parseFloat(currentTransform.split(',')[5]);
+
+        cancelAnimationFrame(scrollAnimation);
+
+        // Reinicia la animación manteniendo la posición actual
+        startAutoScroll(currentY);
+    }
 }
+
 
 // function adjustSpeed(speed) {
 //     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
