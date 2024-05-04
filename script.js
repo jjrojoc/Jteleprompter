@@ -1023,6 +1023,7 @@ function getSpeedControl() {
 //     isTouching = false;
 // });
 
+
 teleprompter.addEventListener('touchstart', function(event) {
     if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
     cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
@@ -1045,7 +1046,9 @@ teleprompter.addEventListener('touchmove', function(event) {
 teleprompter.addEventListener('touchend', function(event) {
     isTouching = false;
     if (isAutoScrolling) {
-        lastTime = undefined; // Resetear el tiempo para que el delta no se acumule mientras estaba pausado
-        scrollAnimation = requestAnimationFrame(animateScroll); // Reanudar el auto-scrolling
+        // En vez de llamar a animateScroll, simplemente reanuda startAutoScroll si es viable
+        // asegúrate que startAutoScroll pueda manejar una llamada mientras ya está corriendo
+        // Si no, asegúrate de reiniciar solo la parte necesaria.
+        startAutoScroll();
     }
 });
