@@ -1023,12 +1023,14 @@ function getSpeedControl() {
 //     isTouching = false;
 // });
 
+const teleprompter = document.getElementById('teleprompter');
+
 teleprompter.addEventListener('touchstart', function(event) {
-    if (!isAutoScrolling) return;
+    if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
     cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
     isTouching = true;
     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
-    event.preventDefault(); // Previene otros eventos como scroll del navegador
+    event.preventDefault(); // Previene el scroll del navegador
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
@@ -1036,7 +1038,7 @@ teleprompter.addEventListener('touchmove', function(event) {
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
 
-    translateYValue -= deltaY; // Actualiza el valor de translateY para mover en la dirección correcta
+    translateYValue -= deltaY; // Actualiza el valor de translateY
     teleprompter.style.transform = `translateY(-${translateYValue}px)`;
     startY = touchY; // Actualiza startY para el próximo movimiento
     event.preventDefault();
