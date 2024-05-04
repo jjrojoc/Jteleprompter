@@ -1073,11 +1073,29 @@ function calculateEstimatedTime() {
     // Calculando el tiempo estimado en segundos
     const estimatedTime = remainingDistance / pixelsPerSecond;
 
-    const futureTime = new Date(Date.now() + estimatedTime * 1000); // Convertir segundos a milisegundos
-    return futureTime.toISOString(); // Convertir la fecha calculada a formato ISO
-    document.getElementById("durationContainer").innerHTML = futureTime;
-    console.log('Estimated duration is:', futureTime);
+    const futureTime = new Date(estimatedTime * 1000); // Convertir segundos a milisegundos
+    var formattedTime = futureTime.toISOString().substr(11, 8);
+    var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
+    document.getElementById("durationContainer").innerHTML = timenohours;
+    console.log('Estimated duration is:', timenohours);
     console.log('Remaining height is:', remainingDistance);
 
     return estimatedTime; // Devuelve el tiempo en segundos
 }
+
+
+// function estimateDuration() {
+//         var teleprompter = document.getElementById('teleprompter');
+//         var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
+//         var speedControl = document.getElementById('speedControl');
+//         var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
+//         var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
+    
+        
+//         var date = new Date(remainingTime);
+//         var formattedTime = date.toISOString().substr(11, 8);
+//         var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
+//         document.getElementById("durationContainer").innerHTML = timenohours;
+//         console.log('Estimated duration is:', timenohours);
+//         console.log('Remaining height is:', remainingHeight);
+//     }
