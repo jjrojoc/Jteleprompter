@@ -1051,7 +1051,7 @@ teleprompter.addEventListener('touchend', function(event) {
 
 
 
-let countdownInterval;
+let countdownEstimateDuration;
 
 function startEstimatedTimeCountdown() {
     const scrollHeight = teleprompter.scrollHeight;
@@ -1059,9 +1059,9 @@ function startEstimatedTimeCountdown() {
     const remainingDistance = scrollHeight - clientHeight - translateYValue;
     let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
 
-    countdownInterval = setInterval(() => {
+    countdownEstimateDuration = setInterval(() => {
         if (estimatedTimeSeconds <= 0) {
-            clearInterval(countdownInterval);
+            clearInterval(countdownEstimateDuration);
             displayTime(0); // Mostrar 00:00 o similar cuando el conteo termine
         } else {
             displayTime(estimatedTimeSeconds);
@@ -1087,5 +1087,5 @@ function displayTime(seconds) {
 }
 
 function stopEstimatedTimeCountdown() {
-    clearInterval(countdownInterval);
+    clearInterval(countdownEstimateDuration);
 }
