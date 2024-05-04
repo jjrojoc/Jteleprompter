@@ -477,6 +477,7 @@ function startAutoScroll() {
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 scrollAnimation = requestAnimationFrame(animateScroll);
+                startEstimatedTimeCountdown();
             }
         }
 
@@ -484,7 +485,6 @@ function startAutoScroll() {
     } else {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
-    startEstimatedTimeCountdown();
 }
 
     
