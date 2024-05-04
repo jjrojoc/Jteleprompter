@@ -437,6 +437,8 @@ function adjustSpeed(speed) {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
+    const endMarker = document.getElementById("endMarker");  // Asegúrate de que tienes este elemento en tu HTML
+
     adjustSpeed(parseInt(speedControl.value));  // Ajusta la velocidad basada en el control
 
     if (!isAutoScrolling) {
@@ -445,20 +447,16 @@ function startAutoScroll() {
         toggleControlsDisplay(false);
 
         if (translateYValue === 0) {
-            // Inicialmente establece el contenido para que empiece justo por debajo de la pantalla
-            translateYValue = window.innerHeight;  // Se prepara para moverse hacia arriba
+            translateYValue = window.innerHeight;
+            // Configura el contenido para comenzar desde abajo de la pantalla
             teleprompter.style.transform = `translateY(${translateYValue}px)`;
-            console.log('Initial translateY set to screen height:', translateYValue);
             cronometro.reset();
             cronometro.start();
-        } else {
+        }   else {
             cronometro.start();
         }
 
         
-
-        const totalHeight = teleprompter.scrollHeight;
-        teleprompter.style.height = `${totalHeight}px`;
 
         let lastTime;
         function animateScroll(timestamp) {
@@ -469,13 +467,15 @@ function startAutoScroll() {
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
 
-            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;  // Incrementa para mover el contenido hacia arriba
-            console.log('Current translateYValue:', translateYValue);
-
-            // Verificar si el contenido ha pasado completamente por la pantalla
-            if (translateYValue <= 0) {
+            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
+            
+            // Consigue la posición actual del marcador final en relación a la ventana
+            const endMarkerRect = endMarker.getBoundingClientRect();
+            
+            // Si el marcador final está por encima de la parte inferior de la ventana, detener el scroll
+            if (endMarkerRect.bottom <= 0) {
                 stopAutoScroll();
-                console.log('AutoScroll finished:', translateYValue);
+                console.log('End marker has passed the bottom of the screen');
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 scrollAnimation = requestAnimationFrame(animateScroll);
@@ -487,6 +487,7 @@ function startAutoScroll() {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
 }
+
 
 
     
