@@ -263,7 +263,6 @@ function toggleAutoScroll() {
     } else {
         if (!teleprompter.hasAttribute('data-original-content')) {
             prepareTeleprompter();  // Solo prepara si no se ha preparado antes o si se requiere resetear
-            setupEndMarkerObserver();
         }
         startAutoScroll();
         button.classList.add('active');
