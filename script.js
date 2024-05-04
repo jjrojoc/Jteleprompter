@@ -944,3 +944,24 @@ document.addEventListener('DOMContentLoaded', setPlaceholder);
 function getSpeedControl() {
     return document.getElementById('speedControl');
 }
+
+
+// Función para manejar la visibilidad de endMarker
+function onEndMarkerVisible(entries, observer) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            stopAutoScroll();
+            observer.unobserve(entry.target);  // Detener la observación una vez que endMarker es visible
+        }
+    });
+}
+
+// Crear el Intersection Observer
+const observer = new IntersectionObserver(onEndMarkerVisible, {
+    root: null,  // null significa que el viewport es el contenedor
+    threshold: 0.1  // 10% del endMarker debe ser visible
+});
+
+// Observar el endMarker
+const endMarker = document.getElementById("endMarker");
+observer.observe(endMarker);
