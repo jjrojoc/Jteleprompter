@@ -486,7 +486,7 @@ function startAutoScroll() {
     }
     // Inicia la actualización de la duración estimada cada segundo
     if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
+        updateDurationInterval = setInterval(calculateEstimatedTime, 1000);
     }
 }
 
