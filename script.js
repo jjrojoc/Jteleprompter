@@ -848,28 +848,36 @@ document.addEventListener('contextmenu', function(event) {
 
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
-    if (!teleprompter.getAttribute('data-original-content')) {
-        // Solo guardar el contenido original la primera vez
-        const content = teleprompter.innerHTML.trim();
-        console.log('Contenido original: ', content);
-        teleprompter.setAttribute('data-original-content', content);
+    // Restaurar contenido original si existe.
+    const originalContent = teleprompter.getAttribute('data-original-content');
+    if (originalContent) {
+        teleprompter.innerHTML = originalContent; // Establecer sin ningún padding o endMarker.
     }
 
+    // Calcular espacio necesario en base al contenido original.
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
-    const linesNeeded = Math.ceil(clientHeight / lineHeight);
+    const contentHeight = teleprompter.scrollHeight; // Altura del contenido sin padding.
+    
+    let paddingLines = 0;
+    if (clientHeight > contentHeight) {
+        paddingLines = Math.ceil((clientHeight - contentHeight) / 2 / lineHeight);
+    }
 
-    const paddingHTML = '<br>'.repeat(linesNeeded - 3);
-    // Usar el contenido original siempre para evitar duplicación de padding
-    const originalContent = teleprompter.getAttribute('data-original-content');
-    teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML;
+    const paddingHTML = '<br>'.repeat(paddingLines);
+    teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML; // Reañadir padding calculado correctamente.
+
+    // Añadir endMarker al final.
     teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
-    console.log('Contenido modificado po prepareteleprompter: ', teleprompter.innerHTML);
-    // Agregar manejadores de eventos al endMarker
+
+    // Añadir o reajustar eventos si necesario.
     const endMarker = document.getElementById("endMarker");
+    endMarker.removeEventListener('touchstart', handleEndMarkerTouch);
+    endMarker.removeEventListener('click', handleEndMarkerTouch);
     endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
     endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
 
 
 
