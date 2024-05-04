@@ -1023,8 +1023,6 @@ function getSpeedControl() {
 //     isTouching = false;
 // });
 
-const teleprompter = document.getElementById('teleprompter');
-
 teleprompter.addEventListener('touchstart', function(event) {
     if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
     cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
