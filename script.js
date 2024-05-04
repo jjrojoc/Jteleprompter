@@ -484,10 +484,7 @@ function startAutoScroll() {
     } else {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
-    // Inicia la actualización de la duración estimada cada segundo
-    if (!updateDurationInterval) {
-        updateDurationInterval = setInterval(estimateDuration, 1000);
-    }
+    startEstimatedTimeCountdown();
 }
 
     
@@ -499,9 +496,7 @@ function stopAutoScroll() {
     isAutoScrolling = false;  // Actualiza el estado de auto-scroll
     updateToggleButton(false);  // Actualiza el estado del botón de toggle
     toggleControlsDisplay(true);  // Vuelve a mostrar los controles si están ocultos
-    clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-    updateDurationInterval = null; // Restablece la variable
-
+    stopEstimatedTimeCountdown();
     // No restablezcas el transform aquí, solo detén la animación.
     // La línea a continuación ha sido comentada o eliminada
     // document.getElementById('teleprompter').style.transform = 'translateY(0)';
@@ -1056,31 +1051,41 @@ teleprompter.addEventListener('touchend', function(event) {
 
 
 
-function estimateDuration() {
+let countdownInterval;
+
+function startEstimatedTimeCountdown() {
     const scrollHeight = teleprompter.scrollHeight;
     const clientHeight = teleprompter.clientHeight;
     const remainingDistance = scrollHeight - clientHeight - translateYValue;
-    const estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
+    let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
 
-    displayTime(estimatedTimeSeconds);
+    countdownInterval = setInterval(() => {
+        if (estimatedTimeSeconds <= 0) {
+            clearInterval(countdownInterval);
+            displayTime(0); // Mostrar 00:00 o similar cuando el conteo termine
+        } else {
+            displayTime(estimatedTimeSeconds);
+            estimatedTimeSeconds -= 1; // Decrementa el contador cada segundo
+        }
+    }, 1000);
 }
 
 function displayTime(seconds) {
     const durationContainer = document.getElementById('durationContainer');
-    if (seconds > 0) {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        let timeString = '';
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    let timeString = '';
 
-        if (hours > 0) {
-            timeString += `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        } else {
-            timeString += `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
-        durationContainer.textContent = timeString;
+    if (hours > 0) {
+        timeString += `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     } else {
-        durationContainer.textContent = "00:00";
+        timeString += `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
+
+    durationContainer.textContent = timeString;
+}
+
+function stopEstimatedTimeCountdown() {
+    clearInterval(countdownInterval);
 }
