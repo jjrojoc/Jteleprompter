@@ -855,24 +855,34 @@ document.addEventListener('contextmenu', function(event) {
 
 
 function prepareTeleprompter() {
+    teleprompter.style.transform = 'translateY(100vh)';
 
     const teleprompter = document.getElementById('teleprompter');
-    // Almacenar el contenido original para restaurarlo después
-    const content = teleprompter.innerHTML.trim(); // Obtener el contenido actual
-
-    // Guardar el contenido actual antes de modificarlo, si aún no se ha guardado
     if (!teleprompter.getAttribute('data-original-content')) {
-        teleprompter.setAttribute('data-original-content', content);
+        teleprompter.setAttribute('data-original-content', teleprompter.innerHTML);
     }
+    // Restaurar contenido original si existe.
+    const originalContent = teleprompter.getAttribute('data-original-content') || teleprompter.innerHTML; // Asegurar que siempre hay contenido.
+    teleprompter.innerHTML = ''; // Limpiar contenido actual para recalcular padding correctamente.
 
+    // Calcular espacio necesario en base al contenido original sin padding.
+    teleprompter.innerHTML = originalContent; // Establecer contenido sin padding.
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
-    const linesNeeded = Math.ceil(clientHeight / lineHeight);
+    const contentHeight = teleprompter.scrollHeight; // Altura del contenido sin padding.
 
-    const paddingHTML = '<br>'.repeat(linesNeeded - 3);
-    teleprompter.innerHTML = paddingHTML + teleprompter.innerHTML + paddingHTML;
-    // Al final, añades el marcador del final
-    // Suponiendo que ya tienes contenido en 'content', añades el marcador al final.
+    let paddingLines = 0;
+    if (clientHeight > contentHeight) {
+        paddingLines = Math.ceil((clientHeight - contentHeight) / 2 / lineHeight);
+    }
+
+    console.log('Padding lines:', paddingLines);
+    console.log('Content height:', contentHeight, 'Client height:', clientHeight);
+
+    const paddingHTML = '<br>'.repeat(paddingLines);
+    teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML; // Reañadir padding calculado correctamente.
+
+    // Añadir endMarker al final.
     teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
 
     // Añade el manejador de eventos
