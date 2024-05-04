@@ -1073,11 +1073,11 @@ function calculateEstimatedTime() {
     // Calculando el tiempo estimado en segundos
     const estimatedTime = remainingDistance / pixelsPerSecond;
 
-    var date = new Date(estimatedTime);
-    var formattedTime = date.toISOString().substr(11, 8);
-    document.getElementById("durationContainer").innerHTML = formattedTime;
-    console.log('Estimated duration is:', formattedTime);
-    console.log('Remaining height is:', remainingHeight);
+    const futureTime = new Date(Date.now() + estimatedTime * 1000); // Convertir segundos a milisegundos
+    return futureTime.toISOString(); // Convertir la fecha calculada a formato ISO
+    document.getElementById("durationContainer").innerHTML = futureTime;
+    console.log('Estimated duration is:', futureTime);
+    console.log('Remaining height is:', remainingDistance);
 
     return estimatedTime; // Devuelve el tiempo en segundos
 }
