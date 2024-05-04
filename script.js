@@ -849,34 +849,30 @@ document.addEventListener('contextmenu', function(event) {
 function prepareTeleprompter() {
     const teleprompter = document.getElementById('teleprompter');
     // Restaurar contenido original si existe.
-    const originalContent = teleprompter.getAttribute('data-original-content');
-    if (originalContent) {
-        teleprompter.innerHTML = originalContent; // Establecer sin ningún padding o endMarker.
-    }
+    const originalContent = teleprompter.getAttribute('data-original-content') || teleprompter.innerHTML; // Asegurar que siempre hay contenido.
+    teleprompter.innerHTML = ''; // Limpiar contenido actual para recalcular padding correctamente.
 
-    // Calcular espacio necesario en base al contenido original.
+    // Calcular espacio necesario en base al contenido original sin padding.
+    teleprompter.innerHTML = originalContent; // Establecer contenido sin padding.
     const lineHeight = parseInt(window.getComputedStyle(teleprompter).lineHeight, 10);
     const clientHeight = teleprompter.clientHeight;
     const contentHeight = teleprompter.scrollHeight; // Altura del contenido sin padding.
-    
+
     let paddingLines = 0;
     if (clientHeight > contentHeight) {
         paddingLines = Math.ceil((clientHeight - contentHeight) / 2 / lineHeight);
     }
+
+    console.log('Padding lines:', paddingLines);
+    console.log('Content height:', contentHeight, 'Client height:', clientHeight);
 
     const paddingHTML = '<br>'.repeat(paddingLines);
     teleprompter.innerHTML = paddingHTML + originalContent + paddingHTML; // Reañadir padding calculado correctamente.
 
     // Añadir endMarker al final.
     teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
-
-    // Añadir o reajustar eventos si necesario.
-    const endMarker = document.getElementById("endMarker");
-    endMarker.removeEventListener('touchstart', handleEndMarkerTouch);
-    endMarker.removeEventListener('click', handleEndMarkerTouch);
-    endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
-    endMarker.addEventListener('click', handleEndMarkerTouch);
 }
+
 
 
 
