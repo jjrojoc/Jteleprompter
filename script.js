@@ -234,15 +234,12 @@ function activateSpecialFunction() {
     const teleprompter = document.getElementById('teleprompter');
     const originalContent = teleprompter.getAttribute('data-original-content');
     if (originalContent) {
-        teleprompter.innerHTML = originalContent;  // Restaura solo el contenido original
+        teleprompter.innerHTML = originalContent;  // Restaura directamente sin modificar
         teleprompter.removeAttribute('data-original-content');
-        teleprompter.style.transform = 'translateY(0px)';  // Resetear transformación
-        prepareTeleprompter();  // Preparar de nuevo el teleprompter para asegurar el espacio correcto
-    } else {
-        console.log("No original content found to restore.");
     }
+    teleprompter.style.transform = 'translateY(0px)';
+    console.log("No original content found to restore.");
 }
-
 
 
 
@@ -435,21 +432,24 @@ function startAutoScroll() {
     function animateScroll(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
-            scrollAnimation = requestAnimationFrame(animateScroll);
-            return;
         }
+    
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
-        const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-
-        translateYValue += pixelsToScroll;
-        if (translateYValue < totalHeight) {
+    
+        const pixelsPerSecond = calculateScrollSpeed(speed);
+        translateYValue += (pixelsPerSecond * deltaTime) / 1000;
+    
+        const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+        if (endMarkerRect.bottom <= window.innerHeight) {
+            stopAutoScroll();
+            teleprompter.style.transform = `translateY(-${translateYValue - endMarkerRect.bottom + window.innerHeight}px)`;
+        } else {
             teleprompter.style.transform = `translateY(-${translateYValue}px)`;
             scrollAnimation = requestAnimationFrame(animateScroll);
-        } else {
-            stopAutoScroll();
         }
     }
+    
 
     scrollAnimation = requestAnimationFrame(animateScroll);
 }
