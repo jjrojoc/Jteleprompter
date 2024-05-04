@@ -447,7 +447,7 @@ function startAutoScroll() {
 
     if (translateYValue === 0) {
         translateYValue = window.innerHeight; // Empieza justo debajo de la pantalla
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+        teleprompter.style.transform = `translateY(-${translateYValue}px)`;
         cronometro.reset();
         cronometro.start();
     } else {
