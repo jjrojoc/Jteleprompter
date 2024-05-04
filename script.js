@@ -262,10 +262,10 @@ function toggleAutoScroll() {
 
     const button = document.getElementById('toggleScroll');
 
-    if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
-        alert('No hay suficiente contenido para hacer scroll.');
-        return;
-    }
+    // if (teleprompter.scrollHeight <= teleprompter.clientHeight) {
+    //     alert('No hay suficiente contenido para hacer scroll.');
+    //     return;
+    // }
 
     if (button.classList.contains('active')) {
         stopAutoScroll();
