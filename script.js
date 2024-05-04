@@ -469,7 +469,7 @@ function startAutoScroll() {
         const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
         if (endMarkerRect.bottom <= window.innerHeight - 100) {
             stopAutoScroll();
-            teleprompter.style.transform = `translateY(-${translateYValue - endMarkerRect.bottom + window.innerHeight}px)`;
+            teleprompter.style.transform = `translateY(-${translateYValue - endMarkerRect.bottom + window.innerHeight - 100}px)`;
         } else {
             teleprompter.style.transform = `translateY(-${translateYValue}px)`;
             scrollAnimation = requestAnimationFrame(animateScroll);
@@ -882,6 +882,12 @@ function prepareTeleprompter() {
 
     // Añadir endMarker al final.
     teleprompter.innerHTML += '<div id="endMarker" style="font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;">TOCA AQUÍ PARA FINALIZAR</div>';
+
+    // Añade el manejador de eventos
+    const endMarker = document.getElementById("endMarker");
+    endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
+    endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
+    // estimateDuration();
 }
 
 
