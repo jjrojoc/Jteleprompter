@@ -1025,8 +1025,8 @@ function getSpeedControl() {
 
 
 teleprompter.addEventListener('touchstart', function(event) {
-    if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
-    cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
+    // if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
+    // cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
     isTouching = true;
     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
     event.preventDefault(); // Previene el scroll del navegador
@@ -1045,10 +1045,4 @@ teleprompter.addEventListener('touchmove', function(event) {
 
 teleprompter.addEventListener('touchend', function(event) {
     isTouching = false;
-    if (isAutoScrolling) {
-        // En vez de llamar a animateScroll, simplemente reanuda startAutoScroll si es viable
-        // asegúrate que startAutoScroll pueda manejar una llamada mientras ya está corriendo
-        // Si no, asegúrate de reiniciar solo la parte necesaria.
-        startAutoScroll();
-    }
 });
