@@ -440,9 +440,12 @@ function adjustSpeed(speed) {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
+    teleprompter.style.height = `${teleprompter.scrollHeight}px`;
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
+        updateToggleButton(true);
+        toggleControlsDisplay(false);
         translateYValue = window.innerHeight;
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
@@ -452,9 +455,7 @@ function startAutoScroll() {
         } else {
             cronometro.start();
         }
-        updateToggleButton(true);
-        toggleControlsDisplay(false);
-        translateYValue = teleprompter.scrollHeight;  // Asegurarse de que inicia debajo de todo el contenido
+        
         lastTime = null;
 
         function animateScroll(timestamp) {
