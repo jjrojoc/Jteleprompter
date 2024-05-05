@@ -1021,28 +1021,7 @@ function getSpeedControl() {
 
 
 // Evento para manejar el auto-scrolling
-teleprompter.addEventListener('touchstart', function(event) {
-    if (!isAutoScrolling) return;
-    isTouching = true;
-    startY = event.touches[0].clientY;
-    //event.preventDefault();
-}, { passive: false });
 
-teleprompter.addEventListener('touchmove', function(event) {
-    if (!isAutoScrolling || !isTouching) return;
-    let touchY = event.touches[0].clientY;
-    let deltaY = touchY - startY;
-    translateYValue += deltaY;
-    teleprompter.style.transform = `translateY(${translateYValue}px)`;
-    startY = touchY;
-    //event.preventDefault();
-}, { passive: false });
-
-teleprompter.addEventListener('touchend', function(event) {
-    if (!isAutoScrolling) return;
-    isTouching = false;
-    startEstimatedTimeCountdown();
-});
 
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
