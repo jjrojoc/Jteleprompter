@@ -447,47 +447,39 @@ function startAutoScroll() {
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        if (translateYValue === 0) {
-            // Ajuste inicial para asegurar que todo el contenido sea visible
-            teleprompter.style.height = `${teleprompter.scrollHeight}px`;
-            // Coloca inicialmente el contenido justo por debajo de la pantalla
-            translateYValue = window.innerHeight;
-            teleprompter.style.transform = `translateY(${translateYValue}px)`;
-            cronometro.reset();
-            cronometro.start();
-        }   else {
-            cronometro.start();
-        }
-        
-        startEstimatedTimeCountdown();
+        // Asegúrate de configurar correctamente translateYValue como un número
+        translateYValue = window.innerHeight;
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
-        let lastTime;
-        function animateScroll(timestamp) {
-            if (!lastTime) {
-                lastTime = timestamp;
-            }
-
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
-
-            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
-
-            const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
-
-            // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
-            if (endMarkerRect.bottom <= window.innerHeight -100) {
-                stopAutoScroll();
-            } else {
-                teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                scrollAnimation = requestAnimationFrame(animateScroll);
-            }
-        }
+        cronometro.reset();
+        cronometro.start();
 
         scrollAnimation = requestAnimationFrame(animateScroll);
+        startEstimatedTimeCountdown();  // Inicia el cálculo del tiempo estimado aquí
     } else {
-        console.log('Attempt to start auto-scroll but it is already running.');
+        console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
 }
+
+
+function animateScroll(timestamp) {
+    if (!lastTime) {
+        lastTime = timestamp;
+    }
+
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
+
+    translateYValue -= (pixelsPerSecond * deltaTime) / 1000; // Actualiza translateYValue
+
+    teleprompter.style.transform = `translateY(${translateYValue}px)`;
+    if (translateYValue <= 0) {
+        stopAutoScroll();
+        return; // Detiene la animación cuando el contenido se ha desplazado completamente
+    }
+    scrollAnimation = requestAnimationFrame(animateScroll);
+}
+
 
     
 function stopAutoScroll() {
