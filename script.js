@@ -440,18 +440,15 @@ function adjustSpeed(speed) {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    adjustSpeed(parseInt(speedControl.value)); // Asegúrate de que esto esté definiendo correctamente `pixelsPerSecond`
+    adjustSpeed(parseInt(speedControl.value));
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        translateYValue = window.innerHeight; // Iniciar desde abajo de la pantalla
+        translateYValue = window.innerHeight;
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
-
-        cronometro.reset();
-        cronometro.start();
 
         function animateScroll(timestamp) {
             if (!lastTime) lastTime = timestamp;
@@ -460,19 +457,18 @@ function startAutoScroll() {
 
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            // Asegúrate de que `translateYValue` no sea negativo o se mueva más allá del inicio del contenido
-            if (translateYValue < 0) {
+            if (translateYValue <= 0) {
                 translateYValue = 0;
-                stopAutoScroll(); // Asegúrate de detener la animación y limpiar adecuadamente
+                stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                scrollAnimation = requestAnimationFrame(animateScroll);
+                requestAnimationFrame(animateScroll);
             }
         }
 
         let lastTime = null;
-        scrollAnimation = requestAnimationFrame(animateScroll);
-        startEstimatedTimeCountdown();
+        requestAnimationFrame(animateScroll);
+        startEstimatedTimeCountdown();  // Asegúrate de que esta función está correctamente definida para reiniciar el contador.
     } else {
         console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
@@ -1034,29 +1030,35 @@ teleprompter.addEventListener('touchend', function(event) {
 let estimatedTimeInterval;
 
 function startEstimatedTimeCountdown() {
-    console.log("Iniciando el countdown estimado...");
-    const scrollHeight = teleprompter.scrollHeight;
-    const clientHeight = teleprompter.clientHeight;
-    const remainingDistance = Math.max(0, scrollHeight - clientHeight - translateYValue);
-    let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
-
-    console.log(`Tiempo estimado inicial: ${estimatedTimeSeconds}`);
-    if (estimatedTimeInterval) {
-        clearInterval(estimatedTimeInterval); // Limpiar cualquier intervalo existente
-    }
+    if (estimatedTimeInterval) clearInterval(estimatedTimeInterval);
+    const totalDistance = teleprompter.scrollHeight - window.innerHeight;
+    let remainingTime = (totalDistance - translateYValue + window.innerHeight) / pixelsPerSecond;
 
     estimatedTimeInterval = setInterval(() => {
-        if (estimatedTimeSeconds <= 0) {
+        if (remainingTime <= 0) {
             clearInterval(estimatedTimeInterval);
-            displayTime(0); // Mostrar 00:00 o similar cuando el conteo termine
-            console.log("Cuenta regresiva del tiempo estimado detenida.");
+            displayTime(0);
         } else {
-            displayTime(estimatedTimeSeconds);
-            estimatedTimeSeconds -= 1; // Decrementa el contador cada segundo
+            remainingTime--;
+            displayTime(remainingTime);
         }
     }, 1000);
 }
 
+function displayTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    let timeString = '';
+
+    if (hours > 0) {
+        timeString = `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    } else {
+        timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    document.getElementById('durationContainer').textContent = timeString;
+}
 
 function stopEstimatedTimeCountdown() {
     if (estimatedTimeInterval) {
@@ -1065,22 +1067,4 @@ function stopEstimatedTimeCountdown() {
         console.log("Cuenta regresiva del tiempo estimado detenida.");
     }
     displayTime(0); // Resetea el tiempo mostrado a 00:00
-}
-
-
-function displayTime(seconds) {
-    const durationContainer = document.getElementById('durationContainer');
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    let timeString = '';
-
-    if (hours > 0) {
-        timeString += `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-    } else {
-        timeString += `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-
-    durationContainer.textContent = timeString;
-    console.log("Mostrando tiempo: ", seconds);
 }
