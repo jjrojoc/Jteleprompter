@@ -493,7 +493,6 @@ function startAutoScroll() {
 
     
 function stopAutoScroll() {
-    if (isAutoScrolling) {
         isAutoScrolling = false;
         cancelAnimationFrame(scrollAnimation);
         stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
@@ -507,7 +506,6 @@ function stopAutoScroll() {
 
         //cronometro.stop();
         console.log('Autoscroll detenido.');
-    }
 }
 
 
