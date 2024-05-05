@@ -439,53 +439,39 @@ function adjustSpeed(speed) {
 
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
-    const speedControl = document.getElementById('speedControl');
-    adjustSpeed(parseInt(speedControl.value));
+    adjustSpeed(parseInt(document.getElementById('speedControl').value));
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
+        translateYValue = window.innerHeight;
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        if (translateYValue === 0) {
-            // Ajuste inicial para asegurar que todo el contenido sea visible
-            teleprompter.style.height = `${teleprompter.scrollHeight}px`;
-            // Coloca inicialmente el contenido justo por debajo de la pantalla
-            translateYValue = window.innerHeight;
-            teleprompter.style.transform = `translateY(${translateYValue}px)`;
-            cronometro.reset();
-            cronometro.start();
-        }   else {
-            cronometro.start();
-        }
+        lastTime = null;
 
-        let lastTime;
         function animateScroll(timestamp) {
-            if (!lastTime) {
-                lastTime = timestamp;
-            }
-
+            if (!lastTime) lastTime = timestamp;
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
-
+            
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
-
-            // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
-            if (endMarkerRect.bottom <= window.innerHeight -100) {
+            if (teleprompter.getBoundingClientRect().bottom <= window.innerHeight) {
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                scrollAnimation = requestAnimationFrame(animateScroll);
+                requestAnimationFrame(animateScroll);
             }
         }
+
+        requestAnimationFrame(animateScroll);
         startEstimatedTimeCountdown();
-        scrollAnimation = requestAnimationFrame(animateScroll);
-    } else {
-        console.log('Attempt to start auto-scroll but it is already running.');
     }
 }
+
+
 
     
 function stopAutoScroll() {
@@ -1042,25 +1028,17 @@ teleprompter.addEventListener('touchend', function(event) {
 let estimatedTimeInterval;
 
 function startEstimatedTimeCountdown() {
-    console.log("Iniciando el countdown estimado...");
-    const scrollHeight = teleprompter.scrollHeight;
-    const clientHeight = teleprompter.clientHeight;
-    const remainingDistance = Math.max(0, scrollHeight - clientHeight - translateYValue);
+    if (estimatedTimeInterval) clearInterval(estimatedTimeInterval);
+    let remainingDistance = teleprompter.scrollHeight - window.innerHeight + translateYValue;
     let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
-
-    console.log(`Tiempo estimado inicial: ${estimatedTimeSeconds}`);
-    if (estimatedTimeInterval) {
-        clearInterval(estimatedTimeInterval); // Limpiar cualquier intervalo existente
-    }
 
     estimatedTimeInterval = setInterval(() => {
         if (estimatedTimeSeconds <= 0) {
             clearInterval(estimatedTimeInterval);
-            displayTime(0); // Mostrar 00:00 o similar cuando el conteo termine
-            console.log("Cuenta regresiva del tiempo estimado detenida.");
+            displayTime(0);
         } else {
+            estimatedTimeSeconds -= 1;
             displayTime(estimatedTimeSeconds);
-            estimatedTimeSeconds -= 1; // Decrementa el contador cada segundo
         }
     }, 1000);
 }
