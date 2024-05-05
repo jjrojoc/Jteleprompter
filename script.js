@@ -240,6 +240,7 @@ function activateSpecialFunction() {
         // Resetear las transformaciones aplicadas para el desplazamiento automático
         teleprompter.style.transform = 'translateY(0px)';
         translateYValue = 0; // Restablece también la variable global usada para la transformación
+        hasReachedEnd = false;
 
         // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
