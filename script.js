@@ -240,7 +240,6 @@ function activateSpecialFunction() {
         // Resetear las transformaciones aplicadas para el desplazamiento automático
         teleprompter.style.transform = 'translateY(0px)';
         translateYValue = 0; // Restablece también la variable global usada para la transformación
-        hasReachedEnd = true;
 
         // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
@@ -448,29 +447,27 @@ function startAutoScroll() {
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        // Comprobamos si el scroll ha llegado al final y fue pausado allí
-        if (translateYValue === undefined || translateYValue <= 0 && !hasReachedEnd) {
+        if (translateYValue === undefined || translateYValue <= 0) {
             translateYValue = window.innerHeight;
         }
 
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         cronometro.start();
-
+        
         lastTime = null;
 
         function animateScroll(timestamp) {
             if (!lastTime) lastTime = timestamp;
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
-
+            
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
             if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
-                hasReachedEnd = true; // Marcamos que el scroll ha llegado al final.
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 scrollAnimation = requestAnimationFrame(animateScroll);
@@ -483,10 +480,6 @@ function startAutoScroll() {
         console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
 }
-
-// Inicializa la variable al cargar la página o al reiniciar completamente el autoscroll
-let hasReachedEnd = false;
-
 
 
 
