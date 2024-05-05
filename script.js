@@ -447,21 +447,35 @@ function startAutoScroll() {
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        translateYValue = window.innerHeight;
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+        if (translateYValue === 0) {
+            // Ajuste inicial para asegurar que todo el contenido sea visible
+            teleprompter.style.height = `${teleprompter.scrollHeight}px`;
+            // Coloca inicialmente el contenido justo por debajo de la pantalla
+            translateYValue = window.innerHeight;
+            teleprompter.style.transform = `translateY(${translateYValue}px)`;
+            cronometro.reset();
+            cronometro.start();
+        }   else {
+            cronometro.start();
+        }
+        
+        startEstimatedTimeCountdown();
 
-        let lastTime = null;
-
+        let lastTime;
         function animateScroll(timestamp) {
-            if (!lastTime) lastTime = timestamp;
+            if (!lastTime) {
+                lastTime = timestamp;
+            }
+
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
 
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            if (translateYValue <= 0) {
-                translateYValue = 0;
-                teleprompter.style.transform = `translateY(${translateYValue}px)`;
+            const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+
+            // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
+            if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
@@ -469,14 +483,11 @@ function startAutoScroll() {
             }
         }
 
-        requestAnimationFrame(animateScroll);
-        startEstimatedTimeCountdown();
+        scrollAnimation = requestAnimationFrame(animateScroll);
     } else {
-        console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
+        console.log('Attempt to start auto-scroll but it is already running.');
     }
 }
-
-
 
     
 function stopAutoScroll() {
@@ -1033,35 +1044,29 @@ teleprompter.addEventListener('touchend', function(event) {
 let estimatedTimeInterval;
 
 function startEstimatedTimeCountdown() {
-    if (estimatedTimeInterval) clearInterval(estimatedTimeInterval);
-    const totalDistance = teleprompter.scrollHeight - window.innerHeight;
-    let remainingTime = (totalDistance - translateYValue + window.innerHeight) / pixelsPerSecond;
+    console.log("Iniciando el countdown estimado...");
+    const scrollHeight = teleprompter.scrollHeight;
+    const clientHeight = teleprompter.clientHeight;
+    const remainingDistance = Math.max(0, scrollHeight - clientHeight - translateYValue);
+    let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
+
+    console.log(`Tiempo estimado inicial: ${estimatedTimeSeconds}`);
+    if (estimatedTimeInterval) {
+        clearInterval(estimatedTimeInterval); // Limpiar cualquier intervalo existente
+    }
 
     estimatedTimeInterval = setInterval(() => {
-        if (remainingTime <= 0) {
+        if (estimatedTimeSeconds <= 0) {
             clearInterval(estimatedTimeInterval);
-            displayTime(0);
+            displayTime(0); // Mostrar 00:00 o similar cuando el conteo termine
+            console.log("Cuenta regresiva del tiempo estimado detenida.");
         } else {
-            remainingTime--;
-            displayTime(remainingTime);
+            displayTime(estimatedTimeSeconds);
+            estimatedTimeSeconds -= 1; // Decrementa el contador cada segundo
         }
     }, 1000);
 }
 
-function displayTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = seconds % 60;
-    let timeString = '';
-
-    if (hours > 0) {
-        timeString = `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-    } else {
-        timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-
-    document.getElementById('durationContainer').textContent = timeString;
-}
 
 function stopEstimatedTimeCountdown() {
     if (estimatedTimeInterval) {
@@ -1070,4 +1075,22 @@ function stopEstimatedTimeCountdown() {
         console.log("Cuenta regresiva del tiempo estimado detenida.");
     }
     displayTime(0); // Resetea el tiempo mostrado a 00:00
+}
+
+
+function displayTime(seconds) {
+    const durationContainer = document.getElementById('durationContainer');
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    let timeString = '';
+
+    if (hours > 0) {
+        timeString += `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    } else {
+        timeString += `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    durationContainer.textContent = timeString;
+    console.log("Mostrando tiempo: ", seconds);
 }
