@@ -273,14 +273,10 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   margin-right: 10px; /* Espacio entre controles */
 }
 
-.tooltip {
-  background-color: #f9f9f9;
-  border: 1px solid #d3d3d3;
-  padding: 5px;
-  border-radius: 6px;
-  position: relative;
-}
-
 .icon {
   width: 20px;  /* Asegúrate de ajustar esto según el tamaño de tu icono */
+}
+
+#scrollSpeedValue, #textSizeValue {
+  color: white; /* Asegura que el texto sea blanco */
 }
