@@ -458,7 +458,7 @@ function startAutoScroll() {
             
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            if (teleprompter.getBoundingClientRect().bottom <= window.innerHeight) {
+            if (teleprompter.getBoundingClientRect().bottom < 0) {
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
