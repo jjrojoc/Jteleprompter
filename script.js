@@ -444,6 +444,7 @@ function startAutoScroll() {
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
+        startEstimatedTimeCountdown();
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
@@ -470,7 +471,6 @@ function startAutoScroll() {
 
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            startEstimatedTimeCountdown();
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
             // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
