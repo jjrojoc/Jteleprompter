@@ -28,7 +28,7 @@ body, html {
   font-family: Helvetica;
   -webkit-tap-highlight-color: transparent; /* <-- this is new */
   line-height: 1.5em; /* Asegúrate de que el teleprompter tiene un line-height definido */
-  transform: translateY(0);
+  /* transform: translateY(0); */
   will-change: transform;  
   contain: none;
   position: relative;
