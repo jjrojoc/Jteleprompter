@@ -443,7 +443,7 @@ function startAutoScroll() {
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
-        translateYValue = window.innerHeight;
+        translateYValue = teleprompter.scrollHeight;  // Asegurarse de que inicia debajo de todo el contenido
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         updateToggleButton(true);
@@ -458,7 +458,8 @@ function startAutoScroll() {
             
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            if (teleprompter.getBoundingClientRect().bottom < 0) {
+            // Asegurar que el contenido inicialmente no visible se muestra correctamente
+            if (teleprompter.getBoundingClientRect().top <= 0 && translateYValue <= 0) {
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
@@ -470,6 +471,7 @@ function startAutoScroll() {
         startEstimatedTimeCountdown();
     }
 }
+
 
 
 
