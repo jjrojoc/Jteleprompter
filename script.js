@@ -453,7 +453,7 @@ function startAutoScroll() {
             // Coloca inicialmente el contenido justo por debajo de la pantalla
             translateYValue = window.innerHeight;
             teleprompter.style.transform = `translateY(${translateYValue}px)`;
-            
+            translateYValue = 0;
             cronometro.reset();
             cronometro.start();
         }   else {
