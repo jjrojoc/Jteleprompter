@@ -454,7 +454,7 @@ function startAutoScroll() {
         }
         updateToggleButton(true);
         toggleControlsDisplay(false);
-
+        translateYValue = teleprompter.scrollHeight;  // Asegurarse de que inicia debajo de todo el contenido
         lastTime = null;
 
         function animateScroll(timestamp) {
