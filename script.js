@@ -1042,7 +1042,9 @@ teleprompter.addEventListener('touchmove', function(event) {
 teleprompter.addEventListener('touchend', function(event) {
     //if (!isAutoScrolling) return;
     isTouching = false;
+    if (isAutoScrolling) {
     startEstimatedTimeCountdown();
+    }
 });
 
 
