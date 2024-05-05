@@ -444,39 +444,48 @@ function startAutoScroll() {
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
-        translateYValue = window.innerHeight;  // Restablece a la altura inicial cada vez
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
-
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        lastTime = null;  // Restablecer el tiempo inicial para la animación
+        if (translateYValue === 0) {
+            // Ajuste inicial para asegurar que todo el contenido sea visible
+            teleprompter.style.height = `${teleprompter.scrollHeight}px`;
+            // Coloca inicialmente el contenido justo por debajo de la pantalla
+            translateYValue = window.innerHeight;
+            teleprompter.style.transform = `translateY(${translateYValue}px)`;
+            cronometro.reset();
+            cronometro.start();
+        }   else {
+            cronometro.start();
+        }
 
+        let lastTime;
         function animateScroll(timestamp) {
-            if (lastTime === null) {
+            if (!lastTime) {
                 lastTime = timestamp;
             }
+
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
 
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
-            if (translateYValue <= 0) {
-                translateYValue = 0;  // Evita valores negativos
-                teleprompter.style.transform = `translateY(0px)`;
+
+            const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+
+            // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
+            if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                requestAnimationFrame(animateScroll);
+                scrollAnimation = requestAnimationFrame(animateScroll);
             }
         }
-
-        requestAnimationFrame(animateScroll);
         startEstimatedTimeCountdown();
+        scrollAnimation = requestAnimationFrame(animateScroll);
     } else {
-        console.log('Intento de iniciar el auto-scroll pero ya está en ejecución.');
+        console.log('Attempt to start auto-scroll but it is already running.');
     }
 }
-
 
     
 function stopAutoScroll() {
