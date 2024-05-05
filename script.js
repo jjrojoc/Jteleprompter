@@ -1031,7 +1031,7 @@ teleprompter.addEventListener('touchstart', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    if (!isTouching && !isAutoScrolling) return;
+    if (!isTouching || !isAutoScrolling) return;
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
 
