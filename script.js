@@ -446,7 +446,11 @@ function startAutoScroll() {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
-        translateYValue = window.innerHeight;
+
+        if (translateYValue === undefined || translateYValue <= 0) {
+            translateYValue = window.innerHeight;
+        }
+    
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         if (translateYValue === 0) {
