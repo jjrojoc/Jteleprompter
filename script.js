@@ -1056,26 +1056,28 @@ let estimatedTimeInterval;
 
 function startEstimatedTimeCountdown() {
     console.log("Iniciando el countdown estimado...");
+    const scrollHeight = teleprompter.scrollHeight;
+    const clientHeight = teleprompter.clientHeight;
+    const remainingDistance = Math.max(0, scrollHeight - clientHeight - translateYValue);
+    let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
+
+    console.log(`Tiempo estimado inicial: ${estimatedTimeSeconds}`);
     if (estimatedTimeInterval) {
         clearInterval(estimatedTimeInterval); // Limpiar cualquier intervalo existente
     }
-
-    const scrollHeight = teleprompter.scrollHeight;
-    const clientHeight = teleprompter.clientHeight;
-    const remainingDistance = scrollHeight - clientHeight - translateYValue;
-    let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
-    console.log("Tiempo estimado inicial:", estimatedTimeSeconds);
 
     estimatedTimeInterval = setInterval(() => {
         if (estimatedTimeSeconds <= 0) {
             clearInterval(estimatedTimeInterval);
             displayTime(0); // Mostrar 00:00 o similar cuando el conteo termine
+            console.log("Cuenta regresiva del tiempo estimado detenida.");
         } else {
             displayTime(estimatedTimeSeconds);
             estimatedTimeSeconds -= 1; // Decrementa el contador cada segundo
         }
     }, 1000);
 }
+
 
 function stopEstimatedTimeCountdown() {
     if (estimatedTimeInterval) {
