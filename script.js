@@ -1015,45 +1015,54 @@ function getSpeedControl() {
 // });
 
 
-teleprompter.addEventListener('touchstart', function(event) {
-    // if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
-    // cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
-    if (teleprompter.contentEditable === "true" || hasReachedEnd) {
-        // Si el contenido es editable, no procesar este evento como parte del auto-scroll
-        return;
+function setupTouchEvents() {
+    let controlBarVisible = document.getElementById('controlBar').style.display !== 'none';
+
+    // Añadir eventos solo si la controlBar está visible y la presentación no ha terminado
+    if (controlBarVisible && !hasReachedEnd) {
+        teleprompter.addEventListener('touchstart', handleTouchStart, { passive: false });
+        teleprompter.addEventListener('touchmove', handleTouchMove, { passive: false });
+        teleprompter.addEventListener('touchend', handleTouchEnd);
+    } else {
+        // Remover eventos si las condiciones no se cumplen
+        teleprompter.removeEventListener('touchstart', handleTouchStart, { passive: false });
+        teleprompter.removeEventListener('touchmove', handleTouchMove, { passive: false });
+        teleprompter.removeEventListener('touchend', handleTouchEnd);
+    }
+}
+
+function handleTouchStart(event) {
+    if (teleprompter.contentEditable === "true") {
+        return;  // No iniciar el toque si el contenido es editable
     }
     isTouching = true;
     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
     event.preventDefault(); // Previene el scroll del navegador
-}, { passive: false });
+}
 
-teleprompter.addEventListener('touchmove', function(event) {
-    if (teleprompter.contentEditable === "true" || hasReachedEnd) {
-        // Si el contenido es editable, no procesar este evento como parte del auto-scroll
-        return;
-    }
-    // if (!isTouching) return;
+function handleTouchMove(event) {
+    if (!isTouching || teleprompter.contentEditable === "true") return;
+
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
-
     translateYValue += deltaY; // Actualiza el valor de translateY
-    teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+    teleprompter.style.transform = `translateY(${translateYValue}px)`;
     startY = touchY; // Actualiza startY para el próximo movimiento
     event.preventDefault();
-}, { passive: false });
+}
 
-teleprompter.addEventListener('touchend', function(event) {
+function handleTouchEnd(event) {
     if (teleprompter.contentEditable === "true") {
-        // No hacer nada si el contenido es editable
         isTouching = false;
-        return;
+        return;  // No hacer nada si el contenido es editable
     }
     isTouching = false;
-    // Recalcular y actualizar el tiempo estimado solo si es necesario y si el auto-scroll está activo
-    if (!hasReachedEnd && isAutoScrolling) {
-        startEstimatedTimeCountdown();
-    }
-});
+    // Recalcular y actualizar el tiempo estimado solo si es necesario
+    startEstimatedTimeCountdown();
+}
+
+// Asegúrate de llamar a setupTouchEvents en el código que maneja cambios de estado, como cambios en hasReachedEnd o visibilidad de controlBar.
+
 
 
 
