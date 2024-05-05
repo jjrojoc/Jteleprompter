@@ -239,6 +239,7 @@ function activateSpecialFunction() {
 
         // Resetear las transformaciones aplicadas para el desplazamiento automático
         teleprompter.style.transform = 'translateY(0px)';
+        teleprompter.scrollTop = 0; // Restablece el scroll interno al principio
         //translateYValue = 0; // Restablece también la variable global usada para la transformación
         hasReachedEnd = true;
         translateYValue = 0;  // Preparar para comenzar de nuevo si es necesario
@@ -1021,30 +1022,29 @@ function getSpeedControl() {
 
 
 // Evento para manejar el auto-scrolling
+teleprompter.addEventListener('touchstart', function(event) {
+    if (!isAutoScrolling) return;
+    isTouching = true;
+    startY = event.touches[0].clientY;
+    event.preventDefault();
+}, { passive: false });
 
-// Detector de eventos de scroll manual
-// Manejo de eventos táctiles
-let touchInProgress = false;
+teleprompter.addEventListener('touchmove', function(event) {
+    if (!isAutoScrolling || !isTouching) return;
+    let touchY = event.touches[0].clientY;
+    let deltaY = touchY - startY;
+    translateYValue += deltaY;
+    teleprompter.style.transform = `translateY(${translateYValue}px)`;
+    startY = touchY;
+    event.preventDefault();
+}, { passive: false });
 
-teleprompter.addEventListener('touchstart', () => {
-    touchInProgress = true;
-    if (isAutoScrolling) {
-        stopAutoScroll();
-        // Restablecer transformación
-        teleprompter.style.transform = '';
-    }
+teleprompter.addEventListener('touchend', function(event) {
+    if (!isAutoScrolling) return;
+    isTouching = false;
+    startEstimatedTimeCountdown();
 });
 
-teleprompter.addEventListener('touchend', () => {
-    touchInProgress = false;
-    // Opcional: Reiniciar autoscroll después de un delay o cuando el usuario deja de interactuar
-    setTimeout(() => {
-        if (!isAutoScrolling && !touchInProgress) {
-            translateYValue = -teleprompter.scrollTop;
-            startAutoScroll();
-        }
-    }, 1000); // Espera 1 segundo antes de reiniciar autoscroll
-});
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
 
