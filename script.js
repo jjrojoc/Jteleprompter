@@ -1023,7 +1023,7 @@ function getSpeedControl() {
 
 
 teleprompter.addEventListener('touchstart', function(event) {
-    // if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
+    if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
     // cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
     isTouching = true;
     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
@@ -1031,7 +1031,7 @@ teleprompter.addEventListener('touchstart', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    if (!isTouching) return;
+    if (!isTouching && !isAutoScrolling) return;
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
 
@@ -1042,7 +1042,14 @@ teleprompter.addEventListener('touchmove', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchend', function(event) {
+    if (!isAutoScrolling) {
+        // Si el contenido es editable o el autoscroll no está activo, simplemente reinicia isTouching
+        isTouching = false;
+        return;
+    }
     isTouching = false;
+    // Recalcular y actualizar el tiempo estimado solo si es necesario
+    startEstimatedTimeCountdown();
 });
 
 
