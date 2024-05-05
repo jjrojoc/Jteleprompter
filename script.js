@@ -444,7 +444,6 @@ function startAutoScroll() {
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
-        startEstimatedTimeCountdown();
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
@@ -486,32 +485,21 @@ function startAutoScroll() {
     } else {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
+        startEstimatedTimeCountdown();
 }
 
     
-
-
-
 function stopAutoScroll() {
-    cancelAnimationFrame(scrollAnimation);  // Detiene la animación en curso
-    isAutoScrolling = false;  // Actualiza el estado de auto-scroll
-    updateToggleButton(false);  // Actualiza el estado del botón de toggle
-    toggleControlsDisplay(true);  // Vuelve a mostrar los controles si están ocultos
-    stopEstimatedTimeCountdown(); // Detiene y limpia el contador de tiempo estimado
-    // No restablezcas el transform aquí, solo detén la animación.
-    // La línea a continuación ha sido comentada o eliminada
-    // document.getElementById('teleprompter').style.transform = 'translateY(0)';
+    if (isAutoScrolling) {
+        isAutoScrolling = false;
+        cancelAnimationFrame(scrollAnimation);
+        stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
+        updateToggleButton(false);
+        toggleControlsDisplay(true);
+        //cronometro.stop();
+        console.log('Autoscroll detenido.');
+    }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
