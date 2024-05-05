@@ -450,6 +450,8 @@ function startAutoScroll() {
         translateYValue = window.innerHeight;
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
+        let lastTime = null;
+
         function animateScroll(timestamp) {
             if (!lastTime) lastTime = timestamp;
             const deltaTime = timestamp - lastTime;
@@ -459,20 +461,21 @@ function startAutoScroll() {
 
             if (translateYValue <= 0) {
                 translateYValue = 0;
+                teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                requestAnimationFrame(animateScroll);
+                scrollAnimation = requestAnimationFrame(animateScroll);
             }
         }
 
-        let lastTime = null;
         requestAnimationFrame(animateScroll);
-        startEstimatedTimeCountdown();  // Asegúrate de que esta función está correctamente definida para reiniciar el contador.
+        startEstimatedTimeCountdown();
     } else {
         console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
 }
+
 
 
     
