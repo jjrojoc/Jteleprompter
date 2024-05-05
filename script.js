@@ -240,7 +240,7 @@ function activateSpecialFunction() {
         // Resetear las transformaciones aplicadas para el desplazamiento automático
         teleprompter.style.transform = 'translateY(0px)';
         translateYValue = 0; // Restablece también la variable global usada para la transformación
-        hasReachedEnd = false;
+        hasReachedEnd = true;
 
         // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
@@ -451,14 +451,11 @@ function startAutoScroll() {
         // Comprobamos si el scroll ha llegado al final y fue pausado allí
         if (translateYValue === undefined || translateYValue <= 0 && !hasReachedEnd) {
             translateYValue = window.innerHeight;
-            cronometro.reset();
-            cronometro.start();
-        } else{
-            cronometro.start();
         }
 
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
+        cronometro.start();
 
         lastTime = null;
 
