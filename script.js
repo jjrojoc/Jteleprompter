@@ -447,9 +447,11 @@ function startAutoScroll() {
 
     if (hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+        
         hasReachedEnd = false;  // Resetear la bandera
     }
+    
+    teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
