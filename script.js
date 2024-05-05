@@ -1036,6 +1036,7 @@ teleprompter.addEventListener('touchmove', function(event) {
 
 teleprompter.addEventListener('touchend', function(event) {
     isTouching = false;
+    startEstimatedTimeCountdown();
 });
 
 
