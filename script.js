@@ -1025,7 +1025,7 @@ teleprompter.addEventListener('touchstart', function(event) {
     if (!isAutoScrolling) return;
     isTouching = true;
     startY = event.touches[0].clientY;
-    event.preventDefault();
+    //event.preventDefault();
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
@@ -1035,7 +1035,7 @@ teleprompter.addEventListener('touchmove', function(event) {
     translateYValue += deltaY;
     teleprompter.style.transform = `translateY(${translateYValue}px)`;
     startY = touchY;
-    event.preventDefault();
+    //event.preventDefault();
 }, { passive: false });
 
 teleprompter.addEventListener('touchend', function(event) {
