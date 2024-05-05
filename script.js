@@ -1043,13 +1043,17 @@ teleprompter.addEventListener('touchmove', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchend', function(event) {
-    if (teleprompter.contentEditable === "true") {
-        // Si el contenido es editable, no procesar este evento como parte del auto-scroll
+    if (teleprompter.contentEditable === "true" || !isAutoScrolling) {
+        // No hacer nada si el contenido es editable o si el auto-scroll no está activo
         return;
     }
     isTouching = false;
-    startEstimatedTimeCountdown();
+    // Recalcular y actualizar el tiempo estimado solo si es necesario
+    if (hasReachedEnd === false) {
+        startEstimatedTimeCountdown();
+    }
 });
+
 
 
 
