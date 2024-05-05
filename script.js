@@ -443,9 +443,15 @@ function startAutoScroll() {
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
-        translateYValue = teleprompter.scrollHeight;  // Asegurarse de que inicia debajo de todo el contenido
+        translateYValue = window.innerHeight;
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
+        if (translateYValue === 0) {
+            cronometro.reset();
+            cronometro.start();
+        } else {
+            cronometro.start();
+        }
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
@@ -458,20 +464,21 @@ function startAutoScroll() {
             
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            // Asegurar que el contenido inicialmente no visible se muestra correctamente
-            if (teleprompter.getBoundingClientRect().top <= 0 && translateYValue <= 0) {
+            const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+
+            // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
+            if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
-                requestAnimationFrame(animateScroll);
+                scrollAnimation = requestAnimationFrame(animateScroll);
             }
         }
 
-        requestAnimationFrame(animateScroll);
+        scrollAnimation = requestAnimationFrame(animateScroll);
         startEstimatedTimeCountdown();
     }
 }
-
 
 
 
