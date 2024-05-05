@@ -630,7 +630,6 @@ function showMenuBar() {
     controlBar.style.display = 'none';
     menuBar.style.display = 'flex';
     teleprompter.contentEditable = "true";
-    setEditableMode();
     initializeEditable();  // Inicializa el editor con autoguardado y deshacer
     //deleteDefaultText();
 }
@@ -1023,42 +1022,30 @@ function getSpeedControl() {
 
 
 // Evento para manejar el auto-scrolling
-let isAutoScrolling = false;
-let isEditableMode = false; // Asegúrate de ajustar esto basado en tu lógica de UI
-let isTouching = false;
-let startY = 0;
-let translateYValue = 0;
-
-// Asumiendo que esta función se llama cuando cambias al modo editable
-function setEditableMode(enabled) {
-    isEditableMode = enabled;
-}
-
 teleprompter.addEventListener('touchstart', function(event) {
-    if (isEditableMode || !isAutoScrolling) return;
+    // if (!isAutoScrolling) return;
     isTouching = true;
     startY = event.touches[0].clientY;
-    event.preventDefault(); // Prevent default only if auto-scrolling
+    event.preventDefault();
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    if (isEditableMode || !isTouching) return;
+    // if (!isAutoScrolling || !isTouching) return;
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY;
     translateYValue += deltaY;
     teleprompter.style.transform = `translateY(${translateYValue}px)`;
     startY = touchY;
-    event.preventDefault(); // Prevent default only if auto-scrolling
+    event.preventDefault();
 }, { passive: false });
 
 teleprompter.addEventListener('touchend', function(event) {
-    if (isEditableMode) return;
+    //if (!isAutoScrolling) return;
     isTouching = false;
     if (isAutoScrolling) {
-        startEstimatedTimeCountdown();
+    startEstimatedTimeCountdown();
     }
 });
-
 
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
