@@ -265,6 +265,10 @@ function activateSpecialFunction() {
     toggleControlsDisplay(true);
     displayTime(0);
 
+    teleprompter.removeEventListener('touchmove', handleTouchMove);
+    teleprompter.removeEventListener('touchstart', handleTouchStart);
+    teleprompter.removeEventListener('touchend', handleTouchEnd);
+
 }
 
 
