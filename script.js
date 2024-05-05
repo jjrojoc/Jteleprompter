@@ -1043,7 +1043,7 @@ teleprompter.addEventListener('touchmove', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchend', function(event) {
-    if (teleprompter.contentEditable === "true" || !isAutoScrolling) {
+    if (teleprompter.contentEditable === "true") {
         // No hacer nada si el contenido es editable o si el auto-scroll no está activo
         return;
     }
