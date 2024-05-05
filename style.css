@@ -260,3 +260,27 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   position: relative;  /* O puedes usar 'absolute' si se ajusta mejor a tu layout */
   z-index: 1010;  /* Asegura que sea mayor que el de controlBar */
 }
+
+
+/* Para los nuevos slider */
+.control-group {
+  display: flex;
+  align-items: center;  /* Centra los elementos verticalmente */
+  flex-wrap: nowrap;    /* Evita que los elementos se envuelvan */
+}
+
+.control {
+  margin-right: 10px; /* Espacio entre controles */
+}
+
+.tooltip {
+  background-color: #f9f9f9;
+  border: 1px solid #d3d3d3;
+  padding: 5px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.icon {
+  width: 20px;  /* Asegúrate de ajustar esto según el tamaño de tu icono */
+}
