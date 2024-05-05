@@ -446,8 +446,8 @@ function adjustSpeed(speed) {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
-    teleprompter.style.height = `${teleprompter.scrollHeight}px`;
-
+    //teleprompter.style.height = `${teleprompter.scrollHeight}px`;
+    updateTeleprompterHeight();
     if (hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
@@ -505,9 +505,16 @@ function stopAutoScroll() {
 
         //cronometro.stop();
         console.log('Autoscroll detenido.');
+        updateTeleprompterHeight();
 }
 
 
+function updateTeleprompterHeight() {
+    const teleprompter = document.getElementById('teleprompter');
+    teleprompter.style.height = `auto`; // Ajustar a 'auto' antes de calcular
+    const newHeight = Math.max(teleprompter.scrollHeight, window.innerHeight);
+    teleprompter.style.height = `${newHeight}px`;
+}
 
 
 
