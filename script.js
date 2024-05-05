@@ -1018,7 +1018,7 @@ function getSpeedControl() {
 teleprompter.addEventListener('touchstart', function(event) {
     // if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
     // cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
-    if (teleprompter.contentEditable === "true") {
+    if (teleprompter.contentEditable === "true" || hasReachedEnd) {
         // Si el contenido es editable, no procesar este evento como parte del auto-scroll
         return;
     }
@@ -1028,7 +1028,7 @@ teleprompter.addEventListener('touchstart', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    if (teleprompter.contentEditable === "true") {
+    if (teleprompter.contentEditable === "true" || hasReachedEnd) {
         // Si el contenido es editable, no procesar este evento como parte del auto-scroll
         return;
     }
