@@ -444,7 +444,7 @@ function startAutoScroll() {
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
-        translateYValue = window.innerHeight;  // Asegura posición inicial correcta
+        translateYValue = window.innerHeight;  // Restablece a la altura inicial cada vez
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         updateToggleButton(true);
@@ -474,18 +474,6 @@ function startAutoScroll() {
         startEstimatedTimeCountdown();
     } else {
         console.log('Intento de iniciar el auto-scroll pero ya está en ejecución.');
-    }
-}
-
-function stopAutoScroll() {
-    if (isAutoScrolling) {
-        isAutoScrolling = false;
-        cancelAnimationFrame(scrollAnimation);
-        scrollAnimation = null;
-        updateToggleButton(false);
-        toggleControlsDisplay(true);
-        stopEstimatedTimeCountdown();
-        console.log("Auto-scroll detenido.");
     }
 }
 
