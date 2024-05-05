@@ -453,7 +453,6 @@ function startAutoScroll() {
             // Coloca inicialmente el contenido justo por debajo de la pantalla
             translateYValue = window.innerHeight;
             teleprompter.style.transform = `translateY(${translateYValue}px)`;
-            translateYValue = 0;
             cronometro.reset();
             cronometro.start();
         }   else {
@@ -471,6 +470,7 @@ function startAutoScroll() {
 
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
+            startEstimatedTimeCountdown();
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
             // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
@@ -486,7 +486,6 @@ function startAutoScroll() {
     } else {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
-    startEstimatedTimeCountdown();
 }
 
     
