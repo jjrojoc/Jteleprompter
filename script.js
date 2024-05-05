@@ -447,27 +447,32 @@ function startAutoScroll() {
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        if (translateYValue === undefined || translateYValue <= 0) {
+        // Comprobamos si el scroll ha llegado al final y fue pausado allí
+        if (translateYValue === undefined || translateYValue <= 0 && !hasReachedEnd) {
             translateYValue = window.innerHeight;
+            cronometro.reset();
+            cronometro.start();
+        } else{
+            cronometro.start();
         }
 
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
-        cronometro.start();
-        
+
         lastTime = null;
 
         function animateScroll(timestamp) {
             if (!lastTime) lastTime = timestamp;
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
-            
+
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
             if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
+                hasReachedEnd = true; // Marcamos que el scroll ha llegado al final.
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 scrollAnimation = requestAnimationFrame(animateScroll);
@@ -480,6 +485,10 @@ function startAutoScroll() {
         console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
 }
+
+// Inicializa la variable al cargar la página o al reiniciar completamente el autoscroll
+let hasReachedEnd = false;
+
 
 
 
