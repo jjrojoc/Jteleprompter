@@ -458,9 +458,9 @@ function startAutoScroll() {
         }   else {
             cronometro.start();
         }
-
+        translateYValue.value = window.innerHeight;
         startEstimatedTimeCountdown();
-        
+
         let lastTime;
         function animateScroll(timestamp) {
             if (!lastTime) {
