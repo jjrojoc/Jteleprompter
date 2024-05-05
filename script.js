@@ -450,15 +450,10 @@ function startAutoScroll() {
         if (translateYValue === undefined || translateYValue <= 0) {
             translateYValue = window.innerHeight;
         }
-    
+
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
-        if (translateYValue === 0) {
-            cronometro.reset();
-            cronometro.start();
-        } else {
-            cronometro.start();
-        }
+        cronometro.start();
         
         lastTime = null;
 
@@ -471,7 +466,6 @@ function startAutoScroll() {
 
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
-            // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
             if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
             } else {
@@ -482,23 +476,26 @@ function startAutoScroll() {
 
         scrollAnimation = requestAnimationFrame(animateScroll);
         startEstimatedTimeCountdown();
+    } else {
+        console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
 }
+
 
 
 
     
 function stopAutoScroll() {
-    if (isAutoScrolling) {
-        isAutoScrolling = false;
+    isAutoScrolling = false;
+    updateToggleButton(false);
+    toggleControlsDisplay(true);
+    if (scrollAnimation) {
         cancelAnimationFrame(scrollAnimation);
-        stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
-        updateToggleButton(false);
-        toggleControlsDisplay(true);
-        //cronometro.stop();
-        console.log('Autoscroll detenido.');
+        scrollAnimation = null;
     }
+    // No resetear translateYValue aquí
 }
+
 
 
 
