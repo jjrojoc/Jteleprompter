@@ -432,7 +432,7 @@ let scrollAnimation;  // ID de la animación
 let translateYValue = 0;
 let pixelsPerSecond = 0;  // Define la velocidad inicial
 //let updateDurationInterval; // intervalo para estimada duracion
-let hasReachedEnd = false;
+let hasReachedEnd = true;
 
 function adjustSpeed(speed) {
     const minSpeed = 0.5;
@@ -447,7 +447,7 @@ function startAutoScroll() {
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
     teleprompter.style.height = `${teleprompter.scrollHeight}px`;
 
-    if (translateYValue = 0 || hasReachedEnd) {
+    if (hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
         hasReachedEnd = false;  // Resetear la bandera
@@ -498,6 +498,11 @@ function stopAutoScroll() {
         stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
         updateToggleButton(false);
         toggleControlsDisplay(true);
+        const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+        if (!(endMarkerRect.bottom <= window.innerHeight - 100)) {
+            hasReachedEnd = false; // Indica que no se ha alcanzado el final
+        }
+
         //cronometro.stop();
         console.log('Autoscroll detenido.');
     }
