@@ -239,8 +239,10 @@ function activateSpecialFunction() {
 
         // Resetear las transformaciones aplicadas para el desplazamiento automático
         teleprompter.style.transform = 'translateY(0px)';
-        translateYValue = 0; // Restablece también la variable global usada para la transformación
-
+        //translateYValue = 0; // Restablece también la variable global usada para la transformación
+        if (hasReachedEnd) {
+            translateYValue = window.innerHeight;  // Preparar para comenzar de nuevo si es necesario
+        }
         // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
         //console.log('Content restored:', originalContent);
@@ -427,7 +429,8 @@ function updateToggleButton(isActive) {
 let scrollAnimation;  // ID de la animación
 let translateYValue = 0;
 let pixelsPerSecond = 0;  // Define la velocidad inicial
-let updateDurationInterval; // intervalo para estimada duracion
+//let updateDurationInterval; // intervalo para estimada duracion
+let hasReachedEnd = false;
 
 function adjustSpeed(speed) {
     const minSpeed = 0.5;
@@ -442,16 +445,16 @@ function startAutoScroll() {
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
     teleprompter.style.height = `${teleprompter.scrollHeight}px`;
 
+    if (hasReachedEnd) {
+        translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+        hasReachedEnd = false;  // Resetear la bandera
+    }
+
     if (!isAutoScrolling) {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
-
-        if (translateYValue === undefined || translateYValue <= 0) {
-            translateYValue = window.innerHeight;
-        }
-
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         cronometro.start();
         
@@ -468,6 +471,7 @@ function startAutoScroll() {
 
             if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
+                hasReachedEnd = true;
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
                 scrollAnimation = requestAnimationFrame(animateScroll);
