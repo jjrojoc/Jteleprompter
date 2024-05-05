@@ -258,7 +258,6 @@ function activateSpecialFunction() {
     // Opcionalmente, restablecer cualquier otro UI o estado de la aplicación
     updateToggleButton(false);
     toggleControlsDisplay(true);
-    stopEstimatedTimeCountdown();
     displayTime(0);
 
 }
@@ -454,7 +453,7 @@ function startAutoScroll() {
             // Coloca inicialmente el contenido justo por debajo de la pantalla
             translateYValue = window.innerHeight;
             teleprompter.style.transform = `translateY(${translateYValue}px)`;
-            startEstimatedTimeCountdown();
+            
             cronometro.reset();
             cronometro.start();
         }   else {
@@ -487,6 +486,7 @@ function startAutoScroll() {
     } else {
         console.log('Attempt to start auto-scroll but it is already running.');
     }
+    startEstimatedTimeCountdown();
 }
 
     
@@ -1056,6 +1056,7 @@ teleprompter.addEventListener('touchend', function(event) {
 let estimatedTimeInterval;
 
 function startEstimatedTimeCountdown() {
+    console.log("Iniciando el countdown estimado...");
     if (estimatedTimeInterval) {
         clearInterval(estimatedTimeInterval); // Limpiar cualquier intervalo existente
     }
@@ -1064,6 +1065,7 @@ function startEstimatedTimeCountdown() {
     const clientHeight = teleprompter.clientHeight;
     const remainingDistance = scrollHeight - clientHeight - translateYValue;
     let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
+    console.log("Tiempo estimado inicial:", estimatedTimeSeconds);
 
     estimatedTimeInterval = setInterval(() => {
         if (estimatedTimeSeconds <= 0) {
@@ -1100,4 +1102,5 @@ function displayTime(seconds) {
     }
 
     durationContainer.textContent = timeString;
+    console.log("Mostrando tiempo: ", seconds);
 }
