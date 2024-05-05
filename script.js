@@ -450,13 +450,14 @@ function startAutoScroll() {
         
         hasReachedEnd = false;  // Resetear la bandera
     }
+
     
-    teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         cronometro.start();
         
