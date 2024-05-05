@@ -241,7 +241,7 @@ function activateSpecialFunction() {
         teleprompter.style.transform = 'translateY(0px)';
         //translateYValue = 0; // Restablece también la variable global usada para la transformación
         hasReachedEnd = true;
-        translateYValue = window.innerHeight;  // Preparar para comenzar de nuevo si es necesario
+        translateYValue = 0;  // Preparar para comenzar de nuevo si es necesario
 
         teleprompter.removeAttribute('data-original-content');
         }
