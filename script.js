@@ -440,44 +440,42 @@ function adjustSpeed(speed) {
 function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     const speedControl = document.getElementById('speedControl');
-    adjustSpeed(parseInt(speedControl.value));
+    adjustSpeed(parseInt(speedControl.value)); // Asegúrate de que esto esté definiendo correctamente `pixelsPerSecond`
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
 
-        // Asegúrate de configurar correctamente translateYValue como un número
-        translateYValue = window.innerHeight;
+        translateYValue = window.innerHeight; // Iniciar desde abajo de la pantalla
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         cronometro.reset();
         cronometro.start();
 
+        function animateScroll(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
+
+            translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
+
+            // Asegúrate de que `translateYValue` no sea negativo o se mueva más allá del inicio del contenido
+            if (translateYValue < 0) {
+                translateYValue = 0;
+                stopAutoScroll(); // Asegúrate de detener la animación y limpiar adecuadamente
+            } else {
+                teleprompter.style.transform = `translateY(${translateYValue}px)`;
+                scrollAnimation = requestAnimationFrame(animateScroll);
+            }
+        }
+
+        let lastTime = null;
         scrollAnimation = requestAnimationFrame(animateScroll);
-        startEstimatedTimeCountdown();  // Inicia el cálculo del tiempo estimado aquí
+        startEstimatedTimeCountdown();
     } else {
         console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
-}
-
-
-function animateScroll(timestamp) {
-    if (!lastTime) {
-        lastTime = timestamp;
-    }
-
-    const deltaTime = timestamp - lastTime;
-    lastTime = timestamp;
-
-    translateYValue -= (pixelsPerSecond * deltaTime) / 1000; // Actualiza translateYValue
-
-    teleprompter.style.transform = `translateY(${translateYValue}px)`;
-    if (translateYValue <= 0) {
-        stopAutoScroll();
-        return; // Detiene la animación cuando el contenido se ha desplazado completamente
-    }
-    scrollAnimation = requestAnimationFrame(animateScroll);
 }
 
 
