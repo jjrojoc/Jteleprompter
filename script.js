@@ -444,7 +444,6 @@ function startAutoScroll() {
     const teleprompter = document.getElementById('teleprompter');
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
     teleprompter.style.height = `${teleprompter.scrollHeight}px`;
-    setupTouchEvents();
 
     if (hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
@@ -497,7 +496,6 @@ function stopAutoScroll() {
         stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
         updateToggleButton(false);
         toggleControlsDisplay(true);
-        setupTouchEvents();
         //cronometro.stop();
         console.log('Autoscroll detenido.');
     }
@@ -620,7 +618,6 @@ function showControlBar() {
     menuBar.style.display = 'none';
     controlBar.style.display = 'flex';
     teleprompter.contentEditable = "false";
-    setupTouchEvents();
 }
 
 function showMenuBar() {
@@ -628,7 +625,6 @@ function showMenuBar() {
     menuBar.style.display = 'flex';
     teleprompter.contentEditable = "true";
     initializeEditable();  // Inicializa el editor con autoguardado y deshacer
-    setupTouchEvents();
     //deleteDefaultText();
 }
 
@@ -1017,65 +1013,6 @@ function getSpeedControl() {
 // teleprompter.addEventListener('touchend', function(event) {
 //     isTouching = false;
 // });
-
-
-function setupTouchEvents() {
-    let controlBarVisible = document.getElementById('controlBar').style.display !== 'none';
-
-    // Añadir o remover eventos basado en si la barra de control está visible y la presentación aún no ha terminado
-    if (controlBarVisible && !hasReachedEnd) {
-        addTouchEvents();
-    } else {
-        removeTouchEvents();
-    }
-}
-
-function addTouchEvents() {
-    teleprompter.addEventListener('touchstart', handleTouchStart, { passive: false });
-    teleprompter.addEventListener('touchmove', handleTouchMove, { passive: false });
-    teleprompter.addEventListener('touchend', handleTouchEnd);
-}
-
-function removeTouchEvents() {
-    teleprompter.removeEventListener('touchstart', handleTouchStart, { passive: false });
-    teleprompter.removeEventListener('touchmove', handleTouchMove, { passive: false });
-    teleprompter.removeEventListener('touchend', handleTouchEnd);
-}
-
-function handleTouchStart(event) {
-    if (teleprompter.contentEditable === "true") {
-        return;  // No iniciar el toque si el contenido es editable
-    }
-    isTouching = true;
-    startY = event.touches[0].clientY; // Almacena la posición inicial de Y
-    event.preventDefault(); // Previene el scroll del navegador
-}
-
-function handleTouchMove(event) {
-    if (!isTouching || teleprompter.contentEditable === "true") return;
-
-    let touchY = event.touches[0].clientY;
-    let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
-    translateYValue += deltaY; // Actualiza el valor de translateY
-    teleprompter.style.transform = `translateY(${translateYValue}px)`;
-    startY = touchY; // Actualiza startY para el próximo movimiento
-    event.preventDefault();
-}
-
-function handleTouchEnd(event) {
-    if (teleprompter.contentEditable === "true") {
-        isTouching = false;
-        return;  // No hacer nada si el contenido es editable
-    }
-    isTouching = false;
-    // Recalcular y actualizar el tiempo estimado solo si es necesario
-    if (!hasReachedEnd) {
-        startEstimatedTimeCountdown();
-    }
-}
-
-// Asegúrate de llamar a setupTouchEvents en el código que maneja cambios de estado, como cambios en hasReachedEnd o visibilidad de controlBar.
-
 
 
 
