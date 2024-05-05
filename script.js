@@ -1023,24 +1023,28 @@ function getSpeedControl() {
 // Evento para manejar el auto-scrolling
 
 // Detector de eventos de scroll manual
-teleprompter.addEventListener('wheel', handleManualScroll, { passive: true });
+// Manejo de eventos táctiles
+let touchInProgress = false;
 
-function handleManualScroll() {
+teleprompter.addEventListener('touchstart', () => {
+    touchInProgress = true;
     if (isAutoScrolling) {
-        // Detener autoscroll temporalmente
         stopAutoScroll();
         // Restablecer transformación
         teleprompter.style.transform = '';
     }
+});
 
+teleprompter.addEventListener('touchend', () => {
+    touchInProgress = false;
     // Opcional: Reiniciar autoscroll después de un delay o cuando el usuario deja de interactuar
     setTimeout(() => {
-        if (!isAutoScrolling) {
+        if (!isAutoScrolling && !touchInProgress) {
             translateYValue = -teleprompter.scrollTop;
             startAutoScroll();
         }
-    }, 3000); // Espera 3 segundos antes de reiniciar autoscroll
-}
+    }, 1000); // Espera 1 segundo antes de reiniciar autoscroll
+});
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
 
