@@ -1018,13 +1018,21 @@ function getSpeedControl() {
 teleprompter.addEventListener('touchstart', function(event) {
     // if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
     // cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
+    if (teleprompter.contentEditable === "true") {
+        // Si el contenido es editable, no procesar este evento como parte del auto-scroll
+        return;
+    }
     isTouching = true;
     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
     event.preventDefault(); // Previene el scroll del navegador
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    if (!isTouching) return;
+    if (teleprompter.contentEditable === "true") {
+        // Si el contenido es editable, no procesar este evento como parte del auto-scroll
+        return;
+    }
+    // if (!isTouching) return;
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
 
@@ -1035,6 +1043,10 @@ teleprompter.addEventListener('touchmove', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchend', function(event) {
+    if (teleprompter.contentEditable === "true") {
+        // Si el contenido es editable, no procesar este evento como parte del auto-scroll
+        return;
+    }
     isTouching = false;
     startEstimatedTimeCountdown();
 });
