@@ -56,6 +56,7 @@ if ('serviceWorker' in navigator) {
 let isAutoScrolling = false; // Estado inicial del autoscroll
 let scrollInterval = null;
 let lastScrollTop = 0;
+setUpEventListeners();
 
 const teleprompter = document.getElementById('teleprompter');
 const speedControl = document.getElementById('speedControl');
@@ -457,7 +458,6 @@ function startAutoScroll() {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
-        updateEventListeners();
 
         cronometro.start();
         
@@ -498,7 +498,6 @@ function stopAutoScroll() {
         stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
         updateToggleButton(false);
         toggleControlsDisplay(true);
-        updateEventListeners();
         const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
         if (!(endMarkerRect.bottom <= window.innerHeight - 100)) {
             hasReachedEnd = false; // Indica que no se ha alcanzado el final
@@ -1023,39 +1022,31 @@ function getSpeedControl() {
 
 
 // Evento para manejar el auto-scrolling
-function updateEventListeners() {
-    if (isAutoScrolling) {
-        // Agrega manejadores de eventos para auto-scrolling
-        teleprompter.addEventListener('touchstart', handleAutoScrollStart, { passive: false });
-        teleprompter.addEventListener('touchmove', handleAutoScrollMove, { passive: false });
-        teleprompter.addEventListener('touchend', handleAutoScrollEnd);
-    } else {
-        // Elimina manejadores de eventos para auto-scrolling
-        teleprompter.removeEventListener('touchstart', handleAutoScrollStart, { passive: false });
-        teleprompter.removeEventListener('touchmove', handleAutoScrollMove, { passive: false });
-        teleprompter.removeEventListener('touchend', handleAutoScrollEnd);
-    }
+function setUpEventListeners() {
+    teleprompter.addEventListener('touchstart', function(event) {
+        if (!isAutoScrolling) return;
+        isTouching = true;
+        startY = event.touches[0].clientY;
+        event.preventDefault();
+    }, { passive: false });
+
+    teleprompter.addEventListener('touchmove', function(event) {
+        if (!isAutoScrolling || !isTouching) return;
+        let touchY = event.touches[0].clientY;
+        let deltaY = touchY - startY;
+        translateYValue += deltaY;
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
+        startY = touchY;
+        event.preventDefault();
+    }, { passive: false });
+
+    teleprompter.addEventListener('touchend', function(event) {
+        if (!isAutoScrolling) return;
+        isTouching = false;
+        startEstimatedTimeCountdown();
+    });
 }
 
-function handleAutoScrollStart(event) {
-    isTouching = true;
-    startY = event.touches[0].clientY;
-    event.preventDefault(); // Previniendo el scroll del navegador
-}
-
-function handleAutoScrollMove(event) {
-    if (!isTouching) return;
-    let touchY = event.touches[0].clientY;
-    let deltaY = touchY - startY;
-    translateYValue += deltaY;
-    teleprompter.style.transform = `translateY(${translateYValue}px)`;
-    startY = touchY;
-    event.preventDefault();
-}
-
-function handleAutoScrollEnd(event) {
-    isTouching = false;
-}
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
 
