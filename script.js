@@ -448,7 +448,8 @@ function startAutoScroll() {
         toggleControlsDisplay(false);
 
         if (translateYValue === undefined || translateYValue <= 0) {
-            teleprompter.style.transform = `translateY(${window.innerHeight}px)`;
+            screenviewer = window.innerHeight;
+            teleprompter.style.transform = `translateY(${screenviewer}px)`;
         }
     
         
@@ -468,6 +469,7 @@ function startAutoScroll() {
             lastTime = timestamp;
             
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
+            console.log('translateYValue is: ', translateYValue)
 
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
