@@ -446,14 +446,21 @@ function startAutoScroll() {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
-
+        originalTranslateValue = translateYValue;
         if (translateYValue === undefined || translateYValue <= 0) {
             translateYValue = window.innerHeight;
+            teleprompter.style.transform = `translateY(${translateYValue}px)`;
+            translateYValue = originalTranslateValue;
         }
-
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
-
-        cronometro.start();
+    
+        
+        
+        if (translateYValue === 0) {
+            cronometro.reset();
+            cronometro.start();
+        } else {
+            cronometro.start();
+        }
         
         lastTime = null;
 
@@ -466,6 +473,7 @@ function startAutoScroll() {
 
             const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
 
+            // Detiene el desplazamiento si el marcador final ha pasado por completo la parte inferior de la pantalla
             if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
             } else {
@@ -476,26 +484,23 @@ function startAutoScroll() {
 
         scrollAnimation = requestAnimationFrame(animateScroll);
         startEstimatedTimeCountdown();
-    } else {
-        console.log('Intento de iniciar el autoscroll pero ya está en ejecución.');
     }
 }
-
 
 
 
     
 function stopAutoScroll() {
-    isAutoScrolling = false;
-    updateToggleButton(false);
-    toggleControlsDisplay(true);
-    if (scrollAnimation) {
+    if (isAutoScrolling) {
+        isAutoScrolling = false;
         cancelAnimationFrame(scrollAnimation);
-        scrollAnimation = null;
+        stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
+        updateToggleButton(false);
+        toggleControlsDisplay(true);
+        //cronometro.stop();
+        console.log('Autoscroll detenido.');
     }
-    // No resetear translateYValue aquí
 }
-
 
 
 
