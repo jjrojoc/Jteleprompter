@@ -241,7 +241,7 @@ function activateSpecialFunction() {
         teleprompter.style.transform = 'translateY(0px)';
         //translateYValue = 0; // Restablece también la variable global usada para la transformación
         if (hasReachedEnd) {
-            translateYValue = 0;  // Preparar para comenzar de nuevo si es necesario
+            translateYValue = window.innerHeight;  // Preparar para comenzar de nuevo si es necesario
         }
         // Eliminar el atributo para evitar futuros errores si se resetea nuevamente
         teleprompter.removeAttribute('data-original-content');
@@ -447,17 +447,14 @@ function startAutoScroll() {
 
     if (hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
-        
+        teleprompter.style.transform = `translateY(${translateYValue}px)`;
         hasReachedEnd = false;  // Resetear la bandera
     }
-
-    
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
         updateToggleButton(true);
         toggleControlsDisplay(false);
-        teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
         cronometro.start();
         
@@ -1018,7 +1015,29 @@ function getSpeedControl() {
 // });
 
 
+teleprompter.addEventListener('touchstart', function(event) {
+    // if (!isAutoScrolling) return;  // Solo actuar si el auto-scroll está activo
+    // cancelAnimationFrame(scrollAnimation); // Pausar el auto-scrolling
+    isTouching = true;
+    startY = event.touches[0].clientY; // Almacena la posición inicial de Y
+    event.preventDefault(); // Previene el scroll del navegador
+}, { passive: false });
 
+teleprompter.addEventListener('touchmove', function(event) {
+    if (!isTouching) return;
+    let touchY = event.touches[0].clientY;
+    let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
+
+    translateYValue += deltaY; // Actualiza el valor de translateY
+    teleprompter.style.transform = `translateY(-${translateYValue}px)`;
+    startY = touchY; // Actualiza startY para el próximo movimiento
+    event.preventDefault();
+}, { passive: false });
+
+teleprompter.addEventListener('touchend', function(event) {
+    isTouching = false;
+    // startEstimatedTimeCountdown();
+});
 
 
 
