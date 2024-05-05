@@ -447,7 +447,7 @@ function startAutoScroll() {
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
     teleprompter.style.height = `${teleprompter.scrollHeight}px`;
 
-    if (hasReachedEnd) {
+    if (translateYValue = 0 || hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
         hasReachedEnd = false;  // Resetear la bandera
