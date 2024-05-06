@@ -684,21 +684,26 @@ document.getElementById('boldButton').addEventListener('click', function() {
     if (selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
         if (!range.collapsed) {
-            // Si hay texto seleccionado, aplica o quita negrita.
-            const span = document.createElement('span');
-            span.style.fontWeight = 'bold';
-            range.surroundContents(span);
+            toggleBoldOnRange(range);
         } else {
             // No hay texto seleccionado, aplica negrita a todo el texto.
             const teleprompter = document.getElementById('teleprompter');
-            if (teleprompter.style.fontWeight === 'bold' || teleprompter.style.fontWeight === '700') {
-                teleprompter.style.fontWeight = 'normal';
-            } else {
-                teleprompter.style.fontWeight = 'bold';
-            }
+            teleprompter.style.fontWeight = teleprompter.style.fontWeight === 'bold' ? 'normal' : 'bold';
         }
     }
 });
+
+function toggleBoldOnRange(range) {
+    const fragment = range.extractContents();
+    const span = document.createElement('span');
+    span.style.fontWeight = 'bold';
+    span.appendChild(fragment);
+    range.insertNode(span);
+
+    // Normaliza para evitar duplicados y problemas de renderizado
+    span.parentNode.normalize();
+}
+
 
 
 ////// Original, este funciona bien /////
