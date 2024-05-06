@@ -1045,34 +1045,23 @@ teleprompter.addEventListener('touchstart', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    if (!isAutoScrolling) {
-        return; // No ajustar durante el auto-scroll
-    }
-
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY;
-    let potentialNewTranslateY = translateYValue + deltaY;
 
-    // Ajusta los límites de translateY mientras el auto-scroll está activo
-    let maxTranslateY = 0; // No permitir mover hacia arriba más allá del inicio
-    let minTranslateY = -teleprompter.scrollHeight; // La altura completa del teleprompter como límite inferior
+    // Calcula el nuevo valor de translateY, pero no lo asignes aún
+    let newTranslateYValue = translateYValue + deltaY;
 
-    // Considerar la altura de la ventana para permitir empezar desde abajo
-    minTranslateY += window.innerHeight;
+    // Limita el nuevo valor para que el contenido no se desplace más allá de sus límites
+    newTranslateYValue = Math.min(0, newTranslateYValue); // Evita que se mueva hacia arriba más allá del inicio
+    newTranslateYValue = Math.max(window.innerHeight - teleprompter.scrollHeight, newTranslateYValue); // Evita que se mueva hacia abajo más allá del final
 
-    // Aplicar un buffer si es necesario, para permitir algo de movimiento fuera de los bordes mientras auto-scroll está activo
-    if (isAutoScrolling) {
-        const buffer = 100; // Permite 100px extra de movimiento hacia abajo
-        minTranslateY -= buffer;
-    }
-
-    // Aplicar los límites calculados
-    translateYValue = Math.min(maxTranslateY, Math.max(minTranslateY, potentialNewTranslateY));
+    // Asigna el valor ajustado de translateYValue y actualiza la transformación
+    translateYValue = newTranslateYValue;
     teleprompter.style.transform = `translateY(${translateYValue}px)`;
+
     startY = touchY;
     event.preventDefault();
 }, { passive: false });
-
 
 
 teleprompter.addEventListener('touchend', function(event) {
