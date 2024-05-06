@@ -618,6 +618,7 @@ function initializeEditable() {
 
     teleprompter.addEventListener('input', () => {
         if (!isUndoRedo) {  // Solo guarda los cambios iniciados por el usuario
+            updateTeleprompterHeight();
             localStorage.setItem('savedScript', teleprompter.innerHTML);
             undoStack.push(teleprompter.innerHTML);
             redoStack = [];
