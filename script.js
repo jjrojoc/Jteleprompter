@@ -611,6 +611,11 @@ function initializeEditable() {
     let redoStack = [];
     let isUndoRedo = false; // Bandera para controlar si el cambio es por deshacer/rehacer
 
+    // Cargar el estado inicial desde localStorage si existe
+    if (localStorage.getItem('savedScript')) {
+        teleprompter.innerHTML = localStorage.getItem('savedScript');
+    }
+
     teleprompter.addEventListener('input', () => {
         if (!isUndoRedo) {  // Solo guarda los cambios iniciados por el usuario
             localStorage.setItem('savedScript', teleprompter.innerHTML);
@@ -625,6 +630,7 @@ function initializeEditable() {
             redoStack.push(undoStack.pop());
             isUndoRedo = true;  // Indica que el cambio es por deshacer
             teleprompter.innerHTML = undoStack[undoStack.length - 1];
+            localStorage.setItem('savedScript', teleprompter.innerHTML); // Actualiza localStorage
         }
     });
 
@@ -634,9 +640,11 @@ function initializeEditable() {
             undoStack.push(redoState);
             isUndoRedo = true;  // Indica que el cambio es por rehacer
             teleprompter.innerHTML = redoState;
+            localStorage.setItem('savedScript', teleprompter.innerHTML); // Actualiza localStorage
         }
     });
 }
+
 
 
 
