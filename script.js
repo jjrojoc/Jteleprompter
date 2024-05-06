@@ -452,6 +452,7 @@ function startAutoScroll() {
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
     //teleprompter.style.height = `${teleprompter.scrollHeight}px`;
     updateTeleprompterHeight();
+    teleprompter.style.overflow = 'hidden';
     if (hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
@@ -510,6 +511,7 @@ function stopAutoScroll() {
         //cronometro.stop();
         console.log('Autoscroll detenido.');
         updateTeleprompterHeight();
+        teleprompter.style.overflow = 'auto';
 }
 
 
