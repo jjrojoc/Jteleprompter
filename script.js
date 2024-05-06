@@ -521,6 +521,7 @@ function updateTeleprompterHeight() {
     teleprompter.style.height = `auto`; // Ajustar a 'auto' antes de calcular
     const newHeight = Math.max(teleprompter.scrollHeight, window.innerHeight);
     teleprompter.style.height = `${newHeight}px`;
+    teleprompter.offsetHeight;
 }
 
 
@@ -655,6 +656,7 @@ function showControlBar() {
     menuBar.style.display = 'none';
     controlBar.style.display = 'flex';
     teleprompter.contentEditable = "false";
+    updateTeleprompterHeight();
 }
 
 function showMenuBar() {
