@@ -795,6 +795,8 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
             }
         });
     }
+    updateTeleprompterHeight();
+    const maxScroll = window.innerHeight - teleprompter.scrollHeight;
     autoguardado();
 });
 
