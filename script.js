@@ -679,6 +679,26 @@ document.getElementById('resetButton').addEventListener('click', function() {
 });
 
 
+document.getElementById('boldButton').addEventListener('click', function() {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        if (!range.collapsed) {
+            // Si hay texto seleccionado, aplica o quita negrita.
+            const span = document.createElement('span');
+            span.style.fontWeight = 'bold';
+            range.surroundContents(span);
+        } else {
+            // No hay texto seleccionado, aplica negrita a todo el texto.
+            const teleprompter = document.getElementById('teleprompter');
+            if (teleprompter.style.fontWeight === 'bold' || teleprompter.style.fontWeight === '700') {
+                teleprompter.style.fontWeight = 'normal';
+            } else {
+                teleprompter.style.fontWeight = 'bold';
+            }
+        }
+    }
+});
 
 
 ////// Original, este funciona bien /////
