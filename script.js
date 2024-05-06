@@ -1072,7 +1072,6 @@ function handleScrollEvent() {
 }
 
 // Añadir evento de scroll para manejar cuando se hace scroll manual
-const teleprompter = document.getElementById('teleprompter');
 teleprompter.addEventListener('scroll', handleScrollEvent);
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
