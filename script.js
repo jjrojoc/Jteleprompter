@@ -694,32 +694,6 @@ document.getElementById('resetButton').addEventListener('click', function() {
 });
 
 
-document.getElementById('boldButton').addEventListener('click', function() {
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        if (!range.collapsed) {
-            toggleBoldOnRange(range);
-        } else {
-            // No hay texto seleccionado, aplica negrita a todo el texto.
-            const teleprompter = document.getElementById('teleprompter');
-            teleprompter.style.fontWeight = teleprompter.style.fontWeight === 'bold' ? 'normal' : 'bold';
-        }
-    }
-});
-
-function toggleBoldOnRange(range) {
-    const fragment = range.extractContents();
-    const span = document.createElement('span');
-    span.style.fontWeight = 'bold';
-    span.appendChild(fragment);
-    range.insertNode(span);
-
-    // Normaliza para evitar duplicados y problemas de renderizado
-    span.parentNode.normalize();
-}
-
-
 
 ////// Original, este funciona bien /////
 document.getElementById('teleprompter').addEventListener('paste', function(e) {
