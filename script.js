@@ -1059,6 +1059,18 @@ teleprompter.addEventListener('touchend', function(event) {
 });
 
 
+function handleScrollEvent() {
+    if (!isAutoScrolling) {
+        const teleprompter = document.getElementById('teleprompter');
+        const scrolledPosition = -teleprompter.scrollTop;
+        teleprompter.style.transform = `translateY(${scrolledPosition}px)`;
+    }
+}
+
+// Añadir evento de scroll para manejar cuando se hace scroll manual
+const teleprompter = document.getElementById('teleprompter');
+teleprompter.addEventListener('scroll', handleScrollEvent);
+
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
 
 
