@@ -452,7 +452,6 @@ function startAutoScroll() {
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
     //teleprompter.style.height = `${teleprompter.scrollHeight}px`;
     updateTeleprompterHeight();
-    teleprompter.style.overflow = 'hidden';
     if (hasReachedEnd) {
         translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
         teleprompter.style.transform = `translateY(${translateYValue}px)`;
@@ -511,7 +510,10 @@ function stopAutoScroll() {
         //cronometro.stop();
         console.log('Autoscroll detenido.');
         updateTeleprompterHeight();
-        teleprompter.style.overflow = 'auto';
+        // Quitar el transform y resetear la posición del teleprompter
+        teleprompter.style.transform = 'none';
+        teleprompter.scrollTop = -translateYValue;  // Ajusta el scrollTop basado en la última translateY
+        translateYValue = 0;  // Resetea el valor de translateY para futuras animaciones
 }
 
 
@@ -1070,6 +1072,7 @@ function handleScrollEvent() {
 }
 
 // Añadir evento de scroll para manejar cuando se hace scroll manual
+const teleprompter = document.getElementById('teleprompter');
 teleprompter.addEventListener('scroll', handleScrollEvent);
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
