@@ -237,8 +237,12 @@ function activateSpecialFunction() {
         // Restaurar el contenido original
         teleprompter.innerHTML = originalContent;
 
+        
+        // Convertir el scroll actual en translateY
+        const currentScroll = teleprompter.scrollTop;
+        translateYValue = -currentScroll;
         // Resetear las transformaciones aplicadas para el desplazamiento automático
-        teleprompter.style.transform = 'translateY(0px)';
+        teleprompter.style.transform = 'translateY(${translateYValue}px)';
         teleprompter.scrollTop = 0; // Restablece el scroll interno al principio
         //translateYValue = 0; // Restablece también la variable global usada para la transformación
         hasReachedEnd = true;
