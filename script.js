@@ -828,6 +828,7 @@ document.addEventListener('DOMContentLoaded', function() {
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
     });
 
+    stopAutoScroll();
     // // prevent contextual menu in app
     // document.addEventListener('contextmenu', function (event) {
     //     event.preventDefault();  // Prevenir la apertura del menú contextual
