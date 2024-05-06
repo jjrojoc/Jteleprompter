@@ -237,7 +237,10 @@ function activateSpecialFunction() {
         // Restaurar el contenido original
         teleprompter.innerHTML = originalContent;
 
-        
+        // Quitar el transform y resetear la posición del teleprompter
+        teleprompter.style.transform = 'none';
+        teleprompter.scrollTop = -translateYValue;  // Ajusta el scrollTop basado en la última translateY
+        translateYValue = 0;  // Resetea el valor de translateY para futuras animaciones
         // Convertir el scroll actual en translateY
         const currentScroll = teleprompter.scrollTop;
         translateYValue = -currentScroll;
@@ -510,10 +513,6 @@ function stopAutoScroll() {
         //cronometro.stop();
         console.log('Autoscroll detenido.');
         updateTeleprompterHeight();
-        // Quitar el transform y resetear la posición del teleprompter
-        teleprompter.style.transform = 'none';
-        teleprompter.scrollTop = -translateYValue;  // Ajusta el scrollTop basado en la última translateY
-        translateYValue = 0;  // Resetea el valor de translateY para futuras animaciones
 }
 
 
