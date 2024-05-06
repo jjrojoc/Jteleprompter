@@ -1045,14 +1045,24 @@ teleprompter.addEventListener('touchstart', function(event) {
 }, { passive: false });
 
 teleprompter.addEventListener('touchmove', function(event) {
-    // if (!isAutoScrolling || !isTouching) return;
     let touchY = event.touches[0].clientY;
     let deltaY = touchY - startY;
-    translateYValue += deltaY;
+
+    // Calcula el nuevo valor de translateY, pero no lo asignes aún
+    let newTranslateYValue = translateYValue + deltaY;
+
+    // Limita el nuevo valor para que el contenido no se desplace más allá de sus límites
+    newTranslateYValue = Math.min(0, newTranslateYValue); // Evita que se mueva hacia arriba más allá del inicio
+    newTranslateYValue = Math.max(window.innerHeight - teleprompter.scrollHeight, newTranslateYValue); // Evita que se mueva hacia abajo más allá del final
+
+    // Asigna el valor ajustado de translateYValue y actualiza la transformación
+    translateYValue = newTranslateYValue;
     teleprompter.style.transform = `translateY(${translateYValue}px)`;
+
     startY = touchY;
-    //event.preventDefault();
+    event.preventDefault();
 }, { passive: false });
+
 
 teleprompter.addEventListener('touchend', function(event) {
     // if (!isAutoScrolling) return;
