@@ -607,30 +607,37 @@ const menuBar = document.getElementById('menuBar');
 
 function initializeEditable() {
     const teleprompter = document.getElementById('teleprompter');
-    let undoStack = [];  // Almacena estados pasados del contenido
-    let redoStack = [];  // Almacena estados para la función de rehacer
+    let undoStack = [];
+    let redoStack = [];
+    let isUndoRedo = false; // Bandera para controlar si el cambio es por deshacer/rehacer
 
     teleprompter.addEventListener('input', () => {
-        localStorage.setItem('savedScript', teleprompter.innerHTML);
-        undoStack.push(teleprompter.innerHTML);
-        redoStack = [];  // Limpia el redo stack cada vez que se hace un nuevo cambio
+        if (!isUndoRedo) {  // Solo guarda los cambios iniciados por el usuario
+            localStorage.setItem('savedScript', teleprompter.innerHTML);
+            undoStack.push(teleprompter.innerHTML);
+            redoStack = [];
+        }
+        isUndoRedo = false;  // Restablece la bandera después de cada cambio
     });
 
     document.getElementById('undoButton').addEventListener('click', () => {
         if (undoStack.length > 1) {
-            redoStack.push(undoStack.pop());  // Mueve el último estado al stack de rehacer
-            teleprompter.innerHTML = undoStack[undoStack.length - 1];  // Restaura el último estado
+            redoStack.push(undoStack.pop());
+            isUndoRedo = true;  // Indica que el cambio es por deshacer
+            teleprompter.innerHTML = undoStack[undoStack.length - 1];
         }
     });
 
     document.getElementById('redoButton').addEventListener('click', () => {
         if (redoStack.length > 0) {
-            const redoState = redoStack.pop();  // Obtiene el último estado guardado para rehacer
-            undoStack.push(redoState);  // Mueve el estado de rehacer de vuelta al undo stack
-            teleprompter.innerHTML = redoState;  // Aplica el estado de rehacer
+            const redoState = redoStack.pop();
+            undoStack.push(redoState);
+            isUndoRedo = true;  // Indica que el cambio es por rehacer
+            teleprompter.innerHTML = redoState;
         }
     });
 }
+
 
 
 
