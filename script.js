@@ -1115,6 +1115,9 @@ function startEstimatedTimeCountdown() {
     let remainingDistance = teleprompter.scrollHeight - window.innerHeight + translateYValue;
     let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
 
+    // Añadir 2 segundos al tiempo estimado
+    estimatedTimeSeconds += 2;
+
     estimatedTimeInterval = setInterval(() => {
         if (estimatedTimeSeconds <= 0) {
             clearInterval(estimatedTimeInterval);
