@@ -471,16 +471,19 @@ function startAutoScroll() {
         lastTime = null;
 
         function animateScroll(timestamp) {
+            let endMarker = ensureEndMarkerExists();
             if (!lastTime) lastTime = timestamp;
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
             
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
 
-            const endMarkerRect = document.getElementById("endMarker").getBoundingClientRect();
+            const endMarkerRect = endMarker.getBoundingClientRect();
+
 
             if (endMarkerRect.bottom <= window.innerHeight -100) {
                 stopAutoScroll();
+                cronometro.stop();
                 hasReachedEnd = true;
             } else {
                 teleprompter.style.transform = `translateY(${translateYValue}px)`;
@@ -656,7 +659,6 @@ function showControlBar() {
     menuBar.style.display = 'none';
     controlBar.style.display = 'flex';
     teleprompter.contentEditable = "false";
-    updateTeleprompterHeight();
 }
 
 function showMenuBar() {
@@ -886,6 +888,22 @@ document.addEventListener('contextmenu', function(event) {
 //         }, speedscroll);
 //     }
 // }
+
+
+function ensureEndMarkerExists() {
+    let endMarker = document.getElementById('endMarker');
+    if (!endMarker) {
+        console.log("Recreating endMarker because it was not found.");
+        endMarker = document.createElement('div');
+        endMarker.id = 'endMarker';
+        endMarker.style.cssText = "font-size: 24px; font-weight: bold; text-align: center; padding: 20px; cursor: pointer;";
+        endMarker.textContent = "TOCA AQUÍ PARA FINALIZAR";
+        endMarker.addEventListener('touchstart', handleEndMarkerTouch, { passive: true });
+        endMarker.addEventListener('click', handleEndMarkerTouch);
+        document.getElementById('teleprompter').appendChild(endMarker);
+    }
+    return endMarker;
+}
 
 
 
