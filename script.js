@@ -524,7 +524,7 @@ function updateTeleprompterHeight() {
     teleprompter.style.height = `auto`; // Ajustar a 'auto' antes de calcular
     const newHeight = Math.max(teleprompter.scrollHeight, window.innerHeight);
     teleprompter.style.height = `${newHeight}px`;
-    teleprompter.offsetHeight;
+    //teleprompter.offsetHeight;
 }
 
 
@@ -776,6 +776,20 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
         Array.from(element.querySelectorAll('*')).forEach(node => {
 
+            // Convertir ciertos elementos a un formato más simple
+            switch (node.tagName) {
+                case 'SPAN':
+                case 'DIV':
+                case 'H1':
+                case 'H2':
+                case 'H3':
+                case 'P':
+                    const newNode = document.createElement('p');
+                    newNode.innerHTML = node.innerHTML;
+                    node.parentNode.replaceChild(newNode, node);
+                    break;
+            }
+
             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
             if (node.style) {
@@ -794,7 +808,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 node.style.backgroundColor = '';
             }
             // Eliminar elementos que no contribuyen al texto visible
-            if (node.tagName === 'SCRIPT' || node.tagName === 'META' || node.tagName === 'STYLE') {
+            if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
                 node.parentNode.removeChild(node);
             }
         });
