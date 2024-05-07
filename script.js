@@ -859,6 +859,7 @@ document.addEventListener('DOMContentLoaded', function() {
         textSizeValue.textContent = textSizeControl.value + 'px';
         console.log('Adjusting text size to:', textSizeControl.value + 'px');
         teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
+        updateTeleprompterHeight(); // Actualiza la altura del teleprompter para asegurar que se acomoda al nuevo tamaño del texto
     });
 
     updateTeleprompterHeight();
