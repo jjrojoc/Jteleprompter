@@ -776,19 +776,15 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
         Array.from(element.querySelectorAll('*')).forEach(node => {
 
-            // Convertir ciertos elementos a un formato más simple
-            switch (node.tagName) {
-                case 'SPAN':
-                case 'DIV':
-                case 'H1':
-                case 'H2':
-                case 'H3':
-                case 'P':
-                    const newNode = document.createElement('p');
-                    newNode.innerHTML = node.innerHTML;
-                    node.parentNode.replaceChild(newNode, node);
-                    break;
+            // Opciones para reemplazar ciertos elementos con un formato más simple
+        if (['SPAN', 'DIV', 'H1', 'H2', 'H3', 'P'].includes(node.tagName)) {
+            const newNode = document.createElement('p');
+            newNode.innerHTML = node.innerHTML; // Copia el contenido interno al nuevo nodo
+
+            if (node.parentNode) { // Asegura que el nodo padre existe antes de reemplazar
+                node.parentNode.replaceChild(newNode, node);
             }
+        }
 
             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
