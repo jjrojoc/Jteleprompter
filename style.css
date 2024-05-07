@@ -25,7 +25,7 @@ body, html {
   color: white;
   padding: 20px;
   box-sizing: border-box;
-  /* font-size: 36px; Initial font size, adjustable via slider */
+  font-size: 36px; /* Initial font size, adjustable via slider */
   font-family: Helvetica;
   -webkit-tap-highlight-color: transparent; /* <-- this is new */
   line-height: 1.5em; /* Asegúrate de que el teleprompter tiene un line-height definido */

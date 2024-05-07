@@ -793,9 +793,17 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                     node.removeAttribute('style'); // Cambia el gris a por defecto, fix jw Biblia
                 }
                 // Eliminar estilos no necesarios
-                node.style.fontSize = textSize;
+                
+                node.style.fontSize = '';
                 node.style.fontFamily = '';
+                //node.style.color = '';
                 node.style.backgroundColor = '';
+                node.style.fontWeight = '';
+                node.style.fontStyle = '';
+                node.style.fontVariant = '';
+                node.style.textDecoration = '';
+                node.style.verticalAlign = '';
+                node.style.whiteSpace = '';
             }
             // Eliminar elementos que no contribuyen al texto visible
             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
