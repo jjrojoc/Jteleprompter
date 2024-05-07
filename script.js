@@ -695,6 +695,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
         localStorage.setItem('savedScript', scriptText); // Guarda en localStorage
         teleprompter.setAttribute("contentEditable", true);
         // alert('Teleprompter contenido ha sido reseteado.'); // Muestra mensaje de confirmación
+        updateTeleprompterHeight();
     }
     showControlBar();
 });
