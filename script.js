@@ -876,6 +876,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
 function autoguardado() {
     const contenido = document.getElementById('teleprompter').innerHTML;
+    console.log("Guardando contenido:", contenido);
     localStorage.setItem('savedScript', contenido);
 }
 
