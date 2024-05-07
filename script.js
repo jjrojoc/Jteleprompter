@@ -775,17 +775,10 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
         // Asignar de nuevo el HTML procesado
         element.innerHTML = htmlString;
 
+        const textSize = document.getElementById('textSizeControl').value + 'px'; // Obtén el tamaño de texto configurado
+        
         Array.from(element.querySelectorAll('*')).forEach(node => {
-
-            // Opciones para reemplazar ciertos elementos con un formato más simple
-        if (['SPAN', 'DIV', 'H1', 'H2', 'H3', 'P'].includes(node.tagName)) {
-            const newNode = document.createElement('p');
-            newNode.innerHTML = node.innerHTML; // Copia el contenido interno al nuevo nodo
-
-            if (node.parentNode) { // Asegura que el nodo padre existe antes de reemplazar
-                node.parentNode.replaceChild(newNode, node);
-            }
-        }
+        
 
             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
@@ -800,7 +793,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                     node.removeAttribute('style'); // Cambia el gris a por defecto, fix jw Biblia
                 }
                 // Eliminar estilos no necesarios
-                node.style.fontSize = '';
+                node.style.fontSize = textSize;
                 node.style.fontFamily = '';
                 node.style.backgroundColor = '';
             }
