@@ -864,7 +864,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     range.setEndAfter(fragment);
     selection.removeAllRanges(); // Limpiar selecciones anteriores
     selection.addRange(range); // Establecer la nueva selección
-
+    teleprompter.offsetHeight;
     updateTeleprompterHeight();
     autoguardado();
 });
