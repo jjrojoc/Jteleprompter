@@ -830,20 +830,24 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
     // Filtrar y modificar el contenido
     Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
-        // Mantener solo los estilos de color y eliminar todos los demás estilos
-        const textColor = node.style.color; // Guardar el color del texto
-        node.removeAttribute('style'); // Eliminar todos los estilos
-        if (textColor) {
-            node.style.color = textColor; // Reasignar solo el color del texto
+        const textColor = node.style.color; // Guardar el color del texto original
+        node.removeAttribute('style'); // Eliminar todos los estilos para resetear
+    
+        // Aplicar lógica condicional basada en el color
+        if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
+            textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
+            textColor !== 'rgb(41, 41, 41)') {
+            // Si el color no es blanco, negro o gris, entonces reasigna el color
+            node.style.color = textColor;
         }
-
-        // Eliminar todos los atributos excepto los estilos
-        Array.from(node.attributes).forEach(attr => {
-            if (attr.name !== 'style') {
-                node.removeAttribute(attr.name);
-            }
-        });
+        // Si el color es blanco, negro o gris, no asignamos ningún color,
+        // permitiendo que el texto herede el color por defecto de `teleprompter`
     });
+    
+
+    // Convertir y colapsar espacios múltiples a un espacio único, mantener saltos de línea
+    let htmlString = tempDiv.innerHTML.replace(/\s+/g, ' ').replace(/<br\s*\/?>/gi, '\n');
+    tempDiv.innerHTML = htmlString;
 
     // Insertar el contenido modificado en el elemento
     const selection = window.getSelection();
@@ -861,6 +865,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     selection.removeAllRanges(); // Limpiar selecciones anteriores
     selection.addRange(range); // Establecer la nueva selección
 });
+
 
 
 
