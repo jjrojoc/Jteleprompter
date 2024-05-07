@@ -35,13 +35,6 @@ body, html {
   position: relative;
   }
 
-  #teleprompter, #teleprompter * {
-    font-size: inherit !important;
-    line-height: inherit !important;
-    white-space: inherit !important;
-}
-
-
 
 .control-bar {
   position: fixed;

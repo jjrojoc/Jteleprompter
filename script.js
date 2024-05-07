@@ -794,19 +794,21 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
                 }
                 // Eliminar estilos no necesarios
                 
-                node.style.fontSize = '';
-                node.style.fontFamily = '';
-                //node.style.color = '';
-                node.style.backgroundColor = '';
-                node.style.fontWeight = '';
-                node.style.fontStyle = '';
-                node.style.fontVariant = '';
-                node.style.textDecoration = '';
-                node.style.verticalAlign = '';
-                node.style.whiteSpace = '';
+                // node.style.fontSize = '';
+                // node.style.fontFamily = '';
+                // //node.style.color = '';
+                // node.style.backgroundColor = '';
+                // node.style.fontWeight = '';
+                // node.style.fontStyle = '';
+                // node.style.fontVariant = '';
+                // node.style.textDecoration = '';
+                // node.style.verticalAlign = '';
+                // node.style.whiteSpace = '';
+                node.removeAttribute('style');
+                node.removeAttribute('class');
             }
             // Eliminar elementos que no contribuyen al texto visible
-            if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
+            if (node.tagName === 'SCRIPT' || node.tagName === 'META' || node.tagName === 'STYLE') {
                 node.parentNode.removeChild(node);
             }
         });
