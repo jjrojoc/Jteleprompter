@@ -596,7 +596,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "rgb(255, 255, 255)"; // Define el color blanco como por defecto
+    const defaultColor = "#ffffff"; // Define el color blanco como por defecto en formato hexadecimal
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
@@ -604,12 +604,14 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     const range = selection.getRangeAt(0);
     let selectedContent = range.extractContents();
 
-    // Función para aplicar el color
+    // Función para aplicar o eliminar el color
     function applyColorToNode(node, color) {
         if (node.nodeType === Node.TEXT_NODE) {
             if (node.textContent.trim() !== "") { // Asegurarse de que no es solo espacio en blanco
                 const span = document.createElement('span');
-                span.style.color = color;
+                if (color !== defaultColor) {
+                    span.style.color = color; // Aplica el color seleccionado
+                } // No se establece ningún estilo si el color es blanco
                 span.textContent = node.textContent;
                 return span;
             }
@@ -625,21 +627,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
         }
     }
 
-    // Aplicar el color o eliminar el span si el color es el default
-    if (color === defaultColor) {
-        let frag = document.createDocumentFragment();
-        Array.from(selectedContent.childNodes).forEach(child => {
-            if (child.nodeType === Node.ELEMENT_NODE && child.tagName === "SPAN" && (child.style.color === defaultColor || child.style.color === 'white')) {
-                Array.from(child.childNodes).forEach(innerChild => frag.appendChild(innerChild.cloneNode(true)));
-            } else {
-                frag.appendChild(child.cloneNode(true));
-            }
-        });
-        selectedContent = frag;
-    } else {
-        selectedContent = applyColorToNode(selectedContent, color);
-    }
-
+    selectedContent = applyColorToNode(selectedContent, color);
     range.insertNode(selectedContent);
 
     // Restablecer la selección
@@ -648,8 +636,9 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     newRange.selectNodeContents(range.commonAncestorContainer);
     selection.addRange(newRange);
 
-    autoguardado();
+    autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
