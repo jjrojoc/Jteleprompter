@@ -519,14 +519,23 @@ function stopAutoScroll() {
 }
 
 
+// function updateTeleprompterHeight() {
+//     const teleprompter = document.getElementById('teleprompter');
+//     teleprompter.style.height = `auto`; // Ajustar a 'auto' antes de calcular
+//     const newHeight = Math.max(teleprompter.scrollHeight, window.innerHeight);
+//     teleprompter.style.height = `${newHeight}px`;
+//     //teleprompter.offsetHeight;
+// }
+
 function updateTeleprompterHeight() {
     const teleprompter = document.getElementById('teleprompter');
-    teleprompter.style.height = `auto`; // Ajustar a 'auto' antes de calcular
-    const newHeight = Math.max(teleprompter.scrollHeight, window.innerHeight);
-    teleprompter.style.height = `${newHeight}px`;
-    //teleprompter.offsetHeight;
+    // Actualizar la altura si el contenido es más alto que la ventana
+    teleprompter.style.height = `${Math.min(teleprompter.scrollHeight, window.innerHeight)}px`;
+    
+    // Reajustar translateY basándonos en la nueva altura del contenido
+    translateYValue = Math.min(0, window.innerHeight - teleprompter.scrollHeight);
+    teleprompter.style.transform = `translateY(${translateYValue}px)`;
 }
-
 
 
 // function estimateDuration() {
@@ -864,9 +873,6 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
     range.setEndAfter(fragment);
     selection.removeAllRanges(); // Limpiar selecciones anteriores
     selection.addRange(range); // Establecer la nueva selección
-    const translateY = Math.min(0, window.innerHeight - teleprompter.scrollHeight);
-    teleprompter.style.transform = `translateY(${translateY}px)`;
-    teleprompter.offsetHeight;
 
     updateTeleprompterHeight();
     autoguardado();
