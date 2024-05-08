@@ -609,7 +609,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
         return;
     }
 
-    if (color === defaultColor) {
+    if (color === defaultColor || color === "#FFFFFF") {
         // Eliminar el span si el color elegido es el color por defecto
         if (!needsNewSpan) {
             const parent = span.parentNode;
