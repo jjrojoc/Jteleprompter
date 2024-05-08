@@ -848,6 +848,7 @@ document.getElementById('teleprompter').addEventListener('paste', function(e) {
 
     // Funciones adicionales para actualizar el teleprompter y guardar automáticamente
     updateTeleprompterHeight();
+    teleprompter.scrollTop = teleprompter.scrollHeight;
     autoguardado();
 });
 
