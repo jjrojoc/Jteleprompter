@@ -665,6 +665,28 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
 
+document.addEventListener('selectionchange', function() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    const node = range.startContainer.parentNode; // Obtiene el nodo donde comienza la selección
+
+    // Asume que el color puede estar en un elemento span; ajusta según sea necesario
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
+        const color = window.getComputedStyle(node).color;
+        document.getElementById('textColorPicker').value = rgbToHex(color); // Actualiza el selector de color
+    } else {
+        // Si el nodo seleccionado no es un <span>, se podría establecer un color por defecto o mantener el actual
+        document.getElementById('textColorPicker').value = '#ffffff'; // Color por defecto
+    }
+});
+
+// Función para convertir color RGB a Hex
+function rgbToHex(rgb) {
+    const rgbArr = rgb.match(/\d+/g);
+    return rgbArr ? "#" + rgbArr.map(x => parseInt(x).toString(16).padStart(2, '0')).join('') : '#000000';
+}
 
 
 
