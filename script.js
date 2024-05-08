@@ -948,7 +948,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Filtrar y modificar el contenido para ajustar los colores
         Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
-            simplifyDOM(node);
             const textColor = node.style.color; // Guardar el color del texto original
             node.removeAttribute('style'); // Eliminar todos los estilos para resetear
 
@@ -986,34 +985,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-
-function simplifyDOM(node) {
-    // Verificar que el nodo es parte de los tipos que queremos transformar
-    switch (node.tagName) {
-        case 'SPAN':
-        case 'DIV':
-        case 'H1':
-        case 'H2':
-        case 'H3':
-        case 'P':
-            // Crear un nuevo elemento 'p'
-            const newNode = document.createElement('p');
-            // Mover todo el contenido HTML del nodo original al nuevo nodo
-            newNode.innerHTML = node.innerHTML;
-
-            // Asegurarse de que el nodo original tiene un padre antes de reemplazarlo
-            if (node.parentNode) {
-                node.parentNode.replaceChild(newNode, node);
-            }
-            break;
-
-        default:
-            // Si el nodo no es uno de los tipos especificados, no se hace nada
-            console.log("El nodo no necesita ser simplificado.");
-            break;
-    }
-}
 
 
 // document.getElementById('teleprompter').addEventListener('paste', function(e) {
