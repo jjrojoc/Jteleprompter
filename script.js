@@ -703,174 +703,171 @@ document.getElementById('resetButton').addEventListener('click', function() {
 
 
 ////// Original, este funciona bien /////
-// document.getElementById('teleprompter').addEventListener('paste', function(e) {
-//     e.preventDefault(); // Previene el comportamiento de pegado predeterminado
+document.getElementById('teleprompter').addEventListener('paste', function(e) {
+    e.preventDefault(); // Previene el comportamiento de pegado predeterminado
 
-//     var htmlContent = e.clipboardData.getData('text/html');
-//     var plainText = e.clipboardData.getData('text/plain');
-//     // console.log("HTML Original:", htmlContent);
+    var htmlContent = e.clipboardData.getData('text/html');
+    var plainText = e.clipboardData.getData('text/plain');
+    // console.log("HTML Original:", htmlContent);
 
 
-//     const selection = window.getSelection();
-//     if (!selection.rangeCount) return false;
-//     const range = selection.getRangeAt(0);
-//     range.deleteContents();
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return false;
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
 
-//     if (htmlContent) {
-//         const tempDiv = document.createElement('div');
-//         tempDiv.innerHTML = htmlContent;
-//         processHTML(tempDiv);
+    if (htmlContent) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlContent;
+        processHTML(tempDiv);
     
-//         // Inserta cada nodo en el orden en que aparece.
-//         Array.from(tempDiv.childNodes).forEach(node => {
-//             range.insertNode(node.cloneNode(true));
-//             range.collapse(false); // Mueve el rango al final del nodo insertado
-//         });
+        // Inserta cada nodo en el orden en que aparece.
+        Array.from(tempDiv.childNodes).forEach(node => {
+            range.insertNode(node.cloneNode(true));
+            range.collapse(false); // Mueve el rango al final del nodo insertado
+        });
         
         
-//     } else if (plainText) {
-//         // Insertar texto plano respetando los saltos de línea
-//         const lines = plainText.split(/[\r\n]+/);
-//         lines.forEach((line, index) => {
-//             if (index > 0) {
-//                 range.insertNode(document.createElement('br'));
-//             }
-//             range.insertNode(document.createTextNode(line));
-//             range.collapse(false); // Mueve el rango al final del nodo insertado
-//         });
-//     }
+    } else if (plainText) {
+        // Insertar texto plano respetando los saltos de línea
+        const lines = plainText.split(/[\r\n]+/);
+        lines.forEach((line, index) => {
+            if (index > 0) {
+                range.insertNode(document.createElement('br'));
+            }
+            range.insertNode(document.createTextNode(line));
+            range.collapse(false); // Mueve el rango al final del nodo insertado
+        });
+    }
 
-//     // Colocar el cursor después del texto insertado
-//     range.collapse(false);
-//     selection.removeAllRanges();
-//     selection.addRange(range);
+    // Colocar el cursor después del texto insertado
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
 
-//     // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
-//     function processHTML(element) {
+    // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
+    function processHTML(element) {
 
-//         // Eliminar elementos específicos como <sup class="superscription"> y <span class="parabreak">
-//         Array.from(element.querySelectorAll('sup.superscription, span.parabreak')).forEach(node => {
-//         const parent = node.parentNode;
-//         parent.removeChild(node); // Elimina completamente el nodo del DOM
-//         });
+        // Eliminar elementos específicos como <sup class="superscription"> y <span class="parabreak">
+        Array.from(element.querySelectorAll('sup.superscription, span.parabreak')).forEach(node => {
+        const parent = node.parentNode;
+        parent.removeChild(node); // Elimina completamente el nodo del DOM
+        });
 
-//         Array.from(element.querySelectorAll('a')).forEach(node => {
-//             if (!/\d/.test(node.textContent)) {
-//                 if (node.parentNode) {
-//                     node.parentNode.removeChild(node); // Elimina completamente el nodo <a> del DOM
-//                 }
-//             }
+        Array.from(element.querySelectorAll('a')).forEach(node => {
+            if (!/\d/.test(node.textContent)) {
+                if (node.parentNode) {
+                    node.parentNode.removeChild(node); // Elimina completamente el nodo <a> del DOM
+                }
+            }
             
-//             // const parent = node.parentNode;
-//             // while (node.firstChild) {
-//             //     parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
-//             // }
-//             // parent.removeChild(node); // Elimina el nodo del enlace
+            // const parent = node.parentNode;
+            // while (node.firstChild) {
+            //     parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
+            // }
+            // parent.removeChild(node); // Elimina el nodo del enlace
             
-//         });
+        });
 
-//         // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
-//         let htmlString = element.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
+        // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
+        let htmlString = element.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
         
-//         // Asignar de nuevo el HTML procesado
-//         element.innerHTML = htmlString;
+        // Asignar de nuevo el HTML procesado
+        element.innerHTML = htmlString;
 
-//         Array.from(element.querySelectorAll('*')).forEach(node => {
+        Array.from(element.querySelectorAll('*')).forEach(node => {
 
-//             // Opciones para reemplazar ciertos elementos con un formato más simple
-//             if (['SPAN', 'DIV', 'H1', 'H2', 'H3', 'P'].includes(node.tagName)) {
-//                 const newNode = document.createElement('p');
-//                 newNode.innerHTML = node.innerHTML; // Copia el contenido interno al nuevo nodo
+            // Opciones para reemplazar ciertos elementos con un formato más simple
+            if (['SPAN', 'DIV', 'H1', 'H2', 'H3', 'P'].includes(node.tagName)) {
+                const newNode = document.createElement('p');
+                newNode.innerHTML = node.innerHTML; // Copia el contenido interno al nuevo nodo
 
-//                 if (node.parentNode) { // Asegura que el nodo padre existe antes de reemplazar
-//                     node.parentNode.replaceChild(newNode, node);
-//                 }
-//             }
+                if (node.parentNode) { // Asegura que el nodo padre existe antes de reemplazar
+                    node.parentNode.replaceChild(newNode, node);
+                }
+            }
 
-//             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
+            node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
 
-//             if (node.style) {
+            if (node.style) {
 
-//                 // Si el color es blanco, eliminar el estilo completamente
-//                 if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
-//                     node.removeAttribute('style');
-//                 } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
-//                     node.removeAttribute('style'); // Cambia el negro a blanco
-//                 } else if (node.style.color === 'rgb(41, 41, 41)') {
-//                     node.removeAttribute('style'); // Cambia el gris a por defecto, fix jw Biblia
-//                 }
-//                 // Eliminar estilos no necesarios
-//                 node.style.fontSize = '';
-//                 node.style.fontFamily = '';
-//                 node.style.backgroundColor = '';
-//             }
-//             // Eliminar elementos que no contribuyen al texto visible
-//             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
-//                 node.parentNode.removeChild(node);
-//             }
-//         });
-//     }
+                // Si el color es blanco, eliminar el estilo completamente
+                if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
+                    node.removeAttribute('style');
+                } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
+                    node.removeAttribute('style'); // Cambia el negro a blanco
+                } else if (node.style.color === 'rgb(41, 41, 41)') {
+                    node.removeAttribute('style'); // Cambia el gris a por defecto, fix jw Biblia
+                }
+                // Eliminar estilos no necesarios
+                node.style.fontSize = '';
+                node.style.fontFamily = '';
+                node.style.backgroundColor = '';
+            }
+            // Eliminar elementos que no contribuyen al texto visible
+            if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
+                node.parentNode.removeChild(node);
+            }
+        });
+    }
+    updateTeleprompterHeight();
+    const maxScroll = window.innerHeight - teleprompter.scrollHeight;
+    autoguardado();
+});
+
+
+// document.getElementById('teleprompter').addEventListener('paste', function(e) {
+//     // Prevenir el comportamiento predeterminado del pegado
+//     e.preventDefault();
+
+//     // Obtener el texto del portapapeles
+//     const clipboardData = e.clipboardData || window.clipboardData;
+//     const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
+
+//     // Crear un contenedor temporal donde se insertará el HTML para manipulación
+//     const tempDiv = document.createElement('div');
+//     tempDiv.innerHTML = pastedData;
+
+//     // Filtrar y modificar el contenido
+//     Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
+//         const textColor = node.style.color; // Guardar el color del texto original
+//         node.removeAttribute('style'); // Eliminar todos los estilos para resetear
+    
+//         // Aplicar lógica condicional basada en el color
+//         if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
+//             textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
+//             textColor !== 'rgb(41, 41, 41)') {
+//             // Si el color no es blanco, negro o gris, entonces reasigna el color
+//             node.style.color = textColor;
+//         }
+//         // Si el color es blanco, negro o gris, no asignamos ningún color,
+//         // permitiendo que el texto herede el color por defecto de `teleprompter`
+//     });
+    
+
+//     // Convertir y colapsar espacios múltiples a un espacio único, mantener saltos de línea
+//     let htmlString = tempDiv.innerHTML.replace(/\s+/g, ' ').replace(/<br\s*\/?>/gi, '\n');
+//     tempDiv.innerHTML = htmlString;
+
+//     // Insertar el contenido modificado en el elemento
+//     const selection = window.getSelection();
+//     if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
+//     const range = selection.getRangeAt(0);
+//     range.deleteContents(); // Eliminar el contenido actual en la selección
+
+//     // Crear un nodo de fragmento de documento para insertar
+//     const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
+//     range.insertNode(fragment);
+
+//     // Mover el cursor inmediatamente después del contenido insertado
+//     range.setStartAfter(fragment);
+//     range.setEndAfter(fragment);
+//     selection.removeAllRanges(); // Limpiar selecciones anteriores
+//     selection.addRange(range); // Establecer la nueva selección
+
 //     updateTeleprompterHeight();
-//     const maxScroll = window.innerHeight - teleprompter.scrollHeight;
 //     autoguardado();
 // });
-
-
-document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    // Prevenir el comportamiento predeterminado del pegado
-    e.preventDefault();
-
-    // Obtener el texto del portapapeles
-    const clipboardData = e.clipboardData || window.clipboardData;
-    const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
-
-    // Crear un contenedor temporal donde se insertará el HTML para manipulación
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = pastedData;
-
-    // Filtrar y modificar el contenido
-    Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
-        const textColor = node.style.color; // Guardar el color del texto original
-        node.removeAttribute('style'); // Eliminar todos los estilos para resetear
-    
-        // Aplicar lógica condicional basada en el color
-        if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
-            textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
-            textColor !== 'rgb(41, 41, 41)') {
-            // Si el color no es blanco, negro o gris, entonces reasigna el color
-            node.style.color = textColor;
-        }
-        // Si el color es blanco, negro o gris, no asignamos ningún color,
-        // permitiendo que el texto herede el color por defecto de `teleprompter`
-    });
-    
-
-    // Convertir y colapsar espacios múltiples a un espacio único, mantener saltos de línea
-    let htmlString = tempDiv.innerHTML.replace(/\s+/g, ' ').replace(/<br\s*\/?>/gi, '\n');
-    tempDiv.innerHTML = htmlString;
-
-    // Insertar el contenido modificado en el elemento
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
-    const range = selection.getRangeAt(0);
-    range.deleteContents(); // Eliminar el contenido actual en la selección
-
-    // Crear un nodo de fragmento de documento para insertar
-    const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
-    range.insertNode(fragment);
-
-    // Mover el cursor inmediatamente después del contenido insertado
-    range.setStartAfter(fragment);
-    range.setEndAfter(fragment);
-    selection.removeAllRanges(); // Limpiar selecciones anteriores
-    selection.addRange(range); // Establecer la nueva selección
-
-    // Esperar a que el DOM se actualice antes de recalcular la altura y el desplazamiento
-    setTimeout(() => {
-        updateTeleprompterHeight();
-        autoguardado();
-    }, 0);
-});
 
 
 
