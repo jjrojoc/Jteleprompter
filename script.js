@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "rgb(255, 255, 255)"; // Ajusta a tu color por defecto de 'teleprompter'
+    const defaultColor = "rgb(255, 255, 255)"; // Color por defecto en formato RGB
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
@@ -591,24 +591,26 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     let span;
     let needsNewSpan = true;
 
-    // Comprueba si la selección ya está dentro de un 'span'
-    const isSpan = (node) => node && node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN';
+    // Comprobar si la selección actual está dentro de un 'span'
     let commonAncestorContainer = range.commonAncestorContainer;
-    while (commonAncestorContainer && !isSpan(commonAncestorContainer)) {
+    while (commonAncestorContainer.nodeType !== Node.ELEMENT_NODE) {
         commonAncestorContainer = commonAncestorContainer.parentNode;
     }
-
-    if (commonAncestorContainer && isSpan(commonAncestorContainer)) {
+    if (commonAncestorContainer.tagName === 'SPAN') {
         span = commonAncestorContainer;
         needsNewSpan = false; // No necesita un nuevo span, reutiliza este
-    } else {
-        span = document.createElement('span');
-        span.appendChild(range.extractContents());
-        range.insertNode(span);
+    } else if (commonAncestorContainer.contains(range.startContainer) && range.startContainer.parentNode.tagName === 'SPAN') {
+        span = range.startContainer.parentNode;
+        needsNewSpan = false;
     }
 
-    // Si el color seleccionado es el color por defecto, eliminar el span
+    if (!needsNewSpan && span.style.color === color) {
+        // No se realiza ningún cambio si el color es el mismo
+        return;
+    }
+
     if (color === defaultColor) {
+        // Eliminar el span si el color elegido es el color por defecto
         if (!needsNewSpan) {
             const parent = span.parentNode;
             while (span.firstChild) {
@@ -617,14 +619,19 @@ document.getElementById('textColorPicker').addEventListener('change', function()
             parent.removeChild(span);
         }
     } else {
+        if (needsNewSpan) {
+            span = document.createElement('span');
+            span.appendChild(range.extractContents());
+            range.insertNode(span);
+        }
         // Aplicar el nuevo color
         span.style.color = color;
     }
 
-    // Restablecer y mantener la selección para que se centre en el contenido modificado
+    // Restablecer y mantener la selección
     selection.removeAllRanges();
     const newRange = document.createRange();
-    if (span.parentNode) {
+    if (span && span.parentNode) {
         newRange.selectNodeContents(span);
     } else {
         newRange.setStartBefore(span);
@@ -634,6 +641,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado();
 });
+
 
 
 
