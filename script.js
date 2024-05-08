@@ -582,45 +582,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "rgb(255, 255, 255)"; // Define el color por defecto o el color de fondo del teleprompter
+    const defaultColor = rgb(255, 255, 255); // Ajusta a tu color por defecto de 'teleprompter'
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    const selectedContent = range.extractContents();
     let span;
+    let needsNewSpan = true;
 
-    // Buscar un span existente en el contenido seleccionado
-    if (selectedContent.childNodes.length === 1 && selectedContent.childNodes[0].nodeType === 1 && selectedContent.childNodes[0].tagName === 'SPAN') {
-        span = selectedContent.childNodes[0];
+    // Comprueba si la selección ya está dentro de un 'span'
+    if (range.startContainer.parentNode.tagName === 'SPAN' && range.endContainer.parentNode.tagName === 'SPAN' &&
+        range.startContainer.parentNode === range.endContainer.parentNode) {
+        span = range.startContainer.parentNode;
+        needsNewSpan = false; // No necesita un nuevo span, reutiliza este
     } else {
         span = document.createElement('span');
-        span.appendChild(selectedContent);
+        span.appendChild(range.extractContents());
     }
 
-    // Decidir si aplicar el nuevo color o eliminar el span
     if (color === defaultColor) {
         // Eliminar el span si el color seleccionado es el por defecto
-        const parent = range.commonAncestorContainer;
-        while (span.firstChild) {
-            range.insertNode(span.firstChild);
+        if (!needsNewSpan) {
+            const parent = span.parentNode;
+            while (span.firstChild) {
+                parent.insertBefore(span.firstChild, span);
+            }
+            parent.removeChild(span);
         }
-        span.parentNode.removeChild(span);
     } else {
         // Aplicar el nuevo color
         span.style.color = color;
-        range.insertNode(span);
+        if (needsNewSpan) {
+            range.insertNode(span);
+        }
     }
 
-    // Limpiar la selección y establecer el nuevo rango
+    // Restablecer y mantener la selección para que se centre en el contenido modificado
     selection.removeAllRanges();
     const newRange = document.createRange();
-    newRange.selectNodeContents(span.parentNode);
+    if (span.parentNode) {
+        newRange.selectNodeContents(span);
+    } else {
+        newRange.selectNodeContents(span.parentNode);
+    }
     selection.addRange(newRange);
 
     autoguardado();
 });
+
 
 
 
