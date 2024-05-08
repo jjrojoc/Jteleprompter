@@ -507,12 +507,17 @@ function startAutoScroll() {
 
 
 
-
+document.fullscreenElement
     
 function stopAutoScroll() {
         isAutoScrolling = false;
+        
         // Salir del modo pantalla completa
-        document.exitFullscreen();
+        if (document.fullscreenElement) {
+            // Intenta entrar en modo pantalla completa
+            document.exitFullscreen();
+            }
+
         cancelAnimationFrame(scrollAnimation);
         stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
         updateToggleButton(false);
