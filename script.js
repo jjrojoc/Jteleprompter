@@ -816,59 +816,50 @@ document.getElementById('resetButton').addEventListener('click', function() {
 // });
 
 
-document.getElementById('teleprompter').addEventListener('paste', function(e) {
-    e.preventDefault(); // Prevenir el comportamiento predeterminado del pegado
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('teleprompter').addEventListener('paste', function(e) {
+        e.preventDefault(); // Previene el comportamiento predeterminado del pegado.
 
-    // Obtener el texto del portapapeles
-    const clipboardData = e.clipboardData || window.clipboardData;
-    const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
+        const clipboardData = e.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
 
-    // Crear un contenedor temporal donde se insertará el HTML para manipulación
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = pastedData;
+        // Crear un contenedor temporal donde se insertará el HTML para manipulación
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = pastedData;
 
-    // Procesar el HTML para ajustar colores y eliminar estilos no deseados
-    processHTML(tempDiv);
+        // Filtrar y modificar el contenido para ajustar los colores
+        Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
+            const textColor = node.style.color; // Guardar el color del texto original
+            node.removeAttribute('style'); // Eliminar todos los estilos para resetear
 
-    // Insertar el contenido modificado en el elemento
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
-    const range = selection.getRangeAt(0);
-    range.deleteContents(); // Eliminar el contenido actual en la selección
+            // Aplicar lógica condicional basada en el color
+            if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
+                textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
+                textColor !== 'rgb(41, 41, 41)') {
+                // Si el color no es blanco, negro o gris, entonces reasigna el color
+                node.style.color = textColor;
+            }
+            // Si el color es blanco, negro o gris, no asignamos ningún color,
+            // permitiendo que el texto herede el color por defecto del 'teleprompter'
+        });
 
-    // Crear un nodo de fragmento de documento para insertar
-    const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
-    range.insertNode(fragment);
+        // Insertar el contenido modificado en el elemento
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
+        const range = selection.getRangeAt(0);
+        range.deleteContents(); // Eliminar el contenido actual en la selección
 
-    // Mover el cursor inmediatamente después del contenido insertado
-    range.setStartAfter(fragment);
-    range.setEndAfter(fragment);
-    selection.removeAllRanges(); // Limpiar selecciones anteriores
-    selection.addRange(range); // Establecer la nueva selección
+        const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
+        range.insertNode(fragment);
 
-    // Funciones adicionales para actualizar el teleprompter y guardar automáticamente
-    updateTeleprompterHeight();
-    teleprompter.scrollTop = teleprompter.scrollHeight;
-    autoguardado();
-});
+        range.collapse(false);
+        selection.removeAllRanges(); // Limpiar selecciones anteriores
+        selection.addRange(range); // Establecer la nueva selección
 
-function processHTML(element) {
-    Array.from(element.querySelectorAll('*')).forEach(node => {
-        const textColor = node.style.color; // Guardar el color del texto original
-        node.removeAttribute('style'); // Eliminar todos los estilos para resetear
-    
-        // Si el color es significativo, se podría reasignar aquí, modificando las condiciones según la necesidad
-        if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
-            textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
-            textColor !== 'rgb(41, 41, 41)') {
-            node.style.color = textColor; // Reasignar solo colores significativos
-        }
+        updateTeleprompterHeight();
+        autoguardado();
     });
-
-    // Convertir y colapsar espacios múltiples a un espacio único, mantener saltos de línea
-    let htmlString = element.innerHTML.replace(/\s+/g, ' ').replace(/<br\s*\/?>/gi, '\n');
-    element.innerHTML = htmlString;
-}
+});
 
 
 
