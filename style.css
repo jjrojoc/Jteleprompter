@@ -22,7 +22,7 @@ body, html {
   overflow-y: scroll;
   cursor: pointer;
   background-color: black;
-  color: white;
+  color: rgb(255, 255, 255);
   padding: 20px;
   box-sizing: border-box;
   font-size: 36px; /* Initial font size, adjustable via slider */
