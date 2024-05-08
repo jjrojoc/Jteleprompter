@@ -607,16 +607,41 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     // Función para aplicar o eliminar el color
     function applyColorToNode(node, color) {
         if (node.nodeType === Node.TEXT_NODE) {
-            if (node.textContent.trim() !== "") { // Asegurarse de que no es solo espacio en blanco
-                const span = document.createElement('span');
+            const parent = node.parentNode;
+            // Si el nodo texto ya está dentro de un <span>, ajustar o eliminar el color
+            if (parent && parent.tagName === "SPAN") {
+                if (color === defaultColor) {
+                    parent.style.removeProperty('color'); // Elimina el color si es blanco
+                } else {
+                    parent.style.color = color; // Cambia el color existente
+                }
+                return node; // Devuelve el nodo texto sin modificarlo más
+            } else {
+                // Si no está en un <span>, crea uno si es necesario
                 if (color !== defaultColor) {
-                    span.style.color = color; // Aplica el color seleccionado
-                } // No se establece ningún estilo si el color es blanco
-                span.textContent = node.textContent;
-                return span;
+                    const span = document.createElement('span');
+                    span.style.color = color;
+                    span.appendChild(node.cloneNode(true));
+                    return span;
+                }
+            }
+        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
+            // Maneja los <span> existentes
+            if (color === defaultColor) {
+                node.style.removeProperty('color'); // Elimina el color si es blanco
+            } else {
+                node.style.color = color;
+            }
+            // Recursividad para hijos
+            let child = node.firstChild;
+            while (child) {
+                const next = child.nextSibling;
+                node.replaceChild(applyColorToNode(child, color), child);
+                child = next;
             }
             return node;
         } else {
+            // Recursividad para otros nodos
             let child = node.firstChild;
             while (child) {
                 const next = child.nextSibling;
@@ -625,6 +650,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
             }
             return node;
         }
+        return node;
     }
 
     selectedContent = applyColorToNode(selectedContent, color);
@@ -638,6 +664,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
