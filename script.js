@@ -451,6 +451,13 @@ function adjustSpeed(speed) {
 }
 
 function startAutoScroll() {
+    if (!document.fullscreenElement) {
+        // Intenta entrar en modo pantalla completa
+        document.documentElement.requestFullscreen().catch(err => {
+            alert(`Error al intentar activar el modo pantalla completa: ${err.message} (${err.name})`);
+        }
+    )};
+    
     const teleprompter = document.getElementById('teleprompter');
     adjustSpeed(parseInt(document.getElementById('speedControl').value));
     //teleprompter.style.height = `${teleprompter.scrollHeight}px`;
@@ -504,6 +511,8 @@ function startAutoScroll() {
     
 function stopAutoScroll() {
         isAutoScrolling = false;
+        // Salir del modo pantalla completa
+        document.exitFullscreen();
         cancelAnimationFrame(scrollAnimation);
         stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
         updateToggleButton(false);
