@@ -839,6 +839,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Si el color no es blanco, negro o gris, entonces reasigna el color
                 node.style.color = textColor;
             }
+
+            // Eliminar elementos que no contribuyen al texto visible
+            if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
+                node.parentNode.removeChild(node);
+            }
             // Si el color es blanco, negro o gris, no asignamos ningún color,
             // permitiendo que el texto herede el color por defecto del 'teleprompter'
         });
