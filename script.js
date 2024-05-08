@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = rgb(255, 255, 255); // Ajusta a tu color por defecto de 'teleprompter'
+    const defaultColor = "#FFFFFF"; // Ajusta a tu color por defecto de 'teleprompter'
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
@@ -592,17 +592,23 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     let needsNewSpan = true;
 
     // Comprueba si la selección ya está dentro de un 'span'
-    if (range.startContainer.parentNode.tagName === 'SPAN' && range.endContainer.parentNode.tagName === 'SPAN' &&
-        range.startContainer.parentNode === range.endContainer.parentNode) {
-        span = range.startContainer.parentNode;
+    const isSpan = (node) => node && node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN';
+    let commonAncestorContainer = range.commonAncestorContainer;
+    while (commonAncestorContainer && !isSpan(commonAncestorContainer)) {
+        commonAncestorContainer = commonAncestorContainer.parentNode;
+    }
+
+    if (commonAncestorContainer && isSpan(commonAncestorContainer)) {
+        span = commonAncestorContainer;
         needsNewSpan = false; // No necesita un nuevo span, reutiliza este
     } else {
         span = document.createElement('span');
         span.appendChild(range.extractContents());
+        range.insertNode(span);
     }
 
+    // Si el color seleccionado es el color por defecto, eliminar el span
     if (color === defaultColor) {
-        // Eliminar el span si el color seleccionado es el por defecto
         if (!needsNewSpan) {
             const parent = span.parentNode;
             while (span.firstChild) {
@@ -613,9 +619,6 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     } else {
         // Aplicar el nuevo color
         span.style.color = color;
-        if (needsNewSpan) {
-            range.insertNode(span);
-        }
     }
 
     // Restablecer y mantener la selección para que se centre en el contenido modificado
@@ -624,12 +627,14 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     if (span.parentNode) {
         newRange.selectNodeContents(span);
     } else {
-        newRange.selectNodeContents(span.parentNode);
+        newRange.setStartBefore(span);
+        newRange.setEndAfter(span);
     }
     selection.addRange(newRange);
 
     autoguardado();
 });
+
 
 
 
