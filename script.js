@@ -635,6 +635,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
 
 
+
 // document.getElementById('textColorPicker').addEventListener('change', function() {
 //     var color = this.value;
 //     //document.getElementById('textSample').style.color = color;
