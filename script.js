@@ -524,6 +524,7 @@ function updateTeleprompterHeight() {
     teleprompter.style.height = `auto`; // Ajustar a 'auto' antes de calcular
     const newHeight = Math.max(teleprompter.scrollHeight, window.innerHeight);
     teleprompter.style.height = `${newHeight}px`;
+    teleprompter.style.transform = `translateY(${translateY}px)`;
     //teleprompter.offsetHeight;
 }
 
