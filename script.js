@@ -521,10 +521,11 @@ function stopAutoScroll() {
 
 function updateTeleprompterHeight() {
     const teleprompter = document.getElementById('teleprompter');
+    translateYValue = window.innerHeight;  // Ajustar para iniciar desde el principio
+    teleprompter.style.transform = `translateY(${translateYValue}px)`;
     teleprompter.style.height = `auto`; // Ajustar a 'auto' antes de calcular
     const newHeight = Math.max(teleprompter.scrollHeight, window.innerHeight);
     teleprompter.style.height = `${newHeight}px`;
-    teleprompter.style.transform = `translateY(${translateY}px)`;
     //teleprompter.offsetHeight;
 }
 
