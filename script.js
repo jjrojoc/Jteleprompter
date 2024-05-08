@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#FFFFFF"; // Ajusta a tu color por defecto de 'teleprompter'
+    const defaultColor = "rgb(255, 255, 255)"; // Ajusta a tu color por defecto de 'teleprompter'
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
