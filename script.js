@@ -579,24 +579,69 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
 document.getElementById('textColorPicker').addEventListener('change', function() {
-    var color = this.value;
-    //document.getElementById('textSample').style.color = color;
+    var color = this.value; // Color seleccionado
+    const defaultColor = "#FFFFFF"; // Ajusta esto al color de fondo o al color por defecto de tu teleprompter
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    const span = document.createElement('span');
-    span.style.color = color;
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
+    let span;
+
+    // Comprobar si el contenido seleccionado ya está en un span
+    if (range.commonAncestorContainer.nodeType === 3 && range.commonAncestorContainer.parentNode.tagName === 'SPAN') {
+        span = range.commonAncestorContainer.parentNode;
+
+        if (color === defaultColor) {
+            // Si el color seleccionado es el por defecto, eliminar el span
+            let parent = span.parentNode;
+            while (span.firstChild) parent.insertBefore(span.firstChild, span);
+            parent.removeChild(span);
+        } else {
+            // Si no, actualizar el color
+            span.style.color = color;
+        }
+    } else if (color !== defaultColor) {
+        // Si no está en un span y el color no es el por defecto, crear un nuevo span
+        span = document.createElement('span');
+        span.style.color = color;
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+    }
+
+    // Limpiar selección y mantener el rango actualizado
     selection.removeAllRanges();
-    selection.addRange(range);
-    selection.removeAllRanges();
+    if (span) {
+        const newRange = document.createRange();
+        newRange.selectNodeContents(span);
+        selection.addRange(newRange);
+    }
 
     autoguardado();
 });
+
+
+
+// document.getElementById('textColorPicker').addEventListener('change', function() {
+//     var color = this.value;
+//     //document.getElementById('textSample').style.color = color;
+//     const selection = window.getSelection();
+
+//     if (!selection.rangeCount) return;
+
+//     const range = selection.getRangeAt(0);
+//     const span = document.createElement('span');
+//     span.style.color = color;
+//     span.appendChild(range.extractContents());
+//     range.insertNode(span);
+//     selection.removeAllRanges();
+//     selection.addRange(range);
+//     selection.removeAllRanges();
+
+//     autoguardado();
+// });
 
 
 
