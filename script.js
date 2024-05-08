@@ -582,65 +582,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "rgb(255, 255, 255)"; // Color por defecto en formato RGB
+    const defaultColor = "rgb(255, 255, 255)"; // Define el color por defecto
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    let span;
-    let needsNewSpan = true;
+    let selectedContent = range.extractContents();
 
-    // Comprobar si la selección actual está dentro de un 'span'
-    let commonAncestorContainer = range.commonAncestorContainer;
-    while (commonAncestorContainer.nodeType !== Node.ELEMENT_NODE) {
-        commonAncestorContainer = commonAncestorContainer.parentNode;
-    }
-    if (commonAncestorContainer.tagName === 'SPAN') {
-        span = commonAncestorContainer;
-        needsNewSpan = false; // No necesita un nuevo span, reutiliza este
-    } else if (commonAncestorContainer.contains(range.startContainer) && range.startContainer.parentNode.tagName === 'SPAN') {
-        span = range.startContainer.parentNode;
-        needsNewSpan = false;
-    }
-
-    if (!needsNewSpan && span.style.color === color) {
-        // No se realiza ningún cambio si el color es el mismo
-        return;
-    }
-
-    if (color === defaultColor || color === "#FFFFFF") {
-        // Eliminar el span si el color elegido es el color por defecto
-        if (!needsNewSpan) {
-            const parent = span.parentNode;
-            while (span.firstChild) {
-                parent.insertBefore(span.firstChild, span);
+    // Función para aplicar el color
+    function applyColorToNode(node, color) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            if (node.textContent.trim() !== "") { // Asegurarse de que no es solo espacio en blanco
+                const span = document.createElement('span');
+                span.style.color = color;
+                span.textContent = node.textContent;
+                return span;
             }
-            parent.removeChild(span);
+            return node;
+        } else {
+            let child = node.firstChild;
+            while (child) {
+                const next = child.nextSibling;
+                node.replaceChild(applyColorToNode(child, color), child);
+                child = next;
+            }
+            return node;
         }
-    } else {
-        if (needsNewSpan) {
-            span = document.createElement('span');
-            span.appendChild(range.extractContents());
-            range.insertNode(span);
-        }
-        // Aplicar el nuevo color
-        span.style.color = color;
     }
 
-    // Restablecer y mantener la selección
+    // Aplicar el color o eliminar el span si el color es el default
+    if (color === defaultColor) {
+        let frag = document.createDocumentFragment();
+        Array.from(selectedContent.childNodes).forEach(child => {
+            if (child.nodeType === Node.ELEMENT_NODE && child.tagName === "SPAN") {
+                Array.from(child.childNodes).forEach(innerChild => frag.appendChild(innerChild.cloneNode(true)));
+            } else {
+                frag.appendChild(child.cloneNode(true));
+            }
+        });
+        selectedContent = frag;
+    } else {
+        selectedContent = applyColorToNode(selectedContent, color);
+    }
+
+    range.insertNode(selectedContent);
+
+    // Restablecer la selección
     selection.removeAllRanges();
     const newRange = document.createRange();
-    if (span && span.parentNode) {
-        newRange.selectNodeContents(span);
-    } else {
-        newRange.setStartBefore(span);
-        newRange.setEndAfter(span);
-    }
+    newRange.selectNodeContents(range.commonAncestorContainer);
     selection.addRange(newRange);
 
     autoguardado();
 });
+
 
 
 
