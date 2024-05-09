@@ -596,39 +596,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#ffffff"; // Define el color blanco como por defecto en formato hexadecimal
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    let selectedContent = range.extractContents();
+    const selectedText = range.toString();
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.textContent = selectedText;
 
-    // Función para aplicar o eliminar el color
-    function applyColorToNode(node, color) {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-            // Revisar si el elemento ya tiene estilo de color
-            if (node.style.color) {
-                if (color === defaultColor) {
-                    node.style.removeProperty('color'); // Elimina el color si es el color por defecto
-                } else {
-                    node.style.color = color; // Aplica el nuevo color
-                }
-            }
-            // Recursividad para aplicar el color a todos los nodos hijos
-            Array.from(node.childNodes).forEach(child => applyColorToNode(child, color));
-        }
-    }
-
-    applyColorToNode(selectedContent, color);
-    range.insertNode(selectedContent);
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(selectedContent);
-    selection.addRange(newRange);
+    range.deleteContents();
+    range.insertNode(span);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
