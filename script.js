@@ -596,66 +596,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#ffffff"; // Define el color blanco como por defecto en formato hexadecimal
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    let selectedContent = range.extractContents();
+    const selectedText = range.toString();
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.textContent = selectedText;
 
-    // Función para aplicar o eliminar el color
-    function applyColorToNode(node, color) {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const parent = node.parentNode;
-            // Si el nodo de texto ya está dentro de un <span>
-            if (parent && parent.tagName === "SPAN") {
-                if (color === defaultColor) {
-                    // Elimina el color si es blanco y comprueba si el <span> tiene otros estilos
-                    parent.style.removeProperty('color');
-                    if (!parent.getAttribute('style')) {
-                        // Si no tiene otros estilos, extraer el contenido del <span>
-                        while (parent.firstChild) {
-                            parent.parentNode.insertBefore(parent.firstChild, parent);
-                        }
-                        parent.parentNode.removeChild(parent);
-                    }
-                } else {
-                    parent.style.color = color; // Cambia el color existente
-                }
-                return;
-            }
-        }
-
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
-            if (color === defaultColor) {
-                node.style.removeProperty('color');
-                // Elimina el <span> si ya no tiene estilos
-                if (!node.getAttribute('style')) {
-                    const children = Array.from(node.childNodes);
-                    const parent = node.parentNode;
-                    children.forEach(child => parent.insertBefore(child, node));
-                    parent.removeChild(node);
-                }
-            } else {
-                node.style.color = color; // Aplica nuevo color
-            }
-        }
-        // Continuar recursivamente
-        Array.from(node.childNodes).forEach(child => applyColorToNode(child, color));
-    }
-
-    applyColorToNode(selectedContent, color);
-    range.insertNode(selectedContent);
-
-    // Restablecer la selección
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(selectedContent);
-    selection.addRange(newRange);
+    range.deleteContents();
+    range.insertNode(span);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
