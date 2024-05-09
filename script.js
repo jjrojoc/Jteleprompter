@@ -596,74 +596,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#ffffff"; // Define el color blanco como por defecto en formato hexadecimal
+    const defaultColor = "#ffffff";  // Asegúrate de que el valor coincida con el formato del input color
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    let selectedContent = range.extractContents();
-
-    // Función para aplicar o eliminar el color
-    function applyColorToNode(node, color) {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const parent = node.parentNode;
-            // Si el nodo texto ya está dentro de un <span>, ajustar o eliminar el color
-            if (parent && parent.tagName === "SPAN") {
-                if (color === defaultColor) {
-                    parent.style.removeProperty('color'); // Elimina el color si es blanco
-                } else {
-                    parent.style.color = color; // Cambia el color existente
-                }
-                return node; // Devuelve el nodo texto sin modificarlo más
-            } else {
-                // Si no está en un <span>, crea uno si es necesario
-                if (color !== defaultColor) {
-                    const span = document.createElement('span');
-                    span.style.color = color;
-                    span.appendChild(node.cloneNode(true));
-                    return span;
-                }
-            }
-        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
-            // Maneja los <span> existentes
-            if (color === defaultColor) {
-                node.style.removeProperty('color'); // Elimina el color si es blanco
-            } else {
-                node.style.color = color;
-            }
-            // Recursividad para hijos
-            let child = node.firstChild;
-            while (child) {
-                const next = child.nextSibling;
-                node.replaceChild(applyColorToNode(child, color), child);
-                child = next;
-            }
-            return node;
-        } else {
-            // Recursividad para otros nodos
-            let child = node.firstChild;
-            while (child) {
-                const next = child.nextSibling;
-                node.replaceChild(applyColorToNode(child, color), child);
-                child = next;
-            }
-            return node;
-        }
-        return node;
+    let node = range.startContainer;
+    if (node.nodeType === Node.TEXT_NODE) {
+        node = node.parentNode; // Sube un nivel si es nodo de texto
     }
 
-    selectedContent = applyColorToNode(selectedContent, color);
-    range.insertNode(selectedContent);
-
-    // Restablecer la selección
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(range.commonAncestorContainer);
-    selection.addRange(newRange);
+    // Aplica color o elimina el atributo de estilo si el color es blanco
+    if (color === defaultColor) {
+        node.style.color = ""; // Elimina cualquier color inline, permitiendo que se hereden los estilos
+    } else {
+        node.style.color = color;
+    }
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 document.addEventListener('selectionchange', function() {
     const selection = window.getSelection();
