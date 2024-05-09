@@ -593,78 +593,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-///// estoy usando esta ////
-// document.getElementById('textColorPicker').addEventListener('change', function() {
-//     var color = this.value;
-//     const defaultColor = "#ffffff"; // Define el color blanco como por defecto en formato hexadecimal
-//     const selection = window.getSelection();
-
-//     if (!selection.rangeCount) return;
-
-//     const range = selection.getRangeAt(0);
-//     let selectedContent = range.extractContents();
-
-//     // Función para aplicar o eliminar el color
-//     function applyColorToNode(node, color) {
-//         if (node.nodeType === Node.TEXT_NODE) {
-//             const parent = node.parentNode;
-//             // Si el nodo texto ya está dentro de un <span>, ajustar o eliminar el color
-//             if (parent && parent.tagName === "SPAN") {
-//                 if (color === defaultColor) {
-//                     parent.style.removeProperty('color'); // Elimina el color si es blanco
-//                 } else {
-//                     parent.style.color = color; // Cambia el color existente
-//                 }
-//                 return node; // Devuelve el nodo texto sin modificarlo más
-//             } else {
-//                 // Si no está en un <span>, crea uno si es necesario
-//                 if (color !== defaultColor) {
-//                     const span = document.createElement('span');
-//                     span.style.color = color;
-//                     span.appendChild(node.cloneNode(true));
-//                     return span;
-//                 }
-//             }
-//         } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
-//             // Maneja los <span> existentes
-//             if (color === defaultColor) {
-//                 node.style.removeProperty('color'); // Elimina el color si es blanco
-//             } else {
-//                 node.style.color = color;
-//             }
-//             // Recursividad para hijos
-//             let child = node.firstChild;
-//             while (child) {
-//                 const next = child.nextSibling;
-//                 node.replaceChild(applyColorToNode(child, color), child);
-//                 child = next;
-//             }
-//             return node;
-//         } else {
-//             // Recursividad para otros nodos
-//             let child = node.firstChild;
-//             while (child) {
-//                 const next = child.nextSibling;
-//                 node.replaceChild(applyColorToNode(child, color), child);
-//                 child = next;
-//             }
-//             return node;
-//         }
-//         return node;
-//     }
-
-//     selectedContent = applyColorToNode(selectedContent, color);
-//     range.insertNode(selectedContent);
-
-//     // Restablecer la selección
-//     selection.removeAllRanges();
-//     const newRange = document.createRange();
-//     newRange.selectNodeContents(range.commonAncestorContainer);
-//     selection.addRange(newRange);
-
-//     autoguardado(); // Asegúrate de que esta función está correctamente definida
-// });
-
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
@@ -683,9 +611,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
             // Si el nodo texto ya está dentro de un <span>, ajustar o eliminar el color
             if (parent && parent.tagName === "SPAN") {
                 if (color === defaultColor) {
-                    if (parent.style.color) {
-                        parent.style.removeProperty('color'); // Elimina el color si es blanco
-                    }
+                    parent.style.removeProperty('color'); // Elimina el color si es blanco
                 } else {
                     parent.style.color = color; // Cambia el color existente
                 }
@@ -699,15 +625,23 @@ document.getElementById('textColorPicker').addEventListener('change', function()
                     return span;
                 }
             }
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            if (node.tagName === "SPAN") {
-                if (color === defaultColor && node.style.color) {
-                    node.style.removeProperty('color'); // Elimina el color
-                } else if (color !== defaultColor) {
-                    node.style.color = color; // Aplica el nuevo color
-                }
+        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
+            // Maneja los <span> existentes
+            if (color === defaultColor) {
+                node.style.removeProperty('color'); // Elimina el color si es blanco
+            } else {
+                node.style.color = color;
             }
             // Recursividad para hijos
+            let child = node.firstChild;
+            while (child) {
+                const next = child.nextSibling;
+                node.replaceChild(applyColorToNode(child, color), child);
+                child = next;
+            }
+            return node;
+        } else {
+            // Recursividad para otros nodos
             let child = node.firstChild;
             while (child) {
                 const next = child.nextSibling;
@@ -730,8 +664,6 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
-
-
 
 document.addEventListener('selectionchange', function() {
     const selection = window.getSelection();
@@ -1002,102 +934,55 @@ document.getElementById('resetButton').addEventListener('click', function() {
 //     autoguardado();
 // });
 
-///// estoy usando este
-// document.addEventListener('DOMContentLoaded', function() {
-//     document.getElementById('teleprompter').addEventListener('paste', function(e) {
-//         e.preventDefault(); // Previene el comportamiento predeterminado del pegado.
+///// estoy usando este /////
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('teleprompter').addEventListener('paste', function(e) {
+        e.preventDefault(); // Previene el comportamiento predeterminado del pegado.
 
-//         const clipboardData = e.clipboardData || window.clipboardData;
-//         const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
+        const clipboardData = e.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
 
-//         // Crear un contenedor temporal donde se insertará el HTML para manipulación
-//         const tempDiv = document.createElement('div');
-//         tempDiv.innerHTML = pastedData;
+        // Crear un contenedor temporal donde se insertará el HTML para manipulación
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = pastedData;
 
-//         // Filtrar y modificar el contenido para ajustar los colores
-//         Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
-//             const textColor = node.style.color; // Guardar el color del texto original
-//             node.removeAttribute('style'); // Eliminar todos los estilos para resetear
+        // Filtrar y modificar el contenido para ajustar los colores
+        Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
+            const textColor = node.style.color; // Guardar el color del texto original
+            node.removeAttribute('style'); // Eliminar todos los estilos para resetear
 
-//             // Aplicar lógica condicional basada en el color
-//             if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
-//                 textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
-//                 textColor !== 'rgb(41, 41, 41)') {
-//                 // Si el color no es blanco, negro o gris, entonces reasigna el color
-//                 node.style.color = textColor;
-//             }
+            // Aplicar lógica condicional basada en el color
+            if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
+                textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
+                textColor !== 'rgb(41, 41, 41)') {
+                // Si el color no es blanco, negro o gris, entonces reasigna el color
+                node.style.color = textColor;
+            }
 
-//             // Eliminar elementos que no contribuyen al texto visible
-//             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
-//                 node.parentNode.removeChild(node);
-//             }
-//             // Si el color es blanco, negro o gris, no asignamos ningún color,
-//             // permitiendo que el texto herede el color por defecto del 'teleprompter'
-//         });
+            // Eliminar elementos que no contribuyen al texto visible
+            if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
+                node.parentNode.removeChild(node);
+            }
+            // Si el color es blanco, negro o gris, no asignamos ningún color,
+            // permitiendo que el texto herede el color por defecto del 'teleprompter'
+        });
 
-//         // Insertar el contenido modificado en el elemento
-//         const selection = window.getSelection();
-//         if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
-//         const range = selection.getRangeAt(0);
-//         range.deleteContents(); // Eliminar el contenido actual en la selección
+        // Insertar el contenido modificado en el elemento
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
+        const range = selection.getRangeAt(0);
+        range.deleteContents(); // Eliminar el contenido actual en la selección
 
-//         const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
-//         range.insertNode(fragment);
+        const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
+        range.insertNode(fragment);
 
-//         range.collapse(false);
-//         selection.removeAllRanges(); // Limpiar selecciones anteriores
-//         selection.addRange(range); // Establecer la nueva selección
+        range.collapse(false);
+        selection.removeAllRanges(); // Limpiar selecciones anteriores
+        selection.addRange(range); // Establecer la nueva selección
 
-//         updateTeleprompterHeight();
-//         autoguardado();
-//     });
-// });
-
-document.addEventListener('paste', function(event) {
-    event.preventDefault();  // Evitar el pegado predeterminado
-
-    var htmlContent = (event.clipboardData || window.clipboardData).getData('text/html');
-
-    // Si no hay HTML, intenta obtener texto plano
-    if (!htmlContent) {
-        htmlContent = (event.clipboardData || window.clipboardData).getData('text/plain');
-        htmlContent = htmlContent.replace(/(?:\r\n|\r|\n)/g, '<br>');  // Convertir saltos de línea a <br>
-    }
-
-    var tempDiv = document.createElement('div');
-    tempDiv.innerHTML = htmlContent;
-
-    // Mantener solo el color del texto y eliminar otros estilos
-    Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
-        const textColor = node.style.color;
-        node.removeAttribute('style');
-                // Aplicar lógica condicional basada en el color
-        if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
-            textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
-            textColor !== 'rgb(41, 41, 41)') {
-            // Si el color no es blanco, negro o gris, entonces reasigna el color
-            node.style.color = textColor;
-        }
-
-        // Eliminar elementos que no contribuyen al texto visible
-        if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
-            node.parentNode.removeChild(node);
-        }
-        // Si el color es blanco, negro o gris, no asignamos ningún color,
-        // permitiendo que el texto herede el color por defecto del 'teleprompter'
+        updateTeleprompterHeight();
+        autoguardado();
     });
-
-    // Añadir el contenido limpio al área de entrada
-    var inputArea = document.getElementById('teleprompter');
-    if (inputArea) {
-        if (inputArea.isContentEditable) {
-            inputArea.innerHTML += tempDiv.innerHTML;
-        } else {
-            inputArea.value += tempDiv.innerText;  // Convertir a texto si no es contentEditable
-        }
-    }
-    updateTeleprompterHeight();
-    autoguardado();
 });
 
 
