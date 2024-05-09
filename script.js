@@ -606,12 +606,18 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     // Función para aplicar o eliminar el color
     function applyColorToNode(node, color) {
-        if (node.nodeType === Node.ELEMENT_NODE && node.style && node.style.color) {
-            node.style.color = color; // Cambia el color directamente
+        if (node.nodeType === Node.ELEMENT_NODE) {
+            // Revisar si el elemento ya tiene estilo de color
+            if (node.style.color) {
+                if (color === defaultColor) {
+                    node.style.removeProperty('color'); // Elimina el color si es el color por defecto
+                } else {
+                    node.style.color = color; // Aplica el nuevo color
+                }
+            }
+            // Recursividad para aplicar el color a todos los nodos hijos
+            Array.from(node.childNodes).forEach(child => applyColorToNode(child, color));
         }
-
-        let children = Array.from(node.childNodes);
-        children.forEach(child => applyColorToNode(child, color));
     }
 
     applyColorToNode(selectedContent, color);
