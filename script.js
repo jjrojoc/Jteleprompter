@@ -606,33 +606,15 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     // Función para aplicar o eliminar el color
     function applyColorToNode(node, color) {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const parent = node.parentNode;
-            if (parent.tagName === "SPAN") {
-                if (color === defaultColor) {
-                    parent.style.color = ""; // Establecer explícitamente al color por defecto
-                } else {
-                    parent.style.color = color;
-                }
-            } else if (color !== defaultColor) {
-                const span = document.createElement('span');
-                span.style.color = color;
-                span.appendChild(node.cloneNode(true));
-                return span;
-            }
-            return node;
+        if (node.nodeType === Node.ELEMENT_NODE && node.style && node.style.color) {
+            node.style.color = color; // Cambia el color directamente
         }
 
-        let child = node.firstChild;
-        while (child) {
-            const next = child.nextSibling;
-            node.replaceChild(applyColorToNode(child, color), child);
-            child = next;
-        }
-        return node;
+        let children = Array.from(node.childNodes);
+        children.forEach(child => applyColorToNode(child, color));
     }
 
-    selectedContent = applyColorToNode(selectedContent, color);
+    applyColorToNode(selectedContent, color);
     range.insertNode(selectedContent);
     selection.removeAllRanges();
     const newRange = document.createRange();
@@ -641,6 +623,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
