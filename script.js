@@ -1000,9 +1000,9 @@ document.addEventListener('paste', function(event) {
     tempDiv.innerHTML = htmlContent;
 
     // Mantener solo el color del texto y eliminar otros estilos
-    Array.from(tempDiv.querySelectorAll('*')).forEach(el => {
-        const textColor = el.style.color;
-        el.removeAttribute('style');
+    Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
+        const textColor = node.style.color;
+        node.removeAttribute('style');
                 // Aplicar lógica condicional basada en el color
         if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
             textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
