@@ -1001,9 +1001,22 @@ document.addEventListener('paste', function(event) {
 
     // Mantener solo el color del texto y eliminar otros estilos
     Array.from(tempDiv.querySelectorAll('*')).forEach(el => {
-        const color = el.style.color;
+        const textColor = el.style.color;
         el.removeAttribute('style');
-        if (color) el.style.color = color;  // Aplicar solo el color
+                // Aplicar lógica condicional basada en el color
+        if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
+            textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
+            textColor !== 'rgb(41, 41, 41)') {
+            // Si el color no es blanco, negro o gris, entonces reasigna el color
+            node.style.color = textColor;
+        }
+
+        // Eliminar elementos que no contribuyen al texto visible
+        if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
+            node.parentNode.removeChild(node);
+        }
+        // Si el color es blanco, negro o gris, no asignamos ningún color,
+        // permitiendo que el texto herede el color por defecto del 'teleprompter'
     });
 
     // Añadir el contenido limpio al área de entrada
