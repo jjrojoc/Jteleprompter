@@ -608,48 +608,42 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     function applyColorToNode(node, color) {
         if (node.nodeType === Node.TEXT_NODE) {
             const parent = node.parentNode;
-            if (parent && parent.tagName === "SPAN") {
+            if (parent.tagName === "SPAN") {
                 if (color === defaultColor) {
-                    if (!parent.getAttribute('style') || parent.style.cssText.trim() === 'color: ' + defaultColor + ';') {
-                        parent.replaceWith(...parent.childNodes); // Elimina el span si solo tiene color
+                    if (parent.style.color === defaultColor || !parent.style.color) {
+                        // Si el color es el default y no hay otros estilos, eliminar el span
+                        let docFrag = document.createDocumentFragment();
+                        while (parent.firstChild) {
+                            docFrag.appendChild(parent.firstChild);
+                        }
+                        parent.parentNode.replaceChild(docFrag, parent);
                     } else {
                         parent.style.removeProperty('color');
                     }
                 } else {
                     parent.style.color = color;
                 }
-                return node;
-            } else {
-                if (color !== defaultColor) {
-                    const span = document.createElement('span');
-                    span.style.color = color;
-                    span.appendChild(node.cloneNode(true));
-                    return span;
-                }
-            }
-        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
-            if (color === defaultColor) {
-                node.style.removeProperty('color');
-                if (!node.getAttribute('style')) {
-                    node.replaceWith(...node.childNodes); // Elimina el span si solo tiene color
-                }
-            } else {
-                node.style.color = color;
-            }
-            let child = node.firstChild;
-            while (child) {
-                const next = child.nextSibling;
-                node.replaceChild(applyColorToNode(child, color), child);
-                child = next;
+            } else if (color !== defaultColor) {
+                // Crea un nuevo span para el texto si el color no es el por defecto
+                const span = document.createElement('span');
+                span.style.color = color;
+                span.appendChild(node.cloneNode(true));
+                return span;
             }
             return node;
+        }
+
+        let child = node.firstChild;
+        while (child) {
+            const next = child.nextSibling;
+            node.replaceChild(applyColorToNode(child, color), child);
+            child = next;
         }
         return node;
     }
 
     selectedContent = applyColorToNode(selectedContent, color);
     range.insertNode(selectedContent);
-
     selection.removeAllRanges();
     const newRange = document.createRange();
     newRange.selectNodeContents(selectedContent);
@@ -657,6 +651,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 document.addEventListener('selectionchange', function() {
