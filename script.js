@@ -610,21 +610,11 @@ document.getElementById('textColorPicker').addEventListener('change', function()
             const parent = node.parentNode;
             if (parent.tagName === "SPAN") {
                 if (color === defaultColor) {
-                    if (parent.style.color === defaultColor || !parent.style.color) {
-                        // Si el color es el default y no hay otros estilos, eliminar el span
-                        let docFrag = document.createDocumentFragment();
-                        while (parent.firstChild) {
-                            docFrag.appendChild(parent.firstChild);
-                        }
-                        parent.parentNode.replaceChild(docFrag, parent);
-                    } else {
-                        parent.style.removeProperty('color');
-                    }
+                    parent.style.color = defaultColor; // Establecer explícitamente al color por defecto
                 } else {
                     parent.style.color = color;
                 }
             } else if (color !== defaultColor) {
-                // Crea un nuevo span para el texto si el color no es el por defecto
                 const span = document.createElement('span');
                 span.style.color = color;
                 span.appendChild(node.cloneNode(true));
@@ -651,6 +641,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
