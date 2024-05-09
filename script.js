@@ -934,7 +934,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
 //     autoguardado();
 // });
 
-///// estoy usando este /////
+
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('teleprompter').addEventListener('paste', function(e) {
         e.preventDefault(); // Previene el comportamiento predeterminado del pegado.
@@ -984,6 +984,7 @@ document.addEventListener('DOMContentLoaded', function() {
         autoguardado();
     });
 });
+
 
 
 // document.getElementById('teleprompter').addEventListener('paste', function(e) {
