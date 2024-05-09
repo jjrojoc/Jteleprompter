@@ -934,57 +934,90 @@ document.getElementById('resetButton').addEventListener('click', function() {
 //     autoguardado();
 // });
 
+///// estoy usando este
+// document.addEventListener('DOMContentLoaded', function() {
+//     document.getElementById('teleprompter').addEventListener('paste', function(e) {
+//         e.preventDefault(); // Previene el comportamiento predeterminado del pegado.
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('teleprompter').addEventListener('paste', function(e) {
-        e.preventDefault(); // Previene el comportamiento predeterminado del pegado.
+//         const clipboardData = e.clipboardData || window.clipboardData;
+//         const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
 
-        const clipboardData = e.clipboardData || window.clipboardData;
-        const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
+//         // Crear un contenedor temporal donde se insertará el HTML para manipulación
+//         const tempDiv = document.createElement('div');
+//         tempDiv.innerHTML = pastedData;
 
-        // Crear un contenedor temporal donde se insertará el HTML para manipulación
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = pastedData;
+//         // Filtrar y modificar el contenido para ajustar los colores
+//         Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
+//             const textColor = node.style.color; // Guardar el color del texto original
+//             node.removeAttribute('style'); // Eliminar todos los estilos para resetear
 
-        // Filtrar y modificar el contenido para ajustar los colores
-        Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
-            const textColor = node.style.color; // Guardar el color del texto original
-            node.removeAttribute('style'); // Eliminar todos los estilos para resetear
+//             // Aplicar lógica condicional basada en el color
+//             if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
+//                 textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
+//                 textColor !== 'rgb(41, 41, 41)') {
+//                 // Si el color no es blanco, negro o gris, entonces reasigna el color
+//                 node.style.color = textColor;
+//             }
 
-            // Aplicar lógica condicional basada en el color
-            if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
-                textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
-                textColor !== 'rgb(41, 41, 41)') {
-                // Si el color no es blanco, negro o gris, entonces reasigna el color
-                node.style.color = textColor;
-            }
+//             // Eliminar elementos que no contribuyen al texto visible
+//             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
+//                 node.parentNode.removeChild(node);
+//             }
+//             // Si el color es blanco, negro o gris, no asignamos ningún color,
+//             // permitiendo que el texto herede el color por defecto del 'teleprompter'
+//         });
 
-            // Eliminar elementos que no contribuyen al texto visible
-            if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
-                node.parentNode.removeChild(node);
-            }
-            // Si el color es blanco, negro o gris, no asignamos ningún color,
-            // permitiendo que el texto herede el color por defecto del 'teleprompter'
-        });
+//         // Insertar el contenido modificado en el elemento
+//         const selection = window.getSelection();
+//         if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
+//         const range = selection.getRangeAt(0);
+//         range.deleteContents(); // Eliminar el contenido actual en la selección
 
-        // Insertar el contenido modificado en el elemento
-        const selection = window.getSelection();
-        if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
-        const range = selection.getRangeAt(0);
-        range.deleteContents(); // Eliminar el contenido actual en la selección
+//         const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
+//         range.insertNode(fragment);
 
-        const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
-        range.insertNode(fragment);
+//         range.collapse(false);
+//         selection.removeAllRanges(); // Limpiar selecciones anteriores
+//         selection.addRange(range); // Establecer la nueva selección
 
-        range.collapse(false);
-        selection.removeAllRanges(); // Limpiar selecciones anteriores
-        selection.addRange(range); // Establecer la nueva selección
+//         updateTeleprompterHeight();
+//         autoguardado();
+//     });
+// });
 
-        updateTeleprompterHeight();
-        autoguardado();
+document.addEventListener('paste', function(event) {
+    event.preventDefault();  // Evitar el pegado predeterminado
+
+    var htmlContent = (event.clipboardData || window.clipboardData).getData('text/html');
+
+    // Si no hay HTML, intenta obtener texto plano
+    if (!htmlContent) {
+        htmlContent = (event.clipboardData || window.clipboardData).getData('text/plain');
+        htmlContent = htmlContent.replace(/(?:\r\n|\r|\n)/g, '<br>');  // Convertir saltos de línea a <br>
+    }
+
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+
+    // Mantener solo el color del texto y eliminar otros estilos
+    Array.from(tempDiv.querySelectorAll('*')).forEach(el => {
+        const color = el.style.color;
+        el.removeAttribute('style');
+        if (color) el.style.color = color;  // Aplicar solo el color
     });
-});
 
+    // Añadir el contenido limpio al área de entrada
+    var inputArea = document.getElementById('teleprompterInput');
+    if (inputArea) {
+        if (inputArea.isContentEditable) {
+            inputArea.innerHTML += tempDiv.innerHTML;
+        } else {
+            inputArea.value += tempDiv.innerText;  // Convertir a texto si no es contentEditable
+        }
+    }
+    updateTeleprompterHeight();
+    autoguardado();
+});
 
 
 // document.getElementById('teleprompter').addEventListener('paste', function(e) {
