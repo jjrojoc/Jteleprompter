@@ -1007,7 +1007,7 @@ document.addEventListener('paste', function(event) {
     });
 
     // Añadir el contenido limpio al área de entrada
-    var inputArea = document.getElementById('teleprompterInput');
+    var inputArea = document.getElementById('teleprompter');
     if (inputArea) {
         if (inputArea.isContentEditable) {
             inputArea.innerHTML += tempDiv.innerHTML;
