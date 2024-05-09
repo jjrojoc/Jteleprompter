@@ -610,7 +610,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
             const parent = node.parentNode;
             if (parent.tagName === "SPAN") {
                 if (color === defaultColor) {
-                    parent.style.color = defaultColor; // Establecer explícitamente al color por defecto
+                    parent.style.color = ""; // Establecer explícitamente al color por defecto
                 } else {
                     parent.style.color = color;
                 }
