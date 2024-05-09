@@ -596,21 +596,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
+    const defaultColor = "#ffffff"; // Color blanco en hexadecimal
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
     const selectedText = range.toString();
-    const span = document.createElement('span');
-    span.style.color = color;
-    span.textContent = selectedText;
 
+    // Crear un nuevo span o usar un fragmento de texto
+    let contentToInsert;
+    if (color === defaultColor) {
+        // Si el color es blanco, simplemente usa un fragmento de texto para no aplicar un estilo específico
+        contentToInsert = document.createTextNode(selectedText);
+    } else {
+        // Si se seleccionó un color, crea un span y aplica el color
+        const span = document.createElement('span');
+        span.style.color = color;
+        span.textContent = selectedText;
+        contentToInsert = span;
+    }
+
+    // Insertar el nuevo contenido y reemplazar el viejo
     range.deleteContents();
-    range.insertNode(span);
+    range.insertNode(contentToInsert);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
