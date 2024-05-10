@@ -606,39 +606,41 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     range.deleteContents();
 
+    // Crea un textNode con el texto seleccionado
+    const textNode = document.createTextNode(selectedText);
+
+    // Si el color no es blanco, envuelve el texto en un span con el color elegido
     if (color !== defaultColor) {
         const span = document.createElement('span');
         span.style.color = color;
-        span.textContent = selectedText;
+        span.appendChild(textNode);
         range.insertNode(span);
     } else {
-        const textNode = document.createTextNode(selectedText);
-        const ancestor = range.commonAncestorContainer;
-
-        // Intenta subir hasta encontrar el primer 'span' o el límite del contenido editable
-        let current = ancestor;
-        while (current && current !== document.body && current.nodeType !== Node.ELEMENT_NODE || (current.nodeType === Node.ELEMENT_NODE && current.tagName !== "SPAN")) {
-            current = current.parentNode;
-        }
-
-        if (current && current.tagName === "SPAN" && current.style.color) {
-            // Limpia el color del 'span' si sólo afecta al color
-            if (current.style.length === 1) {
-                let parent = current.parentNode;
-                while (current.firstChild) parent.insertBefore(current.firstChild, current);
-                parent.removeChild(current);
-                range.insertNode(textNode);
-            } else {
-                current.style.removeProperty('color');
-                range.insertNode(textNode);
-            }
-        } else {
-            range.insertNode(textNode);
-        }
+        // Eliminar cualquier span que pueda estar afectando el color directamente
+        cleanColorStyles(range.commonAncestorContainer, textNode, range);
     }
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
+function cleanColorStyles(node, textNode, range) {
+    // Mientras el nodo no sea el cuerpo y sea un span que afecta el color
+    while (node !== document.body && node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN" && node.style.color) {
+        let parent = node.parentNode;
+
+        // Mueve todos los hijos de node a parent antes de node
+        while (node.firstChild) {
+            parent.insertBefore(node.firstChild, node);
+        }
+
+        // Remueve el span vacío
+        parent.removeChild(node);
+        node = parent;
+    }
+    // Inserta el textNode limpio en el rango original
+    range.insertNode(textNode);
+}
+
 
 
 
