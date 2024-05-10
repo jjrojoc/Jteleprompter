@@ -604,41 +604,42 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     const range = selection.getRangeAt(0);
     let selectedContent = range.extractContents();
 
-    if (color !== defaultColor || color !== "rgb(255, 255, 255)") {
-        // Aplicar color mediante un nuevo span si no es blanco
+    if (color === defaultColor) {
+        // Si el color seleccionado es blanco, eliminar los spans.
+        let newContent = document.createDocumentFragment();
+        removeSpanNodes(selectedContent, newContent);
+        range.insertNode(newContent);
+    } else {
+        // Si el color seleccionado no es blanco, aplicar el color con un nuevo span.
         const span = document.createElement('span');
         span.style.color = color;
         span.appendChild(selectedContent);
         range.insertNode(span);
-    } else {
-        // Eliminar todos los span de la selección si el color es blanco
-        let fragment = removeSpanNodes(selectedContent);
-        range.insertNode(fragment);
     }
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
 
-function removeSpanNodes(node) {
-    let fragment = document.createDocumentFragment();
+function removeSpanNodes(node, fragment) {
     if (node.nodeType === Node.TEXT_NODE) {
         fragment.appendChild(node); // Directamente añadir nodos de texto
     } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
-        // No añadir el span, pero procesar sus hijos
+        // No añadir el span, pero procesar sus hijos y añadirlos directamente al fragmento.
         Array.from(node.childNodes).forEach(child => {
-            fragment.appendChild(removeSpanNodes(child));
-        });
-    } else if (node.hasChildNodes()) {
-        // Otros elementos: añadir sus hijos procesados
-        Array.from(node.childNodes).forEach(child => {
-            fragment.appendChild(removeSpanNodes(child));
+            removeSpanNodes(child, fragment);
         });
     } else {
-        // Otros nodos que no sean texto ni span, simplemente añadir
-        fragment.appendChild(node.cloneNode(true));
+        // Para cualquier otro elemento, clonarlo sin copiar los posibles estilos <span> internos.
+        let newNode = node.cloneNode(false);
+        fragment.appendChild(newNode);
+        Array.from(node.childNodes).forEach(child => {
+            removeSpanNodes(child, newNode);
+        });
     }
-    return fragment;
 }
+
+
+
 
 // Función para convertir color RGB a Hex
 function rgbToHex(rgb) {
