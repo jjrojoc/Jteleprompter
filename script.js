@@ -607,18 +607,39 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     range.deleteContents();
 
     if (color !== defaultColor) {
-        // Si el color no es blanco, crea un span y aplica el color
         const span = document.createElement('span');
         span.style.color = color;
         span.textContent = selectedText;
         range.insertNode(span);
     } else {
-        // Si el color es blanco, simplemente inserta el texto sin span
-        range.insertNode(document.createTextNode(selectedText));
+        const textNode = document.createTextNode(selectedText);
+        const ancestor = range.commonAncestorContainer;
+
+        // Intenta subir hasta encontrar el primer 'span' o el límite del contenido editable
+        let current = ancestor;
+        while (current && current !== document.body && current.nodeType !== Node.ELEMENT_NODE || (current.nodeType === Node.ELEMENT_NODE && current.tagName !== "SPAN")) {
+            current = current.parentNode;
+        }
+
+        if (current && current.tagName === "SPAN" && current.style.color) {
+            // Limpia el color del 'span' si sólo afecta al color
+            if (current.style.length === 1) {
+                let parent = current.parentNode;
+                while (current.firstChild) parent.insertBefore(current.firstChild, current);
+                parent.removeChild(current);
+                range.insertNode(textNode);
+            } else {
+                current.style.removeProperty('color');
+                range.insertNode(textNode);
+            }
+        } else {
+            range.insertNode(textNode);
+        }
     }
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
