@@ -596,55 +596,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#ffffff"; // El color blanco como color por defecto
     const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    const selectedContent = range.extractContents();
+    const selectedText = range.toString();
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.textContent = selectedText;
 
-    // Función para aplicar o quitar el color
-    function applyOrRemoveColor(node, color) {
-        if (node.nodeType === Node.TEXT_NODE) {
-            let span = node.parentNode.tagName === "SPAN" ? node.parentNode : document.createElement('span');
-            if (color === defaultColor) {
-                // Si el color es blanco, quitamos el atributo de color
-                span.style.removeProperty('color');
-            } else {
-                span.style.color = color;
-            }
-            return span;
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            if (node.tagName === "SPAN") {
-                if (color === defaultColor) {
-                    node.style.removeProperty('color');
-                } else {
-                    node.style.color = color;
-                }
-            }
-            // Procesar nodos hijos recursivamente
-            Array.from(node.childNodes).forEach(child => {
-                node.replaceChild(applyOrRemoveColor(child, color), child);
-            });
-            return node;
-        }
-        return node;
-    }
-
-    // Aplica la lógica a todo el contenido seleccionado
-    const newContent = applyOrRemoveColor(selectedContent, color);
-    range.insertNode(newContent);
-
-    // Limpia la selección actual y selecciona el contenido nuevo
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(newContent);
-    selection.addRange(newRange);
+    range.deleteContents();
+    range.insertNode(span);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
-
 
 
 
