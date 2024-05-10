@@ -596,21 +596,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const selection = window.getSelection();
+    const defaultColor = "#ffffff"; // Este es el color "blanco"
 
+    const selection = window.getSelection();
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    const selectedText = range.toString();
-    const span = document.createElement('span');
-    span.style.color = color;
-    span.textContent = selectedText;
+    let selectedContent = range.extractContents();
 
-    range.deleteContents();
-    range.insertNode(span);
+    if (color !== defaultColor) {
+        // Aplicar color mediante un nuevo span si no es blanco
+        const span = document.createElement('span');
+        span.style.color = color;
+        span.appendChild(selectedContent);
+        range.insertNode(span);
+    } else {
+        // Eliminar todos los span de la selección si el color es blanco
+        let fragment = removeSpanNodes(selectedContent);
+        range.insertNode(fragment);
+    }
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
+function removeSpanNodes(node) {
+    let fragment = document.createDocumentFragment();
+    if (node.nodeType === Node.TEXT_NODE) {
+        fragment.appendChild(node); // Directamente añadir nodos de texto
+    } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
+        // No añadir el span, pero procesar sus hijos
+        Array.from(node.childNodes).forEach(child => {
+            fragment.appendChild(removeSpanNodes(child));
+        });
+    } else if (node.hasChildNodes()) {
+        // Otros elementos: añadir sus hijos procesados
+        Array.from(node.childNodes).forEach(child => {
+            fragment.appendChild(removeSpanNodes(child));
+        });
+    } else {
+        // Otros nodos que no sean texto ni span, simplemente añadir
+        fragment.appendChild(node.cloneNode(true));
+    }
+    return fragment;
+}
+
+// Función para convertir color RGB a Hex
+function rgbToHex(rgb) {
+    const rgbArr = rgb.match(/\d+/g);
+    return rgbArr ? "#" + rgbArr.map(x => parseInt(x).toString(16).padStart(2, '0')).join('') : '#000000';
+}
+
 
 
 
@@ -636,12 +671,6 @@ document.addEventListener('selectionchange', function() {
         document.getElementById('textColorPicker').value = '#ffffff'; // Color por defecto
     }
 });
-
-// Función para convertir color RGB a Hex
-function rgbToHex(rgb) {
-    const rgbArr = rgb.match(/\d+/g);
-    return rgbArr ? "#" + rgbArr.map(x => parseInt(x).toString(16).padStart(2, '0')).join('') : '#000000';
-}
 
 
 
