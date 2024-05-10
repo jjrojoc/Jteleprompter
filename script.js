@@ -70,33 +70,39 @@ document.getElementById('loadText').style.display = 'none';
 document.getElementById('saveText').style.display = 'none';
 
 // Asume que textColorControl es un input de tipo color
+// Escucha el cambio en el control de color
 document.getElementById('textColorControl').addEventListener('change', function() {
-    const newColor = this.value;
-    const selection = window.getSelection();
+    const newColor = this.value; // Nuevo color seleccionado
 
-    // Si no hay selección, simplemente cambia el color del 'teleprompter'
+    const selection = window.getSelection();
     if (!selection.rangeCount) {
+        // No hay selección, cambiamos el color del elemento por defecto
         teleprompter.style.color = newColor;
         return;
     }
 
+    // Obtenemos el rango de la selección
     const range = selection.getRangeAt(0);
-    const node = range.startContainer.parentNode; // Asume que la selección es simple y está dentro de un nodo
+    // Se asume que la selección es simple y dentro de un nodo
+    let node = range.startContainer;
 
-    // Verifica si el nodo actual es un <span> y tiene un estilo de color definido
-    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN" && node.style.color) {
-        const currentColor = rgbToHex(window.getComputedStyle(node).color);
-        if (currentColor === "#ffffff" || !node.style.color) {
-            node.style.color = newColor; // Cambia el color si el actual es blanco o no está definido
-        } else if (newColor !== "#ffffff") {
-            node.style.color = newColor; // Cambia el color si el nuevo color no es blanco
-        }
-    } else {
-        node.style.color = newColor; // Si el nodo no es un <span>, simplemente cambia el color
+    // Asegurarse de obtener un nodo de elemento si el nodo es de texto
+    if (node.nodeType === Node.TEXT_NODE) {
+        node = node.parentNode;
     }
 
-    autoguardado(); // Asegúrate de que esta función está correctamente definida
+    // Cambiar el color solo si el nodo es un <span> o el nodo de teleprompter (ajusta según tu lógica)
+    if (node.nodeType === Node.ELEMENT_NODE && (node.tagName === "SPAN" || node === teleprompter)) {
+        if (newColor === "#ffffff") { // Si el color seleccionado es blanco, aplicamos el color por defecto del teleprompter
+            node.style.color = ""; // O podría ser el color por defecto que tú definas
+        } else {
+            node.style.color = newColor;
+        }
+    }
+
+    autoguardado(); // Función para auto-guardado, asegúrate de que está correctamente definida
 });
+
 
 
 
