@@ -603,38 +603,35 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     const range = selection.getRangeAt(0);
     const fragment = range.extractContents(); // Extraemos el contenido del rango
 
-    // Comprobamos si el color elegido es el blanco o el color por defecto
-    if (color === "#ffffff") {
-        // Recursivamente eliminamos <span> y mantenemos el texto
-        function flattenSpans(node) {
-            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
-                while (node.firstChild) {
-                    node.parentNode.insertBefore(node.firstChild, node);
-                }
-                node.parentNode.removeChild(node);
+    if (color === "#ffffff") { // Si el color seleccionado es blanco
+        let textContent = '';
+        (function extractText(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                textContent += node.nodeValue; // Concatenamos texto de nodos de texto
             } else {
-                Array.from(node.childNodes).forEach(flattenSpans);
+                Array.from(node.childNodes).forEach(extractText); // Recursivamente para todos los hijos
             }
-        }
-        Array.from(fragment.childNodes).forEach(flattenSpans);
+        })(fragment);
+
+        // Creamos un nuevo nodo de texto con todo el texto extraído
+        const textNode = document.createTextNode(textContent);
+        range.insertNode(textNode); // Insertamos el texto plano
     } else {
-        // Para otros colores, creamos un nuevo <span> con el color seleccionado
         const span = document.createElement('span');
         span.style.color = color;
-        span.appendChild(fragment);
-        fragment = span;
+        span.appendChild(fragment); // Insertamos el contenido extraído dentro del span
+        range.insertNode(span); // Insertamos el span en el rango
     }
-
-    range.insertNode(fragment); // Reinsertamos el contenido modificado en el rango
 
     // Restablecer la selección
     selection.removeAllRanges();
     const newRange = document.createRange();
-    newRange.selectNodeContents(fragment);
+    newRange.selectNodeContents(range.startContainer);
     selection.addRange(newRange);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
