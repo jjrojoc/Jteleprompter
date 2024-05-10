@@ -604,7 +604,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     const range = selection.getRangeAt(0);
     const selectedText = range.toString();
     const span = document.createElement('span');
-    if (color !== defaultColor) {
+    if (color !== defaultColor || "rgb(255, 255, 255") {
         span.style.color = color; // Solo asigna el color si no es blanco
     }
     span.textContent = selectedText;
