@@ -69,11 +69,35 @@ document.getElementById('toggleScroll').addEventListener('click', toggleAutoScro
 document.getElementById('loadText').style.display = 'none';
 document.getElementById('saveText').style.display = 'none';
 
-textColorControl.addEventListener('change', () => {
-    // const newColor = document.getElementById('textColorPicker').value; // toma el color del colorpicker
-    const newColor = textColorControl.value;
-    teleprompter.style.color = newColor;
+// Asume que textColorControl es un input de tipo color
+document.getElementById('textColorControl').addEventListener('change', function() {
+    const newColor = this.value;
+    const selection = window.getSelection();
+
+    // Si no hay selección, simplemente cambia el color del 'teleprompter'
+    if (!selection.rangeCount) {
+        teleprompter.style.color = newColor;
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+    const node = range.startContainer.parentNode; // Asume que la selección es simple y está dentro de un nodo
+
+    // Verifica si el nodo actual es un <span> y tiene un estilo de color definido
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN" && node.style.color) {
+        const currentColor = rgbToHex(window.getComputedStyle(node).color);
+        if (currentColor === "#ffffff" || !node.style.color) {
+            node.style.color = newColor; // Cambia el color si el actual es blanco o no está definido
+        } else if (newColor !== "#ffffff") {
+            node.style.color = newColor; // Cambia el color si el nuevo color no es blanco
+        }
+    } else {
+        node.style.color = newColor; // Si el nodo no es un <span>, simplemente cambia el color
+    }
+
+    autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 ///// CRONOMETRO /////
