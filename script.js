@@ -596,21 +596,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const selection = window.getSelection();
+    const defaultColor = "#ffffff"; // Este es el color "blanco"
 
+    const selection = window.getSelection();
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
     const selectedText = range.toString();
-    const span = document.createElement('span');
-    span.style.color = color;
-    span.textContent = selectedText;
 
     range.deleteContents();
-    range.insertNode(span);
+
+    if (color !== defaultColor) {
+        // Si el color no es blanco, crea un span y aplica el color
+        const span = document.createElement('span');
+        span.style.color = color;
+        span.textContent = selectedText;
+        range.insertNode(span);
+    } else {
+        // Si el color es blanco, simplemente inserta el texto sin span
+        range.insertNode(document.createTextNode(selectedText));
+    }
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
