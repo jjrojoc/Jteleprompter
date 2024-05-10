@@ -596,17 +596,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#ffffff"; // Este es el color "blanco"
-
     const selection = window.getSelection();
+
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
     const selectedText = range.toString();
     const span = document.createElement('span');
-    if (color !== defaultColor || "rgb(255, 255, 255") {
-        span.style.color = color; // Solo asigna el color si no es blanco
-    }
+    span.style.color = color;
     span.textContent = selectedText;
 
     range.deleteContents();
@@ -614,8 +611,6 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
-
-
 
 
 
