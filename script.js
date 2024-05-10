@@ -596,57 +596,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#ffffff"; // Este es el color "blanco"
-
     const selection = window.getSelection();
+
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
     const selectedText = range.toString();
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.textContent = selectedText;
 
     range.deleteContents();
-
-    // Crea un textNode con el texto seleccionado
-    const textNode = document.createTextNode(selectedText);
-
-    // Si el color no es blanco, envuelve el texto en un span con el color elegido
-    if (color && color !== 'white' && color !== 'rgb(255, 255, 255)' &&
-                color !== 'black' && color !== 'rgb(0, 0, 0)' &&
-                color !== 'rgb(41, 41, 41)') {
-                // Si el color no es blanco, negro o gris, entonces reasigna el color
-                const span = document.createElement('span');
-        span.style.color = color;
-        span.appendChild(textNode);
-        range.insertNode(span);
-        
-    } else {
-        // Eliminar cualquier span que pueda estar afectando el color directamente
-        cleanColorStyles(range.commonAncestorContainer, textNode, range);
-    }
+    range.insertNode(span);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
-
-function cleanColorStyles(node, textNode, range) {
-    // Mientras el nodo no sea el cuerpo y sea un span que afecta el color
-    while (node !== document.body && node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN" && node.style.color) {
-        let parent = node.parentNode;
-
-        // Mueve todos los hijos de node a parent antes de node
-        while (node.firstChild) {
-            parent.insertBefore(node.firstChild, node);
-        }
-
-        // Remueve el span vacío
-        parent.removeChild(node);
-        node = parent;
-    }
-    // Inserta el textNode limpio en el rango original
-    range.insertNode(textNode);
-}
-
-
-
 
 
 
