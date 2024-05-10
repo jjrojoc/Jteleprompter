@@ -610,11 +610,15 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     const textNode = document.createTextNode(selectedText);
 
     // Si el color no es blanco, envuelve el texto en un span con el color elegido
-    if (color !== defaultColor) {
-        const span = document.createElement('span');
+    if (color && color !== 'white' && color !== 'rgb(255, 255, 255)' &&
+                color !== 'black' && color !== 'rgb(0, 0, 0)' &&
+                color !== 'rgb(41, 41, 41)') {
+                // Si el color no es blanco, negro o gris, entonces reasigna el color
+                const span = document.createElement('span');
         span.style.color = color;
         span.appendChild(textNode);
         range.insertNode(span);
+        
     } else {
         // Eliminar cualquier span que pueda estar afectando el color directamente
         cleanColorStyles(range.commonAncestorContainer, textNode, range);
