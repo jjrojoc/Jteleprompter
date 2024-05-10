@@ -596,14 +596,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const selection = window.getSelection();
+    const defaultColor = "#ffffff"; // Este es el color "blanco"
+    const teleprompterDefaultColor = getComputedStyle(document.getElementById('teleprompter')).color; // Obtener el color por defecto de teleprompter
 
+    const selection = window.getSelection();
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
     const selectedText = range.toString();
     const span = document.createElement('span');
-    span.style.color = color;
+    if (color === defaultColor) {
+        span.style.color = teleprompterDefaultColor; // Usa el color de teleprompter si el color elegido es blanco
+    } else {
+        span.style.color = color; // Usa el color elegido
+    }
     span.textContent = selectedText;
 
     range.deleteContents();
@@ -611,6 +617,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
+
 
 
 
