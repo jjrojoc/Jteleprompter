@@ -594,49 +594,39 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+function removeSpanKeepText(node) {
+    const parent = node.parentNode;
+    while (node.firstChild) {
+        parent.insertBefore(node.firstChild, node);
+    }
+    parent.removeChild(node);
+}
+
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const defaultColor = "#ffffff"; // Este es el color "blanco"
-
     const selection = window.getSelection();
+
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    let selectedContent = range.extractContents();
+    const fragment = range.cloneContents();
 
-    if (color === defaultColor) {
-        // Si el color seleccionado es blanco, eliminar los spans.
-        let newContent = document.createDocumentFragment();
-        removeSpanNodes(selectedContent, newContent);
-        range.insertNode(newContent);
+    // Comprobamos si el color elegido es el blanco o el color por defecto
+    if (color === "#ffffff") {
+        let spans = fragment.querySelectorAll('span');
+        spans.forEach(span => removeSpanKeepText(span));
     } else {
-        // Si el color seleccionado no es blanco, aplicar el color con un nuevo span.
+        const selectedText = range.toString();
         const span = document.createElement('span');
         span.style.color = color;
-        span.appendChild(selectedContent);
+        span.textContent = selectedText;
+
+        range.deleteContents();
         range.insertNode(span);
     }
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
-
-function removeSpanNodes(node, fragment) {
-    if (node.nodeType === Node.TEXT_NODE) {
-        fragment.appendChild(node); // Directamente añadir nodos de texto
-    } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "SPAN") {
-        // No añadir el span, pero procesar sus hijos y añadirlos directamente al fragmento.
-        Array.from(node.childNodes).forEach(child => {
-            removeSpanNodes(child, fragment);
-        });
-    } else {
-        // Para cualquier otro elemento, clonarlo sin copiar los posibles estilos <span> internos.
-        let newNode = node.cloneNode(false);
-        fragment.appendChild(newNode);
-        Array.from(node.childNodes).forEach(child => {
-            removeSpanNodes(child, newNode);
-        });
-    }
-}
 
 
 
