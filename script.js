@@ -595,16 +595,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
-    const newColor = textColorControl.value;
-    // Define el color blanco o cualquier otro color que consideres "por defecto"
-    const defaultColor = "#ffffff";
+    var color = this.value;
+    const selection = window.getSelection();
 
-    // Aplica el nuevo color o el color por defecto del teleprompter
-    if (newColor === defaultColor) {
-        teleprompter.style.color = ""; // Remueve el color inline, dejando que herede el estilo global o de CSS
-    } else {
-        teleprompter.style.color = newColor; // Aplica el nuevo color seleccionado
-    }
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    const selectedText = range.toString();
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.textContent = selectedText;
+
+    range.deleteContents();
+    range.insertNode(span);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
