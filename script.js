@@ -626,7 +626,7 @@ function removeAllColorStyles(node) {
         node.style.color = ""; // Eliminar explícitamente el estilo de color
     }
     // Proceso recursivo para todos los nodos hijos
-    Array.from(node.childNodes).forEach(child => removeAllColorStyles(child));
+    Array.from(node.parentNode).forEach(parent => removeAllColorStyles(parent));
 }
 
 
