@@ -608,35 +608,28 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 });
 
 function removeSpansFromSelection(selection) {
+    const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
     const range = selection.getRangeAt(0);
-    let ancestor = range.commonAncestorContainer;
-    
-    // Asegurar que estamos empezando desde un elemento, no desde un nodo de texto
-    while (ancestor.nodeType !== Node.ELEMENT_NODE) {
-        ancestor = ancestor.parentNode;
-    }
+    const container = range.commonAncestorContainer;
+    if (container.nodeType === 3) {
+      const parentElement = container.parentNode;
+      const wrapper = document.createElement("div");
+      wrapper.appendChild(container.cloneNode(true));
+      const text = wrapper.innerHTML;
+      parentElement.innerHTML = parentElement.innerHTML.replace(container.textContent, text);
+    } else {
+      const spansToRemove = container.getElementsByTagName("span");
+      const spansToRemoveArray = Array.from(spansToRemove);
 
-    // Extraer el contenido de la selección
-    const fragment = range.extractContents();
-    let walker = document.createTreeWalker(fragment, NodeFilter.SHOW_ELEMENT, {
-        acceptNode: function(node) {
-            return node.tagName === "SPAN" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      for (const span of spansToRemoveArray) {
+        if (range.intersectsNode(span)) {
+          const textNode = document.createTextNode(span.textContent);
+          span.parentNode.replaceChild(textNode, span);
         }
-    });
-
-    // Reemplazar cada span con su contenido de texto
-    let node;
-    while ((node = walker.nextNode())) {
-        const textNode = document.createTextNode(node.textContent);
-        node.parentNode.replaceChild(textNode, node);
+      }
     }
-
-    // Reinsertar el contenido modificado
-    range.insertNode(fragment);
-
-    // Restablecer la selección
-    selection.removeAllRanges();
-    selection.addRange(range);
+  }
 }
 
 function applyColorToSelection(color, selection) {
@@ -676,7 +669,8 @@ document.addEventListener('selectionchange', function() {
         document.getElementById('textColorPicker').value = rgbToHex(color); // Actualiza el selector de color
     } else {
         // Si el nodo seleccionado no es un <span>, se podría establecer un color por defecto o mantener el actual
-        document.getElementById('textColorPicker').value = '#ffffff'; // Color por defecto
+        const color = window.getComputedStyle(node).color;
+        document.getElementById('textColorPicker').value = rgbToHex(color);
     }
 });
 
