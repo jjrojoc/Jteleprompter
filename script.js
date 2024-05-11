@@ -600,47 +600,27 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     if (!selection.rangeCount) return;
 
-    if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
-        removeSpanColorFromSelection(selection);
-    } else {
-        applyColorToSelection(color, selection);
-    }
+    
+    applyColorToSelection(color, selection)
 });
-
-function removeSpanColorFromSelection(selection) {
-    const range = selection.getRangeAt(0);
-    const fragment = range.extractContents();  // Extraemos el contenido seleccionado
-
-    // Eliminar el estilo de color de todos los spans en el fragmento
-    const spans = fragment.querySelectorAll('span');
-    spans.forEach(span => {
-        span.style.removeProperty('color');  // Elimina el estilo de color
-    });
-
-    // Reinsertar el contenido modificado en el documento
-    range.insertNode(fragment);
-
-    // Limpiar y restablecer la selección para incluir el nuevo contenido
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(fragment);
-    selection.addRange(newRange);
-}
 
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
-    span.style.color = color;
+    if (color ==='#ffffff'|| color ==='rgb(255, 255, 255)') { 
+        span.style.color = "null";
+    } else {
+        span.style.color = color;
+    }
     span.appendChild(range.extractContents());
     range.insertNode(span);
 
     // Re-seleccionar el contenido del nuevo span
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(span);
-    selection.addRange(newRange);
+    // const newRange = document.createRange();
+    // newRange.selectNodeContents(span);
+    // selection.removeAllRanges();
+    // selection.addRange(newRange);
 }
-
 
 
 
