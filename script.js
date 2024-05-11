@@ -600,32 +600,45 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     if (!selection.rangeCount) return;
 
-    // Si el color es blanco, eliminar los <span> y resetear a texto sin formato.
-    if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
-        removeFormattingFromSelection(selection);
+    if (color === '#ffffff') {
+        removeSpansFromSelection(selection);
     } else {
         applyColorToSelection(color, selection);
     }
-    autoguardado();
 });
 
-// Función para eliminar los <span> dentro de una selección
-function removeFormattingFromSelection(selection) {
+function removeSpansFromSelection(selection) {
     const range = selection.getRangeAt(0);
-    const contents = range.extractContents();
-    const spans = contents.querySelectorAll('span');
+    let ancestor = range.commonAncestorContainer;
+    
+    // Asegurar que estamos empezando desde un elemento, no desde un nodo de texto
+    while (ancestor.nodeType !== Node.ELEMENT_NODE) {
+        ancestor = ancestor.parentNode;
+    }
 
-    spans.forEach(span => {
-        const textNode = document.createTextNode(span.textContent);
-        span.parentNode.replaceChild(textNode, span);
+    // Extraer el contenido de la selección
+    const fragment = range.extractContents();
+    let walker = document.createTreeWalker(fragment, NodeFilter.SHOW_ELEMENT, {
+        acceptNode: function(node) {
+            return node.tagName === "SPAN" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+        }
     });
 
-    range.insertNode(contents);
+    // Reemplazar cada span con su contenido de texto
+    let node;
+    while ((node = walker.nextNode())) {
+        const textNode = document.createTextNode(node.textContent);
+        node.parentNode.replaceChild(textNode, node);
+    }
+
+    // Reinsertar el contenido modificado
+    range.insertNode(fragment);
+
+    // Restablecer la selección
     selection.removeAllRanges();
     selection.addRange(range);
 }
 
-// Función para aplicar color a la selección
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
@@ -633,12 +646,13 @@ function applyColorToSelection(color, selection) {
     span.appendChild(range.extractContents());
     range.insertNode(span);
 
-    // Seleccionar el contenido dentro del nuevo span
+    // Re-seleccionar el contenido del nuevo span
     const newRange = document.createRange();
     newRange.selectNodeContents(span);
     selection.removeAllRanges();
     selection.addRange(newRange);
 }
+
 
 
 
