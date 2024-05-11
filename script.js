@@ -600,7 +600,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     if (!selection.rangeCount) return;
 
-    if (color === '#ffffff') {
+    if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
         removeSpansFromSelection(selection);
     } else {
         applyColorToSelection(color, selection);
