@@ -600,27 +600,50 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     if (!selection.rangeCount) return;
 
-    
-    applyColorToSelection(color, selection)
+    if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
+        removeColorFromSelection(selection);
+    } else {
+        applyColorToSelection(color, selection);
+    }
 });
+
+function removeColorFromSelection(selection) {
+    const range = selection.getRangeAt(0);
+    const fragment = range.extractContents();
+
+    // Función recursiva para eliminar el color de todos los spans, buscando incluso en los nodos hijos
+    function removeColor(node) {
+        if (node.nodeType === 1 && node.tagName === 'SPAN') { // Node.ELEMENT_NODE y el elemento es un span
+            node.style.removeProperty('color');
+        }
+        Array.from(node.childNodes).forEach(removeColor);
+    }
+
+    removeColor(fragment);
+
+    range.insertNode(fragment);
+
+    // Restablecer la selección
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(fragment);
+    selection.addRange(newRange);
+}
 
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
-    if (color ==='#ffffff'|| color ==='rgb(255, 255, 255)') { 
-        span.style.color = "null";
-    } else {
-        span.style.color = color;
-    }
+    span.style.color = color;
     span.appendChild(range.extractContents());
     range.insertNode(span);
 
     // Re-seleccionar el contenido del nuevo span
-    // const newRange = document.createRange();
-    // newRange.selectNodeContents(span);
-    // selection.removeAllRanges();
-    // selection.addRange(newRange);
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
 }
+
 
 
 
