@@ -609,33 +609,35 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
 
 function removeColorFromSelection(selection) {
-    // const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
     const fragment = range.extractContents();
 
-    // Function to replace all span elements with their text content
-    function removeAllSpans(node) {
+    // Function to recursively remove all span elements
+    function flattenSpans(node) {
         if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
-            // Insert text content back into the parent node
-            node.parentNode.insertBefore(document.createTextNode(node.textContent), node);
+            // Replace span with a text node containing its content
+            const textNode = document.createTextNode(node.textContent);
+            node.parentNode.insertBefore(textNode, node);
             node.parentNode.removeChild(node);
         } else {
-            // Recursively process child nodes
-            Array.from(node.childNodes).forEach(removeAllSpans);
+            // Process all child nodes
+            Array.from(node.childNodes).forEach(child => flattenSpans(child));
         }
     }
 
-    removeAllSpans(fragment);
+    flattenSpans(fragment);
 
-    range.insertNode(fragment); // Reinsert the cleaned fragment back to the range
+    // Reinsert the cleaned fragment back into the document
+    range.insertNode(fragment);
+    range.collapse(false);
 
-    // Reset selection to encompass the modified content
-    const newRange = document.createRange();
-    newRange.selectNodeContents(range.startContainer);
+    // Update the selection to reflect the change
     selection.removeAllRanges();
-    selection.addRange(newRange);
+    selection.addRange(range);
 };
     
 
