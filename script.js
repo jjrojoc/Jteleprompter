@@ -596,7 +596,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const selection = window.getSelection() - 1;
+    const selection = window.getSelection();
 
     if (!selection.rangeCount) return;
 
