@@ -614,20 +614,36 @@ function removeSpanColorFromSelection() {
     const range = selection.getRangeAt(0);
     const documentFragment = range.extractContents();
 
-    // Limpieza de color en cada span de forma recursiva
-    removeAllColorStyles(documentFragment);
+    // Eliminar el estilo de color de todos los span directamente en el fragmento
+    removeColorStylesDirectly(documentFragment);
 
-    // Reinsertar el contenido modificado
+    // Reinsertar el contenido modificado de vuelta en el documento
     range.insertNode(documentFragment);
+
+    // Limpiar la selección y seleccionar el contenido modificado
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(range.commonAncestorContainer);
+    selection.addRange(newRange);
 }
 
-function removeAllColorStyles(node) {
+function removeColorStylesDirectly(node) {
     if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
-        node.style.color = ""; // Eliminar explícitamente el estilo de color
+        node.style.removeProperty('color'); // Eliminar el estilo de color
     }
-    // Proceso recursivo para todos los nodos hijos
-    Array.from(node.parentNode).forEach(parent => removeAllColorStyles(parent));
+    // Aplicar esto a todos los nodos hijos
+    Array.from(node.childNodes).forEach(child => removeColorStylesDirectly(child));
+
+    // Además, ajustar los estilos de los ancestros si es necesario
+    let parent = node.parentNode;
+    while (parent && parent !== document.body) {
+        if (parent.tagName === 'SPAN') {
+            parent.style.removeProperty('color');
+        }
+        parent = parent.parentNode;
+    }
 }
+
 
 
 
