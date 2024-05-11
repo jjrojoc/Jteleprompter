@@ -601,34 +601,34 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     if (!selection.rangeCount) return;
 
     if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
-        removeSpansFromSelection(selection);
+        removeSpanColorFromSelection(selection);
     } else {
         applyColorToSelection(color, selection);
     }
 });
 
-function removeSpansFromSelection(selection) {
-  if (selection.rangeCount > 0) {
-    const range = selection.getRangeAt(0);
-    const container = range.commonAncestorContainer;
-    if (container.nodeType === 3) {
-      const parentElement = container.parentNode;
-      const wrapper = document.createElement("div");
-      wrapper.appendChild(container.cloneNode(true));
-      const text = wrapper.innerHTML;
-      parentElement.innerHTML = parentElement.innerHTML.replace(container.textContent, text);
-    } else {
-      const spansToRemove = container.getElementsByTagName("span");
-      const spansToRemoveArray = Array.from(spansToRemove);
+function removeSpanColorFromSelection() {
+    if (!window.getSelection) return; // Check if the browser supports selection
 
-      for (const span of spansToRemoveArray) {
-        if (range.intersectsNode(span)) {
-          const textNode = document.createTextNode(span.textContent);
-          span.parentNode.replaceChild(textNode, span);
+    const selection = window.getSelection();
+    if (selection.rangeCount === 0) return; // No selection made
+
+    const range = selection.getRangeAt(0); // Get the first selection range
+    const container = document.createElement("div");
+
+    // Clone contents of the selection into a temporary div container
+    container.appendChild(range.cloneContents());
+
+    // Find all spans in the cloned content
+    container.querySelectorAll("span").forEach(span => {
+        if (span.style.color) {
+            span.style.removeProperty('color'); // Remove the color style property
         }
-      }
-    }
-  }
+    });
+
+    // Replace the selected content with modified container contents
+    range.deleteContents(); // Remove original selection
+    range.insertNode(container); // Insert the modified content
 }
 
 function applyColorToSelection(color, selection) {
