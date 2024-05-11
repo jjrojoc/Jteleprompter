@@ -607,8 +607,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     }
 });
 
-function removeSpanColorFromSelection() {
-    const selection = window.getSelection();
+function removeSpanColorFromSelection(selection) {
     if (selection.rangeCount === 0) return; // No hay selección
 
     const range = selection.getRangeAt(0);
@@ -616,14 +615,13 @@ function removeSpanColorFromSelection() {
 
     container.appendChild(range.cloneContents());
 
-    // Encuentra todos los spans en el contenido clonado
+    // Obtener el color del div específico con id 'teleprompter'
+    const teleprompterDiv = document.getElementById('teleprompter');
+    const teleprompterColor = window.getComputedStyle(teleprompterDiv).color;
+
+    // Aplicar ese color a todos los spans en el contenido clonado
     container.querySelectorAll("span").forEach(span => {
-        // Encuentra el div padre más cercano y toma su color
-        let parentDiv = span.closest('div'); // Encuentra el div más cercano
-        if (parentDiv) {
-            let color = window.getComputedStyle(parentDiv).color;
-            span.style.color = color; // Aplica el color del div a los span
-        }
+        span.style.color = teleprompterColor; // Aplica el color obtenido
     });
 
     range.deleteContents(); // Elimina el contenido original
