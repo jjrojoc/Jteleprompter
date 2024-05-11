@@ -608,7 +608,6 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 });
 
 function removeSpansFromSelection(selection) {
-    const selection = window.getSelection();
   if (selection.rangeCount > 0) {
     const range = selection.getRangeAt(0);
     const container = range.commonAncestorContainer;
