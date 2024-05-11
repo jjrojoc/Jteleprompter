@@ -623,6 +623,7 @@ function removeColorFromSelection(selection) {
             const textNode = document.createTextNode(node.textContent);
             node.parentNode.insertBefore(textNode, node);
             node.parentNode.removeChild(node);
+            Array.from(node.childNodes).forEach(child => flattenSpans(child));
         } else {
             // Process all child nodes
             Array.from(node.childNodes).forEach(child => flattenSpans(child));
