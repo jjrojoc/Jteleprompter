@@ -638,7 +638,6 @@ function removeColorFromSelection(selection) {
     selection.addRange(range);
 
 
-    const range = selection.getRangeAt(0);
     const fragment = range.extractContents();
 
     // Function to recursively remove all span elements
