@@ -607,47 +607,28 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     }
 });
 
-function removeSpanColorFromSelection() {
-    const selection = window.getSelection();
-    if (selection.rangeCount === 0) return;
-
+function removeSpanColorFromSelection(selection) {
     const range = selection.getRangeAt(0);
-    const documentFragment = range.extractContents();
+    const container = document.createElement("div");
 
-    // Eliminar el estilo de color de todos los span directamente en el fragmento
-    removeColorStylesDirectly(documentFragment);
+    container.appendChild(range.cloneContents());
 
-    // Reinsertar el contenido modificado de vuelta en el documento
-    range.insertNode(documentFragment);
+    // Procesar cada span dentro del contenido clonado
+    container.querySelectorAll("span").forEach(span => {
+        span.style.removeProperty('color');  // Elimina el estilo de color de cada span
+    });
 
-    // Limpiar la selección y seleccionar el contenido modificado
+    // Elimina el contenido actual de la selección
+    range.deleteContents();
+    // Inserta el nuevo contenido modificado
+    range.insertNode(container);
+
+    // Re-seleccionar el contenido actualizado
     selection.removeAllRanges();
     const newRange = document.createRange();
-    newRange.selectNodeContents(range.commonAncestorContainer);
+    newRange.selectNode(container);
     selection.addRange(newRange);
 }
-
-function removeColorStylesDirectly(node) {
-    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
-        node.style.removeProperty('color'); // Eliminar el estilo de color
-    }
-    // Aplicar esto a todos los nodos hijos
-    Array.from(node.childNodes).forEach(child => removeColorStylesDirectly(child));
-
-    // Además, ajustar los estilos de los ancestros si es necesario
-    let parent = node.parentNode;
-    while (parent && parent !== document.body) {
-        if (parent.tagName === 'SPAN') {
-            parent.style.removeProperty('color');
-        }
-        parent = parent.parentNode;
-    }
-}
-
-
-
-
-
 
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
@@ -662,6 +643,7 @@ function applyColorToSelection(color, selection) {
     selection.removeAllRanges();
     selection.addRange(newRange);
 }
+
 
 
 
