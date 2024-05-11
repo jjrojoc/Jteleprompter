@@ -601,48 +601,16 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    const fragment = range.extractContents(); // Extraemos el contenido del rango
+    const selectedText = range.toString();
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.textContent = selectedText;
 
-    if (color === "#ffffff") { // Si el color seleccionado es blanco
-        let textContent = '';
-        (function extractText(node) {
-            if (node.nodeType === Node.TEXT_NODE) {
-                textContent += node.nodeValue; // Concatenamos texto de nodos de texto
-            } else {
-                Array.from(node.childNodes).forEach(extractText); // Recursivamente para todos los hijos
-            }
-        })(fragment);
-
-        // Creamos un nuevo nodo de texto con todo el texto extraído
-        const textNode = document.createTextNode(textContent);
-        range.insertNode(textNode); // Insertamos el texto plano
-    } else {
-        const span = document.createElement('span');
-        span.style.color = color;
-        span.appendChild(fragment); // Insertamos el contenido extraído dentro del span
-        range.insertNode(span); // Insertamos el span en el rango
-    }
-
-    // Restablecer la selección
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(range.startContainer);
-    selection.addRange(newRange);
+    range.deleteContents();
+    range.insertNode(span);
 
     autoguardado(); // Asegúrate de que esta función está correctamente definida
 });
-
-
-
-
-
-
-// Función para convertir color RGB a Hex
-function rgbToHex(rgb) {
-    const rgbArr = rgb.match(/\d+/g);
-    return rgbArr ? "#" + rgbArr.map(x => parseInt(x).toString(16).padStart(2, '0')).join('') : '#000000';
-}
-
 
 
 
@@ -668,6 +636,12 @@ document.addEventListener('selectionchange', function() {
         document.getElementById('textColorPicker').value = '#ffffff'; // Color por defecto
     }
 });
+
+// Función para convertir color RGB a Hex
+function rgbToHex(rgb) {
+    const rgbArr = rgb.match(/\d+/g);
+    return rgbArr ? "#" + rgbArr.map(x => parseInt(x).toString(16).padStart(2, '0')).join('') : '#000000';
+}
 
 
 
