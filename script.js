@@ -600,35 +600,9 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     if (!selection.rangeCount) return;
 
-    if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
-        removeSpanColorFromSelection(selection);
-    } else {
-        applyColorToSelection(color, selection);
-    }
+    
+    applyColorToSelection(color, selection)
 });
-
-function removeSpanColorFromSelection(selection) {
-    const range = selection.getRangeAt(0);
-    const fragment = range.extractContents();  // Extraemos el contenido seleccionado
-
-    const walker = document.createTreeWalker(
-        fragment,
-        NodeFilter.SHOW_ELEMENT,
-        { acceptNode: node => node.tagName === "SPAN" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP }
-    );
-
-    let currentNode = walker.nextNode();
-    while (currentNode) {
-        currentNode.style.removeProperty('color');  // Elimina el estilo de color de cada span
-        currentNode = walker.nextNode();
-    }
-
-    range.insertNode(fragment);  // Reinserta el contenido modificado
-    selection.removeAllRanges();  // Limpia selecciones existentes
-    const newRange = document.createRange();
-    newRange.selectNodeContents(fragment);  // Selecciona el contenido actualizado
-    selection.addRange(newRange);
-}
 
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
