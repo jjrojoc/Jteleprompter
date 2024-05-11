@@ -938,6 +938,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = pastedData;
 
+        // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
+        let htmlString = tempDiv.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
+        
+        // Asignar de nuevo el HTML procesado
+        tempDiv.innerHTML = htmlString;
+
         // Filtrar y modificar el contenido para ajustar los colores
         Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
             const textColor = node.style.color; // Guardar el color del texto original
