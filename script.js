@@ -614,25 +614,31 @@ function removeSpanColorFromSelection() {
     const range = selection.getRangeAt(0);
     const documentFragment = range.extractContents();
 
-    // Obtener el color del div específico con id 'teleprompter'
-    const teleprompterDiv = document.getElementById('teleprompter');
-    const teleprompterColor = window.getComputedStyle(teleprompterDiv).color;
-
-    const walker = document.createTreeWalker(documentFragment, NodeFilter.SHOW_ELEMENT, {
-        acceptNode: function(node) {
-            if (node.tagName === 'SPAN') {
-                return NodeFilter.FILTER_ACCEPT;
-            }
-        }
-    });
-
-    let currentNode;
-    while ((currentNode = walker.nextNode())) {
-        currentNode.style.color = teleprompterColor; // Aplica el color obtenido directamente
-    }
+    // Limpiar colores heredados en el fragmento del documento
+    clearInheritedColors(documentFragment);
 
     range.insertNode(documentFragment); // Reinserta el contenido modificado
 }
+
+function clearInheritedColors(node) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
+        node.style.removeProperty('color'); // Elimina el color inline si existe
+    }
+
+    Array.from(node.childNodes).forEach(child => {
+        clearInheritedColors(child); // Recursivamente limpia los hijos
+    });
+
+    // Revisar después de limpiar los hijos para ver si el nodo debe heredar algún color nuevo
+    if (node.nodeType === Node.ELEMENT_NODE) {
+        if (!node.closest('#teleprompter')) {
+            const teleprompterDiv = document.getElementById('teleprompter');
+            const teleprompterColor = window.getComputedStyle(teleprompterDiv).color;
+            node.style.color = teleprompterColor; // Aplica el color de teleprompter si no está dentro de él
+        }
+    }
+}
+
 
 
 function applyColorToSelection(color, selection) {
