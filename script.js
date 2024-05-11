@@ -595,32 +595,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
-    var color = this.value;
     const selection = window.getSelection();
-
     if (!selection.rangeCount) return;
 
-    
-    applyColorToSelection(color, selection)
-});
-
-function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
-    const span = document.createElement('span');
-    if (color ==='#ffffff'|| color ==='rgb(255, 255, 255)') { 
-        span.style.color = "null";
-    } else {
-        span.style.color = color;
-    }
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
+    const fragment = range.extractContents();
 
-    // Re-seleccionar el contenido del nuevo span
-    // const newRange = document.createRange();
-    // newRange.selectNodeContents(span);
-    // selection.removeAllRanges();
-    // selection.addRange(newRange);
-}
+    // Function to recursively remove span elements and keep text
+    function removeSpanElements(node) {
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
+            // Create a document fragment to hold the child nodes
+            const docFrag = document.createDocumentFragment();
+            while (node.firstChild) {
+                docFrag.appendChild(node.firstChild); // Move all children out of the span
+            }
+            node.parentNode.insertBefore(docFrag, node); // Insert children before the span
+            node.parentNode.removeChild(node); // Remove the empty span
+        } else {
+            // Recursively process child nodes
+            Array.from(node.childNodes).forEach(removeSpanElements);
+        }
+    }
+
+    removeSpanElements(fragment);
+
+    range.insertNode(fragment); // Reinsert the cleaned fragment back to the range
+
+    // Reset selection
+    const newRange = document.createRange();
+    newRange.selectNodeContents(fragment);
+    selection.removeAllRanges();
+    selection.addRange(newRange);
+});
+    
+    
 
 
 
