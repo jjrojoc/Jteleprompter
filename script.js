@@ -605,6 +605,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     } else {
         applyColorToSelection(color, selection);
     }
+    autoguardado();
 });
 
 
