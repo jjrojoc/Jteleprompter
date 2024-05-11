@@ -595,7 +595,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
+    var color = this.value;
     const selection = window.getSelection();
+
+    if (!selection.rangeCount) return;
+
+    if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
+        removeColorFromSelection(selection);
+    } else {
+        applyColorToSelection(color, selection);
+    }
+});
+
+
+function removeColorFromSelection(selection) {
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
@@ -626,9 +639,22 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     newRange.selectNodeContents(fragment);
     selection.removeAllRanges();
     selection.addRange(newRange);
-});
+};
     
-    
+
+function applyColorToSelection(color, selection) {
+    const range = selection.getRangeAt(0);
+    const span = document.createElement('span');
+    span.style.color = color;
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+
+    // Re-seleccionar el contenido del nuevo span
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
+}
 
 
 
