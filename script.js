@@ -609,9 +609,34 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
 
 function removeColorFromSelection(selection) {
-    if (!selection.rangeCount) return;
+    if (selection.rangeCount === 0) return;
 
-    if (!selection.rangeCount) return;
+    const range = selection.getRangeAt(0);
+    let startNode = range.startContainer;
+    let endNode = range.endContainer;
+
+    // Expand the start of the range to the beginning of the span
+    while (startNode !== null && startNode.nodeType !== Node.ELEMENT_NODE || (startNode.tagName !== 'SPAN' && startNode.parentNode)) {
+        startNode = startNode.parentNode;
+    }
+
+    // Expand the end of the range to the end of the span
+    while (endNode !== null && endNode.nodeType !== Node.ELEMENT_NODE || (endNode.tagName !== 'SPAN' && endNode.parentNode)) {
+        endNode = endNode.parentNode;
+    }
+
+    // Check if we're actually inside a span and adjust if so
+    if (startNode.tagName === 'SPAN') {
+        range.setStartBefore(startNode);
+    }
+    if (endNode.tagName === 'SPAN') {
+        range.setEndAfter(endNode);
+    }
+
+    // Update the selection with the new range
+    selection.removeAllRanges();
+    selection.addRange(range);
+
 
     const range = selection.getRangeAt(0);
     const fragment = range.extractContents();
