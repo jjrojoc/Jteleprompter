@@ -607,7 +607,11 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
-    span.style.color = color;
+    if (color ==='#ffffff'|| color ==='rgb(255, 255, 255)') { 
+        span.style.color = "";
+    } else {
+        span.style.color = color;
+    }
     span.appendChild(range.extractContents());
     range.insertNode(span);
 
