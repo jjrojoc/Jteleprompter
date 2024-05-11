@@ -608,7 +608,7 @@ function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
     if (color ==='#ffffff'|| color ==='rgb(255, 255, 255)') { 
-        span.style.color = "";
+        span.style.color = "!inherit";
     } else {
         span.style.color = color;
     }
