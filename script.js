@@ -596,7 +596,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
-    const selection = window.getSelection();
+    const selection = window.getSelection() - 1;
 
     if (!selection.rangeCount) return;
 
@@ -623,7 +623,6 @@ function removeColorFromSelection(selection) {
             const textNode = document.createTextNode(node.textContent);
             node.parentNode.insertBefore(textNode, node);
             node.parentNode.removeChild(node);
-            Array.from(node.parentNode).forEach(parent => flattenSpans(parent));
         } else {
             // Process all child nodes
             Array.from(node.childNodes).forEach(child => flattenSpans(child));
