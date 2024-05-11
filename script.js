@@ -614,20 +614,21 @@ function removeSpanColorFromSelection() {
     const range = selection.getRangeAt(0);
     const documentFragment = range.extractContents();
 
-    // Limpieza recursiva de colores en cada span
-    recursivelyRemoveColor(documentFragment);
+    // Limpieza de color en cada span de forma recursiva
+    removeAllColorStyles(documentFragment);
 
-    // Reinsertar el contenido limpio
+    // Reinsertar el contenido modificado
     range.insertNode(documentFragment);
 }
 
-function recursivelyRemoveColor(node) {
+function removeAllColorStyles(node) {
     if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
-        node.style.color = ""; // Eliminar el estilo de color
+        node.style.color = ""; // Eliminar explícitamente el estilo de color
     }
-    // Procesar todos los nodos hijos
-    node.childNodes.forEach(child => recursivelyRemoveColor(child));
+    // Proceso recursivo para todos los nodos hijos
+    Array.from(node.childNodes).forEach(child => removeAllColorStyles(child));
 }
+
 
 
 
