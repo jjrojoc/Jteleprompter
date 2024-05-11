@@ -609,24 +609,24 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
 function removeSpanColorFromSelection(selection) {
     const range = selection.getRangeAt(0);
-    const container = document.createElement("div");
+    const fragment = range.extractContents();  // Extraemos el contenido seleccionado
 
-    container.appendChild(range.cloneContents());
+    const walker = document.createTreeWalker(
+        fragment,
+        NodeFilter.SHOW_ELEMENT,
+        { acceptNode: node => node.tagName === "SPAN" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP }
+    );
 
-    // Procesar cada span dentro del contenido clonado
-    container.querySelectorAll("span").forEach(span => {
-        span.style.removeProperty('color');  // Elimina el estilo de color de cada span
-    });
+    let currentNode = walker.nextNode();
+    while (currentNode) {
+        currentNode.style.removeProperty('color');  // Elimina el estilo de color de cada span
+        currentNode = walker.nextNode();
+    }
 
-    // Elimina el contenido actual de la selección
-    range.deleteContents();
-    // Inserta el nuevo contenido modificado
-    range.insertNode(container);
-
-    // Re-seleccionar el contenido actualizado
-    selection.removeAllRanges();
+    range.insertNode(fragment);  // Reinserta el contenido modificado
+    selection.removeAllRanges();  // Limpia selecciones existentes
     const newRange = document.createRange();
-    newRange.selectNode(container);
+    newRange.selectNodeContents(fragment);  // Selecciona el contenido actualizado
     selection.addRange(newRange);
 }
 
@@ -638,11 +638,12 @@ function applyColorToSelection(color, selection) {
     range.insertNode(span);
 
     // Re-seleccionar el contenido del nuevo span
-    const newRange = document.createRange();
-    newRange.selectNodeContents(span);
-    selection.removeAllRanges();
-    selection.addRange(newRange);
+    // const newRange = document.createRange();
+    // newRange.selectNodeContents(span);
+    // selection.removeAllRanges();
+    // selection.addRange(newRange);
 }
+
 
 
 
