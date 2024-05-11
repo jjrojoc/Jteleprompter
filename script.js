@@ -594,19 +594,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-function adjustRangeToIncludeSpans(range) {
-    // Extend the start of the range to the beginning of the first partially included span
-    if (range.startContainer.nodeType === Node.TEXT_NODE && range.startContainer.parentNode.tagName === 'SPAN' && range.startOffset !== 0) {
-        range.setStartBefore(range.startContainer.parentNode);
-    }
-
-    // Extend the end of the range to the end of the last partially included span
-    if (range.endContainer.nodeType === Node.TEXT_NODE && range.endContainer.parentNode.tagName === 'SPAN' && range.endOffset !== range.endContainer.length) {
-        range.setEndAfter(range.endContainer.parentNode);
-    }
-}
-
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
     const selection = window.getSelection();
@@ -622,37 +609,41 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
 
 function removeColorFromSelection(selection) {
-    if (!selection.rangeCount) return;
-
-    if (!selection.rangeCount) return;
+    if (selection.rangeCount === 0) return;
 
     const range = selection.getRangeAt(0);
-    adjustRangeToIncludeSpans(range);
-    const fragment = range.extractContents();
+    const container = document.createElement("div");
+    container.appendChild(range.cloneContents());
 
-    // Function to recursively remove all span elements
-    function flattenSpans(node) {
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
-            // Replace span with a text node containing its content
-            const textNode = document.createTextNode(node.textContent);
-            node.parentNode.insertBefore(textNode, node);
-            node.parentNode.removeChild(node);
-            Array.from(node.childNodes).forEach(child => flattenSpans(child));
-        } else {
-            // Process all child nodes
-            Array.from(node.childNodes).forEach(child => flattenSpans(child));
+    // Recursively remove all span elements, appending their children to their parent node
+    function removeSpans(node) {
+        let child = node.firstChild;
+        while (child) {
+            if (child.nodeType === Node.ELEMENT_NODE && child.tagName === 'SPAN') {
+                const parent = child.parentNode;
+                while (child.firstChild) {
+                    parent.insertBefore(child.firstChild, child);
+                }
+                const nextSibling = child.nextSibling;
+                parent.removeChild(child);
+                child = nextSibling; // Continue with the next sibling
+            } else {
+                removeSpans(child); // Recurse into non-span elements
+                child = child.nextSibling; // Move to the next sibling
+            }
         }
     }
 
-    flattenSpans(fragment);
+    removeSpans(container);
 
-    // Reinsert the cleaned fragment back into the document
-    range.insertNode(fragment);
-    range.collapse(false);
+    range.deleteContents(); // Remove the original contents
+    range.insertNode(container); // Insert the modified contents
 
-    // Update the selection to reflect the change
+    // Re-select the modified content to maintain selection
+    const newRange = document.createRange();
+    newRange.selectNodeContents(container);
     selection.removeAllRanges();
-    selection.addRange(range);
+    selection.addRange(newRange);
 };
     
 
