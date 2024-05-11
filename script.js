@@ -612,28 +612,28 @@ function removeSpanColorFromSelection() {
     if (selection.rangeCount === 0) return; // No hay selección
 
     const range = selection.getRangeAt(0);
-    const container = document.createElement("div");
-
-    container.appendChild(range.cloneContents());
+    const documentFragment = range.extractContents();
 
     // Obtener el color del div específico con id 'teleprompter'
     const teleprompterDiv = document.getElementById('teleprompter');
     const teleprompterColor = window.getComputedStyle(teleprompterDiv).color;
 
-    // Eliminar estilo de color de los spans y aplicar el color del 'teleprompter' si es necesario
-    container.querySelectorAll("span").forEach(span => {
-        // Eliminar cualquier estilo de color definido
-        span.style.removeProperty('color');
-
-        // Establecer el color sólo si el elemento no está ya dentro del div 'teleprompter'
-        if (!span.closest('#teleprompter')) {
-            span.style.color = teleprompterColor; // Aplica el color obtenido
+    const walker = document.createTreeWalker(documentFragment, NodeFilter.SHOW_ELEMENT, {
+        acceptNode: function(node) {
+            if (node.tagName === 'SPAN') {
+                return NodeFilter.FILTER_ACCEPT;
+            }
         }
     });
 
-    range.deleteContents(); // Elimina el contenido original
-    range.insertNode(container); // Inserta el contenido modificado
+    let currentNode;
+    while ((currentNode = walker.nextNode())) {
+        currentNode.style.color = teleprompterColor; // Aplica el color obtenido directamente
+    }
+
+    range.insertNode(documentFragment); // Reinserta el contenido modificado
 }
+
 
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
