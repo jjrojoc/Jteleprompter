@@ -608,27 +608,27 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 });
 
 function removeSpanColorFromSelection() {
-    if (!window.getSelection) return; // Check if the browser supports selection
+    if (!window.getSelection) return; // Verifica si el navegador soporta selecciones
 
     const selection = window.getSelection();
-    if (selection.rangeCount === 0) return; // No selection made
+    if (selection.rangeCount === 0) return; // Verifica si se ha hecho una selección
 
-    const range = selection.getRangeAt(0); // Get the first selection range
+    const range = selection.getRangeAt(0); // Obtiene la primera selección
     const container = document.createElement("div");
 
-    // Clone contents of the selection into a temporary div container
+    // Clona el contenido de la selección en un contenedor temporal
     container.appendChild(range.cloneContents());
 
-    // Find all spans in the cloned content
+    // Encuentra todos los spans en el contenido clonado
     container.querySelectorAll("span").forEach(span => {
-        if (span.style.color) {
-            span.style.removeProperty('color'); // Remove the color style property
-        }
+        // Remueve el color y establece uno nuevo para evitar herencia
+        span.style.removeProperty('color');
+        span.style.color = 'inherit'; // Podrías poner aquí 'black' o cualquier otro color deseado
     });
 
-    // Replace the selected content with modified container contents
-    range.deleteContents(); // Remove original selection
-    range.insertNode(container); // Insert the modified content
+    // Reemplaza el contenido seleccionado con el contenido modificado del contenedor
+    range.deleteContents(); // Elimina la selección original
+    range.insertNode(container); // Inserta el contenido modificado
 }
 
 function applyColorToSelection(color, selection) {
