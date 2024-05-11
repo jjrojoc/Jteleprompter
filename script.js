@@ -623,7 +623,7 @@ function removeSpanColorFromSelection() {
     container.querySelectorAll("span").forEach(span => {
         // Remueve el color y establece uno nuevo para evitar herencia
         span.style.removeProperty('color');
-        span.style.color = 'inherit'; // Podrías poner aquí 'black' o cualquier otro color deseado
+        span.style.color = '!inherit'; // Podrías poner aquí 'black' o cualquier otro color deseado
     });
 
     // Reemplaza el contenido seleccionado con el contenido modificado del contenedor
