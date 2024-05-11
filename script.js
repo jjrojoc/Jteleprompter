@@ -600,17 +600,46 @@ document.getElementById('textColorPicker').addEventListener('change', function()
 
     if (!selection.rangeCount) return;
 
+    // Si el color es blanco, eliminar los <span> y resetear a texto sin formato.
+    if (color === '#ffffff') {
+        removeFormattingFromSelection(selection);
+    } else {
+        applyColorToSelection(color, selection);
+    }
+    autoguardado();
+});
+
+// Función para eliminar los <span> dentro de una selección
+function removeFormattingFromSelection(selection) {
     const range = selection.getRangeAt(0);
-    const selectedText = range.toString();
+    const contents = range.extractContents();
+    const spans = contents.querySelectorAll('span');
+
+    spans.forEach(span => {
+        const textNode = document.createTextNode(span.textContent);
+        span.parentNode.replaceChild(textNode, span);
+    });
+
+    range.insertNode(contents);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+// Función para aplicar color a la selección
+function applyColorToSelection(color, selection) {
+    const range = selection.getRangeAt(0);
     const span = document.createElement('span');
     span.style.color = color;
-    span.textContent = selectedText;
-
-    range.deleteContents();
+    span.appendChild(range.extractContents());
     range.insertNode(span);
 
-    autoguardado(); // Asegúrate de que esta función está correctamente definida
-});
+    // Seleccionar el contenido dentro del nuevo span
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.removeAllRanges();
+    selection.addRange(newRange);
+}
+
 
 
 
