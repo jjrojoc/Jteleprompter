@@ -594,6 +594,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+function adjustRangeToIncludeSpans(range) {
+    // Extend the start of the range to the beginning of the first partially included span
+    if (range.startContainer.nodeType === Node.TEXT_NODE && range.startContainer.parentNode.tagName === 'SPAN' && range.startOffset !== 0) {
+        range.setStartBefore(range.startContainer.parentNode);
+    }
+
+    // Extend the end of the range to the end of the last partially included span
+    if (range.endContainer.nodeType === Node.TEXT_NODE && range.endContainer.parentNode.tagName === 'SPAN' && range.endOffset !== range.endContainer.length) {
+        range.setEndAfter(range.endContainer.parentNode);
+    }
+}
+
 document.getElementById('textColorPicker').addEventListener('change', function() {
     var color = this.value;
     const selection = window.getSelection();
@@ -614,6 +627,7 @@ function removeColorFromSelection(selection) {
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
+    adjustRangeToIncludeSpans(range);
     const fragment = range.extractContents();
 
     // Function to recursively remove all span elements
