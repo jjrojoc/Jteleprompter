@@ -601,7 +601,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     if (!selection.rangeCount) return;
 
     // Si el color es blanco, eliminar los <span> y resetear a texto sin formato.
-    if (color === '#ffffff') {
+    if (color === '#ffffff' || color === 'rgb(255, 255, 255)') {
         removeFormattingFromSelection(selection);
     } else {
         applyColorToSelection(color, selection);
