@@ -507,7 +507,7 @@ function startAutoScroll() {
 
 
 
-document.fullscreenElement
+//document.fullscreenElement
     
 function stopAutoScroll() {
         isAutoScrolling = false;
@@ -1450,3 +1450,23 @@ function displayTime(seconds) {
     durationContainer.textContent = timeString;
     console.log("Mostrando tiempo: ", seconds);
 }
+
+
+teleprompter.addEventListener('mouseup', function(e) {
+    const selection = window.getSelection();
+    if (!selection.isCollapsed) {
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        toolbar.style.display = 'block';
+        toolbar.style.left = `${rect.left + window.scrollX}px`;
+        toolbar.style.top = `${rect.top + window.scrollY - toolbar.offsetHeight - 5}px`;
+    } else {
+        toolbar.style.display = 'none';
+    }
+});
+
+document.addEventListener('click', function(e) {
+    if (!editableArea.contains(e.target) && !toolbar.contains(e.target)) {
+        toolbar.style.display = 'none';
+    }
+});
