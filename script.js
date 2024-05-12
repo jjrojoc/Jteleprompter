@@ -1450,26 +1450,3 @@ function displayTime(seconds) {
     durationContainer.textContent = timeString;
     console.log("Mostrando tiempo: ", seconds);
 }
-
-
-
-const toolbar = document.getElementById('toolbar');
-const textColorPicker = document.getElementById('textColorPicker');   
-teleprompter.addEventListener('mouseup', function(e) {
-    const selection = window.getSelection();
-    if (!selection.isCollapsed) {
-        const range = selection.getRangeAt(0);
-        const rect = range.getBoundingClientRect();
-        toolbar.style.display = 'block';
-        toolbar.style.left = `${rect.left + window.scrollX}px`;
-        toolbar.style.top = `${rect.top + window.scrollY - toolbar.offsetHeight - 5}px`;
-    } else {
-        toolbar.style.display = 'none';
-    }
-});
-
-document.addEventListener('click', function(e) {
-    if (teleprompter.contains(e.target) && !toolbar.contains(e.target)) {
-        toolbar.style.display = 'none';
-    }
-});
