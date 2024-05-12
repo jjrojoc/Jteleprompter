@@ -1452,6 +1452,9 @@ function displayTime(seconds) {
 }
 
 
+
+const toolbar = document.getElementById('toolbar');
+const textColorPicker = document.getElementById('textColorPicker');   
 teleprompter.addEventListener('mouseup', function(e) {
     const selection = window.getSelection();
     if (!selection.isCollapsed) {
@@ -1466,7 +1469,7 @@ teleprompter.addEventListener('mouseup', function(e) {
 });
 
 document.addEventListener('click', function(e) {
-    if (!editableArea.contains(e.target) && !toolbar.contains(e.target)) {
+    if (teleprompter.contains(e.target) && !toolbar.contains(e.target)) {
         toolbar.style.display = 'none';
     }
 });
