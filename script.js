@@ -317,125 +317,6 @@ function updateToggleButton(isActive) {
 
 
 
-
-//let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     const speed = 100 - speedControl.value;
-    
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     scrollInterval = setInterval(() => {
-//         teleprompter.scrollBy(0, 1);
-//     }, speed);
-
-//     // // Inicia la actualización de la duración estimada cada segundo
-//     // if (!updateDurationInterval) {
-//     //     updateDurationInterval = setInterval(estimateDuration, 1000);
-//     // }
-// }
-
-
-
-
-
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     // clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-//     // updateDurationInterval = null; // Restablece la variable
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-// }
-
-
-// let scrollAnimation;
-// let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     let speed = parseInt(speedControl.value);
-//     adjustSpeed(speed);
-
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     let lastTime;
-//     let totalTranslation = 0; // Acumulador total de desplazamiento
-
-//     function animateScroll(timestamp) {
-//         if (!lastTime) lastTime = timestamp;
-//         const deltaTime = timestamp - lastTime;
-//         lastTime = timestamp;
-
-//         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-//         totalTranslation += pixelsToScroll;
-
-//         teleprompter.style.transform = `translateY(-${totalTranslation}px)`;
-
-//         if (teleprompter.offsetHeight + totalTranslation < teleprompter.parentNode.offsetHeight) {
-//             requestAnimationFrame(animateScroll);
-//         }
-//     }
-
-
-//     // let lastTime;
-//     // function animateScroll(timestamp) {
-//     //     if (!lastTime) {
-//     //         lastTime = timestamp;
-//     //         scrollAnimation = requestAnimationFrame(animateScroll);
-//     //         return;
-//     //     }
-//     //     const deltaTime = timestamp - lastTime;
-//     //     lastTime = timestamp;
-//     //     // const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
-//     //     // const maxSpeed = 100; // Máximo píxeles por segundo
-//     //     // const speedRange = maxSpeed - minSpeed;
-//     //     // const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
-        
-//     //     const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-
-//     //     pixelAccumulator += pixelsToScroll;
-//     //     if (pixelAccumulator > 1) {
-//     //         teleprompter.scrollTop += (1, Math.floor(pixelAccumulator));
-//     //         pixelAccumulator -= Math.floor(pixelAccumulator);
-//     //     }
-
-//     //     scrollAnimation = requestAnimationFrame(animateScroll);
-//     // }
-
-//     scrollAnimation = requestAnimationFrame(animateScroll);
-// }
-
-// function stopAutoScroll() {
-//     cancelAnimationFrame(scrollAnimation);
-//     scrollAnimation = null;
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-//     pixelAccumulator = 0; // Restablecer el acumulador al detener
-// }
-
 let scrollAnimation;  // ID de la animación
 let translateYValue = 0;
 let pixelsPerSecond = 0;  // Define la velocidad inicial
@@ -540,24 +421,6 @@ function updateTeleprompterHeight() {
     teleprompter.style.height = `${newHeight}px`;
     //teleprompter.offsetHeight;
 }
-
-
-
-// function estimateDuration() {
-//     var teleprompter = document.getElementById('teleprompter');
-//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-//     var speedControl = document.getElementById('speedControl');
-//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
-
-    
-//     var date = new Date(remainingTime);
-//     var formattedTime = date.toISOString().substr(11, 8);
-//     var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
-//     document.getElementById("durationContainer").innerHTML = timenohours;
-//     console.log('Estimated duration is:', timenohours);
-//     console.log('Remaining height is:', remainingHeight);
-// }
 
 
 
@@ -682,16 +545,6 @@ function applyColorToSelection(color, selection) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 document.addEventListener('selectionchange', function() {
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
@@ -715,36 +568,6 @@ function rgbToHex(rgb) {
     const rgbArr = rgb.match(/\d+/g);
     return rgbArr ? "#" + rgbArr.map(x => parseInt(x).toString(16).padStart(2, '0')).join('') : '#000000';
 }
-
-
-
-
-
-
-
-
-
-
-
-// document.getElementById('textColorPicker').addEventListener('change', function() {
-//     var color = this.value;
-//     //document.getElementById('textSample').style.color = color;
-//     const selection = window.getSelection();
-
-//     if (!selection.rangeCount) return;
-
-//     const range = selection.getRangeAt(0);
-//     const span = document.createElement('span');
-//     span.style.color = color;
-//     span.appendChild(range.extractContents());
-//     range.insertNode(span);
-//     selection.removeAllRanges();
-//     selection.addRange(range);
-//     selection.removeAllRanges();
-
-//     autoguardado();
-// });
-
 
 
 
@@ -849,120 +672,6 @@ document.getElementById('resetButton').addEventListener('click', function() {
 
 
 
-////// Original, este funciona bien /////
-// document.getElementById('teleprompter').addEventListener('paste', function(e) {
-//     e.preventDefault(); // Previene el comportamiento de pegado predeterminado
-
-//     var htmlContent = e.clipboardData.getData('text/html');
-//     var plainText = e.clipboardData.getData('text/plain');
-//     // console.log("HTML Original:", htmlContent);
-
-
-//     const selection = window.getSelection();
-//     if (!selection.rangeCount) return false;
-//     const range = selection.getRangeAt(0);
-//     range.deleteContents();
-
-//     if (htmlContent) {
-//         const tempDiv = document.createElement('div');
-//         tempDiv.innerHTML = htmlContent;
-//         processHTML(tempDiv);
-    
-//         // Inserta cada nodo en el orden en que aparece.
-//         Array.from(tempDiv.childNodes).forEach(node => {
-//             range.insertNode(node.cloneNode(true));
-//             range.collapse(false); // Mueve el rango al final del nodo insertado
-//         });
-        
-        
-//     } else if (plainText) {
-//         // Insertar texto plano respetando los saltos de línea
-//         const lines = plainText.split(/[\r\n]+/);
-//         lines.forEach((line, index) => {
-//             if (index > 0) {
-//                 range.insertNode(document.createElement('br'));
-//             }
-//             range.insertNode(document.createTextNode(line));
-//             range.collapse(false); // Mueve el rango al final del nodo insertado
-//         });
-//     }
-
-//     // Colocar el cursor después del texto insertado
-//     range.collapse(false);
-//     selection.removeAllRanges();
-//     selection.addRange(range);
-
-//     // Procesar cada elemento del HTML pegado para ajustar colores y eliminar estilos no deseados
-//     function processHTML(element) {
-
-//         // Eliminar elementos específicos como <sup class="superscription"> y <span class="parabreak">
-//         Array.from(element.querySelectorAll('sup.superscription, span.parabreak')).forEach(node => {
-//         const parent = node.parentNode;
-//         parent.removeChild(node); // Elimina completamente el nodo del DOM
-//         });
-
-//         Array.from(element.querySelectorAll('a')).forEach(node => {
-//             if (!/\d/.test(node.textContent)) {
-//                 if (node.parentNode) {
-//                     node.parentNode.removeChild(node); // Elimina completamente el nodo <a> del DOM
-//                 }
-//             }
-            
-//             // const parent = node.parentNode;
-//             // while (node.firstChild) {
-//             //     parent.insertBefore(node.firstChild, node); // Mueve el contenido del enlace (texto) antes de eliminar el nodo
-//             // }
-//             // parent.removeChild(node); // Elimina el nodo del enlace
-            
-//         });
-
-//         // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
-//         let htmlString = element.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
-        
-//         // Asignar de nuevo el HTML procesado
-//         element.innerHTML = htmlString;
-
-//         Array.from(element.querySelectorAll('*')).forEach(node => {
-
-//             // Opciones para reemplazar ciertos elementos con un formato más simple
-//             if (['SPAN', 'DIV', 'H1', 'H2', 'H3', 'P'].includes(node.tagName)) {
-//                 const newNode = document.createElement('p');
-//                 newNode.innerHTML = node.innerHTML; // Copia el contenido interno al nuevo nodo
-
-//                 if (node.parentNode) { // Asegura que el nodo padre existe antes de reemplazar
-//                     node.parentNode.replaceChild(newNode, node);
-//                 }
-//             }
-
-//             node.innerHTML = node.innerHTML.replace(/&nbsp;/g, ' ');
-
-//             if (node.style) {
-
-//                 // Si el color es blanco, eliminar el estilo completamente
-//                 if (node.style.color === 'white' || node.style.color === 'rgb(255, 255, 255)') {
-//                     node.removeAttribute('style');
-//                 } else if (node.style.color === 'black' || node.style.color === 'rgb(0, 0, 0)') {
-//                     node.removeAttribute('style'); // Cambia el negro a blanco
-//                 } else if (node.style.color === 'rgb(41, 41, 41)') {
-//                     node.removeAttribute('style'); // Cambia el gris a por defecto, fix jw Biblia
-//                 }
-//                 // Eliminar estilos no necesarios
-//                 node.style.fontSize = '';
-//                 node.style.fontFamily = '';
-//                 node.style.backgroundColor = '';
-//             }
-//             // Eliminar elementos que no contribuyen al texto visible
-//             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
-//                 node.parentNode.removeChild(node);
-//             }
-//         });
-//     }
-//     updateTeleprompterHeight();
-//     const maxScroll = window.innerHeight - teleprompter.scrollHeight;
-//     autoguardado();
-// });
-
-
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('teleprompter').addEventListener('paste', function(e) {
         e.preventDefault(); // Previene el comportamiento predeterminado del pegado.
@@ -1021,63 +730,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// document.getElementById('teleprompter').addEventListener('paste', function(e) {
-//     // Prevenir el comportamiento predeterminado del pegado
-//     e.preventDefault();
-
-//     // Obtener el texto del portapapeles
-//     const clipboardData = e.clipboardData || window.clipboardData;
-//     const pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
-
-//     // Crear un contenedor temporal donde se insertará el HTML para manipulación
-//     const tempDiv = document.createElement('div');
-//     tempDiv.innerHTML = pastedData;
-
-//     // Filtrar y modificar el contenido
-//     Array.from(tempDiv.querySelectorAll('*')).forEach(node => {
-//         const textColor = node.style.color; // Guardar el color del texto original
-//         node.removeAttribute('style'); // Eliminar todos los estilos para resetear
-    
-//         // Aplicar lógica condicional basada en el color
-//         if (textColor && textColor !== 'white' && textColor !== 'rgb(255, 255, 255)' &&
-//             textColor !== 'black' && textColor !== 'rgb(0, 0, 0)' &&
-//             textColor !== 'rgb(41, 41, 41)') {
-//             // Si el color no es blanco, negro o gris, entonces reasigna el color
-//             node.style.color = textColor;
-//         }
-//         // Si el color es blanco, negro o gris, no asignamos ningún color,
-//         // permitiendo que el texto herede el color por defecto de `teleprompter`
-//     });
-    
-
-//     // Convertir y colapsar espacios múltiples a un espacio único, mantener saltos de línea
-//     let htmlString = tempDiv.innerHTML.replace(/\s+/g, ' ').replace(/<br\s*\/?>/gi, '\n');
-//     tempDiv.innerHTML = htmlString;
-
-//     // Insertar el contenido modificado en el elemento
-//     const selection = window.getSelection();
-//     if (!selection.rangeCount) return; // No hay nada seleccionado, no se puede insertar
-//     const range = selection.getRangeAt(0);
-//     range.deleteContents(); // Eliminar el contenido actual en la selección
-
-//     // Crear un nodo de fragmento de documento para insertar
-//     const fragment = document.createRange().createContextualFragment(tempDiv.innerHTML);
-//     range.insertNode(fragment);
-
-//     // Mover el cursor inmediatamente después del contenido insertado
-//     range.setStartAfter(fragment);
-//     range.setEndAfter(fragment);
-//     selection.removeAllRanges(); // Limpiar selecciones anteriores
-//     selection.addRange(range); // Establecer la nueva selección
-
-//     updateTeleprompterHeight();
-//     autoguardado();
-// });
-
-
-
-
-
 function autoguardado() {
     const contenido = document.getElementById('teleprompter').innerHTML;
     console.log("Guardando contenido:", contenido);
@@ -1125,15 +777,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     updateTeleprompterHeight();
-    // // prevent contextual menu in app
-    // document.addEventListener('contextmenu', function (event) {
-    //     event.preventDefault();  // Prevenir la apertura del menú contextual
-    // }, false);
-
-    // Permitir el menú contextual solo en el área del teleprompter
-    // teleprompter.addEventListener('contextmenu', function (event) {
-    //     event.stopPropagation();  // Detiene la propagación del evento para evitar que el manejador global lo capture
-    // }, false)
 });
 
 document.addEventListener('contextmenu', function(event) {
@@ -1148,20 +791,6 @@ document.addEventListener('contextmenu', function(event) {
     }
 });
 
-
-// function adjustSpeed(speed) {
-//     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
-//     console.log('Adjusting speed to:', speed);
-//     // Asigna una lógica adecuada para ajustar la velocidad de scroll aquí.
-//     // Esto podría implicar ajustar intervalos de tiempo, modificar CSS, etc.
-//     if (isAutoScrolling) {
-//         clearInterval(scrollInterval);
-//         const speedscroll = 100 - speed;
-//         scrollInterval = setInterval(() => {
-//             teleprompter.scrollBy(0, 1);
-//         }, speedscroll);
-//     }
-// }
 
 
 function ensureEndMarkerExists() {
@@ -1218,16 +847,6 @@ function prepareTeleprompter() {
     endMarker.addEventListener('click', handleEndMarkerTouch); // Para dispositivos no táctiles
     // estimateDuration();
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1327,27 +946,6 @@ function getSpeedControl() {
 
 
 
-// teleprompter.addEventListener('touchstart', function(event) {
-//     isTouching = true;
-//     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
-//     event.preventDefault(); // Previene otros eventos como scroll del navegador
-// }, { passive: false });
-
-// teleprompter.addEventListener('touchmove', function(event) {
-//     if (!isTouching) return;
-//     let touchY = event.touches[0].clientY;
-//     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
-//     translateYValue += deltaY; // Actualiza el valor de translateY
-//     teleprompter.style.transform = `translateY(-${translateYValue}px)`;
-//     startY = touchY; // Actualiza startY para el próximo movimiento
-//     event.preventDefault();
-// }, { passive: false });
-
-// teleprompter.addEventListener('touchend', function(event) {
-//     isTouching = false;
-// });
-
-
 // Evento para manejar el auto-scrolling
 teleprompter.addEventListener('touchstart', function(event) {
     // if (!isAutoScrolling) return;
@@ -1397,7 +995,6 @@ function handleScrollEvent() {
 teleprompter.addEventListener('scroll', handleScrollEvent);
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
-
 
 
 
