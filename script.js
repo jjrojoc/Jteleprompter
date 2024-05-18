@@ -304,9 +304,6 @@ function toggleAutoScroll() {
 
 
 
-
-
-
 function updateToggleButton(isActive) {
     const toggleButton = document.getElementById('toggleScroll');
     const icon = toggleButton.querySelector('i');
@@ -316,125 +313,6 @@ function updateToggleButton(isActive) {
 }
 
 
-
-
-//let updateDurationInterval; // Guarda el ID del intervalo para poder detenerlo más tarde.
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     const speed = 100 - speedControl.value;
-    
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     scrollInterval = setInterval(() => {
-//         teleprompter.scrollBy(0, 1);
-//     }, speed);
-
-//     // // Inicia la actualización de la duración estimada cada segundo
-//     // if (!updateDurationInterval) {
-//     //     updateDurationInterval = setInterval(estimateDuration, 1000);
-//     // }
-// }
-
-
-
-
-
-// function stopAutoScroll() {
-//     clearInterval(scrollInterval);
-//     // clearInterval(updateDurationInterval); // Asegúrate de limpiar este intervalo también
-//     // updateDurationInterval = null; // Restablece la variable
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-// }
-
-
-// let scrollAnimation;
-// let pixelAccumulator = 0; // Acumulador para las fracciones de píxel
-
-// function startAutoScroll() {
-//     const teleprompter = document.getElementById('teleprompter');
-//     const speedControl = document.getElementById('speedControl');
-//     let speed = parseInt(speedControl.value);
-//     adjustSpeed(speed);
-
-//     isAutoScrolling = true;
-//     updateToggleButton(true);
-//     toggleControlsDisplay(false);
-
-//     if (teleprompter.scrollTop === 0) {
-//         cronometro.reset();
-//         cronometro.start();
-//     } else {
-//         cronometro.start();
-//     }
-
-//     let lastTime;
-//     let totalTranslation = 0; // Acumulador total de desplazamiento
-
-//     function animateScroll(timestamp) {
-//         if (!lastTime) lastTime = timestamp;
-//         const deltaTime = timestamp - lastTime;
-//         lastTime = timestamp;
-
-//         const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-//         totalTranslation += pixelsToScroll;
-
-//         teleprompter.style.transform = `translateY(-${totalTranslation}px)`;
-
-//         if (teleprompter.offsetHeight + totalTranslation < teleprompter.parentNode.offsetHeight) {
-//             requestAnimationFrame(animateScroll);
-//         }
-//     }
-
-
-//     // let lastTime;
-//     // function animateScroll(timestamp) {
-//     //     if (!lastTime) {
-//     //         lastTime = timestamp;
-//     //         scrollAnimation = requestAnimationFrame(animateScroll);
-//     //         return;
-//     //     }
-//     //     const deltaTime = timestamp - lastTime;
-//     //     lastTime = timestamp;
-//     //     // const minSpeed = 0.5; // Mínimo píxeles por segundo, puede ajustarse
-//     //     // const maxSpeed = 100; // Máximo píxeles por segundo
-//     //     // const speedRange = maxSpeed - minSpeed;
-//     //     // const pixelsPerSecond = minSpeed + (speedRange * speed / 100);
-        
-//     //     const pixelsToScroll = (pixelsPerSecond * deltaTime) / 1000;
-
-//     //     pixelAccumulator += pixelsToScroll;
-//     //     if (pixelAccumulator > 1) {
-//     //         teleprompter.scrollTop += (1, Math.floor(pixelAccumulator));
-//     //         pixelAccumulator -= Math.floor(pixelAccumulator);
-//     //     }
-
-//     //     scrollAnimation = requestAnimationFrame(animateScroll);
-//     // }
-
-//     scrollAnimation = requestAnimationFrame(animateScroll);
-// }
-
-// function stopAutoScroll() {
-//     cancelAnimationFrame(scrollAnimation);
-//     scrollAnimation = null;
-//     isAutoScrolling = false;
-//     updateToggleButton(false);
-//     toggleControlsDisplay(true);
-//     pixelAccumulator = 0; // Restablecer el acumulador al detener
-// }
 
 let scrollAnimation;  // ID de la animación
 let translateYValue = 0;
@@ -449,6 +327,8 @@ function adjustSpeed(speed) {
     pixelsPerSecond = minSpeed + (speedRange * speed / 100);  // Calcula los píxeles por segundo
     console.log('Speed adjusted to:', pixelsPerSecond, 'pixels per second');
 }
+
+
 
 function startAutoScroll() {
     if (!document.fullscreenElement) {
@@ -506,8 +386,6 @@ function startAutoScroll() {
 }
 
 
-
-//document.fullscreenElement
     
 function stopAutoScroll() {
         isAutoScrolling = false;
@@ -543,24 +421,6 @@ function updateTeleprompterHeight() {
 
 
 
-// function estimateDuration() {
-//     var teleprompter = document.getElementById('teleprompter');
-//     var remainingHeight = teleprompter.scrollHeight - (teleprompter.clientHeight + teleprompter.scrollTop);
-//     var speedControl = document.getElementById('speedControl');
-//     var speedPerPixel = (100 - speedControl.value) * 1.5; // Ajusta este valor según la realidad del desplazamiento
-//     var remainingTime = remainingHeight * speedPerPixel; // tiempo restante en milisegundos
-
-    
-//     var date = new Date(remainingTime);
-//     var formattedTime = date.toISOString().substr(11, 8);
-//     var timenohours = formattedTime.startsWith("00:") ? formattedTime.substr(3) : formattedTime;
-//     document.getElementById("durationContainer").innerHTML = timenohours;
-//     console.log('Estimated duration is:', timenohours);
-//     console.log('Remaining height is:', remainingHeight);
-// }
-
-
-
 function toggleControlsDisplay(show) {
     const controls = document.querySelectorAll('.control');
     controls.forEach(control => {
@@ -586,12 +446,15 @@ document.getElementById('loadText').addEventListener('click', function() {
     }
 });
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const savedText = localStorage.getItem('savedScript');
     if (savedText) {
         document.getElementById('teleprompter').innerHTML = savedText;
     }
 });
+
 
 
 document.getElementById('textColorPicker').addEventListener('change', function() {
@@ -607,6 +470,7 @@ document.getElementById('textColorPicker').addEventListener('change', function()
     }
     autoguardado();
 });
+
 
 
 function removeColorFromSelection(selection) {
@@ -666,6 +530,7 @@ function removeColorFromSelection(selection) {
 };
     
 
+
 function applyColorToSelection(color, selection) {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
@@ -679,16 +544,6 @@ function applyColorToSelection(color, selection) {
     newRange.selectNodeContents(span);
     selection.addRange(newRange);
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -715,36 +570,6 @@ function rgbToHex(rgb) {
     const rgbArr = rgb.match(/\d+/g);
     return rgbArr ? "#" + rgbArr.map(x => parseInt(x).toString(16).padStart(2, '0')).join('') : '#000000';
 }
-
-
-
-
-
-
-
-
-
-
-
-// document.getElementById('textColorPicker').addEventListener('change', function() {
-//     var color = this.value;
-//     //document.getElementById('textSample').style.color = color;
-//     const selection = window.getSelection();
-
-//     if (!selection.rangeCount) return;
-
-//     const range = selection.getRangeAt(0);
-//     const span = document.createElement('span');
-//     span.style.color = color;
-//     span.appendChild(range.extractContents());
-//     range.insertNode(span);
-//     selection.removeAllRanges();
-//     selection.addRange(range);
-//     selection.removeAllRanges();
-
-//     autoguardado();
-// });
-
 
 
 
@@ -800,13 +625,12 @@ function initializeEditable() {
 
 
 
-
-
 function showControlBar() {
     menuBar.style.display = 'none';
     controlBar.style.display = 'flex';
     teleprompter.contentEditable = "false";
 }
+
 
 function showMenuBar() {
     controlBar.style.display = 'none';
@@ -815,6 +639,8 @@ function showMenuBar() {
     initializeEditable();  // Inicializa el editor con autoguardado y deshacer
     //deleteDefaultText();
 }
+
+
 
 document.getElementById('btnShowControlBar').addEventListener('click', showControlBar);
 document.getElementById('btnShowMenuBar').addEventListener('click', showMenuBar);
@@ -849,7 +675,7 @@ document.getElementById('resetButton').addEventListener('click', function() {
 
 
 
-////// Original, este funciona bien /////
+
 // document.getElementById('teleprompter').addEventListener('paste', function(e) {
 //     e.preventDefault(); // Previene el comportamiento de pegado predeterminado
 
@@ -1019,9 +845,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-
-// document.getElementById('teleprompter').addEventListener('paste', function(e) {
 //     // Prevenir el comportamiento predeterminado del pegado
 //     e.preventDefault();
 
@@ -1073,8 +896,6 @@ document.addEventListener('DOMContentLoaded', function() {
 //     updateTeleprompterHeight();
 //     autoguardado();
 // });
-
-
 
 
 
@@ -1149,20 +970,6 @@ document.addEventListener('contextmenu', function(event) {
 });
 
 
-// function adjustSpeed(speed) {
-//     // Aquí puedes ajustar la velocidad del scroll en tu aplicación
-//     console.log('Adjusting speed to:', speed);
-//     // Asigna una lógica adecuada para ajustar la velocidad de scroll aquí.
-//     // Esto podría implicar ajustar intervalos de tiempo, modificar CSS, etc.
-//     if (isAutoScrolling) {
-//         clearInterval(scrollInterval);
-//         const speedscroll = 100 - speed;
-//         scrollInterval = setInterval(() => {
-//             teleprompter.scrollBy(0, 1);
-//         }, speedscroll);
-//     }
-// }
-
 
 function ensureEndMarkerExists() {
     let endMarker = document.getElementById('endMarker');
@@ -1221,16 +1028,6 @@ function prepareTeleprompter() {
 
 
 
-
-
-
-
-
-
-
-
-
-
 function handleEndMarkerTouch(event) {
     //event.preventDefault(); // Evita que se produzcan comportamientos predeterminados indeseados en touch
     console.log("El endMarker ha sido tocado o clickeado.");
@@ -1283,6 +1080,7 @@ function startCountdown(event) {
 }
 
 
+
 function stopCountdown() {
     clearInterval(countdownInterval);
     countdownElement.style.display = 'none';
@@ -1300,6 +1098,7 @@ function setPlaceholder() {
 }
 
 
+
 function removePlaceholder() {
     if (teleprompter.textContent === teleprompter.getAttribute('data-placeholder')) {
         teleprompter.textContent = '';
@@ -1308,44 +1107,28 @@ function removePlaceholder() {
 }
 
 
+
 teleprompter.addEventListener('focus', function() {
     removePlaceholder();
 });
+
 
 
 teleprompter.addEventListener('blur', function() {
     setPlaceholder();
 });
 
+
+
 // Inicializa el placeholder correctamente al cargar
 document.addEventListener('DOMContentLoaded', setPlaceholder);
+
 
 
 function getSpeedControl() {
     return document.getElementById('speedControl');
 }
 
-
-
-// teleprompter.addEventListener('touchstart', function(event) {
-//     isTouching = true;
-//     startY = event.touches[0].clientY; // Almacena la posición inicial de Y
-//     event.preventDefault(); // Previene otros eventos como scroll del navegador
-// }, { passive: false });
-
-// teleprompter.addEventListener('touchmove', function(event) {
-//     if (!isTouching) return;
-//     let touchY = event.touches[0].clientY;
-//     let deltaY = touchY - startY; // Calcula la diferencia desde el último punto
-//     translateYValue += deltaY; // Actualiza el valor de translateY
-//     teleprompter.style.transform = `translateY(-${translateYValue}px)`;
-//     startY = touchY; // Actualiza startY para el próximo movimiento
-//     event.preventDefault();
-// }, { passive: false });
-
-// teleprompter.addEventListener('touchend', function(event) {
-//     isTouching = false;
-// });
 
 
 // Evento para manejar el auto-scrolling
@@ -1355,6 +1138,8 @@ teleprompter.addEventListener('touchstart', function(event) {
     startY = event.touches[0].clientY;
     //event.preventDefault();
 }, { passive: false });
+
+
 
 teleprompter.addEventListener('touchmove', function(event) {
     let touchY = event.touches[0].clientY;
@@ -1376,6 +1161,7 @@ teleprompter.addEventListener('touchmove', function(event) {
 }, { passive: false });
 
 
+
 teleprompter.addEventListener('touchend', function(event) {
     // if (!isAutoScrolling) return;
     isTouching = false;
@@ -1383,6 +1169,7 @@ teleprompter.addEventListener('touchend', function(event) {
     startEstimatedTimeCountdown();
     }
 });
+
 
 
 function handleScrollEvent() {
@@ -1393,12 +1180,12 @@ function handleScrollEvent() {
     }
 }
 
+
+
 // Añadir evento de scroll para manejar cuando se hace scroll manual
 teleprompter.addEventListener('scroll', handleScrollEvent);
 
 // Suponiendo que en algún punto cambias el estado de isAutoScrolling
-
-
 
 
 
@@ -1424,6 +1211,7 @@ function startEstimatedTimeCountdown() {
 }
 
 
+
 function stopEstimatedTimeCountdown() {
     if (estimatedTimeInterval) {
         clearInterval(estimatedTimeInterval);
@@ -1432,6 +1220,7 @@ function stopEstimatedTimeCountdown() {
     }
     displayTime(0); // Resetea el tiempo mostrado a 00:00
 }
+
 
 
 function displayTime(seconds) {
