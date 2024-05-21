@@ -13,15 +13,25 @@
 
 </head>
 <body>
-
-    <div class="teleprompter-container" style="position: relative; overflow: hidden; height: 100vh;">
+    
+    <div id="scriptsList" class="scripts-list"></div>
+    
+    <!-- <div class="teleprompter-container" style="position: relative; overflow: hidden; height: 100vh;">
         <div id="teleprompter" contenteditable="false" data-placeholder="Click en menú y escribe tu texto aquí...">
-          <!-- Contenido desplazable, que podría extenderse más allá de la altura inicial de la ventana -->
+           Contenido desplazable, que podría extenderse más allá de la altura inicial de la ventana -->
         </div>
         <!-- <div class="expand-for-rendering" style="position: absolute; top: 0; height: 200%; width: 100%; background: transparent;"> -->
           <!-- Este div es transparente y solo asegura que el área del teleprompter es considerada para renderización -->
-        <!-- </div> -->
-      </div>
+        <!-- </div>
+      </div> -->
+      <div id="teleprompterContainer" class="teleprompter-container" style="display: none;">
+        <div id="teleprompter" contenteditable="true"></div>
+        <input type="text" id="scriptName" placeholder="Nombre del script">
+        <input type="hidden" id="scriptId">
+        <button id="saveText" class="save-button">Guardar</button>
+        <button id="resetButton" class="reset-button">Resetear</button>
+        <button id="toggleScroll" class="toggle-scroll">Iniciar/Detener Scroll</button>
+    </div>
       
 
 
