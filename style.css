@@ -371,3 +371,24 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 .save-button, .reset-button, .toggle-scroll {
   margin: 10px 0;
 }
+
+
+.load-script-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.load-script-button:hover {
+  background-color: #0056b3;
+}
+
+.load-script-button:active {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
