@@ -283,18 +283,17 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   color: white; /* Asegura que el texto sea blanco */
 }
 
-
 #scriptsList {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   padding: 20px;
 }
 
 .script-item {
-  background-color: white;
+  background-color: #333;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
   margin: 10px;
   padding: 15px;
   width: 200px;
@@ -303,16 +302,17 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid white;
 }
 
 .script-item:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.3);
 }
 
 .script-item div {
   font-size: 14px;
-  color: #333;
+  color: whitesmoke;
   height: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -323,20 +323,23 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 .script-name {
   font-size: 16px;
   font-weight: bold;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   padding: 5px;
   border-top: 1px solid #ddd;
   outline: none;
-  border-radius: 10px;
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   text-align: center;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: white;
 }
 
 .script-name:focus {
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
   border-radius: 5px;
   white-space: normal;
   word-wrap: break-word;
@@ -370,25 +373,4 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 
 .save-button, .reset-button, .toggle-scroll {
   margin: 10px 0;
-}
-
-
-.load-script-button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  font-size: 14px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.load-script-button:hover {
-  background-color: #0056b3;
-}
-
-.load-script-button:active {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
