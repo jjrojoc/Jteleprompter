@@ -296,7 +296,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
   margin: 10px;
   padding: 15px;
-  width: 200px;
+  width: 250px;
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
   display: flex;
@@ -321,7 +321,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 }
 
 .script-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   /* margin-top: 10px; */
   padding: 5px;
@@ -329,19 +329,20 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   outline: none;
   width: 100%;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: wrap;
   text-overflow: ellipsis;
   text-align: center;
   border-radius: 10px;
   background: transparent;
   border: none;
   color: white;
+  resize: none;
 }
 
 .script-name:focus {
   /* background-color: #f9f9f9; */
   border-radius: 5px;
-  white-space: normal;
+  white-space: pre-wrap;
   word-wrap: break-word;
 }
 
@@ -373,4 +374,15 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 
 .save-button, .reset-button, .toggle-scroll {
   margin: 10px 0;
+}
+
+
+.load-script-button {
+  /* padding: 10px 20px;
+  font-size: 16px;
+  margin: 10px 0; */
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  border: 1px solid lightgray;
 }

@@ -155,25 +155,40 @@ function loadScriptsList() {
         searchInput.type = 'text';
         searchInput.id = 'search';
         searchInput.placeholder = 'Buscar scripts...';
-        searchInput.style = 'width: 100%;padding: 10px;margin-bottom: 10px;';
+        searchInput.style = 'border-radius: 10px; width: 100%; padding: 10px; margin-bottom: 10px;';
         scriptsList.appendChild(searchInput);
         
 
         scripts.forEach(script => {
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
+            
+            
             const textSnippet = document.createElement('div');
-            textSnippet.textContent = script.text.replace(/<[^>]+>/g, '').substring(0, 200) + '...'; // Extraer texto sin HTML
+            textSnippet.innerHTML = script.text.replace(/<div>/g, '\n').replace(/<\/div>/g, '').replace(/<br>/g, '\n').replace(/<p>/g, '').replace(/<\/p>/g, '');
+            textSnippet.innerHTML = textSnippet.textContent.substring(0, 150) + '...';
             textSnippet.className = 'text-snippet';
-            const scriptName = document.createElement('input');
+
+            const scriptName = document.createElement('textarea');
+            scriptName.rows = 2;
             scriptName.type = 'text';
             scriptName.value = script.name;
             scriptName.className = 'script-name';
             scriptName.dataset.id = script.id;
             scriptName.contentEditable = false;
 
+            const loadButton = document.createElement('button');
+            loadButton.className = 'load-script-button';
+            loadButton.innerHTML = '<i class="fas fa-play"></i>';
+            loadButton.onclick = (e) => {
+                e.stopPropagation();
+                loadScript(script.id);
+                console.log('Script cargado');
+            };
+            
             scriptItem.appendChild(textSnippet);
             scriptItem.appendChild(scriptName);
+            scriptItem.appendChild(loadButton);
 
             scriptItem.onclick = () => {
                 // const edit = confirm(`¿Deseas editar el script "${script.name}"?`);
@@ -270,6 +285,5 @@ document.getElementById('resetButton').addEventListener('click', () => {
         document.getElementById('scriptId').value = '';
     }
 });
-
 
 
