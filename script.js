@@ -163,7 +163,6 @@ function loadScriptsList() {
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
             scriptItem.style.width = 'calc(40% - 20px)';
-            scriptItem.style.margin = '0 auto';
             
             
             const textSnippet = document.createElement('div');
@@ -296,7 +295,6 @@ window.addEventListener('orientationchange', () => {
     const scriptElements = document.querySelectorAll('.script-item');
     scriptElements.forEach(script => {
         script.style.width = 'calc(40% - 20px)';
-        script.style.margin = '0 auto';
     });
 });
 
@@ -304,6 +302,5 @@ window.addEventListener('resize', () => {
     const scriptElements = document.querySelectorAll('.script-item');
     scriptElements.forEach(script => {
         script.style.width = 'calc(40% - 20px)';
-        script.style.margin = '0 auto';
     });
 });
