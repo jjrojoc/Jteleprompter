@@ -287,3 +287,10 @@ document.getElementById('resetButton').addEventListener('click', () => {
 });
 
 
+// adapta dinámicamente según el tamaño de pantalla el tamaño de script item
+window.addEventListener('resize', () => {
+    const scriptElements = document.querySelectorAll('.script-item');
+    scriptElements.forEach(script => {
+        script.style.width = 'calc(40% - 20px)';
+    });
+});
