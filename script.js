@@ -163,6 +163,9 @@ function loadScriptsList() {
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
             scriptItem.style.width = 'calc(40% - 20px)';
+            if (window.innerWidth < 800) {
+                script.style.width = 'calc(80% - 20px)';
+            }
             
             
             const textSnippet = document.createElement('div');
@@ -288,10 +291,27 @@ document.getElementById('resetButton').addEventListener('click', () => {
 });
 
 
-// adapta dinámicamente según el tamaño de pantalla el tamaño de script item
+// adapta dinámicamente según la orientación de la pantalla el tamaño de script item para que entren dos en una fila y centrados
+
+
+window.addEventListener('orientationchange', () => {
+    const scriptElements = document.querySelectorAll('.script-item');
+    scriptElements.forEach(script => {
+        script.style.width = 'calc(40% - 20px)';
+        script.style.margin = '0 auto';
+        if (window.innerWidth < 800) {
+            script.style.width = 'calc(80% - 20px)';
+        }
+    });
+});
+
 window.addEventListener('resize', () => {
     const scriptElements = document.querySelectorAll('.script-item');
     scriptElements.forEach(script => {
         script.style.width = 'calc(40% - 20px)';
+
+        if (window.innerWidth < 800) {
+            script.style.width = 'calc(80% - 20px)';
+        }
     });
 });
