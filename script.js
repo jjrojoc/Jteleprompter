@@ -162,7 +162,7 @@ function loadScriptsList() {
         scripts.forEach(script => {
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
-            scriptItem.style.width = 'calc(40% - 10px)';
+            scriptItem.style.width = 'calc(40% - 20px)';
             
             
             const textSnippet = document.createElement('div');
@@ -292,6 +292,6 @@ document.getElementById('resetButton').addEventListener('click', () => {
 window.addEventListener('resize', () => {
     const scriptElements = document.querySelectorAll('.script-item');
     scriptElements.forEach(script => {
-        script.style.width = 'calc(40% - 10px)';
+        script.style.width = 'calc(40% - 20px)';
     });
 });
