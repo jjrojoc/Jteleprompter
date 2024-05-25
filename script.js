@@ -163,9 +163,7 @@ function loadScriptsList() {
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
             scriptItem.style.width = 'calc(40% - 20px)';
-            if (window.innerWidth < 800) {
-                script.style.width = 'calc(80% - 20px)';
-            }
+            scriptItem.style.margin = '0 auto';
             
             
             const textSnippet = document.createElement('div');
@@ -299,9 +297,6 @@ window.addEventListener('orientationchange', () => {
     scriptElements.forEach(script => {
         script.style.width = 'calc(40% - 20px)';
         script.style.margin = '0 auto';
-        if (window.innerWidth < 800) {
-            script.style.width = 'calc(80% - 20px)';
-        }
     });
 });
 
@@ -309,9 +304,6 @@ window.addEventListener('resize', () => {
     const scriptElements = document.querySelectorAll('.script-item');
     scriptElements.forEach(script => {
         script.style.width = 'calc(40% - 20px)';
-
-        if (window.innerWidth < 800) {
-            script.style.width = 'calc(80% - 20px)';
-        }
+        script.style.margin = '0 auto';
     });
 });
