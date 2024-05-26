@@ -162,18 +162,27 @@ function loadScriptsList() {
         scripts.forEach(script => {
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
-            scriptItem.style.width = 'calc(40% - 20px)';
+            // scriptItem.style.width = 'calc(40% - 20px)';
             
-            
+            const textSni = document.createElement('div');
+            textSni.innerHTML = script.text;
+            var clone = textSni.cloneNode(true);
+            strip(clone, 200, 14);
+            // textSnippet.innerHTML = script.text;
+            // textSnippet.innerHTML = textSnippet.innerHTML.slice(0, 200) + '...';
             const textSnippet = document.createElement('div');
-            textSnippet.innerHTML = script.text.replace(/<div>/g, '\n').replace(/<\/div>/g, '').replace(/<br>/g, '\n').replace(/<p>/g, '').replace(/<\/p>/g, '');
-            textSnippet.innerHTML = textSnippet.textContent.substring(0, 150) + '...';
+            textSnippet.innerHTML = clone.innerHTML;
+            //const textSnippet = document.createElement('div');
+            // const firstIndex = myString.indexOf('>'); // Find the first index of the character '>'    
+            // const secondIndex = myString.indexOf('<', firstIndex); // Find the second index of the character '<'
+            //textSnippet.innerHTML = script.text; //.replace(/<div>/g, '\n').replace(/<\/div>/g, '').replace(/<br>/g, '\n').replace(/<p>/g, '').replace(/<\/p>/g, '');
+            //textSnippet.innerHTML = textSnippet.textContent.substring(0, 150) + '...';
             textSnippet.className = 'text-snippet';
 
             const scriptName = document.createElement('textarea');
-            scriptName.rows = 2;
-            scriptName.type = 'text';
-            scriptName.value = script.name;
+            //scriptName.rows = 2;
+            //scriptName.type = 'text';
+            scriptName.textContent = script.name;
             scriptName.className = 'script-name';
             scriptName.dataset.id = script.id;
             scriptName.contentEditable = false;
@@ -186,9 +195,9 @@ function loadScriptsList() {
                 loadScript(script.id);
                 console.log('Script cargado');
             };
-            
-            scriptItem.appendChild(textSnippet);
             scriptItem.appendChild(scriptName);
+            scriptItem.appendChild(textSnippet);
+            
             scriptItem.appendChild(loadButton);
 
             scriptItem.onclick = () => {
@@ -291,16 +300,43 @@ document.getElementById('resetButton').addEventListener('click', () => {
 // adapta dinámicamente según la orientación de la pantalla el tamaño de script item para que entren dos en una fila y centrados
 
 
-window.addEventListener('orientationchange', () => {
-    const scriptElements = document.querySelectorAll('.script-item');
-    scriptElements.forEach(script => {
-        script.style.width = 'calc(40% - 20px)';
-    });
-});
+// window.addEventListener('orientationchange', () => {
+//     const scriptElements = document.querySelectorAll('.script-item');
+//     scriptElements.forEach(script => {
+//         // script.style.width = 'calc(40% - 20px)';
+//     });
+// });
 
-window.addEventListener('resize', () => {
-    const scriptElements = document.querySelectorAll('.script-item');
-    scriptElements.forEach(script => {
-        script.style.width = 'calc(40% - 20px)';
-    });
-});
+// window.addEventListener('resize', () => {
+//     const scriptElements = document.querySelectorAll('.script-item');
+//     scriptElements.forEach(script => {
+//         // script.style.width = 'calc(40% - 20px)';
+//     });
+// });
+
+
+var count = 0;
+
+function strip(el, max, fontSize) {
+    var children = Array.prototype.slice.call(el.childNodes);
+    children.forEach((node) => {
+      if (node instanceof Text) {
+        var newCount = count + node.textContent.length;
+        var diff = newCount - max;
+        if (diff > 0)
+          node.textContent = node.textContent.substring(0, node.textContent.length - diff);
+        count += node.textContent.length;
+        node.parentNode.style.fontSize = `${fontSize}px`; // set font size for text node's parent element
+        count = 0;
+        //console.log(node.parentNode.style.fontSize);
+      } else if (node instanceof HTMLElement) {
+        if (count >= max) {
+          node.remove(); // remove unnecessary tags
+          //count = 0;
+        } else {
+          strip(node, max, fontSize); // do recursively
+          count = 0;
+        }
+      }
+    })
+}
