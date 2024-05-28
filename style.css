@@ -34,6 +34,7 @@ body, html {
   will-change: transform;  
   contain: none;
   position: relative;
+  /* display: inline-block; */ /* Opcional, dependiendo de tu diseño cambia los div por br*/
   }
 
 
@@ -307,6 +308,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   flex-grow: 1;
   flex-basis: auto;
   min-width: 0px;
+  height: auto;
 }
 
 .script-item:hover {
@@ -316,21 +318,31 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 
 .script-item div {
   padding: 5px;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   flex-grow: 1;
-  flex-shrink: 1;
-  font-size: 14px;
-  color: whitesmoke;
-  height: 100px;
+  flex-shrink: 1; */
+  /* font-size: 14px; */
+  /* color: whitesmoke; */
+  /* height: 60px; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
+.text-snippet {
+  font-size: 14px;
+  text-align: left;
+  /* padding: 15px; */
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color:whitesmoke;
+}
 .script-name {
+  display: inline-flexbox;
   font-size: 14px;
   font-weight: bold;
   /* margin-top: 10px; */
@@ -347,7 +359,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   border: none;
   color: white;
   resize: none;
-  min-height: 20px;
+  height: 100%;
 }
 
 .script-name:focus {

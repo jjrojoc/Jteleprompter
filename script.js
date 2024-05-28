@@ -93,7 +93,7 @@ function saveScript(id, name, text) {
     const request = store.put(script);
 
     request.onsuccess = function() {
-        alert('Script guardado con éxito');
+        //alert('Script guardado con éxito');
         loadScriptsList();
         hideEditor();
     };
@@ -164,20 +164,26 @@ function loadScriptsList() {
             scriptItem.className = 'script-item';
             // scriptItem.style.width = 'calc(40% - 20px)';
             
-            const textSni = document.createElement('div');
-            textSni.innerHTML = script.text;
-            var clone = textSni.cloneNode(true);
-            strip(clone, 200, 14);
+            // // const textSni = document.createElement('div');
+            // // textSni.innerHTML = script.text;
+            // // var clone = textSni.cloneNode(true);
+            // // strip(clone, 200, 14);
             // textSnippet.innerHTML = script.text;
             // textSnippet.innerHTML = textSnippet.innerHTML.slice(0, 200) + '...';
+            // // const textSnippet = document.createElement('div');
+            // // textSnippet.innerHTML = clone.innerHTML;
+            
             const textSnippet = document.createElement('div');
-            textSnippet.innerHTML = clone.innerHTML;
-            //const textSnippet = document.createElement('div');
-            // const firstIndex = myString.indexOf('>'); // Find the first index of the character '>'    
-            // const secondIndex = myString.indexOf('<', firstIndex); // Find the second index of the character '<'
-            //textSnippet.innerHTML = script.text; //.replace(/<div>/g, '\n').replace(/<\/div>/g, '').replace(/<br>/g, '\n').replace(/<p>/g, '').replace(/<\/p>/g, '');
-            //textSnippet.innerHTML = textSnippet.textContent.substring(0, 150) + '...';
+            // textSnippet.innerHTML = script.text.replace(/<div>/g, '').replace(/<\/div>/g, '').replace(/<br>/g, '\n').replace(/<p>/g, '\n').replace(/<\/p>/g, '');
+            
+            textSnippet.append(new DOMParser().parseFromString(script.text
+                .replace(/<div>/g, '\n')
+                .replace(/<br>/g, '\n')
+                , 'text/html')
+                .body.textContent.slice(0, 100) + '...');
             textSnippet.className = 'text-snippet';
+
+            console.log(textSnippet);
 
             const scriptName = document.createElement('textarea');
             //scriptName.rows = 2;
@@ -256,6 +262,9 @@ function loadScriptsList() {
 // Función para crear un nuevo script
 function createNewScript() {
     document.getElementById('teleprompter').innerHTML = '';
+    // parrafo = document.createElement('p');
+    // parrafo.textContent = 'Escribe aquí tu texto...';
+    // document.getElementById('teleprompter').appendChild(parrafo);
     document.getElementById('scriptName').value = '';
     document.getElementById('scriptId').value = '';
     showEditor();
@@ -314,29 +323,118 @@ document.getElementById('resetButton').addEventListener('click', () => {
 //     });
 // });
 
+// Función para recortar el texto
+// function strip(el, max) {
+//     var children = Array.prototype.slice.call(el.childNodes);
+//     children.forEach((node) => {
+//         if (node instanceof Text) {
+//             var newCount = count + node.textContent.length;
+//             var diff = newCount - max;
+//             if (diff > 0)
+//                 node.textContent = node.textContent.substring(0, node.textContent.length - diff);
+//             count += node.textContent.length;
+//         } else if (node instanceof HTMLElement) {
+//             if (count >= max)
+//                 node.remove();
+//             else
+//                 strip(node, max);
+//         }
+//     });
+// }
 
-var count = 0;
 
-function strip(el, max, fontSize) {
-    var children = Array.prototype.slice.call(el.childNodes);
-    children.forEach((node) => {
-      if (node instanceof Text) {
-        var newCount = count + node.textContent.length;
-        var diff = newCount - max;
-        if (diff > 0)
-          node.textContent = node.textContent.substring(0, node.textContent.length - diff);
-        count += node.textContent.length;
-        node.parentNode.style.fontSize = `${fontSize}px`; // set font size for text node's parent element
-        count = 0;
-        //console.log(node.parentNode.style.fontSize);
-      } else if (node instanceof HTMLElement) {
-        if (count >= max) {
-          node.remove(); // remove unnecessary tags
-          //count = 0;
-        } else {
-          strip(node, max, fontSize); // do recursively
-          count = 0;
-        }
-      }
-    })
-}
+// var count = 0;
+
+// function strip(el, max, fontSize) {
+//   var children = Array.prototype.slice.call(el.childNodes);
+//   children.forEach((node) => {
+//     if (node instanceof Text) {
+//       var newCount = count + node.textContent.length;
+//       var diff = newCount - max;
+//       if (diff > 0)
+//         node.textContent = node.textContent.substring(0, node.textContent.length - diff);
+//         node.parentNode.style.fontSize = `${fontSize}px`; // set font size for text node's parent element
+//       count += node.textContent.length;
+//     } else if (node instanceof HTMLElement) {
+//       if (count >= max)
+//         node.remove(); // remove unnecessary tags
+//       else
+//         strip(node, max, fontSize); // do recursively
+//     }
+//   })
+//   count = 0; // reset count for next element
+// }
+
+
+// function extractContent(s, space) {
+//     var span= document.createElement('span');
+//     span.innerHTML= s;
+//     if(space) {
+//       var children= span.querySelectorAll('*');
+//       for(var i = 0 ; i < children.length ; i++) {
+//         if(children[i].textContent)
+//           children[i].textContent+= ' ';
+//         else
+//           children[i].innerText+= ' ';
+//       }
+//     }
+//     return [span.textContent || span.innerText].toString().replace(/ +/g,' ');
+//   };
+
+
+
+// teleprompter.addEventListener('keyup', onKeyDown);
+
+// function onKeyDown() {
+//     var selection = window.getSelection();
+//     if (!selection.rangeCount) return; // Verifica si hay una selección válida
+
+//     var node = selection.focusNode;
+//     if (node.nodeType !== Node.TEXT_NODE) return; // Asegúrate de que el nodo sea un nodo de texto
+
+//     node = node.parentNode; // Obtén el nodo padre, asumiendo que es un elemento HTML
+//     var input = node.textContent;
+
+//     if (node.hasAttribute('data-processed')) {
+//         return; // Salta si el nodo ya ha sido procesado
+//     }
+
+//     if (input.trim().length > 0) { // Ejecuta si el nodo tiene texto escrito
+//         var keyShortcut = /^[^\S\r\n]{3}/gm; // Patrón para encontrar tres espacios en blanco
+//         if (input.match(keyShortcut) && node.tagName.toLowerCase() === 'p') {
+//             input = input.replace(/\s{3,}/gm, ' '); // Reemplaza los espacios en blanco
+//             node.textContent = input; // Actualiza el contenido del nodo
+//             node.style.color = 'red'; // Cambia el color del texto a rojo
+//             console.log('Código');
+//             node.setAttribute('data-processed', true); // Marca el nodo como procesado
+//         }
+//     }
+// }
+
+
+
+// function truncateText(el, max, fontSize) {
+//     let count = 0;
+  
+//     function traverse(node) {
+//       if (count >= max) {
+//         node.remove(); // Si ya hemos alcanzado el límite, eliminamos el nodo
+//         return;
+//       }
+  
+//       if (node.nodeType === Node.TEXT_NODE) {
+//         // Si es un nodo de texto, ajustamos su contenido
+//         const diff = count + node.textContent.length - max;
+//         if (diff > 0) {
+//           node.textContent = node.textContent.slice(0, -diff);
+//           node.parentNode.style.fontSize = `${fontSize}px`; // Ajustamos el tamaño de fuente
+//         }
+//         count += node.textContent.length;
+//       } else if (node.nodeType === Node.ELEMENT_NODE) {
+//         // Si es un elemento, lo recorremos recursivamente
+//         Array.from(node.childNodes).forEach(traverse);
+//       }
+//     }
+  
+//     traverse(el); // Comenzamos la traversía desde el elemento dado
+//   }
