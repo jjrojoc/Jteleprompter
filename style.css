@@ -294,7 +294,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 
 .script-item {
   background-color: #333;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
   margin: 10px;
   padding: 15px;

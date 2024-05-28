@@ -155,7 +155,7 @@ function loadScriptsList() {
         searchInput.type = 'text';
         searchInput.id = 'search';
         searchInput.placeholder = 'Buscar scripts...';
-        searchInput.style = 'border-radius: 10px; width: 100%; padding: 10px; margin-bottom: 10px;';
+        searchInput.style = 'border-radius: 20px; width: 100%; padding: 10px; margin-bottom: 10px;';
         scriptsList.appendChild(searchInput);
         
 
