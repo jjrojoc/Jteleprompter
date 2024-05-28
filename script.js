@@ -144,54 +144,44 @@ function deleteScript(id) {
 function loadScriptsList() {
     const store = getScriptsStore('readonly');
     if (!store) return;
-    const request = store.getAll();
+
+    const scriptsList = document.getElementById('scriptsList');
+    scriptsList.innerHTML = '';
+
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.id = 'search';
+    searchInput.placeholder = 'Buscar scripts...';
+    searchInput.style = 'border-radius: 20px; width: 100%; padding: 10px; margin-bottom: 10px;';
+    scriptsList.appendChild(searchInput);
+
+    // Abre un cursor para recorrer el almacén en orden descendente
+    const request = store.openCursor(null, 'prev');
 
     request.onsuccess = function(event) {
-        const scripts = event.target.result;
-        const scriptsList = document.getElementById('scriptsList');
-        scriptsList.innerHTML = '';
+        const cursor = event.target.result;
+        if (cursor) {
+            const script = cursor.value;
 
-        const searchInput = document.createElement('input');
-        searchInput.type = 'text';
-        searchInput.id = 'search';
-        searchInput.placeholder = 'Buscar scripts...';
-        searchInput.style = 'border-radius: 20px; width: 100%; padding: 10px; margin-bottom: 10px;';
-        scriptsList.appendChild(searchInput);
-        
-
-        scripts.forEach(script => {
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
-            // scriptItem.style.width = 'calc(40% - 20px)';
-            
-            // // const textSni = document.createElement('div');
-            // // textSni.innerHTML = script.text;
-            // // var clone = textSni.cloneNode(true);
-            // // strip(clone, 200, 14);
-            // textSnippet.innerHTML = script.text;
-            // textSnippet.innerHTML = textSnippet.innerHTML.slice(0, 200) + '...';
-            // // const textSnippet = document.createElement('div');
-            // // textSnippet.innerHTML = clone.innerHTML;
-            
+            scriptItem.style.display = 'flex';
+            scriptItem.style.flexDirection = 'column';
+
             const textSnippet = document.createElement('div');
-            // textSnippet.innerHTML = script.text.replace(/<div>/g, '').replace(/<\/div>/g, '').replace(/<br>/g, '\n').replace(/<p>/g, '\n').replace(/<\/p>/g, '');
-            
+            textSnippet.className = 'text-snippet';
             textSnippet.append(new DOMParser().parseFromString(script.text
                 .replace(/<div>/g, '\n')
                 .replace(/<br>/g, '\n')
                 , 'text/html')
                 .body.textContent.slice(0, 100) + '...');
-            textSnippet.className = 'text-snippet';
 
-            console.log(textSnippet);
-
-            const scriptName = document.createElement('textarea');
-            //scriptName.rows = 2;
-            //scriptName.type = 'text';
+            const scriptName = document.createElement('div');
             scriptName.textContent = script.name;
             scriptName.className = 'script-name';
             scriptName.dataset.id = script.id;
-            scriptName.contentEditable = false;
+            scriptName.style.fontSize = '14px';
+            scriptName.style.color = 'whitesmoke';
 
             const loadButton = document.createElement('button');
             loadButton.className = 'load-script-button';
@@ -201,63 +191,57 @@ function loadScriptsList() {
                 loadScript(script.id);
                 console.log('Script cargado');
             };
+
             scriptItem.appendChild(scriptName);
             scriptItem.appendChild(textSnippet);
-            
             scriptItem.appendChild(loadButton);
 
             scriptItem.onclick = () => {
-                // const edit = confirm(`¿Deseas editar el script "${script.name}"?`);
-                // if (edit) {
-                    loadScript(script.id);
-                //} else {
+                loadScript(script.id);
             }
+
             scriptItem.oncontextmenu = (e) => {
                 e.preventDefault();
                 const del = confirm(`¿Deseas eliminar el script "${script.name}"?`);
-                    if (del) {
-                        deleteScript(script.id);
-                    }
+                if (del) {
+                    deleteScript(script.id);
                 }
+            }
 
             scriptsList.appendChild(scriptItem);
-        });
 
-        // Forzar el recálculo del diseño para el contenedor de scripts
-        scriptsList.style.display = 'none';
-        scriptsList.offsetHeight; // Forzar reflow
-        scriptsList.style.display = 'flex';
+            cursor.continue();
+        } else {
+            const newScriptButton = document.createElement('button');
+            newScriptButton.id = 'newScriptButton';
+            newScriptButton.className = 'new-script-button';
+            newScriptButton.style = 'width:60px;height:60px;position: fixed;background-color:green;border-radius: 50%;z-index: 1050;';
+            newScriptButton.innerHTML = '<i class="fa-solid fa-plus"></i>';
+            newScriptButton.onclick = createNewScript;
+            newScriptButton.style.display = 'block';
+            scriptsList.appendChild(newScriptButton);
 
-        const newScriptButton = document.createElement('button');
-        newScriptButton.id = 'newScriptButton';
-        newScriptButton.className = 'new-script-button';
-        newScriptButton.style = 'width:60px;height:60px;position: fixed;background-color:green;border-radius: 50%;z-index: 1050;';
-        // newScriptButton.textContent = 'Nuevo Script';
-        newScriptButton.innerHTML = '<i class="fa-solid fa-plus"></i>';
-        newScriptButton.onclick = createNewScript;
-        newScriptButton.style.display = 'block';
-        scriptsList.appendChild(newScriptButton);
-
-        var scriptElements = document.querySelectorAll('.script-item'); // Select all elements with class 'script-item'
-        searchInput.oninput = () => {
-            const filter = searchInput.value.toLowerCase(); // Use searchInput.value instead of search.value
-            scriptElements.forEach(script => {
-            const scriptName = script.querySelector('.script-name'); // Get the script name element
-            const scriptText = script.querySelector('.text-snippet'); // Get the script text element
-            if (scriptName.value.toLowerCase().includes(filter) || scriptText.textContent.toLowerCase().includes(filter)) {
-                script.style.display = 'flex'; // Show the script item
-            } else {
-                script.style.display = 'none'; // Hide the script item
-            }
-            });
-        };
-
+            var scriptElements = document.querySelectorAll('.script-item'); // Select all elements with class 'script-item'
+            searchInput.oninput = () => {
+                const filter = searchInput.value.toLowerCase(); // Use searchInput.value instead of search.value
+                scriptElements.forEach(script => {
+                    const scriptName = script.querySelector('.script-name'); // Get the script name element
+                    const scriptText = script.querySelector('.text-snippet'); // Get the script text element
+                    if (scriptName.textContent.toLowerCase().includes(filter) || scriptText.textContent.toLowerCase().includes(filter)) {
+                        script.style.display = 'flex'; // Show the script item
+                    } else {
+                        script.style.display = 'none'; // Hide the script item
+                    }
+                });
+            };
+        }
     };
 
     request.onerror = function(event) {
         alert('Error al cargar la lista de scripts: ' + event.target.errorCode);
     };
 }
+
 
 // Función para crear un nuevo script
 function createNewScript() {
