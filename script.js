@@ -165,8 +165,8 @@ function loadScriptsList() {
 
             const scriptItem = document.createElement('div');
             scriptItem.className = 'script-item';
-            scriptItem.style.display = 'flex';
-            scriptItem.style.flexDirection = 'column';
+            //scriptItem.style.display = 'flex';
+            //scriptItem.style.flexDirection = 'column';
 
             const textSnippet = document.createElement('div');
             textSnippet.className = 'text-snippet';
@@ -180,8 +180,8 @@ function loadScriptsList() {
             scriptName.textContent = script.name;
             scriptName.className = 'script-name';
             scriptName.dataset.id = script.id;
-            scriptName.style.fontSize = '14px';
-            scriptName.style.color = 'whitesmoke';
+            //scriptName.style.fontSize = '14px';
+            //scriptName.style.color = 'whitesmoke';
 
             const loadButton = document.createElement('button');
             loadButton.className = 'load-script-button';
@@ -212,6 +212,12 @@ function loadScriptsList() {
 
             cursor.continue();
         } else {
+
+            // Forzar el recálculo del diseño para el contenedor de scripts
+            scriptsList.style.display = 'none';
+            scriptsList.offsetHeight; // Forzar reflow
+            scriptsList.style.display = 'flex'; 
+
             const newScriptButton = document.createElement('button');
             newScriptButton.id = 'newScriptButton';
             newScriptButton.className = 'new-script-button';
