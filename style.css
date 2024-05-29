@@ -308,7 +308,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   flex-grow: 1;
   flex-basis: auto;
   min-width: 0px;
-  height: auto;
+  height: 100%;
 }
 
 .script-item:hover {
