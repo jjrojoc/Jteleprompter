@@ -57,7 +57,7 @@ if ('serviceWorker' in navigator) {
 
 
 
-// Inicializar IndexedDB
+///// Inicializar IndexedDB /////
 var db;
 const request = indexedDB.open('teleprompterDB', 1);
 
@@ -140,7 +140,7 @@ function deleteScript(id) {
     };
 }
 
-// Función para cargar la lista de scripts
+// Función para cargar la lista de scripts en listsScripts
 function loadScriptsList() {
     const store = getScriptsStore('readonly');
     if (!store) return;
@@ -188,7 +188,8 @@ function loadScriptsList() {
             loadButton.innerHTML = '<i class="fas fa-play"></i>';
             loadButton.onclick = (e) => {
                 e.stopPropagation();
-                loadScript(script.id);
+                //loadScript(script.id);
+                window.location.href = 'teleprompter.html?id=' + scriptId;
                 console.log('Script cargado');
             };
 
@@ -287,6 +288,7 @@ document.getElementById('saveText').addEventListener('click', () => {
 });
 
 
+// Función para que resetea el editor completamente, al guardar lo hará en un nuevo script
 document.getElementById('resetButton').addEventListener('click', () => {
     if (confirm('¿Estás seguro de que quieres resetear el teleprompter? Esto eliminará todo el contenido.')) {
         document.getElementById('teleprompter').innerHTML = '';
@@ -294,137 +296,3 @@ document.getElementById('resetButton').addEventListener('click', () => {
         document.getElementById('scriptId').value = '';
     }
 });
-
-
-// adapta dinámicamente según la orientación de la pantalla el tamaño de script item para que entren dos en una fila y centrados
-
-
-// window.addEventListener('orientationchange', () => {
-//     const scriptElements = document.querySelectorAll('.script-item');
-//     scriptElements.forEach(script => {
-//         // script.style.width = 'calc(40% - 20px)';
-//     });
-// });
-
-// window.addEventListener('resize', () => {
-//     const scriptElements = document.querySelectorAll('.script-item');
-//     scriptElements.forEach(script => {
-//         // script.style.width = 'calc(40% - 20px)';
-//     });
-// });
-
-// Función para recortar el texto
-// function strip(el, max) {
-//     var children = Array.prototype.slice.call(el.childNodes);
-//     children.forEach((node) => {
-//         if (node instanceof Text) {
-//             var newCount = count + node.textContent.length;
-//             var diff = newCount - max;
-//             if (diff > 0)
-//                 node.textContent = node.textContent.substring(0, node.textContent.length - diff);
-//             count += node.textContent.length;
-//         } else if (node instanceof HTMLElement) {
-//             if (count >= max)
-//                 node.remove();
-//             else
-//                 strip(node, max);
-//         }
-//     });
-// }
-
-
-// var count = 0;
-
-// function strip(el, max, fontSize) {
-//   var children = Array.prototype.slice.call(el.childNodes);
-//   children.forEach((node) => {
-//     if (node instanceof Text) {
-//       var newCount = count + node.textContent.length;
-//       var diff = newCount - max;
-//       if (diff > 0)
-//         node.textContent = node.textContent.substring(0, node.textContent.length - diff);
-//         node.parentNode.style.fontSize = `${fontSize}px`; // set font size for text node's parent element
-//       count += node.textContent.length;
-//     } else if (node instanceof HTMLElement) {
-//       if (count >= max)
-//         node.remove(); // remove unnecessary tags
-//       else
-//         strip(node, max, fontSize); // do recursively
-//     }
-//   })
-//   count = 0; // reset count for next element
-// }
-
-
-// function extractContent(s, space) {
-//     var span= document.createElement('span');
-//     span.innerHTML= s;
-//     if(space) {
-//       var children= span.querySelectorAll('*');
-//       for(var i = 0 ; i < children.length ; i++) {
-//         if(children[i].textContent)
-//           children[i].textContent+= ' ';
-//         else
-//           children[i].innerText+= ' ';
-//       }
-//     }
-//     return [span.textContent || span.innerText].toString().replace(/ +/g,' ');
-//   };
-
-
-
-// teleprompter.addEventListener('keyup', onKeyDown);
-
-// function onKeyDown() {
-//     var selection = window.getSelection();
-//     if (!selection.rangeCount) return; // Verifica si hay una selección válida
-
-//     var node = selection.focusNode;
-//     if (node.nodeType !== Node.TEXT_NODE) return; // Asegúrate de que el nodo sea un nodo de texto
-
-//     node = node.parentNode; // Obtén el nodo padre, asumiendo que es un elemento HTML
-//     var input = node.textContent;
-
-//     if (node.hasAttribute('data-processed')) {
-//         return; // Salta si el nodo ya ha sido procesado
-//     }
-
-//     if (input.trim().length > 0) { // Ejecuta si el nodo tiene texto escrito
-//         var keyShortcut = /^[^\S\r\n]{3}/gm; // Patrón para encontrar tres espacios en blanco
-//         if (input.match(keyShortcut) && node.tagName.toLowerCase() === 'p') {
-//             input = input.replace(/\s{3,}/gm, ' '); // Reemplaza los espacios en blanco
-//             node.textContent = input; // Actualiza el contenido del nodo
-//             node.style.color = 'red'; // Cambia el color del texto a rojo
-//             console.log('Código');
-//             node.setAttribute('data-processed', true); // Marca el nodo como procesado
-//         }
-//     }
-// }
-
-
-
-// function truncateText(el, max, fontSize) {
-//     let count = 0;
-  
-//     function traverse(node) {
-//       if (count >= max) {
-//         node.remove(); // Si ya hemos alcanzado el límite, eliminamos el nodo
-//         return;
-//       }
-  
-//       if (node.nodeType === Node.TEXT_NODE) {
-//         // Si es un nodo de texto, ajustamos su contenido
-//         const diff = count + node.textContent.length - max;
-//         if (diff > 0) {
-//           node.textContent = node.textContent.slice(0, -diff);
-//           node.parentNode.style.fontSize = `${fontSize}px`; // Ajustamos el tamaño de fuente
-//         }
-//         count += node.textContent.length;
-//       } else if (node.nodeType === Node.ELEMENT_NODE) {
-//         // Si es un elemento, lo recorremos recursivamente
-//         Array.from(node.childNodes).forEach(traverse);
-//       }
-//     }
-  
-//     traverse(el); // Comenzamos la traversía desde el elemento dado
-//   }
