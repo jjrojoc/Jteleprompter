@@ -188,8 +188,7 @@ function loadScriptsList() {
             loadButton.innerHTML = '<i class="fas fa-play"></i>';
             loadButton.onclick = (e) => {
                 e.stopPropagation();
-                //loadScript(script.id);
-                window.location.href = 'teleprompter.html?id=' + scriptId;
+                loadScript(script.id);
                 console.log('Script cargado');
             };
 
