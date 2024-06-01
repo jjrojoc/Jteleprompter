@@ -1,23 +1,55 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
 body, html {
   height: 100%;
   margin: 0;
   background-color: black;
   color: white;
-}
-
-/* Desactivar el color de resalte para todos los elementos */
-* {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-tap-highlight-color: transparent; /* Chrome, Safari, Opera */
   -webkit-user-select: none; /* Chrome, Safari, Opera */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Standard syntax */
+
 }
+
+#scriptList, #editorSection, #teleprompterSection {
+  display: none;
+}
+
+#editor {
+  width: 100%;
+  height: 80%;
+  background-color: black;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 16px;
+  user-select: text;
+}
+
+/* #teleprompter {
+  width: 100%;
+  height: 90%;
+  overflow: auto;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 1.5em;
+  will-change: transform;
+  position: relative;
+} */
 
 #teleprompter {
   width: 100%;
-  height: 90%;
+  height: 100%;
   overflow: auto;
   overflow-y: scroll;
   cursor: pointer;
@@ -29,262 +61,124 @@ body, html {
   font-weight: bold;
   font-family: Helvetica;
   -webkit-tap-highlight-color: transparent; /* <-- this is new */
-  line-height: 1.5em; /* Asegúrate de que el teleprompter tiene un line-height definido */
+  /* line-height: 1.5em; Asegúrate de que el teleprompter tiene un line-height definido */
   /* transform: translateY(0); */
-  will-change: transform;  
+  will-change: transform;
   contain: none;
   position: relative;
   /* display: inline-block; */ /* Opcional, dependiendo de tu diseño cambia los div por br*/
-  }
+}
 
+#stopResumeScroll {
+  /* position: fixed;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%); */
+  background-color: red;
+}
 
-.control-bar {
+#backToListFromTeleprompter {
+  display: none;
   position: fixed;
-  bottom: 0;
+  justify-content: flex-start;
+  top: 0;
   left: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
-  color: white;
-  padding: 5px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-around; /* Distribuye los elementos uniformemente */
-  z-index: 1000;
+  padding: 10px;
+  /* transform: translateX(-50%); */
 }
 
-.control-bar label {
-  color: white; /* Asegura que las etiquetas en la barra de controles sean blancas */
+.control-group{
+z-index: 2;
 }
-
-.controls-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 5px; /* Espacio entre los elementos */
+.control-speed {
+display: none;
+flex-wrap: nowrap;
+align-items: center;
+/* justify-content: flex-start; */
+/* width: 30%; */
+/* gap: 5px; */
+/* position: fixed;
+bottom: 0;
+right: 0;
+padding-right: 10px; */
 }
 
 
+.control-text {
+display: none;
+flex-wrap: nowrap;
+align-items: center;
+/* justify-content: flex-end; */
+/* width: 30%; */
+/* gap: 5px; */
+/* position: fixed;
+bottom: 0;
+left: 0;
+padding-left: 10px; */
+}
 
 button, input[type="range"], select {
-  padding: 10px;
-  min-width: 60px;
-  min-height: 44px;
-  border: none;
-  background-color: #333;
-  color: white;
-  border-radius: 5px;
-  margin: 5px; /* Espacio entre botones */
-  cursor: pointer;
-  font-size: 16px;
+padding: 0px;
+min-width: 60px;
+min-height: 44px;
+border: none;
+background-color: #333;
+color: white;
+border-radius: 10px;
+margin: 5px; /* Espacio entre botones */
+cursor: pointer;
+font-size: 16px;
 }
 
-input[type="color"] {
-  padding: 0;
-  border: none;
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
-}
-
-button:focus, button:active, input[type="range"]:focus, select:focus {
-  background-color: #555;
-  outline: none;
-}
-
-@media (max-width: 600px) {
-  .controls-container {
-    flex-wrap: wrap;
-  }
-}
-
-#textColorControl option {
-  color: black;
-  background-color: #FFFFFF;
-}
-
-#controls button {
-  background: none;
-  color: white;
-  font-size: 24px;
-  padding: 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#controls button:hover, button:active, button#toggleScroll, button#toggleScroll:active {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* button#toggleScroll {
-  background-color: #007BFF;  /* Bootstrap blue
+/* .bottom-line {
+position: fixed;
+bottom: 0;
+width: 100%;
+height: 54px;
+background-color: rgba(0, 0, 0, 0.5);
+z-index: 1;
 } */
 
-/* .menu-items {
-  display: none;
-  flex-direction: column;
-  background-color: #222;
-  padding: 5px;
-  position: absolute;
-  bottom: 50px;
-  left: 10px;
-}
-
-.control {
-  display: block; /* o 'flex', 'inline-block', etc., dependiendo de tu diseño
-} */
-
-.menu-container {
-  position: relative; /* Establece el contenedor como referencia para el menú */
-}
-
-.menu-items {
-  display: none;
-  flex-direction: column;
-  background-color: #333;
-  padding: 10px;
-  position: absolute;
-  bottom: 100%; /* Desplaza el menú hacia arriba desde el borde inferior del botón */
-  left: 0; /* Alinea el menú con el lado izquierdo del botón */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: opacity 0.3s;
-}
-
-.control:hover, .control:active {
-  background-color: #444;
-  color: #E0E0E0;
-}
-
-
-
-#timer {
-  font-size: 16px; /* Ajusta según necesario */
-  font-family: Arial, sans-serif; /* Fuente legible */
-}
-
-
-#myBtn {
-  display: none; /* O ajustar según necesidad */
-  position: fixed;
-  right: 50%; /* Centra el botón horizontalmente */
-  transform: translateX(50%); /* Ajuste fino para centrado exacto */
-  font-size: 18px;
-  border: none;
-  outline: none;
-  background-color: red;
-  color: white;
-  cursor: pointer;
-  padding: 15px;
-  border-radius: 4px;
-  z-index: 1100; /* Asegura que esté sobre la barra de controles */
-  bottom: 55px; /* Ajusta esto según el padding y altura real de la barra de controles */
-}
-
-
-#myBtn:hover {
-  background-color: #555;
-}
-
-/* #timer {
-  position: fixed; 
-  top: 10px; 
-  right: 10px; 
-  opacity: 0.7; 
-  background-color: black; 
-  color: white; 
-  padding: 5px;
-  border-radius: 15px; /* Esto añade esquinas redondeadas
-  transition: transform 0.2s, background-color 0.2s;  Suaviza las transiciones de transformación y color
-} */
-
-#timer.active {
-  transform: scale(1.3); /* Aumenta el tamaño */
-  animation: blinkAnimation 1s linear infinite; /* Parpadeo */
-}
-
-@keyframes blinkAnimation {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* Permite la selección de texto solo en el teleprompter cuando es editable */
-#teleprompter[contenteditable="true"] {
-  user-select: text;
-}
-
-#countdown {
-  font-size: 48px;
-  font-weight: bold;
-  color: red;
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-#endMarker {
-  font-size: 24px; /* Tamaño grande de texto */
-  font-weight: bold; /* Texto en negrita */
-  color: #FF0000; /* Color del texto */
-  text-align: center; /* Centrar texto horizontalmente */
-  padding: 20px; /* Espacio alrededor del texto */
-  background-color: #FFFF00; /* Fondo amarillo para destacar */
-}
-
-
-.placeholder {
-  color: grey; /* Estilo para el texto del placeholder */
+#teleprompterControls {
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
+color: white;
+padding: 5px;
+box-sizing: border-box;
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+align-items: center;
+justify-content: space-around; /* Distribuye los elementos uniformemente */
+z-index: 1000;
 }
 
 /*Para el nuevo timer */
 #timeControls {
-  position: fixed; 
-  top: 10px; 
-  right: 10px; 
-  opacity: 0.7; 
-  background-color: black; 
-  color: white; 
-  padding: 5px;
-  border-radius: 15px;
-  transition: transform 0.2s, background-color 0.2s;
-  display: flex; /* Organiza los elementos horizontalmente */
-  gap: 10px;  /* Añade espacio entre el timer y el durationContainer */
+position: fixed;
+top: 10px;
+right: 10px;
+opacity: 0.7;
+background-color: black;
+color: white;
+padding: 5px;
+border-radius: 15px;
+/* transition: transform 0.2s, background-color 0.2s; */
+display: flex; /* Organiza los elementos horizontalmente */
+gap: 10px;  /* Añade espacio entre el timer y el durationContainer */
 }
 
-#separator, #timer, #durationContainer {
-  padding: 5px;
-  border-radius: 10px;
-}
-
-#endMarker {
-  position: relative;  /* O puedes usar 'absolute' si se ajusta mejor a tu layout */
-  z-index: 1010;  /* Asegura que sea mayor que el de controlBar */
+#separator, #timer, #duration {
+padding: 5px;
+border-radius: 10px;
 }
 
 
-/* Para los nuevos slider */
-.control-group {
-  display: flex;
-  align-items: center;  /* Centra los elementos verticalmente */
-  flex-wrap: nowrap;    /* Evita que los elementos se envuelvan */
-}
 
-.control {
-  margin-right: 10px; /* Espacio entre controles */
-}
-
-.icon {
-  width: 20px;  /* Asegúrate de ajustar esto según el tamaño de tu icono */
-}
-
-#scrollSpeedValue, #textSizeValue {
-  color: white; /* Asegura que el texto sea blanco */
-}
-
-#scriptsList {
+#scriptList {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -374,6 +268,7 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
 }
 
 .new-script-button {
+  color: white;
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -386,18 +281,18 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.teleprompter-container {
+/* .teleprompter-container {
   display: flex;
   flex-direction: column;
   padding: 10px;
-}
+} */
 
-#teleprompter {
+/* #teleprompter {
   border: 1px solid #ddd;
   padding: 10px;
   height: 70vh;
   overflow-y: auto;
-}
+} */
 
 .save-button, .reset-button, .toggle-scroll {
   margin: 10px 0;
@@ -408,8 +303,123 @@ button:focus, button:active, input[type="range"]:focus, select:focus {
   /* padding: 10px 20px;
   font-size: 16px;
   margin: 10px 0; */
+  height: 40px;
   color: white;
   background-color: rgba(255, 255, 255, 0.2);
   width: 100%;
   border: 1px solid lightgray;
+  border-radius: 10px;
+}
+
+
+
+/* Contenedor principal del editor */
+#editorSection {
+position: relative; /* Asegurar que los elementos hijos puedan usar posición fija relativa a este contenedor */
+}
+
+/* Título fijo */
+#editorSection h1 {
+position: fixed; /* Posicionamiento fijo */
+top: 0; /* Fijar en la parte superior */
+width: 100%; /* Ancho completo */
+background-color: inherit; /* Mantener fondo actual */
+z-index: 10; /* Asegurar que estén por encima del contenido */
+padding: 10px 20px; /* Espaciado interno */
+margin: 0; /* Eliminar márgenes */
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Campo de entrada fijo */
+#editorSection .script-name {
+position: fixed; /* Posicionamiento fijo */
+top: 50px; /* Espaciado para que el input quede debajo del h1 */
+left: 20px; /* Alineación izquierda */
+width: calc(100% - 40px); /* Ajustar ancho para considerar el padding */
+padding: 10px;
+background-color: inherit; /* Mantener fondo actual */
+z-index: 10; /* Asegurar que esté por encima del contenido */
+border: 1px solid #ccc; /* Mantener borde actual */
+color: inherit; /* Mantener color de texto actual */
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Contenedor principal del editor */
+#editorSection {
+position: relative;
+height: 100vh; /* Ocupa toda la altura de la ventana */
+padding-top: 60px; /* Añadir espacio superior para el h1 y el input */
+box-sizing: border-box;
+}
+
+/* Campo de entrada fijo */
+#editorSection .script-name {
+position: fixed;
+top: 10px;
+left: 60px;
+width: calc(100% - 90px); /* Ajustar el ancho */
+padding: 10px;
+background-color: inherit;
+z-index: 10;
+border: 1px solid #ccc;
+color: inherit;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo adicional para el editor */
+#editor {
+padding: 20px;
+border: 1px solid #ccc;
+min-height: 300px;
+box-sizing: border-box;
+overflow-y: auto; /* Hacer que el contenido sea desplazable */
+height: calc(100vh - 120px); /* Altura del editor ajustada para ocupar el espacio restante */
+}
+
+/* Botón de guardar y volver */
+#saveAndBackButton {
+  position: fixed;
+  top: 2px; /* Alinea con el borde superior */
+  left: 0px; /* Alinea con el borde izquierdo */
+  /* background-color: #333; */
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+
+
+.text-format-buttons {
+position: fixed;
+bottom: 0;
+left: 0;
+display: flex;
+gap: 10px;
+z-index: 10;
+}
+
+.text-format-buttons button {
+padding: 10px;
+background-color: #333;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.text-format-buttons button.active {
+background-color: #0056b3; /* Color de fondo cuando está activo */
+}
+
+
+.text-format-buttons button i {
+pointer-events: none; /* Hace que el icono no interfiera con el click del botón */
+}
+
+#colorPicker {
+display: none;
 }

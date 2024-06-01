@@ -1,156 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="refresh" content="30" />
-<title>JTeleprompter</title>
-<link rel="stylesheet" href="style.css?v=1058">
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="icon" href="./icons/favicon.ico">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Script Manager</title>
+    <link rel="stylesheet" href="style.css?v=1059">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="./icons/favicon.ico">
 </head>
-<body>
-    
-    <div id="scriptsList" class="scripts-list"></div>
-    
-    <!-- <div class="teleprompter-container" style="position: relative; overflow: hidden; height: 100vh;">
-        <div id="teleprompter" contenteditable="false" data-placeholder="Click en menú y escribe tu texto aquí...">
-           Contenido desplazable, que podría extenderse más allá de la altura inicial de la ventana -->
-        </div>
-        <!-- <div class="expand-for-rendering" style="position: absolute; top: 0; height: 200%; width: 100%; background: transparent;"> -->
-          <!-- Este div es transparente y solo asegura que el área del teleprompter es considerada para renderización -->
-        <!-- </div>
-      </div> -->
-      <div id="teleprompterContainer" class="teleprompter-container" style="display: none;">
+<body oncontextmenu="return false";>
+    <input type="hidden" id="scriptId">
+    <div id="scriptList" class="scripts-list">
+        <h1>Lista de Scripts</h1>
+        <!-- <ul id="scriptsContainer"></ul> -->
+    </div>
+
+    <div id="editorSection">
+        <!-- <h1>Editor de Scripts</h1> -->
         <input type="text" id="scriptName" class="script-name" placeholder="Nombre del script">
-        <div id="teleprompter" contenteditable="true"></div>
-        
-        <input type="hidden" id="scriptId">
-        <button id="saveText" class="save-button">Guardar</button>
-        <button id="resetButton" class="reset-button">Resetear</button>
-        <button id="toggleScroll" class="toggle-scroll">Iniciar/Detener Scroll</button>
+        <div id="editor" contenteditable="true"></div>
+        <button id="saveAndBackButton"><i class="fa-solid fa-arrow-left"></i></button>
+
+        <!-- Botones de formato de texto -->
+    <div class="text-format-buttons">
+        <button id="boldButton"><i class="fa-solid fa-bold"></i></button>
+        <button id="italicButton"><i class="fa-solid fa-italic"></i></button>
+        <button id="colorButton"><i class="fa-solid fa-paint-brush"></i></button>
+        <input type="color" id="colorPicker" style="display: none;">
+        <button class="colorButton" data-color="red" style="background-color: red;">Red</button>
+        <button class="colorButton" data-color="blue" style="background-color: blue;">Blue</button>
+        <button class="colorButton" data-color="green" style="background-color: green;">Green</button>
+        <button id="removeColorButton"><i class="fa-solid fa-xmark"></i></button>
     </div>
-      
+    </div>
 
-
-    <!-- <div id="teleprompter" onclick="toggleAutoScroll()">
-<div id="teleprompter" contenteditable="false" data-placeholder="Click en menú y escribe tu texto aquí...">
-     <p id="script" > 
-    </p>
-</div> -->
-
-<div id="menuBar" class="control-bar" style="display: none;">
-    <button id="btnShowControlBar" title="ControlBar"><i class="far fa-save"></i></button>
-    <!-- <button onclick="hideBars()">Fin</button> -->
-    <!-- Otros botones y controles del menú -->
-    <button id="undoButton" title="Deshacer"><i class="fas fa-undo"></i></button>
-    <button id="redoButton" title="Rehacer"><i class="fas fa-redo"></i></button>
-    <button id="loadText" title="Cargar"><i class="fas fa-folder-open"></i></button>
-    <button id="saveText" title="Guardar"><i class="fas fa-save"></i></button>
-    <!-- <button id="boldButton"title="Negrita"><i class="fa-solid fa-bold"></i></button> -->
-    <button id="resetButton" title="Resetear Teleprompter"><i class="fas fa-trash"></i></button>
-    <input type="color" id="textColorPicker" value="#ffffff" class="control">
-        
-        
-        
-    <!-- <button id="changeTextColor" title="Cambiar color de texto" class="control">
-        <i class="fas fa-palette"></i>
-    </button> -->
-    <!-- <label for="textColorControl" class="control">C:</label> -->
-        <select id="textColorControl" class="control">
-            <option value="white" style="background-color: white;">Blanco</option>
-            <option value="lightyellow" style="background-color: lightyellow;">Amarillo</option>
-            <option value="lightgreen" style="background-color: lightgreen;">Verde</option>
-            <option value="lightblue" style="background-color: lightblue;">Azul</option>
-            <option value="lightgray" style="background-color: lightgray;">Gris</option>
-        </select>
-  </div>
-
-  <div id="controlBar" class="control-bar" style="display: none;">
-    <div id="controls" class="controls-container">
-        <!-- <div class="menu-container" class="control">
-            <button id="menuButton" title="Menú" class="control"><i class="fas fa-bars"></i></button>
-            <div id="menuItems" class="menu-items" style="display: none">
-                <button id="editToggle" title="Editar"><i class="fas fa-edit"></i></button>
-                <button id="loadText" title="Cargar"><i class="fas fa-folder-open"></i></button>
-                <button id="saveText" title="Guardar"><i class="fas fa-save"></i></button>
-                <button id="resetButton" title="Resetear Teleprompter"><i class="fas fa-trash"></i></button>
+    <div id="teleprompterSection">
+        <div id="teleprompter"></div>
+        <div id="teleprompterControls" class="teleprompterControls">
+            <div class="control-speed control-group">
+                <span class="control icon"><i class="fas fa-tachometer-alt"></i></span> <!-- Icono de velocidad -->
+                <input type="range" id="speedControl" min="1" max="100" value="45" class="control">
+                <span id="scrollSpeedValue" class="control tooltip">45</span>
             </div>
-        </div> -->
-
-        <button id="btnShowMenuBar" title="Menú" class="control"><i class="fas fa-bars"></i></button>
-        
-        <!-- <input type="color" id="textColorPicker" value="#ffffff" class="control">
-        
-        
-        
-        <button id="changeTextColor" title="Cambiar color de texto" class="control">
-            <i class="fas fa-palette"></i>
-        </button> -->
-        
-        <div class="control-group">
-            <span class="control icon"><i class="fas fa-tachometer-alt"></i></span> <!-- Icono de velocidad -->
-            <input type="range" id="speedControl" min="1" max="100" value="45" class="control">
-            <span id="scrollSpeedValue" class="control tooltip">45</span>
+            <button id="stopResumeScroll" class="control-group"><i class="fas fa-play"></i></button>
+            <div class="control-text control-group">
+                <span class="control icon"><i class="fas fa-text-height"></i></span> <!-- Icono de tamaño de texto -->
+                <input type="range" id="textSizeControl" min="10" max="72" value="36" class="control">
+                <span id="textSizeValue" class="control tooltip">36px</span>
+            </div>
         </div>
-        
-        <div class="control-group">
-            <span class="control icon"><i class="fas fa-text-height"></i></span> <!-- Icono de tamaño de texto -->
-            <input type="range" id="textSizeControl" min="10" max="72" value="36" class="control">
-            <span id="textSizeValue" class="control tooltip">36px</span>
+        <button id="backToListFromTeleprompter"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="bottom-line"></div> <!-- Línea semitransparente -->
+        <div id="timeControls">
+            <div id="timer">00:00</div>
+            <div id="separator">/</div>
+            <div id="duration">00:00</div>
         </div>
-        
-        <!-- codigo original para los valores -->
-        <!-- <label for="speedControl" class="control">V:</label>
-        <input type="range" id="speedControl" min="1" max="100" value="45" class="control">
-        <span id="scrollSpeedValue" class="control" class="tooltip">45</span>
-        
-        <label for="textSizeControl" class="control">T:</label>
-        <input type="range" id="textSizeControl" min="10" max="72" value="36" class="control">
-        <span id="textSizeValue" class="control" class="tooltip">36px</span> -->
-        
-        <!-- <label for="textColorControl" class="control">C:</label>
-        <select id="textColorControl" class="control">
-            <option value="white" style="background-color: white;">Blanco</option>
-            <option value="lightyellow" style="background-color: lightyellow;">Amarillo</option>
-            <option value="lightgreen" style="background-color: lightgreen;">Verde</option>
-            <option value="lightblue" style="background-color: lightblue;">Azul</option>
-            <option value="lightgray" style="background-color: lightgray;">Gris</option>
-        </select> -->
-          
-
-        <button id="toggleScroll" title="Iniciar/Detener Scroll" data-scrolling="false"><i class="fas fa-play"></i></button>
     </div>
-</div>
-
-<!-- <div id="timer" style="position: fixed; top: 10px; right: 10px; opacity: 0.7; background-color: black; color: white; padding: 5px; user-select: none;">
-    00:00
-</div> -->
-
-<div id="timeControls" style="display: none;">
-    <div id="timer">00:00</div>
-    <div id="separator">/</div>
-    <div id="durationContainer">00:00</div>
-</div>
-
-
-
-
-<div id="countdown" style="display: none;">3</div>
-<div id="countdownDisplay" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: white; background-color: orange; padding: 10px; border-radius: 5px;">
-    3
-</div>
-
-
-<!-- no usado <button onclick="topFunction()" id="myBtn" title="Go to top">Reiniciar</button> -->
-<!-- <div id="countdownTimer" style="position: fixed; bottom: 20px; right: 20px; color: white; background: rgba(0, 0, 0, 0.5); padding: 5px;">
-
-    Tiempo restante: <span id="timeRemaining">00:00</span>
-</div> -->
+    
 </body>
-<script src="script.js?v=1058"></script>
-
+<script src="script.js?v=1059"></script>
 </html>
