@@ -348,7 +348,7 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
 #editorSection {
 position: relative;
 height: 100vh; /* Ocupa toda la altura de la ventana */
-padding-top: 60px; /* Añadir espacio superior para el h1 y el input */
+padding-top: 100px; /* Añadir espacio superior para el h1 y el input */
 box-sizing: border-box;
 }
 
@@ -395,7 +395,7 @@ height: calc(100vh - 120px); /* Altura del editor ajustada para ocupar el espaci
 
 .text-format-buttons {
 position: fixed;
-bottom: 0;
+top: 50px;
 left: 0;
 display: flex;
 gap: 10px;
