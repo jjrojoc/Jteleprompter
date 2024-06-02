@@ -1236,3 +1236,37 @@ alignmentButton.addEventListener('click', function () {
 // document.getElementById('speedSlider').addEventListener('input', (event) => {
 //     pixelsPerSecond = event.target.value;
 // });
+
+
+
+let touchStartTime = 0;
+let touchStartY = 0;
+let touchThreshold = 5; // Umbral de movimiento en píxeles para considerar que es un desplazamiento
+
+document.getElementById('teleprompter').addEventListener('touchstart', function(event) {
+    touchStartTime = Date.now();
+    touchStartY = event.touches[0].clientY;
+});
+
+document.getElementById('teleprompter').addEventListener('touchend', function(event) {
+    let touchEndTime = Date.now();
+    let touchEndY = event.changedTouches[0].clientY;
+    let touchDuration = touchEndTime - touchStartTime;
+    let touchDistance = Math.abs(touchEndY - touchStartY);
+
+    // Si el toque duró menos de 200 milisegundos y el movimiento fue menor que el umbral,
+    // consideramos que es un toque simple para pausar/reanudar el teleprompter
+    if (touchDuration < 200 && touchDistance < touchThreshold) {
+        if (isAutoScrolling) {
+            stopAutoScroll();
+            document.getElementById('stopResumeScroll').innerHTML = '<i class="fa-solid fa-play"></i>';
+            document.getElementById('stopResumeScroll').style.backgroundColor = '#007BFF';
+            document.getElementById('backToListFromTeleprompter').style.display = 'block';
+        } else {
+            startAutoScroll();
+            document.getElementById('stopResumeScroll').innerHTML = '<i class="fa-solid fa-pause"></i>';
+            document.getElementById('stopResumeScroll').style.backgroundColor = 'red';
+            document.getElementById('backToListFromTeleprompter').style.display = 'none';
+        }
+    }
+});
