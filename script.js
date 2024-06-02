@@ -451,6 +451,11 @@ document.getElementById('backToListFromTeleprompter').onclick = function() {
     cronometro.reset();
     reflow();
     stopAutoScroll();
+    // Salir del modo pantalla completa
+    if (document.fullscreenElement) {
+        // Intenta entrar en modo pantalla completa
+        document.exitFullscreen();
+        }
 };
 
 
@@ -474,8 +479,8 @@ function resetScrollPosition() {
     teleprompter.style.transform = `translateY(${translateYValue}px)`;
     hasReachedEnd = false;
     document.querySelector('#backToListFromTeleprompter').style.display = 'none';
-    document.querySelector('.control-speed').style.display = 'none';
-    document.querySelector('.control-text').style.display = 'none';
+    // document.querySelector('.control-speed').style.display = 'none';
+    // document.querySelector('.control-text').style.display = 'none';
     document.querySelector('#stopResumeScroll').style.display = 'none';
 }
 
@@ -505,8 +510,8 @@ function startAutoScroll() {
             if (translateYValue <= -teleprompter.scrollHeight + window.innerHeight) {
                 stopAutoScroll();
                 document.getElementById('backToListFromTeleprompter').style.display = 'block';
-                document.querySelector('.control-speed').style.display = 'flex';
-                document.querySelector('.control-text').style.display = 'flex';
+                // document.querySelector('.control-speed').style.display = 'flex';
+                // document.querySelector('.control-text').style.display = 'flex';
                 document.getElementById('stopResumeScroll').innerHTML = '<i class="fa-solid fa-play"></i>';
                 document.getElementById('stopResumeScroll').style.backgroundColor = '#007BFF';
 
@@ -526,11 +531,6 @@ function stopAutoScroll() {
     cancelAnimationFrame(scrollAnimation);
     stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
     // document.getElementById('stopResumeScroll').innerHTML = '<i class="fa-solid fa-play"></i>';
-    // Salir del modo pantalla completa
-    if (document.fullscreenElement) {
-        // Intenta entrar en modo pantalla completa
-        document.exitFullscreen();
-        }
 }
 
 
@@ -541,15 +541,15 @@ document.getElementById('stopResumeScroll').onclick = function() {
         this.innerHTML = '<i class="fa-solid fa-play"></i>';
         this.style.backgroundColor = '#007BFF';
         document.getElementById('backToListFromTeleprompter').style.display = 'block';
-        document.querySelector('.control-speed').style.display = 'flex';
-        document.querySelector('.control-text').style.display = 'flex';
+        // document.querySelector('.control-speed').style.display = 'flex';
+        // document.querySelector('.control-text').style.display = 'flex';
     } else {
         startAutoScroll();
         this.innerHTML = '<i class="fa-solid fa-pause"></i>';
         this.style.backgroundColor = 'red';
         document.getElementById('backToListFromTeleprompter').style.display = 'none';
-        document.querySelector('.control-speed').style.display = 'none';
-        document.querySelector('.control-text').style.display = 'none';
+        // document.querySelector('.control-speed').style.display = 'none';
+        // document.querySelector('.control-text').style.display = 'none';
     }
 };
 
@@ -558,24 +558,30 @@ document.getElementById('stopResumeScroll').onclick = function() {
 ///// Paste /////
 document.addEventListener('DOMContentLoaded', function() {
 
-    const speedControl = document.getElementById('speedControl');
-    const scrollSpeedValue = document.getElementById('scrollSpeedValue');
-    const textSizeControl = document.getElementById('textSizeControl');
-    const textSizeValue = document.getElementById('textSizeValue');
+    const speedSlider = document.getElementById('speedSlider');
+    const speedValue = document.getElementById('speedValue');
+    const fontSizeSlider = document.getElementById('fontSizeSlider');
+    const fontSizeValue = document.getElementById('fontSizeValue');
+    const paddingSlider = document.getElementById('paddingSlider');
+    const paddingValue = document.getElementById('paddingValue');
 
     // Cargar valores guardados al iniciar
     const savedSpeed = localStorage.getItem('speed') || '42';  // Valor por defecto
-    const savedTextSize = localStorage.getItem('textSize') || '36';  // Valor por defecto
+    const savedFontSize = localStorage.getItem('textSize') || '36';  // Valor por defecto
+    const savedPadding = localStorage.getItem('padding') || '20';  // Valor por defecto
 
     // Ajustar los sliders y mostrar los valores actuales
-    speedControl.value = savedSpeed;
-    scrollSpeedValue.textContent = savedSpeed;
-    textSizeControl.value = savedTextSize;
-    textSizeValue.textContent = `${savedTextSize}px`;
+    speedSlider.value = savedSpeed;
+    speedValue.textContent = savedSpeed;
+    fontSizeSlider.value = savedFontSize;
+    fontSizeValue.textContent = `${savedFontSize}px`;
+    paddingSlider.value = savedPadding;
+    paddingValue.textContent = `${savedPadding}px`;
 
     // Aplicar los valores iniciales al teleprompter
-    teleprompter.style.fontSize = `${savedTextSize}px`;
+    teleprompter.style.fontSize = `${savedFontSize}px`;
     pixelsPerSecond = savedSpeed;
+    teleprompter.style.padding = `${savedPadding}px`;
 
 
 
@@ -636,24 +642,33 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Evento para cuando el valor del control de velocidad cambia
-speedControl.addEventListener('input', function() {
-    localStorage.setItem('speed', speedControl.value);
-    scrollSpeedValue.textContent = speedControl.value;
-    pixelsPerSecond = speedControl.value;
-    console.log('Adjusting scroll speed to:', speedControl.value);
-});
+// // Evento para cuando el valor del control de velocidad cambia
+// speedSlider.addEventListener('input', function() {
+//     localStorage.setItem('speed', speedSlider.value);
+//     speedValue.textContent = speedSlider.value;
+//     pixelsPerSecond = speedSlider.value;
+//     console.log('Adjusting scroll speed to:', speedSlider.value);
+// });
 
 
 
-// Evento para cuando el valor del control de tamaño de texto cambia
-textSizeControl.addEventListener('input', function() {
-    localStorage.setItem('textSize', textSizeControl.value);
-    textSizeValue.textContent = textSizeControl.value + 'px';
-    console.log('Adjusting text size to:', textSizeControl.value + 'px');
-    teleprompter.style.fontSize = textSizeControl.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
-    //updateTeleprompterHeight(); // Actualiza la altura del teleprompter para asegurar que se acomoda al nuevo tamaño del texto
-});
+// // Evento para cuando el valor del control de tamaño de texto cambia
+// fontSizeSlider.addEventListener('input', function() {
+//     localStorage.setItem('textSize', fontSizeSlider.value);
+//     fontSizeValue.textContent = fontSizeSlider.value + 'px';
+//     console.log('Adjusting text size to:', fontSizeSlider.value + 'px');
+//     teleprompter.style.fontSize = fontSizeSlider.value + 'px'; // Ajustar el tamaño de texto en el teleprompter
+// });
+
+
+
+// // Evento para cuando el valor del control de relleno cambia
+// paddingSlider.addEventListener('input', function() {
+//     localStorage.setItem('padding', paddingSlider.value);
+//     paddingValue.textContent = paddingSlider.value + 'px';
+//     console.log('Adjusting padding to:', paddingSlider.value + 'px');
+//     teleprompter.style.padding = paddingSlider.value + 'px'; // Ajustar el relleno del teleprompter
+// });
 
 
 
@@ -1074,3 +1089,150 @@ function removeColorSpans(range) {
         }
     }
 }
+
+let paddingTimer, fontSizeTimer, speedTimer;
+
+function hideSliderAfterDelay(sliderContainerId, timer, setTimer) {
+    // Clear the previous timer
+    clearTimeout(timer);
+
+    // Set a new timer to hide the slider after 2 seconds of inactivity
+    timer = setTimeout(() => {
+        const sliderContainer = document.getElementById(sliderContainerId);
+        sliderContainer.style.display = 'none';
+    }, 2000);
+
+    // Update the timer reference
+    setTimer(timer);
+}
+
+// Function to handle slider change
+function handleSliderChange(sliderId, timer, setTimer) {
+    const slider = document.getElementById(sliderId);
+    const value = slider.value;
+    const teleprompter = document.getElementById('teleprompter');
+
+    // Apply changes based on the slider type
+    if (sliderId === 'paddingSlider') {
+        teleprompter.style.padding = `${value}px`;
+        localStorage.setItem('padding', value);
+        paddingValue.textContent = value + 'px';
+        console.log('Adjusting padding to:', value + 'px');
+        startEstimatedTimeCountdown();
+        
+
+    } else if (sliderId === 'fontSizeSlider') {
+        teleprompter.style.fontSize = `${value}px`;
+        localStorage.setItem('textSize', value);
+        fontSizeValue.textContent = value + 'px';
+        console.log('Adjusting text size to:', value + 'px');
+        startEstimatedTimeCountdown();
+
+    } else if (sliderId === 'speedSlider') {
+        pixelsPerSecond = value;
+        localStorage.setItem('speed', value);
+        speedValue.textContent = value;
+        console.log('Adjusting scroll speed to:', value);
+        startEstimatedTimeCountdown();
+    }
+
+    hideSliderAfterDelay(slider.parentElement.id, timer, setTimer);
+}
+
+// Function to show slider container and hide others
+function showSliderContainer(sliderContainerId, currentTimer, setCurrentTimer) {
+    const sliderContainers = ['paddingSliderContainer', 'fontSizeSliderContainer', 'speedSliderContainer'];
+
+    // Show the selected slider and hide others
+    sliderContainers.forEach(id => {
+        const container = document.getElementById(id);
+        if (id === sliderContainerId) {
+            container.style.display = 'block';
+            hideSliderAfterDelay(id, currentTimer, setCurrentTimer);
+        } else {
+            container.style.display = 'none';
+            clearTimeout(currentTimer);
+        }
+    });
+}
+
+// Event listeners for the sliders
+document.getElementById('paddingSlider').addEventListener('input', function() {
+    handleSliderChange('paddingSlider', paddingTimer, (newTimer) => paddingTimer = newTimer);
+});
+
+document.getElementById('fontSizeSlider').addEventListener('input', function() {
+    handleSliderChange('fontSizeSlider', fontSizeTimer, (newTimer) => fontSizeTimer = newTimer);
+});
+
+document.getElementById('speedSlider').addEventListener('input', function() {
+    handleSliderChange('speedSlider', speedTimer, (newTimer) => speedTimer = newTimer);
+});
+
+// Add event listeners to the buttons to show the sliders
+document.getElementById('paddingButton').addEventListener('click', function() {
+    showSliderContainer('paddingSliderContainer', paddingTimer, (newTimer) => paddingTimer = newTimer);
+});
+
+document.getElementById('fontSizeButton').addEventListener('click', function() {
+    showSliderContainer('fontSizeSliderContainer', fontSizeTimer, (newTimer) => fontSizeTimer = newTimer);
+});
+
+document.getElementById('speedButton').addEventListener('click', function() {
+    showSliderContainer('speedSliderContainer', speedTimer, (newTimer) => speedTimer = newTimer);
+});
+
+
+
+const alignmentButton = document.getElementById('alignmentButton');
+// Event listener para el botón de alineación
+const textAlign = window.getComputedStyle(teleprompter).textAlign;
+alignmentButton.addEventListener('click', function () {
+    const textAlign = window.getComputedStyle(teleprompter).textAlign;
+    if (textAlign === 'left') {
+        teleprompter.style.textAlign = 'center';
+        alignmentButton.innerHTML = '<i class="fa-solid fa-align-center"></i>';
+    } else if (textAlign === 'center') {
+        teleprompter.style.textAlign = 'right';
+        alignmentButton.innerHTML = '<i class="fa-solid fa-align-right"></i>';
+    } else {
+        teleprompter.style.textAlign = 'left';
+        alignmentButton.innerHTML = '<i class="fa-solid fa-align-left"></i>';
+    }
+});
+// alignmentButton.addEventListener('click', function () {
+//     // Alternar entre las diferentes opciones de alineación
+//     switch (teleprompter.style.textAlign) {
+//         case 'left':
+//             teleprompter.style.textAlign = 'center';
+//             alignmentButton.innerHTML = '<i class="fa-solid fa-align-center"></i>';
+//             break;
+//         case 'center':
+//             teleprompter.style.textAlign = 'right';
+//             alignmentButton.innerHTML = '<i class="fa-solid fa-align-right"></i>';
+//             break;
+//         case 'right':
+//             teleprompter.style.textAlign = 'left';
+//             alignmentButton.innerHTML = '<i class="fa-solid fa-align-left"></i>';
+//             break;
+//         default:
+//             teleprompter.style.textAlign = 'left';
+//             alignmentButton.innerHTML = '<i class="fa-solid fa-align-left"></i>';
+//             break;
+//     }
+// });
+
+
+// document.getElementById('paddingSlider').addEventListener('input', (event) => {
+//     const paddingValue = event.target.value + 'px';
+//     document.getElementById('teleprompter').style.padding = paddingValue;
+// });
+
+// document.getElementById('fontSizeSlider').addEventListener('input', (event) => {
+//     const fontSizeValue = event.target.value + 'px';
+//     document.getElementById('teleprompter').style.fontSize = fontSizeValue;
+// });
+
+// document.getElementById('speedSlider').addEventListener('input', (event) => {
+//     pixelsPerSecond = event.target.value;
+// });

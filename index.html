@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Script Manager</title>
-    <link rel="stylesheet" href="style.css?v=1064">
+    <link rel="stylesheet" href="style.css?v=1065">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="./icons/favicon.ico">
@@ -38,20 +38,41 @@
     <div id="teleprompterSection">
         <div id="teleprompter"></div>
         <div id="teleprompterControls" class="teleprompterControls">
-            <div class="control-speed control-group">
-                <span class="control icon"><i class="fas fa-tachometer-alt"></i></span> <!-- Icono de velocidad -->
+            <button id="alignmentButton"><i class="fa-solid fa-align-left"></i></button>
+            <button id="paddingButton"><i class="fa-solid fa-indent"></i></button>
+            <button id="stopResumeScroll" class="control-group"><i class="fas fa-play"></i></button>
+            <button id="fontSizeButton"><i class="fas fa-text-height"></i></button>
+            <button id="speedButton"><i class="fas fa-tachometer-alt"></i></button>
+  
+            <!-- <div class="control-speed control-group">
+                <span class="control icon"><i class="fas fa-tachometer-alt"></i></span>
                 <input type="range" id="speedControl" min="1" max="100" value="45" class="control">
                 <span id="scrollSpeedValue" class="control tooltip">45</span>
-            </div>
-            <button id="stopResumeScroll" class="control-group"><i class="fas fa-play"></i></button>
-            <div class="control-text control-group">
-                <span class="control icon"><i class="fas fa-text-height"></i></span> <!-- Icono de tamaño de texto -->
+            </div> -->
+            <!-- <button id="stopResumeScroll" class="control-group"><i class="fas fa-play"></i></button> -->
+            <!-- <div class="control-text control-group">
+                <span class="control icon"><i class="fas fa-text-height"></i></span>
                 <input type="range" id="textSizeControl" min="10" max="72" value="36" class="control">
                 <span id="textSizeValue" class="control tooltip">36px</span>
+            </div> -->
+            <div class="slider-container" id="paddingSliderContainer">
+                <label for="paddingSlider">Padding del Texto:</label>
+                <span id="paddingValue" class="control tooltip">0</span>
+                <input type="range" id="paddingSlider" min="0" max="250" value="0">
+            </div>
+            <div class="slider-container" id="fontSizeSliderContainer">
+                <label for="fontSizeSlider">Tamaño de Fuente:</label>
+                <span id="fontSizeValue" class="control tooltip">36px</span>
+                <input type="range" id="fontSizeSlider" min="10" max="72" value="36">
+            </div>
+            <div class="slider-container" id="speedSliderContainer">
+                <label for="speedSlider">Velocidad de Scroll:</label>
+                <span id="speedValue" class="control tooltip">45</span>
+                <input type="range" id="speedSlider" min="1" max="100" value="45">
             </div>
         </div>
         <button id="backToListFromTeleprompter"><i class="fa-solid fa-arrow-left"></i></button>
-        <div class="bottom-line"></div> <!-- Línea semitransparente -->
+        <!-- <div class="bottom-line"></div> Línea semitransparente -->
         <div id="timeControls">
             <div id="timer">00:00</div>
             <div id="separator">/</div>
@@ -60,5 +81,5 @@
     </div>
     
 </body>
-<script src="script.js?v=1064"></script>
+<script src="script.js?v=1065"></script>
 </html>

@@ -56,6 +56,7 @@ body, html {
   background-color: black;
   color: rgb(255, 255, 255);
   padding: 20px;
+  text-align: left; /* Valor inicial de alineación */
   box-sizing: border-box;
   font-size: 36px; /* Initial font size, adjustable via slider */
   font-weight: bold;
@@ -90,17 +91,13 @@ body, html {
 .control-group{
 z-index: 2;
 }
-.control-speed {
+/* .control-speed {
 display: none;
 flex-wrap: nowrap;
 align-items: center;
-/* justify-content: flex-start; */
-/* width: 30%; */
-/* gap: 5px; */
-/* position: fixed;
 bottom: 0;
 right: 0;
-padding-right: 10px; */
+padding-right: 10px;
 }
 
 
@@ -108,14 +105,11 @@ padding-right: 10px; */
 display: none;
 flex-wrap: nowrap;
 align-items: center;
-/* justify-content: flex-end; */
-/* width: 30%; */
-/* gap: 5px; */
-/* position: fixed;
 bottom: 0;
 left: 0;
-padding-left: 10px; */
+padding-left: 10px; 
 }
+*/
 
 button, input[type="range"], select {
 padding: 0px;
@@ -319,16 +313,7 @@ position: relative; /* Asegurar que los elementos hijos puedan usar posición fi
 }
 
 /* Título fijo */
-#editorSection h1 {
-position: fixed; /* Posicionamiento fijo */
-top: 0; /* Fijar en la parte superior */
-width: 100%; /* Ancho completo */
-background-color: inherit; /* Mantener fondo actual */
-z-index: 10; /* Asegurar que estén por encima del contenido */
-padding: 10px 20px; /* Espaciado interno */
-margin: 0; /* Eliminar márgenes */
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
-}
+
 
 /* Campo de entrada fijo */
 #editorSection .script-name {
@@ -422,4 +407,22 @@ pointer-events: none; /* Hace que el icono no interfiera con el click del botón
 
 #colorPicker {
 display: none;
+}
+
+
+
+.slider-container {
+display: none;
+position: absolute;
+bottom: 100px;
+left: 50%;
+transform: translateX(-50%);
+background: rgba(0, 0, 0, 0.8);
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 10px;
+z-index: 1000;
+}
+.slider-container input[type="range"] {
+width: 100%;
 }
