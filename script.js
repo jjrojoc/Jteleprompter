@@ -332,13 +332,24 @@ function createNewScript() {
 
 // Funciones del teleprompter
 document.getElementById('saveAndBackButton').addEventListener('click', () => {
-    const name = document.getElementById('scriptName').value;
-    const text = document.getElementById('editor').innerHTML;
+    var name = document.getElementById('scriptName').value;
+    var text = document.getElementById('editor').innerHTML;
     const id = document.getElementById('scriptId').value;
     if (name) {
         saveScript(id ? parseInt(id) : null, name, text);
     } else {
-        alert('El nombre del script no puede estar vacío.');
+        var textExtract = document.getElementById('editor').textContent;
+        if (textExtract) {
+            var name = textExtract.substring(0, 30) + '...';
+            saveScript(id ? parseInt(id) : null, name, text);
+        }   else {
+            loadScriptsList();
+            document.getElementById('editorSection').style.display = 'none';
+        }
+        // var name = textExtract.substring(0, 30) + '...';
+        // console.log(name);
+        // saveScript(id ? parseInt(id) : null, name, text);
+        // alert('El nombre del script no puede estar vacío.');
     }
 });
 
