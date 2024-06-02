@@ -423,7 +423,7 @@ function startTeleprompter(id) {
         const result = event.target.result;
         if (result) {
             var script = result.text;
-            script += '<br><br><br><br><br>'; // Añadir espacio al final para evitar que el último párrafo se pegue al borde
+            script += '<br><br><br><br><br><br><br>'; // Añadir espacio al final para evitar que el último párrafo se pegue al borde
             const teleprompter = document.getElementById('teleprompter');
             teleprompter.innerHTML = script;
             document.getElementById('scriptList').style.display = 'none';
