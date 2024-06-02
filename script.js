@@ -416,6 +416,13 @@ function deleteScript(id) {
 
 // Función para iniciar el teleprompter
 function startTeleprompter(id) {
+    if (!document.fullscreenElement) {
+        // Intenta entrar en modo pantalla completa
+        document.documentElement.requestFullscreen().catch(err => {
+            alert(`Error al intentar activar el modo pantalla completa: ${err.message} (${err.name})`);
+        }
+    )};
+
     const store = getScriptsStore('readonly');
     const request = store.get(id);
 
@@ -519,6 +526,11 @@ function stopAutoScroll() {
     cancelAnimationFrame(scrollAnimation);
     stopEstimatedTimeCountdown(); // Asegura detener el tiempo estimado
     // document.getElementById('stopResumeScroll').innerHTML = '<i class="fa-solid fa-play"></i>';
+    // Salir del modo pantalla completa
+    if (document.fullscreenElement) {
+        // Intenta entrar en modo pantalla completa
+        document.exitFullscreen();
+        }
 }
 
 
