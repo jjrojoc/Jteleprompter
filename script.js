@@ -985,7 +985,7 @@ function updateButtonStates() {
 
 
 // Event listener para el evento selectionchange
-document.addEventListener('selectionchange', updateButtonStates);
+document.querySelector('#editor').addEventListener('selectionchange', updateButtonStates);
 
 
 
