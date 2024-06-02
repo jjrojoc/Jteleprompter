@@ -422,7 +422,8 @@ function startTeleprompter(id) {
     request.onsuccess = function(event) {
         const result = event.target.result;
         if (result) {
-            const script = result.text;
+            var script = result.text;
+            script += '<br><br><br><br><br>'; // Añadir espacio al final para evitar que el último párrafo se pegue al borde
             const teleprompter = document.getElementById('teleprompter');
             teleprompter.innerHTML = script;
             document.getElementById('scriptList').style.display = 'none';
@@ -465,6 +466,10 @@ function resetScrollPosition() {
     const teleprompter = document.getElementById('teleprompter');
     teleprompter.style.transform = `translateY(${translateYValue}px)`;
     hasReachedEnd = false;
+    document.querySelector('#backToListFromTeleprompter').style.display = 'none';
+    document.querySelector('.control-speed').style.display = 'none';
+    document.querySelector('.control-text').style.display = 'none';
+    document.querySelector('#stopResumeScroll').style.display = 'none';
 }
 
 function startAutoScroll() {
@@ -477,7 +482,8 @@ function startAutoScroll() {
 
     if (!isAutoScrolling) {
         isAutoScrolling = true;
-        document.getElementById('stopResumeScroll').style.display = 'block';
+        document.querySelector('#stopResumeScroll').style.display = 'block';
+        document.querySelector('#stopResumeScroll').style.backgroundColor = 'red';
 
         cronometro.start();
 
@@ -489,7 +495,7 @@ function startAutoScroll() {
             translateYValue -= (pixelsPerSecond * deltaTime) / 1000;
             teleprompter.style.transform = `translateY(${translateYValue}px)`;
 
-            if (translateYValue <= -teleprompter.scrollHeight + window.innerHeight / 2) {
+            if (translateYValue <= -teleprompter.scrollHeight + window.innerHeight) {
                 stopAutoScroll();
                 document.getElementById('backToListFromTeleprompter').style.display = 'block';
                 document.querySelector('.control-speed').style.display = 'flex';
@@ -644,7 +650,7 @@ let estimatedTimeInterval;
 
 function startEstimatedTimeCountdown() {
     if (estimatedTimeInterval) clearInterval(estimatedTimeInterval);
-    let remainingDistance = teleprompter.scrollHeight - (window.innerHeight / 2) + translateYValue;
+    let remainingDistance = teleprompter.scrollHeight - window.innerHeight + translateYValue;
     let estimatedTimeSeconds = remainingDistance / pixelsPerSecond;
 
     // Añadir 2 segundos al tiempo estimado
@@ -692,7 +698,8 @@ function displayTime(seconds) {
 }
 
 
-
+///// Control scroll manual /////
+isTouching = false;
 teleprompter = document.getElementById('teleprompter');
 // Evento para manejar el auto-scrolling
 teleprompter.addEventListener('touchstart', function(event) {
