@@ -430,7 +430,8 @@ function startTeleprompter(id) {
         const result = event.target.result;
         if (result) {
             var script = result.text;
-            script += '<br><br><br><br><br><br><br>'; // Añadir espacio al final para evitar que el último párrafo se pegue al borde
+
+            script = '<br>'.repeat(15) + script + '<br>'.repeat(7);
             const teleprompter = document.getElementById('teleprompter');
             teleprompter.innerHTML = script;
             document.getElementById('scriptList').style.display = 'none';
@@ -474,7 +475,7 @@ let pixelsPerSecond = 0;
 let hasReachedEnd = false;
 
 function resetScrollPosition() {
-    translateYValue = window.innerHeight;
+    translateYValue = 0;
     const teleprompter = document.getElementById('teleprompter');
     teleprompter.style.transform = `translateY(${translateYValue}px)`;
     hasReachedEnd = false;
