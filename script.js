@@ -1278,30 +1278,3 @@ document.getElementById('teleprompter').addEventListener('touchend', function(ev
         }
     }
 });
-
-
-
-function resizeEditorOnKeyboardShow() {
-    // Detectar cuando el teclado se muestra en pantalla
-    window.addEventListener('keyboardShow', function(event) {
-      // Obtener la altura del teclado
-      const keyboardHeight = event.detail.height;
-  
-      // Reducir la altura del editor en la altura del teclado
-      const editor = document.getElementById('editor'); // Reemplazar 'editor' con el ID de tu editor
-      editor.style.height = (window.innerHeight - keyboardHeight) + 'px';
-
-      console.log('Keyboard shown. New editor height:', editor.style.height);
-    });
-  
-    // Detectar cuando el teclado se oculta
-    window.addEventListener('keyboardHide', function() {
-      // Restablecer la altura original del editor
-      const editor = document.getElementById('editor'); // Reemplazar 'editor' con el ID de tu editor
-      editor.style.height = 'auto';
-
-      console.log('Keyboard hidden. Editor height reset to auto.');
-    });
-}
-  
-document.addEventListener('DOMContentLoaded', resizeEditorOnKeyboardShow);
