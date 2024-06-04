@@ -332,7 +332,7 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
 /* Contenedor principal del editor */
 #editorSection {
 position: relative;
-height: 100vh; /* Ocupa toda la altura de la ventana */
+height:calc(100vh); /* Ocupa toda la altura de la ventana */
 padding-top: 100px; /* Añadir espacio superior para el h1 y el input */
 box-sizing: border-box;
 }
@@ -425,14 +425,4 @@ z-index: 1000;
 }
 .slider-container input[type="range"] {
 width: 100%;
-}
-
-
-
-/* MOBILE KEYBOARD IS OPEN */
-@media only screen and (max-width: 430px) and (max-height:400px){
-#editor:focus{
-    position: fixed;
-    top: 100px;
-}
 }
