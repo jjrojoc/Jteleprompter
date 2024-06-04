@@ -1278,3 +1278,11 @@ document.getElementById('teleprompter').addEventListener('touchend', function(ev
         }
     }
 });
+
+
+
+const handleResize = () => {
+    document.getElementById('header').style.top = window.visualViewport.offsetTop.toString() + 'px'
+  }
+  
+  if (window && window.visualViewport) visualViewport.addEventListener('resize', handleResize)
