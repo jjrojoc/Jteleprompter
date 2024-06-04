@@ -1278,3 +1278,25 @@ document.getElementById('teleprompter').addEventListener('touchend', function(ev
         }
     }
 });
+
+
+
+  function resizeEditor() {
+    // Obtener la altura de la ventana gráfica
+    const viewportHeight = window.visualViewport.height;
+  
+    // Obtener la altura del editor
+    const editor = document.getElementById('editor'); // Reemplazar 'editor' con el ID de tu editor
+    const editorHeight = editor.offsetHeight;
+  
+    // Calcular la altura disponible para el editor
+    const availableHeight = viewportHeight - editorHeight;
+  
+    // Ajustar la altura del editor
+    editor.style.height = availableHeight + 'px';
+  }
+  
+  window.visualViewport.addEventListener('resize', function(event) {
+    // Función para redimensionar el editor
+    resizeEditor();
+  });

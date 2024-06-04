@@ -355,7 +355,7 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 #editor {
 padding: 20px;
 border: 1px solid #ccc;
-min-height: 300px;
+/* min-height: 300px; */
 box-sizing: border-box;
 overflow-y: auto; /* Hacer que el contenido sea desplazable */
 height: calc(100vh - 120px); /* Altura del editor ajustada para ocupar el espacio restante */
