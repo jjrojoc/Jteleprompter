@@ -1254,7 +1254,7 @@ let touchThreshold = 5; // Umbral de movimiento en píxeles para considerar que 
 document.getElementById('teleprompter').addEventListener('touchstart', function(event) {
     touchStartTime = Date.now();
     touchStartY = event.touches[0].clientY;
-});
+}, { passive: false });
 
 document.getElementById('teleprompter').addEventListener('touchend', function(event) {
     let touchEndTime = Date.now();
@@ -1281,22 +1281,28 @@ document.getElementById('teleprompter').addEventListener('touchend', function(ev
 
 
 
-  function resizeEditor() {
-    // Obtener la altura de la ventana gráfica
+function resizeEditor() {
+    const editorSection = document.getElementById('editorSection');
+    const scriptName = document.getElementById('scriptName');
+    const textFormatButtons = document.querySelector('.text-format-buttons');
+    const saveAndBackButton = document.getElementById('saveAndBackButton');
+    const editor = document.getElementById('editor');
+
+    // Altura total disponible
     const viewportHeight = window.visualViewport.height;
-  
-    // Obtener la altura del editor
-    const editor = document.getElementById('editor'); // Reemplazar 'editor' con el ID de tu editor
-    const editorHeight = editor.offsetHeight;
-  
-    // Calcular la altura disponible para el editor
-    const availableHeight = viewportHeight - editorHeight;
-  
+
+    // Altura ocupada por los elementos no editables
+    const occupiedHeight = scriptName.offsetHeight + textFormatButtons.offsetHeight + saveAndBackButton.offsetHeight;
+
+    // Altura disponible para el editor
+    const availableHeight = viewportHeight - occupiedHeight;
+
     // Ajustar la altura del editor
     editor.style.height = availableHeight + 'px';
-  }
-  
-  window.visualViewport.addEventListener('resize', function(event) {
-    // Función para redimensionar el editor
-    resizeEditor();
-  });
+    console.log(`Resized editor to ${availableHeight}px`);
+}
+
+window.visualViewport.addEventListener('resize', resizeEditor);
+
+// Inicializar los estilos cuando la página carga
+document.addEventListener('DOMContentLoaded', resizeEditor);
