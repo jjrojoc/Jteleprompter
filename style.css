@@ -332,7 +332,7 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
 /* Contenedor principal del editor */
 #editorSection {
 position: relative;
-height:calc(100vh); /* Ocupa toda la altura de la ventana */
+height: 100vh; /* Ocupa toda la altura de la ventana */
 padding-top: 100px; /* Añadir espacio superior para el h1 y el input */
 box-sizing: border-box;
 }
