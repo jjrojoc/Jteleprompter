@@ -1280,6 +1280,7 @@ document.getElementById('teleprompter').addEventListener('touchend', function(ev
 });
 
 
+const virtualKeyboardSupported = "virtualKeyboard" in navigator;
 
 function resizeEditor() {
     const editorSection = document.getElementById('editorSection');
@@ -1287,6 +1288,10 @@ function resizeEditor() {
     const textFormatButtons = document.querySelector('.text-format-buttons');
     const saveAndBackButton = document.getElementById('saveAndBackButton');
     const editor = document.getElementById('editor');
+
+    if (virtualKeyboardSupported) {
+    navigator.virtualKeyboard.overlaysContent = true;
+  }
 
     // Altura total disponible
     const viewportHeight = window.visualViewport.height;
@@ -1298,11 +1303,33 @@ function resizeEditor() {
     const availableHeight = viewportHeight - occupiedHeight;
 
     // Ajustar la altura del editor
+    // editorSection.style.height = viewportHeight + 'px';
+    // console.log(`Resized editor to ${availableHeight}px`);
     editor.style.height = availableHeight + 'px';
-    console.log(`Resized editor to ${availableHeight}px`);
 }
 
 window.visualViewport.addEventListener('resize', resizeEditor);
 
 // Inicializar los estilos cuando la página carga
-document.addEventListener('DOMContentLoaded', resizeEditor);
+document.addEventListener('DOMContentLoaded', function() {
+    // Comprobar si el teclado virtual está activo
+    const isKeyboardActive = window.visualViewport.height < window.innerHeight;
+
+    if (isKeyboardActive) {
+        resizeEditor();
+    } else {
+        document.getElementById('editor').style.height = 'calc(100% - 150px)';
+    }
+});
+
+// Detectar cuando el teclado virtual se muestra u oculta
+window.addEventListener('resize', function() {
+    // Comprobar si el teclado virtual está activo
+    const isKeyboardActive = window.visualViewport.height < window.innerHeight;
+
+    if (isKeyboardActive) {
+        resizeEditor();
+    } else {
+        document.getElementById('editor').style.height = 'calc(100% - 150px)';
+    }
+});
