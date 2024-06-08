@@ -1280,18 +1280,12 @@ document.getElementById('teleprompter').addEventListener('touchend', function(ev
 });
 
 
-const virtualKeyboardSupported = "virtualKeyboard" in navigator;
-
 function resizeEditor() {
     const editorSection = document.getElementById('editorSection');
     const scriptName = document.getElementById('scriptName');
     const textFormatButtons = document.querySelector('.text-format-buttons');
     const saveAndBackButton = document.getElementById('saveAndBackButton');
     const editor = document.getElementById('editor');
-
-    if (virtualKeyboardSupported) {
-    navigator.virtualKeyboard.overlaysContent = true;
-  }
 
     // Altura total disponible
     const viewportHeight = window.visualViewport.height;
