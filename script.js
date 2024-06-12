@@ -607,6 +607,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
         let htmlString = tempDiv.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
         
+        // Eliminar &nbsp; al inicio
+        htmlString = htmlString.replace(/^ /, '');
+        
         // Asignar de nuevo el HTML procesado
         tempDiv.innerHTML = htmlString;
 
@@ -636,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 span.style.cssText = node.style.cssText;
                 node.parentNode.replaceChild(span, node);
             }
-            
+
             // Si el color es blanco, negro o gris, no asignamos ningún color,
             // permitiendo que el texto herede el color por defecto del 'teleprompter'
         });
