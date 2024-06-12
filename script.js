@@ -607,9 +607,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Convertir &nbsp; a espacios normales y colapsar múltiples espacios a uno solo
         let htmlString = tempDiv.innerHTML.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
         
-        // Eliminar &nbsp; al inicio
-        htmlString = htmlString.replace(/^ /, '');
-        
         // Asignar de nuevo el HTML procesado
         tempDiv.innerHTML = htmlString;
 
@@ -629,15 +626,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Eliminar elementos que no contribuyen al texto visible
             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
                 node.parentNode.removeChild(node);
-            }
-
-            // Eliminar enlaces manteniendo el estilo
-            if (node.tagName === 'A') {
-                const span = document.createElement('span');
-                span.innerHTML = node.innerHTML;
-                // Copiar los estilos del enlace al span
-                span.style.cssText = node.style.cssText;
-                node.parentNode.replaceChild(span, node);
             }
 
             // Si el color es blanco, negro o gris, no asignamos ningún color,
