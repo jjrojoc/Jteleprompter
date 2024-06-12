@@ -628,6 +628,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 node.parentNode.removeChild(node);
             }
 
+            // Eliminar el atributo href de los enlaces
+            if (node.tagName === 'A') {
+                node.removeAttribute('href');
+            }
+
             // Si el color es blanco, negro o gris, no asignamos ningún color,
             // permitiendo que el texto herede el color por defecto del 'teleprompter'
         });
