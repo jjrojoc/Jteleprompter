@@ -627,6 +627,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (node.tagName === 'SCRIPT' || node.tagName === 'META') {
                 node.parentNode.removeChild(node);
             }
+
+            // Eliminar enlaces
+            if (node.tagName === 'A') {
+                node.outerHTML = node.innerHTML; // Reemplazar el enlace con su contenido
+            }
             // Si el color es blanco, negro o gris, no asignamos ningún color,
             // permitiendo que el texto herede el color por defecto del 'teleprompter'
         });
