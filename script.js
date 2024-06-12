@@ -1312,7 +1312,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isKeyboardActive) {
         resizeEditor();
     } else {
-        document.getElementById('editor').style.height = 'calc(100% - 150px)';
+        document.getElementById('editor').style.height = 'calc(100% - 160px)';
     }
 });
 
@@ -1324,6 +1324,6 @@ window.addEventListener('resize', function() {
     if (isKeyboardActive) {
         resizeEditor();
     } else {
-        document.getElementById('editor').style.height = 'calc(100% - 150px)';
+        document.getElementById('editor').style.height = 'calc(100% - 160px)';
     }
 });
