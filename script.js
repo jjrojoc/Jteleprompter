@@ -628,10 +628,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 node.parentNode.removeChild(node);
             }
 
-            // Eliminar enlaces
+            // Eliminar enlaces manteniendo el estilo
             if (node.tagName === 'A') {
-                node.outerHTML = node.innerHTML; // Reemplazar el enlace con su contenido
+                const span = document.createElement('span');
+                span.innerHTML = node.innerHTML;
+                // Copiar los estilos del enlace al span
+                span.style.cssText = node.style.cssText;
+                node.parentNode.replaceChild(span, node);
             }
+            
             // Si el color es blanco, negro o gris, no asignamos ningún color,
             // permitiendo que el texto herede el color por defecto del 'teleprompter'
         });
