@@ -1350,14 +1350,19 @@ function inicializarGoogleAPI() {
     });
 }
 
-// Autenticar al usuario
 async function autenticarConGoogle() {
     try {
         await gapi.auth2.getAuthInstance().signIn();
         console.log("Usuario autenticado con Google.");
-        listarArchivosDocs(); // Listar archivos después de autenticarse
+        listarArchivosDocs(); 
     } catch (error) {
-        console.error("Error en la autenticación:", error);
+        if (error.error === 'popup_closed_by_user') {
+            console.warn("El usuario cerró la ventana de inicio de sesión.");
+            // You can display a message to the user, or take other actions here.
+            // For example, you might want to show a button to retry the login.
+        } else {
+            console.error("Error en la autenticación:", error);
+        }
     }
 }
 
