@@ -1333,3 +1333,75 @@ window.addEventListener('resize', function() {
         document.getElementById('editor').style.height = 'calc(100% - 150px)';
     }
 });
+
+// Inicializar la API de Google y configurar la autenticación
+function inicializarGoogleAPI() {
+    gapi.load("client:auth2", async () => {
+        await gapi.client.init({
+            apiKey: "AIzaSyArX2Sc0pL66kFFvarQqqBg3hnK0Fwkq6Q", // Reemplaza con tu API Key
+            clientId: "490042734939-ndh6s1cuev5cr2arj2pnif6qr4rrk643.apps.googleusercontent.com", // Reemplaza con tu Client ID
+            scope: "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/documents.readonly",
+            discoveryDocs: [
+                "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
+                "https://docs.googleapis.com/$discovery/rest?version=v1"
+            ],
+        });
+        console.log("API de Google Drive y Google Docs inicializada.");
+    });
+}
+
+// Autenticar al usuario
+async function autenticarConGoogle() {
+    try {
+        await gapi.auth2.getAuthInstance().signIn();
+        console.log("Usuario autenticado con Google.");
+        listarArchivosDocs(); // Listar archivos después de autenticarse
+    } catch (error) {
+        console.error("Error en la autenticación:", error);
+    }
+}
+
+// Listar archivos de Google Docs en el Drive del usuario
+async function listarArchivosDocs() {
+    const response = await gapi.client.drive.files.list({
+        q: "mimeType='application/vnd.google-apps.document'",
+        fields: "files(id, name)",
+        spaces: "drive",
+    });
+
+    const files = response.result.files;
+    const fileList = document.getElementById("fileList");
+    fileList.innerHTML = ""; // Limpiar la lista antes de cargar
+
+    files.forEach(file => {
+        const listItem = document.createElement("div");
+        listItem.textContent = file.name;
+        listItem.onclick = () => cargarContenidoDocs(file.id);
+        fileList.appendChild(listItem);
+    });
+}
+
+// Cargar el contenido del archivo seleccionado en el editor
+async function cargarContenidoDocs(docId) {
+    const response = await gapi.client.docs.documents.get({
+        documentId: docId,
+    });
+
+    const content = response.result.body.content;
+    let textoHTML = "";
+
+    // Procesar contenido del documento
+    content.forEach(element => {
+        if (element.paragraph && element.paragraph.elements) {
+            element.paragraph.elements.forEach(el => {
+                if (el.textRun && el.textRun.content) {
+                    textoHTML += `<p>${el.textRun.content}</p>`;
+                }
+            });
+        }
+    });
+
+    // Insertar el contenido en el div del editor
+    document.getElementById('editor').innerHTML = textoHTML;
+}
+
