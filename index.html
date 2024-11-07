@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, interactive-widget=resizes-content">
     <title>Script Manager</title>
-    <link rel="stylesheet" href="style.css?v=1087">
+    <link rel="stylesheet" href="style.css?v=1088">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="./icons/favicon.ico">
@@ -14,6 +14,14 @@
 
     <!-- Botón de inicio de sesión con Google -->
     <button onclick="autenticarConGoogle()">Iniciar sesión con Google</button>
+    
+    <!-- Contenedor para la lista de archivos de Google Docs -->
+    <div id="fileList" class="scripts-list">
+        <h2>Documentos de Google Docs</h2>
+        <!-- Aquí se cargarán los archivos listados desde Google Drive -->
+    </div>
+
+    
     <div id="scriptList" class="scripts-list">
         <h1>Lista de Scripts</h1>
         <!-- <ul id="scriptsContainer"></ul> -->
@@ -84,7 +92,7 @@
     </div>
     
 </body>
-<script src="script.js?v=1087"></script>
+<script src="script.js?v=1088"></script>
 
 <!-- Cargar la API de Google -->
 <script async defer src="https://apis.google.com/js/api.js" onload="inicializarGoogleAPI()"></script>
