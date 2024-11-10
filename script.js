@@ -1333,3 +1333,96 @@ window.addEventListener('resize', function() {
         document.getElementById('editor').style.height = 'calc(100% - 150px)';
     }
 });
+
+
+// Lógica para google drive
+// TODO(developer): Set to client ID and API key from the Developer Console
+const CLIENT_ID = '1005913364090-8ie8tv96sttfc5ek0h4rjep87ce5tibk.apps.googleusercontent.com';
+const API_KEY = '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';
+const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+
+let tokenClient;
+let gapiInited = false;
+let gisInited = false;
+
+// Inicializa Google API y Google Identity Services
+function gapiLoaded() {
+    gapi.load('client', initializeGapiClient);
+}
+
+async function initializeGapiClient() {
+    await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [DISCOVERY_DOC],
+    });
+    gapiInited = true;
+    maybeEnableButtons();
+}
+
+function gisLoaded() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: '', 
+    });
+    gisInited = true;
+    maybeEnableButtons();
+}
+
+function maybeEnableButtons() {
+    if (gapiInited && gisInited) {
+        document.getElementById('authorize_button').style.visibility = 'visible';
+    }
+}
+
+function handleAuthClick() {
+    tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+            throw resp;
+        }
+        localStorage.setItem('access_token', resp.access_token);
+        await sincronizarDocumentosDeCarpeta();
+    };
+    const storedToken = localStorage.getItem('access_token');
+    if (storedToken && gapi.client.getToken() === null) {
+        gapi.client.setToken({ access_token: storedToken });
+        sincronizarDocumentosDeCarpeta();
+    } else {
+        tokenClient.requestAccessToken({ prompt: '' });
+    }
+}
+
+
+async function sincronizarDocumentosDeCarpeta() {
+    let response;
+    try {
+        response = await gapi.client.drive.files.list({
+            q: "mimeType='application/vnd.google-apps.document'",
+            fields: "files(id, name)",
+            spaces: "drive",
+        });
+    } catch (err) {
+        console.error("Error fetching files: ", err.message);
+        return;
+    }
+    
+    const files = response.result.files;
+    if (!files) return;
+
+    for (const file of files) {
+        const content = await obtenerContenidoHTMLDeGoogleDrive(file.id);
+        const nombre = content.slice(0, 30) + "...";
+
+        saveScript(null, nombre, content);
+    }
+    loadScriptsList();
+}
+
+async function obtenerContenidoHTMLDeGoogleDrive(docId) {
+    const response = await gapi.client.drive.files.export({
+        fileId: docId,
+        mimeType: 'text/html',
+    });
+    return response.body;
+}
