@@ -1359,15 +1359,16 @@ async function initializeGapiClient() {
         discoveryDocs: [DISCOVERY_DOC],
     });
 
-    // Inicializa gapi.auth2 para gestionar la autenticación
-    await gapi.auth2.init({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
+    // Carga el módulo Picker explícitamente después de inicializar gapi
+    gapi.load("picker", () => {
+        pickerInited = true;
+        maybeEnableButtons();
     });
 
     gapiInited = true;
     maybeEnableButtons();
 }
+
 
 
 
@@ -1441,6 +1442,7 @@ function seleccionarCarpeta() {
         .build();
     picker.setVisible(true);
 }
+
 
 
 async function sincronizarDocumentosDeCarpeta() {
