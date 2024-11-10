@@ -1380,13 +1380,6 @@ function gisLoaded() {
     maybeEnableButtons();
 }
 
-let pickerInited = false;
-
-function pickerLoaded() {
-    pickerInited = true;
-    maybeEnableButtons();
-}
-
 function maybeEnableButtons() {
     if (gapiInited && gisInited && pickerInited) {
         document.getElementById('authorize_button').style.visibility = 'visible';
