@@ -1399,30 +1399,74 @@ function handleAuthClick() {
     }
 }
 
+let carpetaId = null; // Guardará el ID de la carpeta seleccionada
+
+function seleccionarCarpeta() {
+    const picker = new google.picker.PickerBuilder()
+        .setOAuthToken(gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token)
+        .addView(google.picker.ViewId.FOLDERS) // Muestra solo carpetas
+        .setSelectableMimeTypes('application/vnd.google-apps.folder')
+        .setCallback(data => {
+            if (data.action === google.picker.Action.PICKED) {
+                carpetaId = data.docs[0].id;
+                console.log("Carpeta seleccionada:", carpetaId);
+                sincronizarDocumentosDeCarpeta();
+            }
+        })
+        .build();
+    picker.setVisible(true);
+}
+
 async function sincronizarDocumentosDeCarpeta() {
-    let response;
-    try {
-        response = await gapi.client.drive.files.list({
-            q: "mimeType='application/vnd.google-apps.document'",
-            fields: "files(id, name)",
-            spaces: "drive",
-        });
-    } catch (err) {
-        console.error("Error fetching files: ", err.message);
+    if (!carpetaId) {
+        console.log("No se ha seleccionado ninguna carpeta.");
         return;
     }
-    
+
+    const response = await gapi.client.drive.files.list({
+        q: `'${carpetaId}' in parents and mimeType='application/vnd.google-apps.document'`,
+        fields: "files(id, name)",
+        spaces: "drive",
+    });
+
     const files = response.result.files;
-    if (!files) return;
+    const db = await abrirIndexedDB();
 
     for (const file of files) {
-        const content = await obtenerContenidoHTMLDeGoogleDrive(file.id);
-        const nombre = content.slice(0, 30) + "...";
+        const contenidoHTML = await obtenerContenidoHTMLDeGoogleDrive(file.id);
+        const nombre = contenidoHTML.slice(0, 30) + '...';
 
-        saveScript(null, nombre, content);
+        saveScript(file.id, nombre, contenidoHTML);
+        console.log(`Documento "${nombre}" guardado en IndexedDB`);
     }
+
     loadScriptsList();
 }
+
+//async function sincronizarDocumentosDeCarpeta() {
+ //   let response;
+   // try {
+     //   response = await gapi.client.drive.files.list({
+       //     q: "mimeType='application/vnd.google-apps.document'",
+         //   fields: "files(id, name)",
+           // spaces: "drive",
+       // });
+   // } catch (err) {
+     //   console.error("Error fetching files: ", err.message);
+      //  return;
+    // }
+    
+    // const files = response.result.files;
+    //if (!files) return;
+
+    //for (const file of files) {
+     //   const content = await obtenerContenidoHTMLDeGoogleDrive(file.id);
+       // const nombre = content.slice(0, 30) + "...";
+
+        //saveScript(null, nombre, content);
+    // }
+    //loadScriptsList();
+//}
 
 async function obtenerContenidoHTMLDeGoogleDrive(docId) {
     const response = await gapi.client.drive.files.export({
