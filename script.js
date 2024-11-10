@@ -1370,9 +1370,17 @@ function gisLoaded() {
     maybeEnableButtons();
 }
 
+let pickerInited = false;
+
+function pickerLoaded() {
+    pickerInited = true;
+    maybeEnableButtons();
+}
+
 function maybeEnableButtons() {
-    if (gapiInited && gisInited) {
+    if (gapiInited && gisInited && pickerInited) {
         document.getElementById('authorize_button').style.visibility = 'visible';
+        document.getElementById('select_folder_button').style.visibility = 'visible';
     }
 }
 
@@ -1402,6 +1410,11 @@ function handleAuthClick() {
 let carpetaId = null; // Guardará el ID de la carpeta seleccionada
 
 function seleccionarCarpeta() {
+    if (!pickerInited) {
+        console.error("Google Picker no está listo.");
+        return;
+    }
+
     const picker = new google.picker.PickerBuilder()
         .setOAuthToken(gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token)
         .addView(google.picker.ViewId.FOLDERS) // Muestra solo carpetas
@@ -1416,6 +1429,7 @@ function seleccionarCarpeta() {
         .build();
     picker.setVisible(true);
 }
+
 
 async function sincronizarDocumentosDeCarpeta() {
     if (!carpetaId) {
