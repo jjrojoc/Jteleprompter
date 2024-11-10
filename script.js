@@ -1359,15 +1359,16 @@ async function initializeGapiClient() {
         discoveryDocs: [DISCOVERY_DOC],
     });
 
-    // Cargar Picker explícitamente después de inicializar gapi
-    gapi.load('picker', () => {
-        pickerInited = true;
-        maybeEnableButtons();
+    // Inicializa gapi.auth2 para gestionar la autenticación
+    await gapi.auth2.init({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
     });
 
     gapiInited = true;
     maybeEnableButtons();
 }
+
 
 
 function gisLoaded() {
@@ -1418,7 +1419,14 @@ function seleccionarCarpeta() {
         return;
     }
 
-    const token = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+    const authInstance = gapi.auth2.getAuthInstance();
+    if (!authInstance || !authInstance.isSignedIn.get()) {
+        console.log("El usuario no está autenticado. Inicia sesión primero.");
+        handleAuthClick(); // Llama a la función de autenticación
+        return;
+    }
+
+    const token = authInstance.currentUser.get().getAuthResponse().access_token;
     const picker = new google.picker.PickerBuilder()
         .setOAuthToken(token)
         .addView(google.picker.ViewId.FOLDERS) // Muestra solo carpetas
