@@ -1398,3 +1398,36 @@ function handleAuthClick() {
         tokenClient.requestAccessToken({ prompt: '' });
     }
 }
+
+async function sincronizarDocumentosDeCarpeta() {
+    let response;
+    try {
+        response = await gapi.client.drive.files.list({
+            q: "mimeType='application/vnd.google-apps.document'",
+            fields: "files(id, name)",
+            spaces: "drive",
+        });
+    } catch (err) {
+        console.error("Error fetching files: ", err.message);
+        return;
+    }
+    
+    const files = response.result.files;
+    if (!files) return;
+
+    for (const file of files) {
+        const content = await obtenerContenidoHTMLDeGoogleDrive(file.id);
+        const nombre = content.slice(0, 30) + "...";
+
+        saveScript(null, nombre, content);
+    }
+    loadScriptsList();
+}
+
+async function obtenerContenidoHTMLDeGoogleDrive(docId) {
+    const response = await gapi.client.drive.files.export({
+        fileId: docId,
+        mimeType: 'text/html',
+    });
+    return response.body;
+}
