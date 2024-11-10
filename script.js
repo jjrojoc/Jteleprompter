@@ -1351,14 +1351,24 @@ function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
 }
 
+let pickerInited = false;
+
 async function initializeGapiClient() {
     await gapi.client.init({
         apiKey: API_KEY,
         discoveryDocs: [DISCOVERY_DOC],
     });
+
+    // Cargar Picker explícitamente después de inicializar gapi
+    gapi.load('picker', () => {
+        pickerInited = true;
+        maybeEnableButtons();
+    });
+
     gapiInited = true;
     maybeEnableButtons();
 }
+
 
 function gisLoaded() {
     tokenClient = google.accounts.oauth2.initTokenClient({
@@ -1415,8 +1425,9 @@ function seleccionarCarpeta() {
         return;
     }
 
+    const token = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
     const picker = new google.picker.PickerBuilder()
-        .setOAuthToken(gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token)
+        .setOAuthToken(token)
         .addView(google.picker.ViewId.FOLDERS) // Muestra solo carpetas
         .setSelectableMimeTypes('application/vnd.google-apps.folder')
         .setCallback(data => {
